@@ -18,26 +18,28 @@ def loadfile(filename):
     converteddata = []
     begin = datetime.datetime(1900,1,1,0,0,0) #Startdatum
     for j in splitdata:
-        tage,frac = j[0].split('.')
-        zeit = round((float(frac)*24)/1000000)   # 500000 = 12h, 250000 = 6h, 041667 = 1h
-        date_time = begin + datetime.timedelta(days=float(tage)) + datetime.timedelta(hours=zeit)
-        x1 = float(j[1])
-        x2 = float(j[2])
-        x3 = float(j[3])
-        x4 = float(j[4])
-        converteddata.append([date_time,x1,x2,x3,x4])
-
-#    for d in converteddata:
-#        print d
+        jliste = []
+        # zeitstempel rechnen
+        tage, frac = j[0].split('.')  # split bei '.'
+        zeit = round((float(frac) * 24) / 1000000)   # 500000 = 12h, 250000 = 6h, 041667 = 1h
+        date_time = begin + datetime.timedelta(days=float(tage)) \
+                    + datetime.timedelta(hours=zeit)
+        jliste.append(date_time)
+        #werte wandeln
+        for value in j[1:]:
+            jliste.append(float(value))
+        converteddata.append(jliste)
 
     return converteddata
 
 
 if __name__ == '__main__':
-    filename = "/home/lnx/PycharmProjects/Messdatenauswertung/HStest/v808_20130411_c00_v01_f03/Heat_Cond.txt"
-    thedata = loadfile(filename=filename)
-    print 'loaded: ', thedata
 
+    filename = "/home/hpl/4_buero/github/Messdatenauswertung/HStest/v808/Heat_Cond.txt"
+    thedata = loadfile(filename=filename)
+    print 'loaded: '
+    for d in thedata:
+        print d
 
 
 
