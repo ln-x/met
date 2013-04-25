@@ -1,5 +1,6 @@
+from hs_scripts import hs_loader
+
 __author__ = 'lnx'
-import hs_loader
 import matplotlib.pyplot as plt
 
 filename = "/home/lnx/PycharmProjects/Messdatenauswertung/HStest/v808_20130411_c00_v01_f03/Heat_Cond.txt"
