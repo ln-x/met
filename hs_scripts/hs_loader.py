@@ -35,7 +35,7 @@ def loadfile(filename):
 
 if __name__ == '__main__':
 
-    filename = "/home/hpl/4_buero/github/Messdatenauswertung/HStest/v808/Heat_Cond.txt"
+    filename = "../HStest/v808/Heat_Cond.txt"
     thedata = loadfile(filename=filename)
     print 'loaded: '
     for d in thedata:

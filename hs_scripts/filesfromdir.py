@@ -14,7 +14,7 @@ def listExt(path, ext):
 
 if __name__ == '__main__':
 
-    path = "/home/hpl/4_buero/github/Messdatenauswertung/HStest/v808"
+    path = "/home/lnx/PycharmProjects/Messdatenauswertung/HStest"
     ext = "txt"
     files = listExt(path, ext)
     print files
