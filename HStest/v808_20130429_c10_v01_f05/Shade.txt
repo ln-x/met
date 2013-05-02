@@ -1,0 +1,5 @@
+Heat Source Hourly Output File:  Effective Shade     File created on Mon Apr 29 18:31:44 2013
+
+Datetime      0.650         0.400         0.150         0.000         
+37079.958333  0.9899        0.9914        0.9682        0.9657        
+37080.958333  0.9898        0.9914        0.9682        0.9658        

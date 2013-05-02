@@ -16,14 +16,15 @@ def loadfile(filename):
         splitdata.append(i.split())  #Splitten der Listenelemente   split(":")  Seperator ":"
 
     converteddata = []
-    begin = datetime.datetime(1900,1,1,0,0,0) #Startdatum
+    begin = datetime.datetime(1900,1,1,0,0,0) # Startdatum
     for j in splitdata:
         jliste = []
         # zeitstempel rechnen
         tage, frac = j[0].split('.')  # split bei '.'
         zeit = round((float(frac) * 24) / 1000000)   # 500000 = 12h, 250000 = 6h, 041667 = 1h
-        date_time = begin + datetime.timedelta(days=float(tage)) \
+        date_time = begin + datetime.timedelta(days=float(tage)-2) \
                     + datetime.timedelta(hours=zeit)
+        print tage
         jliste.append(date_time)
         #werte wandeln
         for value in j[1:]:
@@ -35,7 +36,7 @@ def loadfile(filename):
 
 if __name__ == '__main__':
 
-    filename = "../HStest/v808/Heat_Cond.txt"
+    filename = "../HStest/v808_20130429_c00_v01_f05/Heat_SR4.txt"
     thedata = loadfile(filename=filename)
     print 'loaded: '
     for d in thedata:

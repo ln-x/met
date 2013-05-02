@@ -1,0 +1,5 @@
+Heat Source Hourly Output File:  View to Sky     File created on Mon Apr 29 18:21:32 2013
+
+Datetime      0.650         0.400         0.150         0.000         
+37079.958333  0.0457        0.0386        0.0383        0.0412        
+37080.958333  0.0457        0.0386        0.0383        0.0412        
