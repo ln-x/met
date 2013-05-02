@@ -1,3 +1,4 @@
+# coding=utf-8
 from hs_scripts import hs_loader
 from hs_scripts import hs_cdataloader
 
@@ -67,8 +68,7 @@ for d in matches:
 print eld
 e1 = [i[3] for i in thedata5]
 
-# e1 = np.array(e1)
-# x1 = np.array(x1)
+# todo: umbauen und kürzen: np.array! e1 = np.array(e1)
 
 X1 = [m - n for m,n in zip(x1,eld)] #zwei Listen subtrahieren
 X2 = [m - n for m,n in zip(x2,eld)]
