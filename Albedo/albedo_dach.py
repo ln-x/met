@@ -17,7 +17,7 @@ sundays = [dt.date(2012,10,2),dt.date(2012,10,7)]
 
 #print startdate, enddate, starttime, endtime
 
-csv_dict = csv.DictReader(open('/Albedo/JHS_Albedo_20111005_20130102.csv'))
+csv_dict = csv.DictReader(open('JHS_Albedo_20111005_20130102.csv'))
 
 print csv_dict.fieldnames
 
