@@ -1,6 +1,6 @@
 # coding=utf-8
-from hs_scripts import hs_loader
-from hs_scripts import hs_cdataloader
+from Hs_scripts import hs_loader
+from Hs_scripts import hs_cdataloader
 
 __author__ = 'lnx'
 import matplotlib.pyplot as plt

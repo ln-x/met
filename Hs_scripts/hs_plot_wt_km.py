@@ -1,4 +1,4 @@
-from hs_scripts import hs_loader
+from Hs_scripts import hs_loader
 
 __author__ = 'lnx'
 import matplotlib.pyplot as plt
