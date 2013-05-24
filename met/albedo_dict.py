@@ -13,9 +13,9 @@ sundays = [dt.date(2012, 10, 2),dt.date(2012, 10, 7)]
 
 #print startdate, enddate, starttime, endtime
 
-#csv_reader = csv.reader(open('/home/hpl/4_buero/github/py_library/heidiplot/JHS_Albedo_20111005_20130102.csv'))
+#csv_reader = csv.reader(open('/home/hpl/4_buero/github/py_library/heidiplot/JHS_Albedo_20111005_20130102_a.csv'))
 # csvdict = csv.DictReader(open('/home/hpl/4_buero/github/py_library/heidiplot/JHS_Albedo_short.csv'))
-csvdict = csv.DictReader(open('/home/hpl/4_buero/github/py_library/heidiplot/JHS_Albedo_20111005_20130102.csv'))
+csvdict = csv.DictReader(open('/home/hpl/4_buero/github/py_library/heidiplot/JHS_Albedo_20111005_20130102_a.csv'))
 
 
 print csvdict.fieldnames

@@ -2,12 +2,9 @@ import csv
 import datetime as dt
 import matplotlib.pyplot as plt
 
-
-
 x,gs,r1,r2,r3,r4,r5,r6,r7,r9,r10,r11 = [],[],[],[],[],[],[],[],[],[],[],[]
 r12,r14,r15,r16,r17,r18,a1,a2,a3,a4 = [],[],[],[],[],[],[],[],[],[]
 a5,a6,a7,a9,a10,a11,a12,a14,a15,a16,a17,a18 = [],[],[],[],[],[],[],[],[],[],[],[]
-
 
 csv_reader = csv.reader(open('JHS_Albedo_test.csv'))
 
@@ -91,7 +88,7 @@ plt.grid(True)
 #plt.legend(('label1', 'label2'))
 plt.legend()
 
-fig.savefig('albedo.png')
+#fig.savefig('albedo.png')
 plt.show()
 
 

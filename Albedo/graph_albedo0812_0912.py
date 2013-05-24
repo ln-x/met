@@ -12,7 +12,7 @@ starttime = dt.time(7,15,0)
 endtime = dt.time(16,30,0)
 #print startdate, enddate, starttime, endtime
 
-csv_reader = csv.reader(open('JHS_Albedo_20111005_20130102.csv'))
+csv_reader = csv.reader(open('old/JHS_Albedo_20111005_20130102_a.csv'))
 
 for line in csv_reader:
 	

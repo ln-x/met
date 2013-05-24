@@ -13,8 +13,10 @@ endtime = dt.time(15,5,0)
 #print startdate, enddate, starttime, endtime
 
 csv_reader = csv.reader(open('JHS_Albedo_20111005_20130102.csv'))
+headers = csv_reader.next()  # liest erste zeile - nächster zugriff ab zeile 2
+print headers
 
-for line in csv_reader:
+for line in csv_reader:  # ab zeile zwei wegen .next() call oben!
 	
 	actualtimestamp = dt.datetime.strptime(line[0],"%d.%m.%Y %H:%M")
 	#startdt = dt.datetime.combine(startdate, starttime)
@@ -66,8 +68,8 @@ for line in csv_reader:
 			a17.append(float(line[32]))
 			a18.append(float(line[33]))
 '''
-print x
-print gs
+#print x
+#print gs
 #print a1
 
 

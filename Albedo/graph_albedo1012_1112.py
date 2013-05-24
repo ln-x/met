@@ -16,7 +16,7 @@ sundays = [dt.date(2012,10,2),dt.date(2012,10,7)]
 
 #print startdate, enddate, starttime, endtime
 
-csv_reader = csv.reader(open('JHS_Albedo_20111005_20130102.csv'))
+csv_reader = csv.reader(open('old/JHS_Albedo_20111005_20130102_a.csv'))
 
 for line in csv_reader:
 	
