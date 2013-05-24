@@ -10,7 +10,6 @@ def safenumber(value):
     else:
         return 0.0
 
-
 #Definition von Listen für die einzelnen Datenspalten
 #x: Zeit, gs: Globalstrahlung auf Feld 13, 8: frei
 x_s, x_c, gs_s, gs_c = ([] for i in range(4))
@@ -39,7 +38,7 @@ a5, a6, a9, a11_s, a11_c, a12, a14, a15, a16, a17, a18 = ([] for i in range(11))
 #Einschränken des Zeitraumes
 startdate = dt.date(2012, 3, 1)
 enddate = dt.date(2012, 9, 30)
-starttime = dt.time(8, 45, 0)
+starttime = dt.time(8, 40, 0)
 endtime = dt.time(15, 5, 0)
 #print startdate, enddate, starttime, endtime
 
@@ -51,14 +50,17 @@ headers = csv_reader.next()  # liest erste zeile in liste namens "header" - näc
 #Iterieren über "csv_reader"
 for line in csv_reader:  # ab zeile zwei wegen .next() call oben!
     actualtimestamp = dt.datetime.strptime(line[0], "%d.%m.%Y %H:%M")
-    #startdt = dt.datetime.combine(startdate, starttime)
-    #enddt = dt.datetime.combine(enddate, endtime)
-    #print startdt, enddt, actualtimestamp
-    #print 'datum',actualtimestamp.date()
-    #print 'zeit', actualtimestamp.time()
 
     if startdate <= actualtimestamp.date() <= enddate \
             and starttime <= actualtimestamp.time() <= endtime:
+
+#TESTBEREICH ANFANG
+        if actualtimestamp.time() == starttime:
+            a11_c.append(safenumber(line[27]))
+            a11_starttime = sum(a11_c)/len(a11_c)
+        print a11_starttime
+        exit()
+#TESTBEREICH ENDE
 
         #Definiere Grenze für "sonnige Tage" zB 0.5 = 500W direkte Sonneneinstrahlung
         if float(line[1]) > 0.5:
