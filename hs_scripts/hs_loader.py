@@ -24,7 +24,7 @@ def loadfile(filename):
         zeit = round((float(frac) * 24) / 1000000)   # 500000 = 12h, 250000 = 6h, 041667 = 1h
         date_time = begin + datetime.timedelta(days=float(tage)-2) \
                     + datetime.timedelta(hours=zeit)
-        print tage
+        #print tage
         jliste.append(date_time)
         #werte wandeln
         for value in j[1:]:
