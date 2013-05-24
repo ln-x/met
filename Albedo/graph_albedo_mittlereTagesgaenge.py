@@ -4,11 +4,12 @@ import datetime as dt
 import matplotlib.pyplot as plt
 
 def safenumber(value):
-    num = float(value)
-    if isinstance(num, float):
-        return num
-    else:
-        return 0.0
+    try:
+        num = float(value)
+    except ValueError:
+        num = 0.0
+    return num
+
 
 #Definition von Listen für die einzelnen Datenspalten
 #x: Zeit, gs: Globalstrahlung auf Feld 13, 8: frei
@@ -43,46 +44,42 @@ endtime = dt.time(15, 5, 0)
 #print startdate, enddate, starttime, endtime
 
 #Einlesen der csv-Dateien in das Objekt "csv_reader"
-csv_reader = csv.reader(open('JHS_Albedo_20111005_20130102.csv'))
-headers = csv_reader.next()  # liest erste zeile in liste namens "header" - nächster zugriff ab zeile 2
+#csv_reader = csv.reader(open('JHS_Albedo_20111005_20130102.csv'))
+#headers = csv_reader.next()  # liest erste Zeile in Liste namens "header" - nächster Zugriff ab Zeile 2
 #print headers
 
+csv_dict = csv.DictReader(open('JHS_Albedo_20111005_20130102.csv'))
+print csv_dict.fieldnames
+
 #Iterieren über "csv_reader"
-for line in csv_reader:  # ab zeile zwei wegen .next() call oben!
-    actualtimestamp = dt.datetime.strptime(line[0], "%d.%m.%Y %H:%M")
+for line in csv_dict:  # ab Zeile zwei wegen .next() call oben!
+    #csv_dict.next()
+    actualtimestamp = dt.datetime.strptime(line['datetime'], "%d.%m.%Y %H:%M")
 
     if startdate <= actualtimestamp.date() <= enddate \
             and starttime <= actualtimestamp.time() <= endtime:
 
-#TESTBEREICH ANFANG
-        if actualtimestamp.time() == starttime:
-            a11_c.append(safenumber(line[27]))
-            a11_starttime = sum(a11_c)/len(a11_c)
-        print a11_starttime
-        exit()
-#TESTBEREICH ENDE
-
         #Definiere Grenze für "sonnige Tage" zB 0.5 = 500W direkte Sonneneinstrahlung
-        if float(line[1]) > 0.5:
-            x_s.append(dt.datetime.strptime(line[0], "%d.%m.%Y %H:%M")) #1.Element aus Zeile an Liste "x" anhängen
-            gs_s.append(safenumber(line[1])) #2.Element aus Zeile an Liste "gs" anhängen
+        if float(line['gs']) > 0.5:
+            x_s.append(dt.datetime.strptime(line['datetime'], "%d.%m.%Y %H:%M")) #1.Element aus Zeile an Liste "x" anhängen
+            gs_s.append(safenumber(line['gs'])) #2.Element aus Zeile an Liste "gs" anhängen
             #r3_s.append(float(line[5]))
-            a11_s.append(safenumber(line[27])) #extensiv
-            a4_s.append(safenumber(line[21])) #intensiv
-            a2_s.append(safenumber(line[19])) #Blech
-            a7_s.append(safenumber(line[24])) #Teerpappe
-            a10_s.append(safenumber(line[26])) #Kies
+            a11_s.append(safenumber(line['a11'])) #extensiv
+            a4_s.append(safenumber(line['a4'])) #intensiv
+            a2_s.append(safenumber(line['a2'])) #Blech
+            a7_s.append(safenumber(line['a7'])) #Teerpappe
+            a10_s.append(safenumber(line['a10'])) #Kies
 
         #Definiere Grenze für "bewölkte Tage" zB 0.3 = 300W direkte Sonneneinstrahlung
-        elif float(line[1]) < 0.1:
-            x_c.append(dt.datetime.strptime(line[0], "%d.%m.%Y %H:%M")) #1.Element aus Zeile an Liste "x" anhängen
-            gs_c.append(safenumber(line[1])) #2.Element aus Zeile an Liste "gs" anhängen
+        elif float(line['gs']) < 0.1:
+            x_c.append(dt.datetime.strptime(line['datetime'], "%d.%m.%Y %H:%M")) #1.Element aus Zeile an Liste "x" anhängen
+            gs_c.append(safenumber(line['gs'])) #2.Element aus Zeile an Liste "gs" anhängen
             #r3_c.append(float(line[5]))
-            a11_c.append(safenumber(line[18])) #extensiv
-            a4_c.append(safenumber(line[21])) #intensiv
-            a2_c.append(safenumber(line[19])) #Blech
-            a7_c.append(safenumber(line[24])) #Teerpappe
-            a10_c.append(safenumber(line[27])) #Kies
+            a11_c.append(safenumber(line['a11'])) #extensiv
+            a4_c.append(safenumber(line['a4'])) #intensiv
+            a2_c.append(safenumber(line['a2'])) #Blech
+            a7_c.append(safenumber(line['a7'])) #Teerpappe
+            a10_c.append(safenumber(line['a10'])) #Kies
             '''
 			r2.append(float(line[3]))
 			r3.append(float(line[4]))
@@ -116,6 +113,14 @@ for line in csv_reader:  # ab zeile zwei wegen .next() call oben!
 			a17.append(float(line[32]))
 			a18.append(float(line[33]))
 '''
+
+#TESTBEREICH ANFANG
+#xx = dt.timedelta(hours = 1 ) + dt.timedelta(minutes = 10)
+#print xx
+#mean_a4_c = sum(a4_c)/len(a4_c)
+#print mean_a4_c
+#exit()
+#TESTBEREICH ENDE
 
 fig = plt.figure()
 ax = fig.add_subplot(121)
