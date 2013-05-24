@@ -1,0 +1,57 @@
+import csv
+#import datetime as dt
+import matplotlib.pyplot as plt
+
+x,gs,rs1,rs2,rs3,rs4,rs5,rs6,rs7,rs9,rs10,rs11,rs13,rs14,rs15,rs16,rs17,rs18 = [],[],[],[],[],[], [],[],[], [],[],[], [],[],[],[],[],[]   
+csv_reader = csv.reader(open('gs_a18.csv'))
+for line in csv_reader:
+	x.append(float(line[0]))
+	gs.append(float(line[1]))
+	rs1.append(float(line[2]))
+	rs2.append(float(line[3]))
+	rs3.append(float(line[4]))
+	rs4.append(float(line[5]))
+	rs5.append(float(line[6]))
+	rs6.append(float(line[7]))
+	rs7.append(float(line[8]))
+	rs9.append(float(line[9]))
+	rs10.append(float(line[10]))
+	rs11.append(float(line[11]))
+	rs13.append(float(line[12]))
+	rs14.append(float(line[13]))
+	rs15.append(float(line[14]))
+	rs16.append(float(line[15]))
+	rs17.append(float(line[16]))
+	rs18.append(float(line[17]))
+	# other option: y.append(dt.datetime.strptime(line[1],'%M:%S.%f'))
+fig = plt.figure()
+ax = fig.add_subplot(111)
+#ax.plot(x,y1, 'b-', x,y2, 'g-') 
+ax.plot(x,gs,color='yellow', lw=0.5) 
+ax.plot(x,rs1,color='orange', lw=0.5)
+ax.plot(x,rs2,color='orange', lw=0.5)
+ax.plot(x,rs3,color='orange', lw=0.5)
+ax.plot(x,rs4,color='orange', lw=0.5)
+ax.plot(x,rs5,color='orange', lw=0.5)
+ax.plot(x,rs6,color='orange', lw=0.5)
+ax.plot(x,rs7,color='orange', lw=0.5)
+ax.plot(x,rs9,color='orange', lw=0.5)
+ax.plot(x,rs10,color='orange', lw=0.5)
+ax.plot(x,rs11,color='orange', lw=0.5)
+ax.plot(x,rs13,color='orange', lw=0.5)
+ax.plot(x,rs14,color='orange', lw=0.5)
+ax.plot(x,rs15,color='orange', lw=0.5)
+ax.plot(x,rs16,color='orange', lw=0.5)
+ax.plot(x,rs17,color='orange', lw=0.5)
+ax.plot(x,rs18,color='orange', lw=0.5)
+# add 'o-' in the brackets behind x,y, if you want dots for each value
+#fig.autofmt_xdate()
+plt.xlim(0,800)
+plt.ylim(0,1)
+plt.xlabel('time')
+plt.ylabel('radiation')
+plt.grid(True)
+
+
+plt.show()
+
