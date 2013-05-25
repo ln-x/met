@@ -7,9 +7,9 @@ __author__ = 'lnx'
 
 x = []
 
-csv_reader = csv.reader(open('/home/lnx/Documents/_BioCLIC/_Messungen/inklMittlereTagesgaenge_Lafnitz20130401.csv'))
+csv_reader = csv.reader(open('csv/inklMittlereTagesgaenge_Lafnitz20130401.csv'))
 
-graphiken = {}
+graphiken = {}  # Erstellen eines dictonaries
 
 for line in csv_reader:
     #print line
