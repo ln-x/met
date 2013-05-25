@@ -62,40 +62,59 @@ with open(filename, 'r') as f:  # Picklefile als 'alldata' laden (Typ: Autovivif
 times = list(set([day.time() for day in alldata.keys()]))
 times.sort()  # die Liste 'times' sortieren
 
-mittelwert_dict = AutoVivification()  # Anlegen eines Autovivification dictionaries für Mittelwert - Ergebnisse
+mittelwert_s_dict = AutoVivification()  # Anlegen eines Autovivification dictionaries für Mittelwert - Ergebnisse
+mittelwert_c_dict = AutoVivification()
 
 for t in times:   # Interieren über Liste 'times'
     #print t
     # Iterieren über alle Zeitpunkte in 'alldata' und vergleich mit Zeitpunkten in Liste 'times':
     zeitpunkte = [zeitpunkt for zeitpunkt in alldata.keys() if zeitpunkt.time() == t]
     #print zeitpunkte
-    values = []
+    values_s = []
+    values_c = []
     # Iterieren über alle Elemente in Zeitpunkte und wenn wert für a4 >0 dann hinzufügen zu Liste, über die gemittelt
     # wird, Mittelwert wird für den entsprechenden Zeitpunkt in dict. mittelwert eingeschrieben
     for zeit in zeitpunkte:
         wert = safenumber(alldata[zeit]['a4'])
-        if wert > 0:
-            values.append(wert)
+        if wert > 0.5:                   # Einschränken des Wertes für Tage mit vorherrschend direkter Sonnenstr.
+            values_s.append(wert)
+        elif wert > 0 < 0.1:             # Einschränken des Wertes für Tage mit vorherrschend diffuser Sonnestr.
+            values_c.append(wert)
     #print values
-    average = numpy.mean(values)
+    average_s = numpy.mean(values_s)
+    average_c = numpy.mean(values_c)
     #print average
-    mittelwert_dict[t] = average
+    mittelwert_s_dict[t] = average_s
+    mittelwert_c_dict[t] = average_c
 
 
-keysliste = mittelwert_dict.keys()
-keysliste.sort()
+keysliste_s = mittelwert_s_dict.keys()
+keysliste_s.sort()
 
-plot_x = []
-plot_y = []
-dummydatetime = dt.datetime
-for key in keysliste:
-    print key, mittelwert_dict[key]
-    plot_x.append(dt.datetime(2013, 1, 1, key.hour, key.minute))
-    plot_y.append(mittelwert_dict[key])
+keysliste_c = mittelwert_c_dict.keys()
+keysliste_c.sort()
+
+plot_x_s = []
+plot_y_s = []
+plot_x_c = []
+plot_y_c = []
+
+#dummydatetime = dt.datetime
+for key in keysliste_s:
+    print key, mittelwert_s_dict[key]
+    plot_x_s.append(dt.datetime(2013, 1, 1, key.hour, key.minute))
+    plot_y_s.append(mittelwert_s_dict[key])
+
+for key in keysliste_c:
+    print key, mittelwert_c_dict[key]
+    plot_x_c.append(dt.datetime(2013, 1, 1, key.hour, key.minute))
+    plot_y_c.append(mittelwert_c_dict[key])
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ax.plot_date(plot_x, plot_y, color='orange', label='ext')
+ax.plot(plot_x_s, plot_y_s, color="black", linestyle='solid',lw=0.8, label='sun,ext')
+ax.plot(plot_x_c, plot_y_c, color="black", linestyle='dashed',lw=0.8, label='cloud,ext')
+
 fig.autofmt_xdate()
 plt.show()
 
