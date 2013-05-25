@@ -1,4 +1,9 @@
 # coding=utf-8
+import datetime as dt
+import matplotlib.pyplot as plt
+import numpy
+import pickle
+
 # In diesem Skript werden Rohdaten aus einem Pickle-file eingelesen
 # und die mittleren Tagesgänge berechnet und dargestellt
 
@@ -18,12 +23,8 @@
 # 17: 7cm Recycling Ziegel + 5cm Recycling Ziegel
 # 18: 15cm Recycling Ziegel + 5cm Recycling Ziegel
 
-import datetime as dt
-import matplotlib.pyplot as plt
-import numpy
-import pickle
-
 filename = 'graph_albedo_dict.pickle'
+
 
 def safenumber(value):  # verwenden statt 'float' -> auch bei NAN und ' ' kein Problem
     try:
@@ -32,14 +33,17 @@ def safenumber(value):  # verwenden statt 'float' -> auch bei NAN und ' ' kein P
         num = 0.0
     return num
 
+
 class AutoVivification(dict):
     """Implementation of perl's autovivification feature."""
+
     def __getitem__(self, item):
         try:
             return dict.__getitem__(self, item)
         except KeyError:
             value = self[item] = type(self)()
             return value
+
 
 with open(filename, 'r') as f:  # Picklefile als 'alldata' laden (Typ: Autovivification Dictionary)
     alldata = pickle.load(f)
@@ -59,16 +63,29 @@ with open(filename, 'r') as f:  # Picklefile als 'alldata' laden (Typ: Autovivif
 #  Set mit allen Zeitpunkten an einem Tag, die in 'alldata' vorkommen -> Konvertierung in Liste:
 #  keys ist eine Methode von dictionaries, die eine Liste mit allen Schlüsseln in dictionaries ausgibt
 
-times = list(set([day.time() for day in alldata.keys()]))
-times.sort()  # die Liste 'times' sortieren
 
+#Einschränken des Zeitraumes
+startdate = dt.date(2011, 5, 1)
+enddate = dt.date(2014, 7, 30)
+starttime = dt.time(8, 45, 0)
+endtime = dt.time(15, 5, 0)
+
+#actualtimestamp = dt.datetime.strptime(line[0], "%d.%m.%Y %H:%M")
+
+times = list(set([day.time() for day in alldata.keys() if (starttime <= day.time() <= endtime and  startdate <= day.date() <= enddate) ]))
+times.sort()  # die Liste 'times' sortieren
+print 'times', times
 mittelwert_s_dict = AutoVivification()  # Anlegen eines Autovivification dictionaries für Mittelwert - Ergebnisse
 mittelwert_c_dict = AutoVivification()
 
 for t in times:   # Interieren über Liste 'times'
     #print t
     # Iterieren über alle Zeitpunkte in 'alldata' und vergleich mit Zeitpunkten in Liste 'times':
-    zeitpunkte = [zeitpunkt for zeitpunkt in alldata.keys() if zeitpunkt.time() == t]
+
+    zeitpunkte = [zeitpunkt for zeitpunkt in alldata.keys() if (startdate <= zeitpunkt.date() <= enddate \
+        and zeitpunkt.time() == t)]
+    #print 'zeitpunkte' , zeitpunkte
+
     #print zeitpunkte
     values_s = []
     values_c = []
@@ -76,17 +93,18 @@ for t in times:   # Interieren über Liste 'times'
     # wird, Mittelwert wird für den entsprechenden Zeitpunkt in dict. mittelwert eingeschrieben
     for zeit in zeitpunkte:
         wert = safenumber(alldata[zeit]['a4'])
-        if wert > 0.5:                   # Einschränken des Wertes für Tage mit vorherrschend direkter Sonnenstr.
+        print wert
+        if wert > 0.25:                   # Einschränken des Wertes für Tage mit vorherrschend direkter Sonnenstr.
             values_s.append(wert)
-        elif wert > 0 < 0.1:             # Einschränken des Wertes für Tage mit vorherrschend diffuser Sonnestr.
+        elif 0 < wert < 0.15:             # Einschränken des Wertes für Tage mit vorherrschend diffuser Sonnestr.
             values_c.append(wert)
-    #print values
+        #print values
+
     average_s = numpy.mean(values_s)
     average_c = numpy.mean(values_c)
     #print average
     mittelwert_s_dict[t] = average_s
     mittelwert_c_dict[t] = average_c
-
 
 keysliste_s = mittelwert_s_dict.keys()
 keysliste_s.sort()
@@ -112,8 +130,8 @@ for key in keysliste_c:
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ax.plot(plot_x_s, plot_y_s, color="black", linestyle='solid',lw=0.8, label='sun,ext')
-ax.plot(plot_x_c, plot_y_c, color="black", linestyle='dashed',lw=0.8, label='cloud,ext')
+ax.plot(plot_x_s, plot_y_s, color="black", linestyle='solid', lw=0.8, label='sun,ext')
+ax.plot(plot_x_c, plot_y_c, color="black", linestyle='dashed', lw=0.8, label='cloud,ext')
 
 fig.autofmt_xdate()
 plt.show()
