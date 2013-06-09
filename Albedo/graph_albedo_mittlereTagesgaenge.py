@@ -65,10 +65,10 @@ with open(filename, 'r') as f:  # Picklefile als 'alldata' laden (Typ: Autovivif
 
 
 #Einschränken des Zeitraumes
-startdate = dt.date(2011, 5, 1)
-enddate = dt.date(2014, 7, 30)
-starttime = dt.time(8, 45, 0)
-endtime = dt.time(15, 5, 0)
+startdate = dt.date(2012, 4, 1)
+enddate = dt.date(2012, 5, 30)
+starttime = dt.time(5,0, 0)
+endtime = dt.time(19, 0, 0)
 
 #actualtimestamp = dt.datetime.strptime(line[0], "%d.%m.%Y %H:%M")
 
@@ -94,9 +94,9 @@ for t in times:   # Interieren über Liste 'times'
     for zeit in zeitpunkte:
         wert = safenumber(alldata[zeit]['a4'])
         print wert
-        if wert > 0.25:                   # Einschränken des Wertes für Tage mit vorherrschend direkter Sonnenstr.
+        if wert > 0.2:                   # Einschränken des Wertes für Tage mit vorherrschend direkter Sonnenstr.
             values_s.append(wert)
-        elif 0 < wert < 0.15:             # Einschränken des Wertes für Tage mit vorherrschend diffuser Sonnestr.
+        elif 0 < wert < 0.2:             # Einschränken des Wertes für Tage mit vorherrschend diffuser Sonnestr.
             values_c.append(wert)
         #print values
 
