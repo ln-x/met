@@ -10,7 +10,7 @@ middle = []
 
 startdate = dt.date(2012,10,1)
 enddate = dt.date(2012,11,30)
-starttime = dt.time(9,0,0) AlbedoJahresgang
+starttime = dt.time(9,0,0) #AlbedoJahresgang
 endtime = dt.time(14,45,0)
 sundays = [dt.date(2012,10,2),dt.date(2012,10,7)]
 #clouddays = dt.date[(2012,10,3),(2012,10,6)]

@@ -1,8 +1,10 @@
 # coding=utf-8
 import datetime as dt
+from math import exp
 import matplotlib.pyplot as plt
 import numpy
 import pickle
+from Sonnenstand_berechnen import CalcSolarPosition
 
 # In diesem Skript werden Rohdaten aus einem Pickle-file eingelesen
 # und die mittleren Tagesgänge berechnet und dargestellt
@@ -65,10 +67,12 @@ with open(filename, 'r') as f:  # Picklefile als 'alldata' laden (Typ: Autovivif
 
 
 #Einschränken des Zeitraumes
-startdate = dt.date(2012, 4, 1)
-enddate = dt.date(2012, 5, 30)
+startdate = dt.date(2012, 6, 1)
+enddate = dt.date(2012, 6, 30)
 starttime = dt.time(5,0, 0)
-endtime = dt.time(19, 0, 0)
+endtime = dt.time(17, 0, 0)
+
+a_zenith = 0.2
 
 #actualtimestamp = dt.datetime.strptime(line[0], "%d.%m.%Y %H:%M")
 
@@ -93,10 +97,10 @@ for t in times:   # Interieren über Liste 'times'
     # wird, Mittelwert wird für den entsprechenden Zeitpunkt in dict. mittelwert eingeschrieben
     for zeit in zeitpunkte:
         wert = safenumber(alldata[zeit]['a4'])
-        print wert
-        if wert > 0.2:                   # Einschränken des Wertes für Tage mit vorherrschend direkter Sonnenstr.
+        #print wert
+        if wert > 0.0:                   # Einschränken des Wertes für Tage mit vorherrschend direkter Sonnenstr.
             values_s.append(wert)
-        elif 0 < wert < 0.2:             # Einschränken des Wertes für Tage mit vorherrschend diffuser Sonnestr.
+        elif 0 < wert < 0.0:             # Einschränken des Wertes für Tage mit vorherrschend diffuser Sonnestr.
             values_c.append(wert)
         #print values
 
@@ -116,10 +120,19 @@ plot_x_s = []
 plot_y_s = []
 plot_x_c = []
 plot_y_c = []
+plot_a_calc = []
+
+for t in times:  ##Berechnen des Albedos nach Formel von Patt + Paltridge
+    tt = startdate.timetuple()
+    Altitude, Zenith, Daytime, direction = CalcSolarPosition(47, 16, t.hour, t.minute, 0, 0, tt.tm_yday)
+    #print Altitude, Zenith, Daytime, direction
+    a_calc = a_zenith + (1- a_zenith) * exp(-0.1*(90 - Zenith))
+    print t, tt.tm_yday, Zenith, a_calc
+    plot_a_calc.append(a_calc)
 
 #dummydatetime = dt.datetime
 for key in keysliste_s:
-    print key, mittelwert_s_dict[key]
+    #print key, mittelwert_s_dict[key]
     plot_x_s.append(dt.datetime(2013, 1, 1, key.hour, key.minute))
     plot_y_s.append(mittelwert_s_dict[key])
 
@@ -132,8 +145,8 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.plot(plot_x_s, plot_y_s, color="black", linestyle='solid', lw=0.8, label='sun,ext')
 ax.plot(plot_x_c, plot_y_c, color="black", linestyle='dashed', lw=0.8, label='cloud,ext')
+ax.plot(plot_x_s, plot_a_calc, color="black", linestyle='dotted', lw=0.8, label='calc')
 
 fig.autofmt_xdate()
 plt.show()
-
 plt.legend()
