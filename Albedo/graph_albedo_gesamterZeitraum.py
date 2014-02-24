@@ -37,10 +37,10 @@ a5, a6, a9, a11_s, a11_c, a12, a14, a15, a16, a17, a18 = ([] for i in range(11))
 #18: 15cm Recycling Ziegel + 5cm Recycling Ziegel
 
 #Einschränken des Zeitraumes
-startdate = dt.date(2012, 3, 1)
-enddate = dt.date(2012, 9, 30)
-starttime = dt.time(8, 45, 0)
-endtime = dt.time(15, 5, 0)
+startdate = dt.date(2012, 6, 1)
+enddate = dt.date(2012, 7, 30)
+starttime = dt.time(11, 0, 0)
+endtime = dt.time(13, 0, 0)
 #print startdate, enddate, starttime, endtime
 
 #Einlesen der csv-Dateien in das Objekt "csv_reader"

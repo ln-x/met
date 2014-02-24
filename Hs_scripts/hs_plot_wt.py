@@ -4,7 +4,7 @@ from Hs_scripts import hs_cdataloader
 __author__ = 'lnx'
 import matplotlib.pyplot as plt
 
-filename = "/home/lnx/PycharmProjects/Messdatenauswertung/HStest/v808_20130429_c00_v01_f05/Temp_H2O.txt"
+filename = "C:\heatsource900b5_339\win32\Test\inputfiles\Temp_H2O.txt"
 thedata = hs_loader.loadfile(filename=filename)
 print 'loaded: ', thedata
 
@@ -14,7 +14,7 @@ x2 = [i[2] for i in thedata]
 x3 = [i[3] for i in thedata]
 x4 = [i[4] for i in thedata]
 
-filename = "/home/lnx/PycharmProjects/Messdatenauswertung/HStest/v808_20130429_c00_v01_f30/Temp_H2O.txt"
+filename = "C:\heatsource900b5_339\win32\Test\inputfiles\Temp_H2O.txt"
 thedata2 = hs_loader.loadfile(filename=filename)
 print 'loaded: ', thedata2
 
@@ -24,7 +24,7 @@ b2= [i[2] for i in thedata2]
 b3 = [i[3] for i in thedata2]
 b4 = [i[4] for i in thedata2]
 
-filename = "/home/lnx/PycharmProjects/Messdatenauswertung/HStest/v808_20130429_c10_v01_f05/Temp_H2O.txt"
+filename = "C:\heatsource900b5_339\win32\Test\inputfiles\Temp_H2O.txt"
 thedata3 = hs_loader.loadfile(filename=filename)
 print 'loaded: ', thedata3
 
@@ -34,7 +34,7 @@ c2 = [i[2] for i in thedata3]
 c3 = [i[3] for i in thedata3]
 c4 = [i[4] for i in thedata3]
 
-filename = "/home/lnx/PycharmProjects/Messdatenauswertung/HStest/v808_20130429_c10_v01_f30/Temp_H2O.txt"
+filename = "/home/lnx/PycharmProjects/Messdatenauswertung/HStest/v808_20130429_c10_v01_f3/Temp_H2O.txt"
 thedata4 = hs_loader.loadfile(filename=filename)
 print 'loaded: ', thedata4
 

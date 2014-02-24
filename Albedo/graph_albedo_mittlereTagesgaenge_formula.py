@@ -121,6 +121,48 @@ plot_y_s = []
 plot_x_c = []
 plot_y_c = []
 plot_a_calc = []
+plot_a_test1 = []
+plot_a_test2 = []
+plot_a_test3 = []
+plot_a_test4 = []
+
+#To do!!!
+#Integration Luftfeuchteabhängigkeit (var) rF
+#Integration Grauwert (constant) Gv
+#Veg.höhe mittel (constant) Vh
+#Bedeckungsgrad (constant) Vc
+
+for t in times:  ##Berechnen des Albedos nach Formel von Patt + Paltridge + Test, wie verändere ich Formel durch Addition
+   tt = startdate.timetuple()
+   Altitude, Zenith, Daytime, direction = CalcSolarPosition(47, 16, t.hour, t.minute, 0, 0, tt.tm_yday)
+   #print Altitude, Zenith, Daytime, direction
+   a_test1 = a_zenith + (1- a_zenith) * exp(-0.1*(90 - Zenith)) + 0.1
+   print t, tt.tm_yday, Zenith, a_test1
+   plot_a_test1.append(a_test1)
+
+#for t in times:  ##Berechnen des Albedos nach Formel von Patt + Paltridge + Test, wie verändere ich Formel durch Multiplikation
+#    tt = startdate.timetuple()
+#    Altitude, Zenith, Daytime, direction = CalcSolarPosition(47, 16, t.hour, t.minute, 0, 0, tt.tm_yday)
+#    #print Altitude, Zenith, Daytime, direction
+#    a_test2 = (a_zenith + (1- a_zenith) * exp(-0.1*(90 - Zenith)))*1.1
+#    print t, tt.tm_yday, Zenith, a_test2
+#    plot_a_test2.append(a_test2)
+
+# for t in times:  ##Berechnen des Albedos nach Formel von Patt + Paltridge + Test, wie verändere ich Formel durch Mult. des zweiten Terms
+#     tt = startdate.timetuple()
+#     Altitude, Zenith, Daytime, direction = CalcSolarPosition(47, 16, t.hour, t.minute, 0, 0, tt.tm_yday)
+#     #print Altitude, Zenith, Daytime, direction
+#     a_test3 = a_zenith + (1- a_zenith) *1.1* exp(-0.1*(90 - Zenith))
+#     print t, tt.tm_yday, Zenith, a_test3
+#     plot_a_test3.append(a_test3)
+
+# for t in times:  ##Berechnen des Albedos nach Formel von Patt + Paltridge + Test, wie verändere ich Formel durch Veränderung von k
+#    tt = startdate.timetuple()
+#    Altitude, Zenith, Daytime, direction = CalcSolarPosition(47, 16, t.hour, t.minute, 0, 0, tt.tm_yday)
+#    #print Altitude, Zenith, Daytime, direction
+#    a_test4 = a_zenith + (1- a_zenith) * exp(-0.2*(90 - Zenith))
+#    print t, tt.tm_yday, Zenith, a_test4
+#    plot_a_test4.append(a_test4)
 
 for t in times:  ##Berechnen des Albedos nach Formel von Patt + Paltridge
     tt = startdate.timetuple()
@@ -143,9 +185,13 @@ for key in keysliste_c:
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ax.plot(plot_x_s, plot_y_s, color="black", linestyle='solid', lw=0.8, label='sun,ext')
-ax.plot(plot_x_c, plot_y_c, color="black", linestyle='dashed', lw=0.8, label='cloud,ext')
-ax.plot(plot_x_s, plot_a_calc, color="black", linestyle='dotted', lw=0.8, label='calc')
+ax.plot(plot_x_s, plot_y_s, color="black", linestyle='solid', lw=0.8, label="sun,ext")
+ax.plot(plot_x_c, plot_y_c, color="black", linestyle='dashed', lw=0.8, label="cloud,ext")
+ax.plot(plot_x_s, plot_a_calc, color="black", linestyle='dotted', lw=0.8, label="calc")
+ax.plot(plot_x_s, plot_a_test1, color="red", linestyle='solid',lw=0.8, label="test1")
+#ax.plot(plot_x_s, plot_a_test2, color="orange", linestyle='solid',lw=0.8, label="test2")
+#ax.plot(plot_x_s, plot_a_test3, color="green", linestyle='solid',lw=0.8, label="test3")
+#ax.plot(plot_x_s, plot_a_test4, color="blue", linestyle='solid',lw=0.8, label="test4")
 
 fig.autofmt_xdate()
 plt.show()
