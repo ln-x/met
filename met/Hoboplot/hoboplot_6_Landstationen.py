@@ -8,31 +8,43 @@ from numpy.random import rand
 import matplotlib.pyplot as pl
 
 #from matplotlib.dates import DateFormatter, MonthLocator, HourLocator, \
-#     DayLocator
+#DayLocator
+
 
 def read_UA(fname):
+    """
+
+    :param fname:
+    :rtype : object
+    """
     from datetime import datetime as dt
 
-    X = sp.genfromtxt(fname, skip_header=2, delimiter=';', usecols=(0, 1, 2, 3), dtype="i4,S20,f8, f8",
-                      names=["fn", "f0", "f1", "f2"])
+    X = sp.genfromtxt(fname, skip_header=1, delimiter=',', usecols=(0, 1, 2, 3, 4), dtype="S20,f8,f8,f8,f8",
+                      names=["f0", "f1", "f2", "f3", "f4"])
     print X
 
     list = X.tolist()
 
-    dates = [dt.strptime(dts, '%m.%d.%y %I:%M:%S %p') for dts in X["f0"]]
+    dates = []
+    for dts in X["f0"]:
+        dates.append(dt.strptime(dts, '%d.%m.%y %I:%M:%S %p'))
 
-    n = X["fn"]
     T = X["f1"]
-    L = X["f2"]
-    return n, dates, T, L
+    RH = X["f2"]
+    SW = X["f3"]
+    WD = X["f4"]
 
-path = "/media/WETTER_JHG/MET Radiation/1_WT/inBCDatenbank/Pinka"
+    return dates, T, RH, SW, WD
+
+
+path = "/media/WETTER_JHG/MET Radiation/2_Landstationen/"
 ext = "txt"
+
 
 def listExt(path, ext):
     files = []
     for dirpath, dirnames, filenames in os.walk(path):
-        for filename in [f for f in filenames if f.endswith("." + ext) and f.startswith("c")]:
+        for filename in [f for f in filenames if f.endswith("." + ext) and f.startswith("L")]:
             files.append(os.path.join(dirpath, filename))
     return files
 
@@ -54,19 +66,19 @@ fig, ax = pl.subplots()
 #cnt=0
 for cnt, fn in enumerate(filenames):
     print fn
-    n, dates, T, L = read_UA(fn)
+    dates, T, RH, SW, WD = read_UA(fn)
 
     #ax.xaxis.set_major_locator(month)
     #ax.xaxis.set_minor_locator(alldays)
     #ax.xaxis.set_major_formatter(weekFormatter)
 
     pl.subplot(211)
-    pl.plot(dates, L)
+    pl.plot(dates, T)
     #pl.plot(dates, T, color = cols[cnt])
     fig.autofmt_xdate()
 
     pl.subplot(212)
-    pl.plot(dates, T)
+    pl.plot(dates, RH)
     fig.autofmt_xdate()
 
     lege.append(fn.split('/')[-1].strip('.txt'))
@@ -76,7 +88,7 @@ for cnt, fn in enumerate(filenames):
     ax.xaxis_date()
     ax.autoscale_view()
 
-pl.legend(lege, bbox_to_anchor=(1.0, 1), loc=2, prop={'size':6}, borderaxespad=0.)
+pl.legend(lege, bbox_to_anchor=(1.0, 1), loc=2, prop={'size': 6}, borderaxespad=0.)
 
 pl.grid()
 
