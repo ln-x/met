@@ -9,9 +9,7 @@ def loadfile(filename):
         #print len(alldata)
         #print type(alldata)
 
-    name = alldata[1]
-    header = alldata[7] #Liste mit Flusskilometern - Distance from Mouth
-    data = alldata[7:]  #Liste ab 8.Zeile der alten Liste - Beginn der Rohdaten
+    data = alldata[3:]  #Liste ab 4.Zeile der alten Liste - Beginn der Rohdaten
 
     splitdata = []       #splitlistcomp = [i.split() for i in data]
     for i in data:
@@ -33,7 +31,7 @@ def loadfile(filename):
             jliste.append(float(value))
         converteddata.append(jliste)
 
-    return name, header, converteddata
+    return converteddata
 
 
 if __name__ == '__main__':
