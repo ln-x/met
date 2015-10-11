@@ -12,7 +12,7 @@ data = np.array(thedata)
 #print data[0]
 
 #extract data of study time and region
-#studyregion = [i[39:82] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
+#studyregion = [i[39:84] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
 studyregion = [i[31:76] for i in data]        #cuts km 74 - 51.5  (for start from km 89)
 print studyregion[0]
 print studyregion[777]

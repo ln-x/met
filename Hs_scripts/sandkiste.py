@@ -1,8 +1,17 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import numpy as np
+
 
 list1 = [[1,2.9],[4,5],[6,7.00]]
 list2 = (1,2,3,4)
+
+mean = np.mean(list2)
+
+print mean
+
+quit()
+
 
 min1 = min(min(i) for i in list1)
 
