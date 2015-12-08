@@ -10,8 +10,8 @@ def loadfile(filename):
         #print type(alldata)
 
     name = alldata[1]
-    header = alldata[7] #Liste mit Flusskilometern - Distance from Mouth
-    data = alldata[7:]  #Liste ab 8.Zeile der alten Liste - Beginn der Rohdaten
+    header = alldata[6] #Liste mit Flusskilometern - Distance from Mouth
+    data = alldata[6:]  #Liste ab 8.Zeile der alten Liste - Beginn der Rohdaten
 
     splitdata = []       #splitlistcomp = [i.split() for i in data]
     for i in data:

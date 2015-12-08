@@ -6,22 +6,24 @@ import numpy as np
 import matplotlib.pyplot as plt
 #import matplotlib as mpl
 
-filename1 = "/home/lnx/PycharmProjects/HS/049/outputfiles_origConv_elevcorr_incacloud_start89_masstransfer_2/Temp_H2O.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/049_submittedversion/outputfiles/VTS.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
-OMI = studyregion[768:936]  #cuts 2.8.2013 0h - 8.8.2013 23h (for start from 1.7.2013 0h)
-WTmin = min(min(i) for i in OMI)
-WTmax = max(max(j) for j in OMI)
-WTstd = np.std(OMI)
+OMI = studyregion[:]
 listedOMI = []
 for i in OMI:
     for j in i:
         listedOMI.append(j)
+WTmin = min(listedOMI)
+WTmax = max(listedOMI)
+WTstd = np.std(listedOMI)
 WTmean = np.average(listedOMI)
+
+print "/n STQ"
 print "WTmin(OMI)=", WTmin, "WTmax(OMI)=", WTmax, "WTmean(OMI)=", WTmean, "WTstd(OMI)=", WTstd
 
-filename1 = "/home/lnx/PycharmProjects/HS/049/outputfiles_origConv_elevcorr_incacloud_start89_masstransfer_2/Heat_Conv.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/049_submittedversion/outputfiles/Heat_Conv.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
@@ -36,7 +38,7 @@ for i in OMI:
 Cvmean = np.average(listedOMI)
 print "Cvmin(OMI)=", Cvmin, "Cvmax(OMI)=", Cvmax, "Cvmean(OMI)=", Cvmean, "Cvstd(OMI)=", Cvstd
 
-filename1 = "/home/lnx/PycharmProjects/HS/049/outputfiles_origConv_elevcorr_incacloud_start89_masstransfer_2/Heat_Cond.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/049_submittedversion/outputfiles/Heat_Cond.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
@@ -51,7 +53,7 @@ for i in OMI:
 Cdmean = np.average(listedOMI)
 print "Cdmin(OMI)=", Cdmin, "Cdmax(OMI)=", Cdmax, "Cdmean(OMI)=", Cdmean, "Cdstd(OMI)=", Cdstd
 
-filename1 = "/home/lnx/PycharmProjects/HS/049/outputfiles_origConv_elevcorr_incacloud_start89_masstransfer_2/Heat_Evap.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/049_submittedversion/outputfiles/Heat_Evap.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
@@ -66,7 +68,7 @@ for i in OMI:
 Evmean = np.average(listedOMI)
 print "Evmin(OMI)=", Evmin, "Evmax(OMI)=", Evmax, "Evmean(OMI)=", Evmean, "Evstd(OMI)=", Evstd
 
-filename1 = "/home/lnx/PycharmProjects/HS/049/outputfiles_origConv_elevcorr_incacloud_start89_masstransfer_2/Heat_TR.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/049_submittedversion/outputfiles/Heat_TR.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
@@ -81,7 +83,7 @@ for i in OMI:
 Lwmean = np.average(listedOMI)
 print "Lwmin(OMI)=", Lwmin, "Lwmax(OMI)=", Lwmax, "Lwmean(OMI)=", Lwmean, "Lwstd(OMI)=", Lwstd
 
-filename1 = "/home/lnx/PycharmProjects/HS/049/outputfiles_origConv_elevcorr_incacloud_start89_masstransfer_2/Heat_SR6.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/049_submittedversion/outputfiles/Heat_SR6.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
@@ -96,7 +98,23 @@ for i in OMI:
 SR6mean = np.average(listedOMI)
 print "SR6min(OMI)=", SR6min, "SR6max(OMI)=", SR6max, "SR6mean(OMI)=", SR6mean, "SR6std(OMI)=", SR6std
 
-filename1 = "/home/lnx/PycharmProjects/HS/049/outputfiles_origConv_elevcorr_incacloud_start89_penman_2/Heat_Conv.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/060_P_V0_2013/outputfiles/VTS.txt"
+name, header, thedata = hs_loader.loadfile(filename=filename1)
+data = np.array(thedata)
+studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
+OMI = studyregion[:]
+VTSmin_p2 = min(min(i) for i in OMI)
+VTSmax_p2 = max(max(j) for j in OMI)
+VTSstd_p2 = np.std(OMI)
+listedOMI = []
+for i in OMI:
+    for j in i:
+        listedOMI.append(j)
+VTSmean_p2 = np.average(listedOMI)
+print "n/V0"
+print "VTSmin_p2(OMI)=", VTSmin_p2, "VTSmax_p2(OMI)=", VTSmax_p2, "VTSmean_p2(OMI)=", VTSmean_p2, "VTSstd_p2(OMI)=", VTSstd_p2
+
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/060_P_V0_2013/outputfiles/Heat_Conv.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
@@ -111,7 +129,7 @@ for i in OMI:
 Cvmean_p2 = np.average(listedOMI)
 print "Cvmin_p2(OMI)=", Cvmin_p2, "Cvmax_p2(OMI)=", Cvmax_p2, "Cvmean_p2(OMI)=", Cvmean_p2, "Cvstd_p2(OMI)=", Cvstd_p2
 
-filename1 = "/home/lnx/PycharmProjects/HS/049/outputfiles_origConv_elevcorr_incacloud_start89_penman_2/Heat_Cond.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/060_P_V0_2013/outputfiles/Heat_Cond.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
@@ -126,7 +144,7 @@ for i in OMI:
 Cdmean_p2 = np.average(listedOMI)
 print "Cdmin_p2(OMI)=", Cdmin_p2, "Cdmax_p2(OMI)=", Cdmax_p2, "Cdmean(OMI)=", Cdmean_p2, "Cdstd(OMI)=", Cdstd_p2
 
-filename1 = "/home/lnx/PycharmProjects/HS/049/outputfiles_origConv_elevcorr_incacloud_start89_penman_2/Heat_Evap.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/060_P_V0_2013/outputfiles/Heat_Evap.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
@@ -141,7 +159,7 @@ for i in OMI:
 Evmean_p2 = np.average(listedOMI)
 print "P2 Evmin(OMI)=", Evmin_p2, "Evmax(OMI)=", Evmax_p2, "Evmean(OMI)=", Evmean_p2, "Evstd(OMI)=", Evstd_p2
 
-filename1 = "/home/lnx/PycharmProjects/HS/049/outputfiles_origConv_elevcorr_incacloud_start89_penman_2/Heat_TR.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/060_P_V0_2013/outputfiles/Heat_TR.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
@@ -156,7 +174,7 @@ for i in OMI:
 Lwmean_p2 = np.average(listedOMI)
 print "P2 Lwmin(OMI)=", Lwmin_p2, "Lwmax(OMI)=", Lwmax_p2, "Lwmean(OMI)=", Lwmean_p2, "Lwstd(OMI)=", Lwstd_p2
 
-filename1 = "/home/lnx/PycharmProjects/HS/049/outputfiles_origConv_elevcorr_incacloud_start89_penman_2/Heat_SR6.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/060_P_V0_2013/outputfiles/Heat_SR6.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
@@ -171,7 +189,24 @@ for i in OMI:
 SR6mean_p2 = np.average(listedOMI)
 print "P2 SR6min(OMI)=", SR6min_p2, "SR6max(OMI)=", SR6max_p2, "SR6mean(OMI)=", SR6mean_p2, "SR6std(OMI)=", SR6std_p2
 
-filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/049_submittedversion/outputfiles/Heat_Conv.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/061_P_V100_2013/outputfiles/VTS.txt"
+name, header, thedata = hs_loader.loadfile(filename=filename1)
+data = np.array(thedata)
+studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
+OMI = studyregion[:]  #cuts 2.8.2013 0h - 8.8.2013 23h (for start from 1.7.2013 0h)
+VTSmin_p2 = min(min(i) for i in OMI)
+VTSmax_p2 = max(max(j) for j in OMI)
+VTSstd_p2 = np.std(OMI)
+listedOMI = []
+for i in OMI:
+    for j in i:
+        listedOMI.append(j)
+VTSmean_p2 = np.average(listedOMI)
+
+print "n/V100"
+print "VTSmin_p2(OMI)=", VTSmin_p2, "VTSmax_p2(OMI)=", VTSmax_p2, "VTSmean_p2(OMI)=", VTSmean_p2, "VTSstd_p2(OMI)=", VTSstd_p2
+
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/061_P_V100_2013/outputfiles/Heat_Conv.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
@@ -186,7 +221,7 @@ for i in OMI:
 Cvmean_p = np.average(listedOMI)
 print "submitted: Cvmin(OMI)=", Cvmin_p, "Cvmax(OMI)=", Cvmax_p, "Cvmean(OMI)=", Cvmean_p, "Cvstd(OMI)=", Cvstd_p
 
-filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/049_submittedversion/outputfiles/Heat_Cond.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/061_P_V100_2013/outputfiles/Heat_Cond.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
@@ -201,7 +236,7 @@ for i in OMI:
 Cdmean_p = np.average(listedOMI)
 print "Submitted: Cdmin(OMI)=", Cdmin_p, "Cdmax(OMI)=", Cdmax_p, "Cdmean(OMI)=", Cdmean_p, "Cdstd(OMI)=", Cdstd_p
 
-filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/049_submittedversion/outputfiles/Heat_Evap.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/061_P_V100_2013/outputfiles/Heat_Evap.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
@@ -216,7 +251,7 @@ for i in OMI:
 Evmean_p = np.average(listedOMI)
 print "Submitted Evmin(OMI)=", Evmin_p, "Evmax(OMI)=", Evmax_p, "Evmean(OMI)=", Evmean_p, "Evstd(OMI)=", Evstd_p
 
-filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/049_submittedversion/outputfiles/Heat_TR.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/061_P_V100_2013/outputfiles/Heat_TR.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
@@ -235,7 +270,7 @@ for i in OMI:
 Lwmean_p = np.average(listedOMI)
 print "Submitted Lwmin(OMI)=", Lwmin_p, "Lwmax(OMI)=", Lwmax_p, "Lwmean(OMI)=", Lwmean_p, "Lwstd(OMI)=", Lwstd_p
 
-filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/049_submittedversion/outputfiles/Heat_SR6.txt"
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/061_P_V100_2013/outputfiles/Heat_SR6.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 data = np.array(thedata)
 studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
@@ -263,6 +298,208 @@ SR6std_p = np.std(listedOMI)
 
 
 print "Submitted SR6min(OMI)=", SR6min_p, "SR6max(OMI)=", SR6max_p, "SR6mean(OMI)=", SR6mean_p, "SR6std(OMI)=", SR6std_p
+
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/078_P_V0E0_2013/outputfiles_T0_BS0/VTS.txt"
+name, header, thedata = hs_loader.loadfile(filename=filename1)
+data = np.array(thedata)
+studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
+OMI = studyregion[:]  #cuts 2.8.2013 0h - 8.8.2013 23h (for start from 1.7.2013 0h)
+VTSmin_p2 = min(min(i) for i in OMI)
+VTSmax_p2 = max(max(j) for j in OMI)
+VTSstd_p2 = np.std(OMI)
+listedOMI = []
+for i in OMI:
+    for j in i:
+        listedOMI.append(j)
+VTSmean_p2 = np.average(listedOMI)
+
+print "n/ B0"
+print "VTSmin_p2(OMI)=", VTSmin_p2, "VTSmax_p2(OMI)=", VTSmax_p2, "VTSmean_p2(OMI)=", VTSmean_p2, "VTSstd_p2(OMI)=", VTSstd_p2
+
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/078_P_V0E0_2013/outputfiles_T0_BS0/Heat_Conv.txt"
+name, header, thedata = hs_loader.loadfile(filename=filename1)
+data = np.array(thedata)
+studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
+OMI = studyregion[168:336]  #cuts 2.8.2013 0h - 8.8.2013 23h (for start from 26.7.2013 0h)
+Cvmin_p = min(min(i) for i in OMI)
+Cvmax_p = max(max(j) for j in OMI)
+Cvstd_p = np.std(OMI)
+listedOMI = []
+for i in OMI:
+    for j in i:
+        listedOMI.append(j)
+Cvmean_p = np.average(listedOMI)
+print "submitted: Cvmin(OMI)=", Cvmin_p, "Cvmax(OMI)=", Cvmax_p, "Cvmean(OMI)=", Cvmean_p, "Cvstd(OMI)=", Cvstd_p
+
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/078_P_V0E0_2013/outputfiles_T0_BS0/Heat_Cond.txt"
+name, header, thedata = hs_loader.loadfile(filename=filename1)
+data = np.array(thedata)
+studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
+OMI = studyregion[168:336]  #cuts 2.8.2013 0h - 8.8.2013 23h (for start from 1.7.2013 0h)
+Cdmin_p = min(min(i) for i in OMI)
+Cdmax_p = max(max(j) for j in OMI)
+Cdstd_p = np.std(OMI)
+listedOMI = []
+for i in OMI:
+    for j in i:
+        listedOMI.append(j)
+Cdmean_p = np.average(listedOMI)
+print "Submitted: Cdmin(OMI)=", Cdmin_p, "Cdmax(OMI)=", Cdmax_p, "Cdmean(OMI)=", Cdmean_p, "Cdstd(OMI)=", Cdstd_p
+
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/078_P_V0E0_2013/outputfiles_T0_BS0/Heat_Evap.txt"
+name, header, thedata = hs_loader.loadfile(filename=filename1)
+data = np.array(thedata)
+studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
+OMI = studyregion[168:336]  #cuts 2.8.2013 0h - 8.8.2013 23h (for start from 1.7.2013 0h)
+Evmin_p = min(min(i) for i in OMI)
+Evmax_p = max(max(j) for j in OMI)
+Evstd_p = np.std(OMI)
+listedOMI = []
+for i in OMI:
+    for j in i:
+        listedOMI.append(j)
+Evmean_p = np.average(listedOMI)
+print "Submitted Evmin(OMI)=", Evmin_p, "Evmax(OMI)=", Evmax_p, "Evmean(OMI)=", Evmean_p, "Evstd(OMI)=", Evstd_p
+
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/078_P_V0E0_2013/outputfiles_T0_BS0/Heat_TR.txt"
+name, header, thedata = hs_loader.loadfile(filename=filename1)
+data = np.array(thedata)
+studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
+OMI = studyregion[168:336]  #cuts 2.8.2013 0h - 8.8.2013 23h (for start from 1.7.2013 0h)
+
+print "first and last value:", OMI[0][0], OMI[166][44]
+
+
+Lwmin_p = min(min(i) for i in OMI)
+Lwmax_p = max(max(j) for j in OMI)
+Lwstd_p = np.std(OMI)
+listedOMI = []
+for i in OMI:
+    for j in i:
+        listedOMI.append(j)
+Lwmean_p = np.average(listedOMI)
+print "Submitted Lwmin(OMI)=", Lwmin_p, "Lwmax(OMI)=", Lwmax_p, "Lwmean(OMI)=", Lwmean_p, "Lwstd(OMI)=", Lwstd_p
+
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/078_P_V0E0_2013/outputfiles_T0_BS0/Heat_SR6.txt"
+name, header, thedata = hs_loader.loadfile(filename=filename1)
+data = np.array(thedata)
+studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
+OMI = studyregion[168:336]  #cuts 2.8.2013 0h - 8.8.2013 23h (for start from 1.7.2013 0h)
+
+# fig = plt.figure()
+# x = np.arange(len(studyregion[0]))
+# plt.plot(x, OMI[0], color='red', lw=0.5)
+# plt.show()
+
+listedOMI = []
+for i in OMI:
+    for j in i:
+        listedOMI.append(j)
+
+#print "time steps (len(OMI)):", len(OMI) #should be 167
+#print "longitudinal steps (len(OMI[0])):", len(OMI[0]) #should be 45
+#print "number of data entries (len(listedOMI)):",len(listedOMI) #should be 7515
+#print listedOMI
+
+SR6mean_p = np.mean(listedOMI)
+SR6max_p = max(listedOMI)
+SR6min_p = min(listedOMI)
+SR6std_p = np.std(listedOMI)
+
+
+print "Submitted SR6min(OMI)=", SR6min_p, "SR6max(OMI)=", SR6max_p, "SR6mean(OMI)=", SR6mean_p, "SR6std(OMI)=", SR6std_p
+
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/078_P_V0E0_2013/outputfiles_T0/VTS.txt"
+name, header, thedata = hs_loader.loadfile(filename=filename1)
+data = np.array(thedata)
+studyregion = [i[31:77] for i in data]  #cuts km 74 - 51.5  (for start from km 89)
+OMI = studyregion[:]  #cuts 2.8.2013 0h - 8.8.2013 23h (for start from 1.7.2013 0h)
+VTSmin_p2 = min(min(i) for i in OMI)
+VTSmax_p2 = max(max(j) for j in OMI)
+VTSstd_p2 = np.std(OMI)
+listedOMI = []
+for i in OMI:
+    for j in i:
+        listedOMI.append(j)
+VTSmean_p2 = np.average(listedOMI)
+
+print "n/ T0"
+print "VTSmin_p2(OMI)=", VTSmin_p2, "VTSmax_p2(OMI)=", VTSmax_p2, "VTSmean_p2(OMI)=", VTSmean_p2, "VTSstd_p2(OMI)=", VTSstd_p2
+
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/078_P_V0E0_2013/outputfiles_T0/Heat_Conv.txt"
+name, header, thedata = hs_loader.loadfile(filename=filename1)
+data = np.array(thedata)
+studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
+OMI = studyregion[168:336]  #cuts 2.8.2013 0h - 8.8.2013 23h (for start from 1.7.2013 0h)
+Cvmin_p = min(min(i) for i in OMI)
+Cvmax_p = max(max(j) for j in OMI)
+Cvstd_p = np.std(OMI)
+listedOMI = []
+for i in OMI:
+    for j in i:
+        listedOMI.append(j)
+Cvmean_p = np.average(listedOMI)
+print "submitted: Cvmin(OMI)=", Cvmin_p, "Cvmax(OMI)=", Cvmax_p, "Cvmean(OMI)=", Cvmean_p, "Cvstd(OMI)=", Cvstd_p
+
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/078_P_V0E0_2013/outputfiles_T0/Heat_Cond.txt"
+name, header, thedata = hs_loader.loadfile(filename=filename1)
+data = np.array(thedata)
+studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
+OMI = studyregion[168:336]  #cuts 2.8.2013 0h - 8.8.2013 23h (for start from 1.7.2013 0h)
+Cdmin_p = min(min(i) for i in OMI)
+Cdmax_p = max(max(j) for j in OMI)
+Cdstd_p = np.std(OMI)
+listedOMI = []
+for i in OMI:
+    for j in i:
+        listedOMI.append(j)
+Cdmean_p = np.average(listedOMI)
+print "Submitted: Cdmin(OMI)=", Cdmin_p, "Cdmax(OMI)=", Cdmax_p, "Cdmean(OMI)=", Cdmean_p, "Cdstd(OMI)=", Cdstd_p
+
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/078_P_V0E0_2013/outputfiles_T0/Heat_Evap.txt"
+name, header, thedata = hs_loader.loadfile(filename=filename1)
+data = np.array(thedata)
+studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
+OMI = studyregion[168:336]  #cuts 2.8.2013 0h - 8.8.2013 23h (for start from 1.7.2013 0h)
+Evmin_p = min(min(i) for i in OMI)
+Evmax_p = max(max(j) for j in OMI)
+Evstd_p = np.std(OMI)
+listedOMI = []
+for i in OMI:
+    for j in i:
+        listedOMI.append(j)
+Evmean_p = np.average(listedOMI)
+print "Submitted Evmin(OMI)=", Evmin_p, "Evmax(OMI)=", Evmax_p, "Evmean(OMI)=", Evmean_p, "Evstd(OMI)=", Evstd_p
+
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/078_P_V0E0_2013/outputfiles_T0/Heat_TR.txt"
+name, header, thedata = hs_loader.loadfile(filename=filename1)
+data = np.array(thedata)
+studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
+OMI = studyregion[168:336]  #cuts 2.8.2013 0h - 8.8.2013 23h (for start from 1.7.2013 0h)
+Lwmin_p = min(min(i) for i in OMI)
+Lwmax_p = max(max(j) for j in OMI)
+Lwstd_p = np.std(OMI)
+listedOMI = []
+for i in OMI:
+    for j in i:
+        listedOMI.append(j)
+Lwmean_p = np.average(listedOMI)
+print "Submitted Lwmin(OMI)=", Lwmin_p, "Lwmax(OMI)=", Lwmax_p, "Lwmean(OMI)=", Lwmean_p, "Lwstd(OMI)=", Lwstd_p
+
+filename1 = "/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Simulations_Archive/078_P_V0E0_2013/outputfiles_T0/Heat_SR6.txt"
+name, header, thedata = hs_loader.loadfile(filename=filename1)
+data = np.array(thedata)
+studyregion = [i[39:85] for i in data]       #cuts km 74 - 51.5  (for start from km 93)
+OMI = studyregion[168:336]  #cuts 2.8.2013 0h - 8.8.2013 23h (for start from 1.7.2013 0h)
+listedOMI = []
+for i in OMI:
+    for j in i:
+        listedOMI.append(j)
+SR6mean_p = np.mean(listedOMI)
+SR6max_p = max(listedOMI)
+SR6min_p = min(listedOMI)
+SR6std_p = np.std(listedOMI)
+print "SR6min(OMI)=", SR6min_p, "SR6max(OMI)=", SR6max_p, "SR6mean(OMI)=", SR6mean_p, "SR6std(OMI)=", SR6std_p
 
 quit()
 

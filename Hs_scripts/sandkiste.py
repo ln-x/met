@@ -5,16 +5,47 @@ import numpy as np
 
 list1 = [[1,2.9],[4,5],[6,7.00]]
 list2 = (1,2,3,4)
+x = np.arange(0,9,1) #hours since start
+data = [9,3,4,6,6,2,4,5,3,2]
+
+#print data
+#print data[1:1+4]
+
+daily_min = []
+today_data = []
+for i in x:
+    #print i
+    #print divmod(i,2)
+    quotient, remainder = divmod(i,5)
+    if remainder == 0:
+        print 'TRUE'
+        today_data = data[i:i+4]
+
+#        print i
+#        print data
+#        print data[i:1+4]
+        print today_data
+
+        min = np.min(today_data)
+        print min
+
+#        daily_min.append(min(data[i:i+4]))
+        daily_min.append(min)
+
+print daily_min
+
+quit()
 
 mean = np.mean(list2)
 
 print mean
 
+
+
+
 quit()
 
-
 min1 = min(min(i) for i in list1)
-
 
 list3 = []
 for i in list1:

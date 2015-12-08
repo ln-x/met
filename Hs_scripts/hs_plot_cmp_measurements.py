@@ -64,13 +64,14 @@ bg = [i[16] for i in thedata2] # km 38
 
 fig = plt.figure()
 
-plt.plot(date_time, uws, color='red', lw=0.5, label='uw_s')
-plt.plot(date_time, uw, color='blue', lw=0.5, label='uw_m')
+plt.plot(date_time, oo, color='green', lw=0.5, label='oo_m')
+plt.plot(date_time, uo, color='blue', lw=0.5, label='uo_m')
+plt.plot(date_time, uw, color='red', lw=0.5, label='uw_m')
 
 fig.autofmt_xdate()
 plt.xlabel('time[h]')
 plt.ylabel('water temperature [degC]')
 plt.legend()
 
-fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/UW_Validation_OrigConv_m.png')
+fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/Vgl_Messstationen.png')
 plt.show()
