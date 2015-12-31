@@ -6,7 +6,7 @@ __author__ = 'lnx'
 import matplotlib.pyplot as plt
 import numpy as np
 
-filename = "/home/lnx/PycharmProjects/Messdatenauswertung/HStest/v808_20130429_c00_v01_f05/Temp_H2O.txt"
+filename = "C:\heatsource900b5_339\win32\Test\inputfiles\Temp_H2O.txt"
 thedata = hs_loader.loadfile(filename=filename)
 print 'loaded: ', thedata
 

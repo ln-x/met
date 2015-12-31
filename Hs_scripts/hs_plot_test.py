@@ -1,11 +1,11 @@
-from Hs_scripts import hs_loader
+from Hs_scripts import hs9_loader
 from Hs_scripts import hs_cdataloader
 
 __author__ = 'lnx'
 import matplotlib.pyplot as plt
 
-filename = "C:\heatsource900b5_339\win32\Test\inputfiles\Temp_H2O.txt"
-thedata = hs_loader.loadfile(filename=filename)
+filename = "C:\heatsource900b5_339\win32\Test\outputfiles\Temp_H2O.txt"
+thedata = hs9_loader.loadfile(filename=filename)
 print 'loaded: ', thedata
 
 date_time = [i[0] for i in thedata]
@@ -14,8 +14,8 @@ x2 = [i[2] for i in thedata]
 x3 = [i[3] for i in thedata]
 x4 = [i[4] for i in thedata]
 
-filename = "C:\heatsource900b5_339\win32\Test\inputfiles\Temp_H2O.txt"
-thedata2 = hs_loader.loadfile(filename=filename)
+filename = "C:\heatsource900b5_339\win32\Test\outputfiles\Temp_Sed.txt"
+thedata2 = hs9_loader.loadfile(filename=filename)
 print 'loaded: ', thedata2
 
 #date_time = [i[0] for i in thedata2]
@@ -24,8 +24,9 @@ b2= [i[2] for i in thedata2]
 b3 = [i[3] for i in thedata2]
 b4 = [i[4] for i in thedata2]
 
-filename = "C:\heatsource900b5_339\win32\Test\inputfiles\Temp_H2O.txt"
-thedata3 = hs_loader.loadfile(filename=filename)
+
+filename = "C:\heatsource900b5_339\win32\Test\outputfiles\Hyd_Hyp.txt"
+thedata3 = hs9_loader.loadfile(filename=filename)
 print 'loaded: ', thedata3
 
 #date_time = [i[0] for i in thedata3]
@@ -34,8 +35,8 @@ c2 = [i[2] for i in thedata3]
 c3 = [i[3] for i in thedata3]
 c4 = [i[4] for i in thedata3]
 
-filename = "/home/lnx/PycharmProjects/Messdatenauswertung/HStest/v808_20130429_c10_v01_f3/Temp_H2O.txt"
-thedata4 = hs_loader.loadfile(filename=filename)
+filename = "C:\heatsource900b5_339\win32\Test\outputfiles\Hyd_Vel.txt"
+thedata4 = hs9_loader.loadfile(filename=filename)
 print 'loaded: ', thedata4
 
 #date_time = [i[0] for i in thedata4]
@@ -44,27 +45,28 @@ d2 = [i[2] for i in thedata4]
 d3 = [i[3] for i in thedata4]
 d4 = [i[4] for i in thedata4]
 
-filename = "/home/lnx/PycharmProjects/Messdatenauswertung/HStest/Continousdata_HS808_20130415.txt"
-thedata5 = hs_cdataloader.loadfile(filename=filename)
-print 'loaded: ', thedata5
 
-date_time2 = [i[0] for i in thedata5]
-e1 = [i[3] for i in thedata5]
+#filename = "/home/lnx/PycharmProjects/Messdatenauswertung/HStest/Continousdata_HS808_20130415.txt"
+#thedata5 = hs_cdataloader.loadfile(filename=filename)
+#print 'loaded: ', thedata5
 
-matches = list(set(date_time) & set(date_time2))
-matches.sort()
-for m in matches:
-    print(m)
+# date_time2 = [i[0] for i in thedata5]
+# e1 = [i[3] for i in thedata5]
 
-
-eld = []
-for d in matches:
-    index = date_time2.index(d)
-    eld.append(thedata5[index][2])
-    print index
-
-print eld
-e1 = [i[3] for i in thedata5]
+# matches = list(set(date_time) & set(date_time2))
+# matches.sort()
+# for m in matches:
+#     print(m)
+#
+#
+# eld = []
+# for d in matches:
+#     index = date_time2.index(d)
+#     eld.append(thedata5[index][2])
+#     print index
+#
+# print eld
+# e1 = [i[3] for i in thedata5]
 
 fig = plt.figure()
 
@@ -74,7 +76,7 @@ ax.plot(date_time, x1, color='red', lw=0.5)
 ax.plot(date_time, x2, color='darkred', lw=0.5)
 ax.plot(date_time, x3, color='violet', lw=0.5)
 ax.plot(date_time, x4, color='darkblue', lw=0.5)
-ax.plot(date_time, eld, color='black', lw=0.5)
+#ax.plot(date_time, eld, color='black', lw=0.5)
 #ax.plot(graphiken['RO'][12], color='blue', lw=0.5)
 #plt.axis([0, 15, -15, 15])
 #plt.setp(plt.gca(), xticklabels=[6, 12, 18], yticks=(10, 15, 20), xticks=(6, 12, 18))
@@ -87,7 +89,7 @@ ax.plot(date_time, b1, color='red', lw=0.5)
 ax.plot(date_time, b2, color='darkred', lw=0.5)
 ax.plot(date_time, b3, color='violet', lw=0.5)
 ax.plot(date_time, b4, color='darkblue', lw=0.5)
-ax.plot(date_time, eld, color='black', lw=0.5)
+#ax.plot(date_time, eld, color='black', lw=0.5)
 # plt.text(20, 18, 'II', fontsize=20)
 # plt.setp(plt.gca(), xticklabels=[6, 12, 18], yticks=(10, 15, 20), xticks=(6, 12, 18))
 # plt.axis([1, 23, 5, 20])
@@ -99,7 +101,7 @@ ax.plot(date_time, c1, color='red', lw=0.5)
 ax.plot(date_time, c2, color='darkred', lw=0.5)
 ax.plot(date_time, c3, color='violet', lw=0.5)
 ax.plot(date_time, c4, color='darkblue', lw=0.5)
-ax.plot(date_time, eld, color='black', lw=0.5)
+#ax.plot(date_time, eld, color='black', lw=0.5)
 # plt.axis([1, 23, 5, 20])
 # plt.setp(plt.gca(), xticklabels=[6, 12, 18], yticks=(10, 15, 20), xticks=(6, 12, 18))
 # plt.text(20, 18, 'III', fontsize=20)
@@ -111,7 +113,7 @@ ax.plot(date_time, d1, color='red', lw=0.5, label='0.65')
 ax.plot(date_time, d2, color='darkred', lw=0.5, label='0.40')
 ax.plot(date_time, d3, color='violet', lw=0.5, label='0.15')
 ax.plot(date_time, d4, color='darkblue', lw=0.5, label='0.00')
-ax.plot(date_time, eld, color='black', lw=0.5, label='meas')
+#ax.plot(date_time, eld, color='black', lw=0.5, label='meas')
 # plt.axis([1, 23, 5, 20])
 # plt.setp(plt.gca(), xticklabels=[6, 12, 18], yticks=(10, 15, 20), xticks=(6, 12, 18))
 # plt.text(20, 18, 'IV', fontsize=20)
