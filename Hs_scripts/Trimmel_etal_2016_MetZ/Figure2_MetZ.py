@@ -38,9 +38,9 @@ WTdiff = [0.8158, 0.1484, -0.0085, -0.617664]
 print WTdiff[0]
 
 axes2.plot(1, WTdiff[0], marker='s', color='lightgrey') #label='Sw *1.1'
-axes2.plot(2, WTdiff[1], marker='s', color='darkgrey') #label='Lw *1.1'
-axes2.plot(3, WTdiff[2], marker='s', color='grey') #label='Ev *1.1'
-axes2.plot(4, WTdiff[3], marker='s', color='black') #label='Cv *1.1'
+axes2.plot(2, WTdiff[1], marker='s', color='black') #label='Lw *1.1'
+axes2.plot(3, WTdiff[2], marker='s', color='darkgrey') #label='Ev *1.1'
+axes2.plot(4, WTdiff[3], marker='s', color='grey') #label='Cv *1.1'
 axes2.set(ylabel=('water temp. diff. [degC]'))
 # You can specify a rotation for the tick labels in degrees or with keywords.
 axes2.set(xticks=x)  #plt.xticks(x, labels, rotation='vertical')

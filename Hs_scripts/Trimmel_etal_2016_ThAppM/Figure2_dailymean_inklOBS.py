@@ -3,16 +3,47 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+#TODO: 1977-2006 1a, 5a, max airtemp event  : OBS;20050730;20120826;20070722;20030615;20130809
+#TODO: other Data: daily mean
+#TODO: glorad- skip,
+#TODO: Tabelle mit mean values also for hum, wind, glorad
+
+#C_1991_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/1977-2006/Pinka_Oberwart_Landeshauptstrasse_L382_grid_t2m_precip.txt', sep='\t', skiprows=2)# =['Date','T2m(C)','Pr(mm)'], parse_dates=['Date'])
+
+C_1998_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/David_20151221/Bioclick/ZAMG-Station-Data/Bad-Tatzmannsdorf_data.txt', sep='\t', skiprows=9, na_values=['-999.00'])# =['Date','T2m(C)','Pr(mm)'], parse_dates=['Date'])
+
+#1a: 17/07/2005 - 30/07/2005
+#5a: 13/08/2012 - 26/08/2012
+#20a: 15/07/2007 - 22/07/2007
+#2003: 01/06/2003 - 15/06/2003
+#max: 27/07/2013 - 09/08/2013
+
+print C_1998_0
+
+
+#pd.to_datetime(C_1991_0, dayfirst=True)
+
+C_1991 = C_1991_0.set_index(['Day'])
+
+print C_1991
+
+
+
+
+#stats = C_1991_0.describe()
+
+
+quit()
+
 C_2013_0 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_p/inputfiles/Climate_04inca.csv', sep=',', parse_dates=['DateTime'])
+#C_2013_0.resample('D', how='mean')
+
 stats= C_2013_0.describe()
 print 'C_2013=', stats
 C_2013 = C_2013_0.set_index('DateTime')
 #print C_2013
 C_2013_glorad_sum = C_2013['GloRad (W/m2)'].resample('D', how='sum')/1000
 C_2013_glorad_sum_1 = C_2013_glorad_sum.reset_index()
-
-stats= C_2013_glorad_sum.describe()
-print 'C_2013_gloR=', stats
 #print C_2013_glorad_sum_1
 
 C_1a_2030_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2016-2045/1jaehrl/MLF/Climate_04.csv', sep='\s+', parse_dates={'datetime':['YYYY','MM','DD','HH']})
@@ -35,21 +66,12 @@ C_max_2030_glorad_sum_1 = C_max_2030_glorad_sum.reset_index()
 
 # #WT_2030 = pd.merge(WT_1a_2030, WT_5a_2030) #doesnt work - because of Series?
 C_2030 = pd.concat([C_1a_2030_0['AirT'], C_5a_2030_0['AirT'],C_max_2030_0['AirT']],axis=1)
-C_2030_wi = pd.concat([C_1a_2030_0['Wspd'], C_5a_2030_0['Wspd'],C_max_2030_0['Wspd']],axis=1)
-C_2030_rh = pd.concat([C_1a_2030_0['Rhum'], C_5a_2030_0['Rhum'],C_max_2030_0['Rhum']],axis=1)
-
 stats= C_2030.describe()
-print 'C_2030_airt=', stats
-stats= C_2030_rh.describe()
-print 'C_2030_relh=', stats
-stats= C_2030_wi.describe()
-print 'C_2030_wspd=', stats
+print 'C_2030=', stats
 
 #print C_2030
 C_2030 = np.array(C_2030.values)
 C_2030_glorad = pd.concat([C_1a_2030_glorad_sum_1['Rad'], C_5a_2030_glorad_sum_1['Rad'], C_max_2030_glorad_sum_1['Rad']], axis=1)
-stats= C_2030_glorad.describe()
-print 'C_2030_gloR=', stats
 C_2030_glorad = np.array(C_2030_glorad.values)
 print C_2030_glorad
 
@@ -69,19 +91,10 @@ C_max_2050_glorad_sum = C_max_2050['Rad'].resample('D', how='sum')/1000
 C_max_2050_glorad_sum_1 = C_max_2050_glorad_sum.reset_index()
 
 C_2050 = pd.concat([C_1a_2050_0['AirT'], C_5a_2050_0['AirT'],C_max_2050_0['AirT']],axis=1)
-C_2050_wi = pd.concat([C_1a_2050_0['Wspd'], C_5a_2050_0['Wspd'],C_max_2050_0['Wspd']],axis=1)
-C_2050_rh = pd.concat([C_1a_2050_0['Rhum'], C_5a_2050_0['Rhum'],C_max_2050_0['Rhum']],axis=1)
 stats= C_2050.describe()
-print 'C_2050_airt=', stats
-stats= C_2050_rh.describe()
-print 'C_2050_relh=', stats
-stats= C_2050_wi.describe()
-print 'C_2050_wdsp=', stats
-
+print 'C_2050=', stats
 C_2050 = np.array(C_2050.values)
 C_2050_glorad = pd.concat([C_1a_2050_glorad_sum_1['Rad'], C_5a_2050_glorad_sum_1['Rad'], C_max_2050_glorad_sum_1['Rad']], axis=1)
-stats= C_2050_glorad.describe()
-print 'C_2050_gloR=', stats
 C_2050_glorad = np.array(C_2050_glorad.values)
 
 C_1a_2085_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2071-2100/1jaehrl/MLF/Climate_04.csv', sep='\s+', parse_dates={'datetime':['YYYY','MM','DD','HH']})
@@ -100,21 +113,10 @@ C_max_2085_glorad_sum = C_max_2085['Rad'].resample('D', how='sum')/1000
 C_max_2085_glorad_sum_1 = C_max_2085_glorad_sum.reset_index()
 
 C_2085 = pd.concat([C_1a_2085_0['AirT'], C_5a_2085_0['AirT'],C_max_2085_0['AirT']],axis=1)
-C_2085_wi = pd.concat([C_1a_2085_0['Wspd'], C_5a_2085_0['Wspd'],C_max_2085_0['Wspd']],axis=1)
-C_2085_rh = pd.concat([C_1a_2085_0['Rhum'], C_5a_2085_0['Rhum'],C_max_2085_0['Rhum']],axis=1)
-
 stats= C_2085.describe()
-print 'C_2085_airT=', stats
-stats= C_2085_rh.describe()
-print 'C_2085_relH=', stats
-stats= C_2085_wi.describe()
-print 'C_2085_wind=', stats
-
+print 'C_2085=', stats
 C_2085 = np.array(C_2085.values)
 C_2085_glorad = pd.concat([C_1a_2085_glorad_sum_1['Rad'], C_5a_2085_glorad_sum_1['Rad'], C_max_2085_glorad_sum_1['Rad']], axis=1)
-stats= C_2085_glorad.describe()
-print 'C_2085_gloR=', stats
-
 C_2085_glorad = np.array(C_2085_glorad.values)
 
 
@@ -150,7 +152,8 @@ axes[1, 2].boxplot(C_2085_glorad)
 axes[1, 2].set(xticklabels=('1a','5a','max'))
 
 
-#fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure2.tiff')
+
+fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure2.tiff')
 plt.show()
 
 # #
