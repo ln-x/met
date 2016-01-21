@@ -20,18 +20,13 @@ C_1998_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzen
 
 print C_1998_0
 
-
 #pd.to_datetime(C_1991_0, dayfirst=True)
 
 C_1991 = C_1991_0.set_index(['Day'])
 
 print C_1991
 
-
-
-
 #stats = C_1991_0.describe()
-
 
 quit()
 
