@@ -97,5 +97,54 @@ C_max_2085_max5days['Rad'] = C_max_2085_max5days['Rad'].resample('D', how='sum')
 C_max_2085_max5days_mean = C_max_2085_max5days.mean()
 print '2085 Max: \n', C_max_2085_max5days_mean
 
+
+BC_2013 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_p/inputfiles/Boundary_Conditions_P_B4.csv', index_col='DateTime', sep=',', parse_dates=['DateTime'])
+BC_2013_max5days = BC_2013['2013-08-04 00:00:00':'2013-08-08 23:50:00']
+stats= BC_2013_max5days.describe()
+print 'max5days\nBC_2013=', stats
+
+BC_2030 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2016-2045/1jaehrl/MLF/Boundary_Conditions.csv', sep=',', parse_dates=['DateTime'])
+BC_2030_max5days = BC_2030.ix[240:]
+print 'BC_2030 1a=', BC_2030_max5days.describe()
+BC_2030 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2016-2045/5jaehrl/MLF/Boundary_Conditions.csv', sep=',', parse_dates=['DateTime'])
+BC_2030_max5days = BC_2030.ix[240:]
+print 'BC_2030 5a=', BC_2030_max5days.describe()
+BC_2030 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2016-2045/20jaehrl/MLF/Boundary_Conditions.csv', sep=',', parse_dates=['DateTime'])
+BC_2030_max5days = BC_2030.ix[240:]
+print 'BC_2030 20a=', BC_2030_max5days.describe()
+BC_2030 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2016-2045/Max/MLF/Boundary_Conditions.csv', sep=',', parse_dates=['DateTime'])
+BC_2030_max5days = BC_2030.ix[240:]
+stats = BC_2030_max5days.describe()
+print 'BC_2030 max=', stats
+
+
+BC_2050 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2036-2065/1jaehrl/MLF/Boundary_Conditions.csv', sep=',', parse_dates=['DateTime'])
+BC_2050_max5days = BC_2050.ix[240:]
+print 'BC_2050 1a=', BC_2050_max5days.describe()
+BC_2050 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2036-2065/5jaehrl/MLF/Boundary_Conditions.csv', sep=',', parse_dates=['DateTime'])
+BC_2050_max5days = BC_2050.ix[240:]
+print 'BC_2050 5a=', BC_2050_max5days.describe()
+BC_2050 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2036-2065/20jaehrl/MLF/Boundary_Conditions.csv', sep=',', parse_dates=['DateTime'])
+BC_2050_max5days = BC_2050.ix[240:]
+print 'BC_2050 20a=', BC_2050_max5days.describe()
+BC_2050 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2036-2065/Max/MLF/Boundary_Conditions.csv', sep=',', parse_dates=['DateTime'])
+BC_2050_max5days = BC_2050.ix[240:]
+stats= BC_2050_max5days.describe()
+print 'BC_2050 max=', stats
+
+BC_2085 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2071-2100/1jaehrl/MLF/Boundary_Conditions.csv', sep=',', parse_dates=['DateTime'])
+BC_2085_max5days = BC_2085.ix[240:]
+print 'BC_2030 1a=', BC_2085_max5days.describe()
+BC_2085 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2071-2100/5jaehrl/MLF/Boundary_Conditions.csv', sep=',', parse_dates=['DateTime'])
+BC_2085_max5days = BC_2085.ix[240:]
+print 'BC_2030 5a=', BC_2085_max5days.describe()
+BC_2085 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2071-2100/20jaehrl/MLF/Boundary_Conditions.csv', sep=',', parse_dates=['DateTime'])
+BC_2085_max5days = BC_2085.ix[240:]
+print 'BC_2030 20a=', BC_2085_max5days.describe()
+BC_2085 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2071-2100/Max/MLF/Boundary_Conditions.csv', sep=',', parse_dates=['DateTime'])
+BC_2085_max5days = BC_2085.ix[240:]
+stats= BC_2085_max5days.describe()
+print 'BC_2085 max=', stats
+
 quit()
 
