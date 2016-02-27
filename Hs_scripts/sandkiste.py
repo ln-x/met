@@ -78,3 +78,14 @@ at = AnchoredText("Figure 1a",
 at.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
 ax.add_artist(at)
 
+
+
+#DATETIME
+
+#now = datetime.now()
+#print now
+
+#start = datetime(2013,7,25,0,0,0)
+#end = datetime(2013,8,9,23,0,0)
+#y =  end - start
+#print start, end, y

@@ -20,7 +20,8 @@ def loadfile2(filename):
 
     return name, header, splitdata
 
-filename1 = "/home/lnx/PycharmProjects/HS/049/outputfiles_origConv_elevcorr_incacloud_start89_masstransfer_2/Temp_H2O.txt"
+#filename1 = "/home/lnx/PycharmProjects/HS/049/outputfiles_origConv_elevcorr_incacloud_start89_masstransfer_2/Temp_H2O.txt"
+filename1 = "/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_p/outputfiles_20130725_0809/Temp_H2O.txt"
 name, header, thedata = hs_loader.loadfile(filename=filename1)
 
 date_time = [i[0] for i in thedata] # Datum
@@ -41,7 +42,8 @@ bds = [i[89] for i in thedata] # km 45
 wds = [i[97] for i in thedata] # km 41
 bgs = [i[103] for i in thedata] # km 38
 
-filename2 = "/home/lnx/2_Documents/_BioClic/_Simulationen/Measurements_1.csv"
+#filename2 = "/home/lnx/2_Documents/_BioClic/_Simulationen/Measurements_1.csv"
+filename2 = "/home/lnx/2_Documents/_BioClic/_Simulationen/Measurements_20130725_0809_corr.csv"
 
 name2, header2, thedata2 = loadfile2(filename=filename2)
 
@@ -63,14 +65,67 @@ wd = [i[15] for i in thedata2] # km 41
 bg = [i[16] for i in thedata2] # km 38
 
 fig = plt.figure()
+#plt.plot(date_time, uws, color='red', lw=0.5, label='uw_s')
+#plt.plot(date_time, uw, color='blue', lw=0.5, label='uw_m')
 
-plt.plot(date_time, uws, color='red', lw=0.5, label='uw_s')
-plt.plot(date_time, uw, color='blue', lw=0.5, label='uw_m')
+ax = fig.add_subplot(611)
+ax.plot(date_time, tbs, color='red', lw=0.5, label='tb_s')
+ax.plot(date_time, tb, color='blue', lw=0.5, label='tb_m')
 
-fig.autofmt_xdate()
+ax = fig.add_subplot(612)
+ax.plot(date_time, sds, color='red', lw=0.5, label='sd_s')
+ax.plot(date_time, sd, color='blue', lw=0.5, label='sd_m')
+
+ax = fig.add_subplot(613)
+ax.plot(date_time, rds, color='red', lw=0.5, label='rd_s')
+ax.plot(date_time, rd, color='blue', lw=0.5, label='rd_m')
+
+ax = fig.add_subplot(614)
+ax.plot(date_time, oos, color='red', lw=0.5, label='oo_s')
+ax.plot(date_time, oo, color='blue', lw=0.5, label='oo_m')
+
+ax = fig.add_subplot(615)
+ax.plot(date_time, uos, color='red', lw=0.5, label='uo_s')
+ax.plot(date_time, uo, color='blue', lw=0.5, label='uo_m')
+
+ax = fig.add_subplot(616)
+ax.plot(date_time, uws, color='red', lw=0.5, label='uw_s')
+ax.plot(date_time, uw, color='blue', lw=0.5, label='uw_m')
+
+#fig.autofmt_xdate()
 plt.xlabel('time[h]')
 plt.ylabel('water temperature [degC]')
 plt.legend()
 
-fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/UW_Validation_OrigConv_m.png')
+#fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/UW_Validation_OrigConv_m.png')
+plt.show()
+
+fig = plt.figure()
+
+ax = fig.add_subplot(511)
+ax.plot(date_time, j1s, color='red', lw=0.5, label='j1_s')
+ax.plot(date_time, j1, color='blue', lw=0.5, label='j1_m')
+
+ax = fig.add_subplot(512)
+ax.plot(date_time, j3s, color='red', lw=0.5, label='j3_s')
+ax.plot(date_time, j3, color='blue', lw=0.5, label='j3_m')
+
+ax = fig.add_subplot(513)
+ax.plot(date_time, j4s, color='red', lw=0.5, label='j4_s')
+ax.plot(date_time, j4, color='blue', lw=0.5, label='j4_m')
+
+ax = fig.add_subplot(514)
+ax.plot(date_time, z2s, color='red', lw=0.5, label='z2_s')
+ax.plot(date_time, z2, color='blue', lw=0.5, label='z2_m')
+
+ax = fig.add_subplot(515)
+ax.plot(date_time, bgs, color='red', lw=0.5, label='bg_s')
+ax.plot(date_time, bg, color='blue', lw=0.5, label='bg_m')
+
+fig.autofmt_xdate()
+plt.xlabel('time[h]')
+plt.ylabel('water temperature [degC]')
+#plt.legend()
+
+#fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/UW_Validation_OrigConv_m.png')
 plt.show()
