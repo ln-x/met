@@ -1,7 +1,10 @@
 __author__ = 'Heidelinde'
 #given:
-balance = 320000  #the outstanding balance on the credit card
-annualInterestRate = 0.2  #annual interest rate as a decimal
+#balance = 999999  #the outstanding balance on the credit card
+#annualInterestRate = 0.18  #annual interest rate as a decimal
+
+balance = 320000
+annualInterestRate = 0.2
 
 monthleyinterestrate = annualInterestRate/12
 fixedmonthlypayment_lowerbound = balance/12  #reasonable lower bound
@@ -11,61 +14,58 @@ low = fixedmonthlypayment_lowerbound
 high = fixedmonthlypayment_upperbound
 fixedmonthlypayment = (high + low)/2.0
 
-print balance
-print low
-print high
-print fixedmonthlypayment
+print high, low, fixedmonthlypayment
 
-balance_x = balance
-
+new_balance = balance
 counter = 0
-#while abs(balance_x) > 0.01:
-while abs(balance_x) > 100:
-        #balance_x = balance
-        for i in range(12):
-            remainingBalance = balance_x - fixedmonthlypayment
-            balance_x = remainingBalance + (monthleyinterestrate * remainingBalance)
-            print i, balance_x
-
-
-
-        print counter, balance_x
-        if balance_x < 0:
-            high = fixedmonthlypayment
-            fixedmonthlypayment = (high + low)/2.0
-        else:
-            low = fixedmonthlypayment
-            fixedmonthlypayment = (high + low)/2.0
-        counter +=1
-        print fixedmonthlypayment
-
-print ("Lowest Payment: ", fixedmonthlypayment)
-
-
-###WORKS -
-
-__author__ = 'Heidelinde'
-#given:
-balance = 999999  #the outstanding balance on the credit card
-annualInterestRate = 0.18  #annual interest rate as a decimal
-
-monthleyinterestrate = annualInterestRate/12
-fixedmonthlypayment_lowerbound = balance/12  #reasonable lower bound
-fixedmonthlypayment_upperbound = (balance *(1+monthleyinterestrate)**12)/ 12
-
-low = fixedmonthlypayment_lowerbound
-high = fixedmonthlypayment_upperbound
-fixedmonthlypayment = (high + low)/2.0
-
-
-fixedmonthlypayment = 0
-balance_x = balance
-while balance_x > 0:
-    fixedmonthlypayment += 1
-    balance_x = balance
+keep_going = True
+while counter < 100:
+#while keep_going == True:
+    #print balance_x
+    new_balance = balance
+    counter += 1
+    print counter
     for i in range(12):
-        remainingBalance = balance_x - fixedmonthlypayment
-        balance_x = remainingBalance + (monthleyinterestrate * remainingBalance)
-    print balance_x
+            #print i, new_balance
+            remainingBalance = new_balance - fixedmonthlypayment
+            new_balance = remainingBalance + (monthleyinterestrate * remainingBalance)
+    if new_balance > 0.01:
+        print "payed not enough"
+        low = fixedmonthlypayment
+        fixedmonthlypayment = (high + low)/2.0
 
+    elif new_balance < 0.01:
+        print "payed too much"
+        high = fixedmonthlypayment
+        fixedmonthlypayment = (high + low)/2.0
+        print "elif - balance_x", fixedmonthlypayment, new_balance
+    else:
+        fixedmonthleypayment = round(fixedmonthlypayment,2)
+        print ("Lowest Payment: ", fixedmonthlypayment)
+        print "else - balance_x", new_balance
+        keep_going = False
+
+fixedmonthlypayment = round(fixedmonthlypayment,2)
 print ("Lowest Payment: ", fixedmonthlypayment)
+
+
+
+"""
+Test Case 1:
+      balance = 320000
+      annualInterestRate = 0.2
+
+      Result Your Code Should Generate:
+	      -------------------
+     Lowest Payment: 29157.09 (i get 29591.5477987)
+"""
+
+"""
+     Test Case 2:
+     balance = 999999
+     annualInterestRate = 0.18
+
+     Result Your Code Should Generate:
+     -------------------
+     Lowest Payment: 90325.03 (i get 91483.87)
+"""
