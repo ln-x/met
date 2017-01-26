@@ -14,16 +14,20 @@ fixedmonthlypayment = (high + low)/2.0
 print fixedmonthlypayment
 
 balance_x = balance
-while balance_x > 0:
+counter = 0
+while counter < 100:
+    print balance_x
+    counter += 1
+    print counter
     if balance_x > 0.01:
+        print "if - balance_x", balance_x, fixedmonthlypayment
         high = fixedmonthlypayment
         fixedmonthlypayment = (high + low)/2.0
-        print fixedmonthlypayment
         balance_x = balance
         for i in range(12):
             remainingBalance = balance_x - fixedmonthlypayment
             balance_x = remainingBalance + (monthleyinterestrate * remainingBalance)
-    elif balance_x > 0.01:
+    elif balance_x < 0.01:
         print "elif - balance_x", balance_x, fixedmonthlypayment
         balance_x = balance
         low = fixedmonthlypayment
@@ -35,8 +39,8 @@ while balance_x > 0:
         print "else - balance_x", balance_x
         fixedmonthleypayment = round(fixedmonthlypayment,2)
         print ("Lowest Payment: ", fixedmonthlypayment)
+        break
 
-    print fixedmonthlypayment
 
 print ("Lowest Payment: ", fixedmonthlypayment)
 
