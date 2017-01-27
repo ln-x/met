@@ -8,7 +8,7 @@ import csv
 from pandas import DataFrame
 
 path = "/home/lnx/PycharmProjects/HS/"
-DFM = '75.000'
+DFM = '61.000'
 
 #year = [2013, 2030, 2050, 2085]
 #veg = [' ', 'V0', 'V100']
@@ -72,10 +72,16 @@ for f in files:
         #print year, veg
         name = ['WT',year,veg]
         name = "_".join(name)
-
+        print name
         name = pd.read_csv(path + f, skiprows=6, sep='\s+')#, index_col='Datetime', parse_dates='Datetime')
+
         name = name.ix[240:359].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column  1.July-3.Aug: 744+72=816h
+        #name1 = name[DFM]
         name = np.array(name[DFM]) #select only reference station Unterwart DFM 61km ~ DFS 39
+        #print max(name1)
+        #print name2
+        #break
+
         name = name.ravel()
 
         name_stresshours = 0
@@ -93,29 +99,29 @@ for f in files:
 
         #break
 
-quit()
+#quit()
 
 matrix = [0,1,2,3,4,5,6,7,8,9,10,11,12]
-matrix[0] = [max(WT_2013_V0) , max(WT_2013), max(WT_2013_V100)]
-matrix[1] = [max(WT_1a_2030_V0), max(WT_1a_2030), max(WT_1a_2030_V100)]
-matrix[2] = [max(WT_5a_2030_V0), max(WT_5a_2030), max(WT_5a_2030_V100)]
-matrix[3] = [max(WT_20a_2030_V0), max(WT_20a_2030), max(WT_20a_2030_V100)]
-matrix[4] = [max(WT_max_2030_V0), max(WT_max_2030), max(WT_max_2030_V100)]
-matrix[5] = [max(WT_1a_2050_V0), max(WT_1a_2050), max(WT_1a_2050_V100)]
-matrix[6] = [max(WT_5a_2050_V0), max(WT_5a_2050), max(WT_5a_2050_V100)]
-matrix[7] = [max(WT_20a_2050_V0), max(WT_20a_2050), max(WT_20a_2050_V100)]
-matrix[8] = [max(WT_max_2050_V0), max(WT_max_2050), max(WT_max_2050_V100)]
-matrix[9] = [max(WT_1a_2085_V0), max(WT_1a_2085), max(WT_1a_2085_V100)]
-matrix[10] = [max(WT_5a_2085_V0), max(WT_5a_2085), max(WT_5a_2085_V100)]
-matrix[11] = [max(WT_20a_2085_V0), max(WT_20a_2085), max(WT_20a_2085_V100)]
-matrix[12] = [max(WT_max_2085_V0), max(WT_max_2085), max(WT_max_2085_V100)]
+matrix[0] = [max(WT_2013_V0) , max(WT_2013_STQ), max(WT_2013_V100)]
+matrix[1] = [max(WT_1a_2030_V0), max(WT_1a_2030_STQ), max(WT_1a_2030_V100)]
+matrix[2] = [max(WT_5a_2030_V0), max(WT_5a_2030_STQ), max(WT_5a_2030_V100)]
+matrix[3] = [max(WT_20a_2030_V0), max(WT_20a_2030_STQ), max(WT_20a_2030_V100)]
+matrix[4] = [max(WT_max_2030_V0), max(WT_max_2030_STQ), max(WT_max_2030_V100)]
+matrix[5] = [max(WT_1a_2050_V0), max(WT_1a_2050_STQ), max(WT_1a_2050_V100)]
+matrix[6] = [max(WT_5a_2050_V0), max(WT_5a_2050_STQ), max(WT_5a_2050_V100)]
+matrix[7] = [max(WT_20a_2050_V0), max(WT_20a_2050_STQ), max(WT_20a_2050_V100)]
+matrix[8] = [max(WT_max_2050_V0), max(WT_max_2050_STQ), max(WT_max_2050_V100)]
+matrix[9] = [max(WT_1a_2085_V0), max(WT_1a_2085_STQ), max(WT_1a_2085_V100)]
+matrix[10] = [max(WT_5a_2085_V0), max(WT_5a_2085_STQ), max(WT_5a_2085_V100)]
+matrix[11] = [max(WT_20a_2085_V0), max(WT_20a_2085_STQ), max(WT_20a_2085_V100)]
+matrix[12] = [max(WT_max_2085_V0), max(WT_max_2085_STQ), max(WT_max_2085_V100)]
 
 outpd = pd.DataFrame(matrix, index=['2013','2030_1a','2030_5a','2030_20a','2030_max',
                      '2050_1a','2050_5a','2050_20a','2050_max','2085_1a','2085_5a','2085_20a','2085_max'],
                     columns =['V0','STQ','V100'])
 
 print outpd
-outpd.to_csv('/home/lnx/max_DFM80.csv')
+outpd.to_csv('/home/lnx/max_DFM61.csv')
 
 diff = outpd - max(WT_2013)
 
@@ -124,8 +130,40 @@ diff_sp['V0'] = outpd['V0']- max(WT_2013_V0)
 diff_sp['STQ'] = outpd['STQ']- max(WT_2013)
 diff_sp['V100'] = outpd['V100']- max(WT_2013_V100)
 
-diff.to_csv('/home/lnx/diff_DFM80.csv')
-diff_sp.to_csv('/home/lnx/diff_sp_DFM80.csv')
+diff.to_csv('/home/lnx/diff_DFM61.csv')
+diff_sp.to_csv('/home/lnx/diff_sp_DFM61.csv')
+
+matrix = [0,1,2,3,4,5,6,7,8,9,10,11,12]
+matrix[0] = [mean(WT_2013_V0) , mean(WT_2013_STQ), mean(WT_2013_V100)]
+matrix[1] = [mean(WT_1a_2030_V0), mean(WT_1a_2030_STQ), mean(WT_1a_2030_V100)]
+matrix[2] = [mean(WT_5a_2030_V0), mean(WT_5a_2030_STQ), mean(WT_5a_2030_V100)]
+matrix[3] = [mean(WT_20a_2030_V0), mean(WT_20a_2030_STQ), mean(WT_20a_2030_V100)]
+matrix[4] = [mean(WT_max_2030_V0), mean(WT_max_2030_STQ), mean(WT_max_2030_V100)]
+matrix[5] = [mean(WT_1a_2050_V0), mean(WT_1a_2050_STQ), mean(WT_1a_2050_V100)]
+matrix[6] = [mean(WT_5a_2050_V0), mean(WT_5a_2050_STQ), mean(WT_5a_2050_V100)]
+matrix[7] = [mean(WT_20a_2050_V0), mean(WT_20a_2050_STQ), mean(WT_20a_2050_V100)]
+matrix[8] = [mean(WT_max_2050_V0), mean(WT_max_2050_STQ), mean(WT_max_2050_V100)]
+matrix[9] = [mean(WT_1a_2085_V0), mean(WT_1a_2085_STQ), mean(WT_1a_2085_V100)]
+matrix[10] = [mean(WT_5a_2085_V0), mean(WT_5a_2085_STQ), mean(WT_5a_2085_V100)]
+matrix[11] = [mean(WT_20a_2085_V0), mean(WT_20a_2085_STQ), mean(WT_20a_2085_V100)]
+matrix[12] = [mean(WT_max_2085_V0), mean(WT_max_2085_STQ), mean(WT_max_2085_V100)]
+
+outpd = pd.DataFrame(matrix, index=['2013','2030_1a','2030_5a','2030_20a','2030_max',
+                     '2050_1a','2050_5a','2050_20a','2050_max','2085_1a','2085_5a','2085_20a','2085_max'],
+                    columns =['V0','STQ','V100'])
+
+print outpd
+outpd.to_csv('/home/lnx/mean_DFM61.csv')
+
+diff = outpd - mean(WT_2013)
+
+diff_sp = outpd
+diff_sp['V0'] = outpd['V0']- mean(WT_2013_V0)
+diff_sp['STQ'] = outpd['STQ']- mean(WT_2013)
+diff_sp['V100'] = outpd['V100']- mean(WT_2013_V100)
+
+diff.to_csv('/home/lnx/mean_diff_DFM61.csv')
+diff_sp.to_csv('/home/lnx/mean_diff_sp_DFM61.csv')
 
 quit()
 
@@ -164,7 +202,7 @@ quit()
 #output.write(i for i in statmatrix) #TypeError: expected a character buffer object
 #output.close()
 
-##Solution 4 - pd and write() doenst work
+##Solution 4 - pd and write() doenst work #"Expected a character buffer object, exit code 1"
 #f = open('/home/lnx/2_Documents/_BioClic/_Simulationen/Figure3_stats.txt','w')
 #f.write(stats)
 

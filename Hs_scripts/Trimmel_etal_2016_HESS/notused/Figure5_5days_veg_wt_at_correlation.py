@@ -4,24 +4,26 @@ from pylab import *
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import csv
+from scipy.stats import linregress
 from pandas import DataFrame
-
 
 WT_2013 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_MLF_p/outputfiles_orig/Temp_H2O.txt', skiprows=6, sep='\s+')#, index_col='Datetime', parse_dates='Datetime')
 WT_2013 = WT_2013.ix[240:359].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column  1.July-3.Aug: 744+72=816h
 WT_2013 = np.array(WT_2013['61.000']) #select only reference station Unterwart DFM 61km ~ DFS 39
-#WT_2013 = np.array(WT_2013['20.000']) #select only DFM 80km ~ DFS 20
 WT_2013 = WT_2013.ravel()
+#print pd.DataFrame(WT_2013).describe()
+
 WT_2013_V0 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V0_2013_MLF_p/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_2013_V0 = WT_2013_V0.ix[240:].drop(['Datetime'],axis=1)
 WT_2013_V0 = np.array(WT_2013_V0['61.000'])
 WT_2013_V0 = WT_2013_V0.ravel()
+#print pd.DataFrame(WT_2013_V0).describe()
+
 WT_2013_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V100_2013_MLF_p/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_2013_V100 = WT_2013_V100.ix[240:].drop(['Datetime'],axis=1)
 WT_2013_V100 = np.array(WT_2013_V100['61.000'])
 WT_2013_V100 = WT_2013_V100.ravel()
-WT_2013 = transpose(np.array([WT_2013_V0, WT_2013, WT_2013_V100]))
+#print pd.DataFrame(WT_2013_V100).describe()
 
 WT_1a_2030_0 = pd.read_csv('/home/lnx/PycharmProjects/HS/S190_P_STQ_2030_1a_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')#, index_col='Datetime', parse_dates='Datetime')
 WT_1a_2030_1 = WT_1a_2030_0.ix[240:].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column
@@ -36,6 +38,8 @@ WT_1a_2030_V100 = WT_1a_2030_V100.ix[240:].drop(['Datetime'],axis=1)
 WT_1a_2030_V100 = np.array(WT_1a_2030_V100['61.000'])
 WT_1a_2030_V100 = WT_1a_2030_V100.ravel()
 WT_2030_1a = transpose(np.array([WT_1a_2030_V0,WT_1a_2030,WT_1a_2030_V100]))
+WT_2030_1a_stats = pd.DataFrame(WT_2030_1a).describe()
+dWT_2030_1a = WT_2030_1a_stats.ix['mean'][0]-WT_2030_1a_stats.ix['mean'][2]
 
 WT_5a_2030 = pd.read_csv('/home/lnx/PycharmProjects/HS/S196_P_STQ_2030_5a_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_5a_2030_1 = WT_5a_2030.ix[240:].drop(['Datetime'],axis=1)
@@ -50,6 +54,9 @@ WT_5a_2030_V100 = WT_5a_2030_V100.ix[240:].drop(['Datetime'],axis=1)
 WT_5a_2030_V100 = np.array(WT_5a_2030_V100['61.000'])
 WT_5a_2030_V100 = WT_5a_2030_V100.ravel()
 WT_2030_5a = transpose(np.array([WT_5a_2030_V0,WT_5a_2030,WT_5a_2030_V100]))
+WT_2030_5a_stats = pd.DataFrame(WT_2030_5a).describe()
+dWT_2030_5a = WT_2030_5a_stats.ix['mean'][0]-WT_2030_5a_stats.ix['mean'][2]
+
 
 WT_20a_2030 = pd.read_csv('/home/lnx/PycharmProjects/HS/S202_P_STQ_2030_20a_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_20a_2030 = WT_20a_2030.ix[240:].drop(['Datetime'],axis=1)
@@ -64,6 +71,8 @@ WT_20a_2030_V100 = WT_20a_2030_V100.ix[240:].drop(['Datetime'],axis=1)
 WT_20a_2030_V100 = np.array(WT_20a_2030_V100['61.000'])
 WT_20a_2030_V100 = WT_20a_2030_V100.ravel()
 WT_2030_20a = transpose(np.array([WT_20a_2030_V0,WT_20a_2030,WT_20a_2030_V100]))
+WT_2030_20a_stats = pd.DataFrame(WT_2030_20a).describe()
+dWT_2030_20a = WT_2030_20a_stats.ix['mean'][0]-WT_2030_20a_stats.ix['mean'][2]
 
 WT_max_2030 = pd.read_csv('/home/lnx/PycharmProjects/HS/S214_P_STQ_2030_Max_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_max_2030 = WT_max_2030.ix[240:].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column
@@ -78,6 +87,8 @@ WT_max_2030_V100 = WT_max_2030_V100.ix[240:].drop(['Datetime'],axis=1)   #only l
 WT_max_2030_V100 = np.array(WT_max_2030_V100['61.000'])
 WT_max_2030_V100 = WT_max_2030_V100.ravel()
 WT_2030_max = transpose(np.array([WT_max_2030_V0,WT_max_2030,WT_max_2030_V100]))
+WT_2030_max_stats = pd.DataFrame(WT_2030_max).describe()
+dWT_2030_max = WT_2030_max_stats.ix['mean'][0]-WT_2030_max_stats.ix['mean'][2]
 
 WT_1a_2050 = pd.read_csv('/home/lnx/PycharmProjects/HS/S220_P_STQ_2050_1a_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_1a_2050 = WT_1a_2050.ix[240:].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column
@@ -92,6 +103,8 @@ WT_1a_2050_V100 = WT_1a_2050_V100.ix[240:].drop(['Datetime'],axis=1)   #only las
 WT_1a_2050_V100 = np.array(WT_1a_2050_V100['61.000'])
 WT_1a_2050_V100 = WT_1a_2050_V100.ravel()
 WT_2050_1a = transpose(np.array([WT_1a_2050_V0,WT_1a_2050,WT_1a_2050_V100]))
+WT_2050_1a_stats = pd.DataFrame(WT_2050_1a).describe()
+dWT_2050_1a = WT_2050_1a_stats.ix['mean'][0]-WT_2050_1a_stats.ix['mean'][2]
 
 WT_5a_2050 = pd.read_csv('/home/lnx/PycharmProjects/HS/S226_P_STQ_2050_5a_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_5a_2050 = WT_5a_2050.ix[240:].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column
@@ -106,6 +119,8 @@ WT_5a_2050_V100 = WT_5a_2050_V100.ix[240:].drop(['Datetime'],axis=1)   #only las
 WT_5a_2050_V100 = np.array(WT_5a_2050_V100['61.000'])
 WT_5a_2050_V100 = WT_5a_2050_V100.ravel()
 WT_2050_5a = transpose(np.array([WT_5a_2050_V0,WT_5a_2050,WT_5a_2050_V100]))
+WT_2050_5a_stats = pd.DataFrame(WT_2050_5a).describe()
+dWT_2050_5a = WT_2050_5a_stats.ix['mean'][0]-WT_2050_5a_stats.ix['mean'][2]
 
 WT_20a_2050 = pd.read_csv('/home/lnx/PycharmProjects/HS/S232_P_STQ_2050_20a_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_20a_2050 = WT_20a_2050.ix[240:].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column
@@ -120,6 +135,8 @@ WT_20a_2050_V100 = WT_20a_2050_V100.ix[240:].drop(['Datetime'],axis=1)   #only l
 WT_20a_2050_V100 = np.array(WT_20a_2050_V100['61.000'])
 WT_20a_2050_V100 = WT_20a_2050_V100.ravel()
 WT_2050_20a = transpose(np.array([WT_20a_2050_V0,WT_20a_2050,WT_20a_2050_V100]))
+WT_2050_20a_stats = pd.DataFrame(WT_2050_20a).describe()
+dWT_2050_20a = WT_2050_20a_stats.ix['mean'][0]-WT_2050_20a_stats.ix['mean'][2]
 
 WT_max_2050 = pd.read_csv('/home/lnx/PycharmProjects/HS/S244_P_STQ_2050_Max_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_max_2050 = WT_max_2050.ix[240:].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column
@@ -134,6 +151,8 @@ WT_max_2050_V100 = WT_max_2050_V100.ix[240:].drop(['Datetime'],axis=1)   #only l
 WT_max_2050_V100 = np.array(WT_max_2050_V100['61.000'])
 WT_max_2050_V100 = WT_max_2050_V100.ravel()
 WT_2050_max = transpose(np.array([WT_max_2050_V0,WT_max_2050,WT_max_2050_V100]))
+WT_2050_max_stats = pd.DataFrame(WT_2050_max).describe()
+dWT_2050_max = WT_2050_max_stats.ix['mean'][0]-WT_2050_max_stats.ix['mean'][2]
 
 WT_1a_2085 = pd.read_csv('/home/lnx/PycharmProjects/HS/S250_P_STQ_2085_1a_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_1a_2085 = WT_1a_2085.ix[240:].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column
@@ -148,6 +167,8 @@ WT_1a_2085_V100 = WT_1a_2085_V100.ix[240:].drop(['Datetime'],axis=1)   #only las
 WT_1a_2085_V100 = np.array(WT_1a_2085_V100['61.000'])
 WT_1a_2085_V100 = WT_1a_2085_V100.ravel()
 WT_2085_1a = transpose(np.array([WT_1a_2085_V0,WT_1a_2085,WT_1a_2085_V100]))
+WT_2085_1a_stats = pd.DataFrame(WT_2085_1a).describe()
+dWT_2085_1a = WT_2085_1a_stats.ix['mean'][0]-WT_2085_1a_stats.ix['mean'][2]
 
 WT_5a_2085 = pd.read_csv('/home/lnx/PycharmProjects/HS/S256_P_STQ_2085_5a_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_5a_2085 = WT_5a_2085.ix[240:].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column
@@ -162,6 +183,8 @@ WT_5a_2085_V100 = WT_5a_2085_V100.ix[240:].drop(['Datetime'],axis=1)   #only las
 WT_5a_2085_V100 = np.array(WT_5a_2085_V100['61.000'])
 WT_5a_2085_V100 = WT_5a_2085_V100.ravel()
 WT_2085_5a = transpose(np.array([WT_5a_2085_V0,WT_5a_2085,WT_5a_2085_V100]))
+WT_2085_5a_stats = pd.DataFrame(WT_2085_5a).describe()
+dWT_2085_5a = WT_2085_5a_stats.ix['mean'][0]-WT_2085_5a_stats.ix['mean'][2]
 
 WT_20a_2085 = pd.read_csv('/home/lnx/PycharmProjects/HS/S262_P_STQ_2085_20a_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_20a_2085 = WT_20a_2085.ix[240:].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column
@@ -175,6 +198,9 @@ WT_20a_2085_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/S264_P_V100_2085_20
 WT_20a_2085_V100 = WT_20a_2085_V100.ix[240:].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column
 WT_20a_2085_V100 = np.array(WT_20a_2085_V100['61.000'])
 WT_20a_2085_V100 = WT_20a_2085_V100.ravel()
+WT_2085_20a = transpose(np.array([WT_20a_2085_V0,WT_20a_2085,WT_20a_2085_V100]))
+WT_2085_20a_stats = pd.DataFrame(WT_2085_20a).describe()
+dWT_2085_20a = WT_2085_20a_stats.ix['mean'][0]-WT_2085_20a_stats.ix['mean'][2]
 
 WT_max_2085 = pd.read_csv('/home/lnx/PycharmProjects/HS/S274_P_STQ_2085_Max_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_max_2085 = WT_max_2085.ix[240:].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column
@@ -188,78 +214,176 @@ WT_max_2085_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/S276_P_V100_2085_Ma
 WT_max_2085_V100 = WT_max_2085_V100.ix[240:].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column
 WT_max_2085_V100 = np.array(WT_max_2085_V100['61.000'])
 WT_max_2085_V100 = WT_max_2085_V100.ravel()
+WT_2085_max = transpose(np.array([WT_max_2085_V0,WT_max_2085,WT_max_2085_V100]))
+WT_2085_max_stats = pd.DataFrame(WT_2085_max).describe()
+dWT_2085_max = WT_2085_max_stats.ix['mean'][0]-WT_2085_max_stats.ix['mean'][2]
 
-matrix = [0,1,2,3,4,5,6,7,8,9,10,11,12]
-matrix[0] = [26.55 , 24.74, 22.37]
-matrix[1] = [max(WT_1a_2030_V0), max(WT_1a_2030), max(WT_1a_2030_V100)]
-matrix[2] = [max(WT_5a_2030_V0), max(WT_5a_2030), max(WT_5a_2030_V100)]
-matrix[3] = [max(WT_20a_2030_V0), max(WT_20a_2030), max(WT_20a_2030_V100)]
-matrix[4] = [max(WT_max_2030_V0), max(WT_max_2030), max(WT_max_2030_V100)]
-matrix[5] = [max(WT_1a_2050_V0), max(WT_1a_2050), max(WT_1a_2050_V100)]
-matrix[6] = [max(WT_5a_2050_V0), max(WT_5a_2050), max(WT_5a_2050_V100)]
-matrix[7] = [max(WT_20a_2050_V0), max(WT_20a_2050), max(WT_20a_2050_V100)]
-matrix[8] = [max(WT_max_2050_V0), max(WT_max_2050), max(WT_max_2050_V100)]
-matrix[9] = [max(WT_1a_2085_V0), max(WT_1a_2085), max(WT_1a_2085_V100)]
-matrix[10] = [max(WT_5a_2085_V0), max(WT_5a_2085), max(WT_5a_2085_V100)]
-matrix[11] = [max(WT_20a_2085_V0), max(WT_20a_2085), max(WT_20a_2085_V100)]
-matrix[12] = [max(WT_max_2085_V0), max(WT_max_2085), max(WT_max_2085_V100)]
+C_2013 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_p/inputfiles/Climate_04inca.csv', index_col=['DateTime'], sep=',', parse_dates=['DateTime'])
+C_2013_max5days = C_2013['2013-08-04 00:00:00':'2013-08-08 23:50:00']
+C_2013_max5days_glorad_sum = C_2013_max5days['GloRad (W/m2)'].resample('D', how='sum') * 0.0036
+C_2013_max5days_mean = C_2013_max5days.mean()
+C_2013_max5days_glorad_sum_mean = C_2013_max5days_glorad_sum.mean()
+#print '2013 max: \n', C_2013_max5days_mean, '\nGloRadSum[MJ/d] \t\t\t', C_2013_max5days_glorad_sum_mean
 
-outpd = pd.DataFrame(matrix, index=['2013','2030_1a','2030_5a','2030_20a','2030_max',
-                     '2050_1a','2050_5a','2050_20a','2050_max','2085_1a','2085_5a','2085_20a','2085_max'],
-                    columns =['V0','STQ','V100'])
-diff = outpd -24.74
+C_1a_2030_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2016-2045/1jaehrl/MLF/Climate_04.csv', sep='\s+', parse_dates={'datetime':['YYYY','MM','DD','HH']})
+C_1a_2030 = C_1a_2030_0.set_index('datetime')
+C_1a_2030_max5days = C_1a_2030.ix[240:]  #last five days
+C_1a_2030_max5days['Rad'] = C_1a_2030_max5days['Rad'].resample('D', how='sum') * 0.0036
+C_1a_2030_max5days_mean = C_1a_2030_max5days.mean()
+Ta_1a_2030 = C_1a_2030_max5days_mean.ix['AirT']
+print Ta_1a_2030
+#print '2030 1a: \n', C_1a_2030_max5days_mean
 
-diff_sp = outpd
-diff_sp['V0'] = outpd['V0']-26.55
-diff_sp['STQ'] = outpd['STQ']-24.74
-diff_sp['V100'] = outpd['V100']-22.37
+C_5a_2030_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2016-2045/5jaehrl/MLF/Climate_04.csv', sep='\s+', parse_dates={'datetime':['YYYY','MM','DD','HH']})
+C_5a_2030 = C_5a_2030_0.set_index('datetime')
+C_5a_2030_max5days = C_5a_2030.ix[240:]
+C_5a_2030_max5days['Rad'] = C_5a_2030_max5days['Rad'].resample('D', how='sum') * 0.0036
+C_5a_2030_max5days_mean = C_5a_2030_max5days.mean()
+Ta_5a_2030 = C_5a_2030_max5days_mean.ix['AirT']
 
-outpd.to_csv('/home/lnx/max.csv')
-diff.to_csv('/home/lnx/diff.csv')
-diff_sp.to_csv('/home/lnx/diff_sp.csv')
+#print '2030 5a: \n', C_5a_2030_max5days_mean
 
-quit()
+C_20a_2030_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2016-2045/20jaehrl/MLF/Climate_04.csv', sep='\s+', parse_dates={'datetime':['YYYY','MM','DD','HH']})
+C_20a_2030 = C_20a_2030_0.set_index('datetime')
+C_20a_2030_max5days = C_20a_2030.ix[240:]
+C_20a_2030_max5days['Rad'] = C_20a_2030_max5days['Rad'].resample('D', how='sum') * 0.0036
+C_20a_2030_max5days_mean = C_20a_2030_max5days.mean()
+Ta_20a_2030 = C_20a_2030_max5days_mean.ix['AirT']
 
-# # Solution 1, using up and csv: works :-)
-# statmatrix = [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
-# statmatrix[0] = ["period","episode","V0_max", "STQ_max", "V100_max"]
-# statmatrix[1] = ["2013", " ", 26.55 , 24.74, 22.37]
-# #statmatrix[1] = ["2013", " ", max(WT_2013_V0), max(WT_2013), max(WT_2013_V100)]
-# statmatrix[2] = ["2030", "1a", max(WT_1a_2030_V0), max(WT_1a_2030), max(WT_1a_2030_V100)]
-# statmatrix[3] = ["2030", "5a", max(WT_5a_2030_V0), max(WT_5a_2030), max(WT_5a_2030_V100)]
-# statmatrix[4] = ["2030", "20a", max(WT_20a_2030_V0), max(WT_20a_2030), max(WT_20a_2030_V100)]
-# statmatrix[5] = ["2030", "max", max(WT_max_2030_V0), max(WT_max_2030), max(WT_max_2030_V100)]
-# statmatrix[6] = ["2050", "1a", max(WT_1a_2050_V0), max(WT_1a_2050), max(WT_1a_2050_V100)]
-# statmatrix[7] = ["2050", "5a", max(WT_5a_2050_V0), max(WT_5a_2050), max(WT_5a_2050_V100)]
-# statmatrix[8] = ["2050", "20a", max(WT_20a_2050_V0), max(WT_20a_2050), max(WT_20a_2050_V100)]
-# statmatrix[9] = ["2050", "max", max(WT_max_2050_V0), max(WT_max_2050), max(WT_max_2050_V100)]
-# statmatrix[10] = ["2085", "1a", max(WT_1a_2085_V0), max(WT_1a_2085), max(WT_1a_2085_V100)]
-# statmatrix[11] = ["2085", "5a", max(WT_5a_2085_V0), max(WT_5a_2085), max(WT_5a_2085_V100)]
-# statmatrix[12] = ["2085", "20a", max(WT_20a_2085_V0), max(WT_20a_2085), max(WT_20a_2085_V100)]
-# statmatrix[13] = ["2085", "max", max(WT_max_2085_V0), max(WT_max_2085), max(WT_max_2085_V100)]
-#out = np.array(statmatrix)
-#out = np.transpose(out)
-#with open('/home/lnx/test_file.csv', 'w') as csvfile:
-#    writer = csv.writer(csvfile)
-#    [writer.writerow(r) for r in out]
+#print '2030 20a: \n', C_20a_2030_max5days_mean
+
+C_max_2030_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2016-2045/Max/MLF/Climate_04.csv', sep='\s+', parse_dates={'datetime':['YYYY','MM','DD','HH']})
+C_max_2030 = C_max_2030_0.set_index('datetime')
+C_max_2030_max5days = C_max_2030.ix[240:]
+C_max_2030_max5days['Rad'] = C_max_2030_max5days['Rad'].resample('D', how='sum') * 0.0036
+C_max_2030_max5days_mean = C_max_2030_max5days.mean()
+Ta_max_2030 = C_max_2030_max5days_mean.ix['AirT']
+
+#print '2030 Max: \n', C_max_2030_max5days_mean
+
+C_1a_2050_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2036-2065/1jaehrl/MLF/Climate_04.csv', sep='\s+', parse_dates={'datetime':['YYYY','MM','DD','HH']})
+C_1a_2050 = C_1a_2050_0.set_index('datetime')
+C_1a_2050_max5days = C_1a_2050.ix[240:]  #last five days
+C_1a_2050_max5days['Rad'] = C_1a_2050_max5days['Rad'].resample('D', how='sum') * 0.0036
+C_1a_2050_max5days_mean = C_1a_2050_max5days.mean()
+Ta_1a_2050 = C_1a_2050_max5days_mean.ix['AirT']
+
+#print '2050 1a: \n', C_1a_2050_max5days_mean
+
+C_5a_2050_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2036-2065/5jaehrl/MLF/Climate_04.csv', sep='\s+', parse_dates={'datetime':['YYYY','MM','DD','HH']})
+C_5a_2050 = C_5a_2050_0.set_index('datetime')
+C_5a_2050_max5days = C_5a_2050.ix[240:]
+C_5a_2050_max5days['Rad'] = C_5a_2050_max5days['Rad'].resample('D', how='sum') * 0.0036
+C_5a_2050_max5days_mean = C_5a_2050_max5days.mean()
+Ta_5a_2050 = C_5a_2050_max5days_mean.ix['AirT']
+
+#print '2050 5a: \n', C_5a_2050_max5days_mean
+
+C_20a_2050_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2036-2065/20jaehrl/MLF/Climate_04.csv', sep='\s+', parse_dates={'datetime':['YYYY','MM','DD','HH']})
+C_20a_2050 = C_20a_2050_0.set_index('datetime')
+C_20a_2050_max5days = C_20a_2050.ix[240:]
+C_20a_2050_max5days['Rad'] = C_20a_2050_max5days['Rad'].resample('D', how='sum') * 0.0036
+C_20a_2050_max5days_mean = C_20a_2050_max5days.mean()
+Ta_20a_2050 = C_20a_2050_max5days_mean.ix['AirT']
+
+#print '2050 20a: \n', C_20a_2050_max5days_mean
+
+C_max_2050_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2036-2065/Max/MLF/Climate_04.csv', sep='\s+', parse_dates={'datetime':['YYYY','MM','DD','HH']})
+C_max_2050 = C_max_2050_0.set_index('datetime')
+C_max_2050_max5days = C_max_2050.ix[240:]
+C_max_2050_max5days['Rad'] = C_max_2050_max5days['Rad'].resample('D', how='sum') * 0.0036
+C_max_2050_max5days_mean = C_max_2050_max5days.mean()
+Ta_max_2050 = C_max_2050_max5days_mean.ix['AirT']
+
+#print '2050 Max: \n', C_max_2050_max5days_mean
+
+C_1a_2085_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2071-2100/1jaehrl/MLF/Climate_04.csv', sep='\s+', parse_dates={'datetime':['YYYY','MM','DD','HH']})
+C_1a_2085 = C_1a_2085_0.set_index('datetime')
+C_1a_2085_max5days = C_1a_2085.ix[240:]  #last five days
+C_1a_2085_max5days['Rad'] = C_1a_2085_max5days['Rad'].resample('D', how='sum') * 0.0036
+C_1a_2085_max5days_mean = C_1a_2085_max5days.mean()
+Ta_1a_2085 = C_1a_2085_max5days_mean.ix['AirT']
+
+#print '2085 1a: \n', C_1a_2085_max5days_mean
+
+C_5a_2085_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2071-2100/5jaehrl/MLF/Climate_04.csv', sep='\s+', parse_dates={'datetime':['YYYY','MM','DD','HH']})
+C_5a_2085 = C_5a_2085_0.set_index('datetime')
+C_5a_2085_max5days = C_5a_2085.ix[240:]
+C_5a_2085_max5days['Rad'] = C_5a_2085_max5days['Rad'].resample('D', how='sum') * 0.0036
+C_5a_2085_max5days_mean = C_5a_2085_max5days.mean()
+Ta_5a_2085 = C_5a_2085_max5days_mean.ix['AirT']
+
+#print '2085 5a: \n', C_5a_2085_max5days_mean
+
+C_20a_2085_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2071-2100/20jaehrl/MLF/Climate_04.csv', sep='\s+', parse_dates={'datetime':['YYYY','MM','DD','HH']})
+C_20a_2085 = C_20a_2085_0.set_index('datetime')
+C_20a_2085_max5days = C_20a_2085.ix[240:]
+C_20a_2085_max5days['Rad'] = C_20a_2085_max5days['Rad'].resample('D', how='sum') * 0.0036
+C_20a_2085_max5days_mean = C_20a_2085_max5days.mean()
+Ta_20a_2085 = C_20a_2085_max5days_mean.ix['AirT']
+
+#print '2085 20a: \n', C_20a_2085_max5days_mean
+
+C_max_2085_0 = pd.read_csv('/home/lnx/2_Documents/_BioClic/_Simulationen/ClimateSzenarios/Episoden/Pinka/2071-2100/Max/MLF/Climate_04.csv', sep='\s+', parse_dates={'datetime':['YYYY','MM','DD','HH']})
+C_max_2085 = C_max_2085_0.set_index('datetime')
+C_max_2085_max5days = C_max_2085.ix[240:]
+C_max_2085_max5days['Rad'] = C_max_2085_max5days['Rad'].resample('D', how='sum') * 0.0036
+C_max_2085_max5days_mean = C_max_2085_max5days.mean()
+Ta_max_2085 = C_max_2085_max5days_mean.ix['AirT']
+
+#print '2085 Max: \n', C_max_2085_max5days_mean
 
 
-##Solution 2 - using np and npsabetext - doenst work - strings!
-#out1 = out.reshape(14,5)
-#out = np.arange(45).reshape((9,5))
-#np.savetxt('/home/lnx/Table3_Stats.txt', out) #TypeError: float argument required, not numpy.string_
-
-##Solution 3 - using no and write() doenst work  - numbers!
-#output = open('/home/lnx/Table3_Stats.txt','w')
-#output.write("\n".join(str(i) for i in WT_2013))
-#output.write(i for i in statmatrix) #TypeError: expected a character buffer object
-#output.close()
-
-##Solution 4 - pd and write() doenst work
 #f = open('/home/lnx/2_Documents/_BioClic/_Simulationen/Figure3_stats.txt','w')
 #f.write(stats)
 
-##Solution 5 -pd to xlsx via ExcelWriter - should work, didnt try yet
-#writer_orig = pd.ExcelWriter('/home/lnx/simple.xlsx', engine='xlsxwriter')
-#outpd.to_excel(writer_orig, index=False, sheet_name='report')
-#writer_orig.save()
+#labels = list['1a','5a','max']
+fs = 10  # fontsize
+
+
+fig = plt.figure()
+# fig.set_size_inches(3.39,2.54)
+
+watertemp_STQ = [WT_1a_2030.mean(), WT_5a_2030.mean(), WT_20a_2030.mean(), WT_max_2030.mean(), WT_1a_2050.mean(),WT_5a_2050.mean(), WT_20a_2050.mean(), WT_max_2050.mean(), WT_1a_2085.mean(), WT_5a_2085.mean(), WT_20a_2085.mean(), WT_max_2085.mean() ]
+watertemp_V100 = [WT_1a_2030_V100.mean(), WT_5a_2030_V100.mean(), WT_20a_2030_V100.mean(), WT_max_2030_V100.mean(), WT_1a_2050_V100.mean(),WT_5a_2050_V100.mean(), WT_20a_2050_V100.mean(), WT_max_2050_V100.mean(), WT_1a_2085_V100.mean(), WT_5a_2085_V100.mean(), WT_20a_2085_V100.mean(), WT_max_2085_V100.mean() ]
+airtemp = [Ta_1a_2030, Ta_5a_2030, Ta_20a_2030, Ta_max_2030, Ta_1a_2050,Ta_5a_2050, Ta_20a_2050, Ta_max_2050, Ta_1a_2085, Ta_5a_2085, Ta_20a_2085, Ta_max_2085 ]
+
+print len(watertemp_STQ)
+print watertemp_STQ
+print len(airtemp)
+print airtemp
+
+plt.scatter(airtemp,watertemp_STQ,color='red', label="STQ")
+plt.scatter(airtemp,watertemp_V100, color='green', label="full veg")
+
+a,b = np.polyfit(airtemp, watertemp_STQ,1)
+print ("STQ:", a,b, "/n")   #slope, intercept (y = a*x + b)
+c,d = np.polyfit(airtemp, watertemp_V100,1)
+print ("V100:", c,d, "/n")
+
+r = linregress(airtemp,watertemp_STQ)[2] #r-value  coefficient of correlation
+r =
+
+plt.ylabel('water temperature [degC]')
+plt.xlabel('air temperature [degC]')
+plt.legend()
+
+ax = gca()
+
+#ax.spines['right'].set_color('none')
+ax.spines['top'].set_color('none')
+#ax.spines['bottom'].set_color('none')
+ax.set_xticks([])
+#ax.set_yticks([])
+#ax.set(xticklabels=('','','','','','','','',''))
+#ax.set(title='2030               2050               2085')
+
+#ax.axvline(4.5,linestyle=':', color='black')
+#ax.axvline(8.5,linestyle=':', color='black')
+
+plt.margins(0.2)
+
+fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/fig/Figure5_5days_veg_WT_Ta_correlation.tiff')
+
+plt.show()
+

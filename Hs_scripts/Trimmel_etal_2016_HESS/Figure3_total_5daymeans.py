@@ -8,10 +8,13 @@ from pandas import DataFrame
 
 WT_2013 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_MLF_p/outputfiles_orig/Temp_H2O.txt', skiprows=6, sep='\s+')#, index_col='Datetime', parse_dates='Datetime')
 WT_2013 = WT_2013.ix[240:359].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column  1.July-3.Aug: 744+72=816h
+#WT_2013 = WT_2013.ix[240:].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column  1.July-3.Aug: 744+72=816h
 WT_2013 = np.array(WT_2013['61.000']) #select only reference station Unterwart DFM 61km ~ DFS 39
 #WT_2013 = np.array(WT_2013['20.000']) #select only DFM 80km ~ DFS 20
 WT_2013 = WT_2013.ravel()
-print pd.DataFrame(WT_2013).describe()
+print len(WT_2013)
+
+#print pd.DataFrame(WT_2013).describe()
 
 #WT_2013_new = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_p/outputfiles_20130804_08_heatwaveoffset/Temp_H2O.txt', skiprows=6, sep='\s+', index_col='Datetime')
 #WT_2013_new = np.array(WT_2013_new['61']) #select only reference station Unterwart DFM 61km
@@ -19,16 +22,23 @@ print pd.DataFrame(WT_2013).describe()
 #print 'new', pd.DataFrame(WT_2013_new).describe()
 
 WT_2013_V0 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V0_2013_MLF_p/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
-WT_2013_V0 = WT_2013_V0.ix[240:].drop(['Datetime'],axis=1)
+WT_2013_V0 = WT_2013_V0.ix[240:359].drop(['Datetime'],axis=1)
 WT_2013_V0 = np.array(WT_2013_V0['61.000'])
 WT_2013_V0 = WT_2013_V0.ravel()
-print pd.DataFrame(WT_2013_V0).describe()
+print len(WT_2013_V0)
+#print pd.DataFrame(WT_2013_V0).describe()
 
 WT_2013_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V100_2013_MLF_p/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
-WT_2013_V100 = WT_2013_V100.ix[240:].drop(['Datetime'],axis=1)
+WT_2013_V100 = WT_2013_V100.ix[240:359].drop(['Datetime'],axis=1)
 WT_2013_V100 = np.array(WT_2013_V100['61.000'])
 WT_2013_V100 = WT_2013_V100.ravel()
-print pd.DataFrame(WT_2013_V100).describe()
+print len(WT_2013_V100)
+
+WT_2013_all = transpose(np.array([WT_2013_V0, WT_2013, WT_2013_V100]))
+
+print WT_2013_all
+
+#print pd.DataFrame(WT_2013_V100).describe()
 
 #WT_2013 = transpose(np.array([WT_2013_V0, WT_2013, WT_2013_V100]))
 #WT_2013_stats = pd.DataFrame(WT_2013).describe()
@@ -40,15 +50,22 @@ WT_1a_2030_0 = pd.read_csv('/home/lnx/PycharmProjects/HS/S190_P_STQ_2030_1a_MLF/
 WT_1a_2030_1 = WT_1a_2030_0.ix[240:].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column
 WT_1a_2030 = np.array(WT_1a_2030_1['61.000']) #select only reference station Unterwart DFM 61km
 WT_1a_2030 = WT_1a_2030.ravel()
+print len(WT_1a_2030)
+
 WT_1a_2030_V0 = pd.read_csv('/home/lnx/PycharmProjects/HS/S191_P_V0_2030_1a_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_1a_2030_V0 = WT_1a_2030_V0.ix[240:].drop(['Datetime'],axis=1)
 WT_1a_2030_V0 = np.array(WT_1a_2030_V0['61.000'])
 WT_1a_2030_V0 = WT_1a_2030_V0.ravel()
+print WT_1a_2030_V0
 WT_1a_2030_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/S192_P_V100_2030_1a_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_1a_2030_V100 = WT_1a_2030_V100.ix[240:].drop(['Datetime'],axis=1)
 WT_1a_2030_V100 = np.array(WT_1a_2030_V100['61.000'])
 WT_1a_2030_V100 = WT_1a_2030_V100.ravel()
+print WT_1a_2030_V100
 WT_2030_1a = transpose(np.array([WT_1a_2030_V0,WT_1a_2030,WT_1a_2030_V100]))
+
+print WT_2030_1a
+
 WT_2030_1a_stats = pd.DataFrame(WT_2030_1a).describe()
 print WT_2030_1a_stats
 dWT_2030_1a = WT_2030_1a_stats.ix['mean'][0]-WT_2030_1a_stats.ix['mean'][2]
@@ -261,6 +278,20 @@ print dWT_2085_max
 #labels = list['1a','5a','max']
 fs = 10  # fontsize
 
+fig = plt.figure(figsize=(4,3))
+
+axisrange = [0,2,16,30]
+plt.axis(axisrange)
+
+plt.boxplot(WT_2013_all)
+plt.title('2013', fontsize=fs)
+plt.ylabel('water temperature [degC]', fontsize=fs)
+
+ax = gca()
+ax.xaxis.set_ticklabels(['V0','STQ','V100'])
+
+plt.show()
+
 fig, axes = plt.subplots(nrows=3, ncols=3, sharex='col', sharey='row') #, figsize=(6, 6))
 #fig.set_size_inches(3.39,2.54)
 
@@ -301,8 +332,14 @@ axes[2, 2].set_title('2085_20a', fontsize=fs)
 
 #fig.subplots_adjust(hspace=0.4)
 
-fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure3_total_5days_vegcomp.tiff')
+#fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure3_total_5days_vegcomp.tiff')
 plt.show()
+
+
+
+
+
+'''
 
 
 fig = plt.figure()
@@ -341,7 +378,8 @@ ax.axvline(8.5,linestyle=':', color='black')
 
 plt.margins(0.2)
 
-fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure5_5days_veg_diff_2.tiff')
+#fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure5_5days_veg_diff_2.tiff')
 
 plt.show()
 
+'''

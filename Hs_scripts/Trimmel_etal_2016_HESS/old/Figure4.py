@@ -82,5 +82,5 @@ plt.xlabel('distance from source [km]')
 #plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0., title="km")
 
 
-fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure4a.tiff')
+fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure4_new.tiff')
 plt.show()

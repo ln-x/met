@@ -39,7 +39,8 @@ rects4 = axes1.bar(ind + 3*width, shS, width, color='black', label='shaded site'
 
 axes1.set(ylabel=('W m-2'))
 axes1.set(xticks=(ind+width))
-axes1.set(xticklabels=('Cd','Cv','Ev','Lw','Sw','Bal'))
+#axes1.set(xticklabels=('Cd','Cv','Ev','Lw','Sw','Bal'))
+axes1.set(xticklabels=('Ev','Cv','Cd','Lw','Sw','Bal'))
 axes1.legend(loc=4, fontsize=12)
 axes1.set(title='A')
 axes1.margins(0.1)
@@ -51,7 +52,8 @@ rects6 = axes2.bar(ind + 2*width, exR_WT, 2*width, color='lightgrey', label='exp
 
 axes2.set(ylabel=('water temperature change in reach [degC]'))
 axes2.set(xticks=(ind+width))
-axes2.set(xticklabels=('Cd','Cv','Ev','Lw','Sw','Bal'))
+#axes2.set(xticklabels=('Cd','Cv','Ev','Lw','Sw','Bal'))
+axes2.set(xticklabels=('Ev','Cv','Cd','Lw','Sw','Bal'))
 axes2.set(title='B')
 axes2.margins(0.1)
 
@@ -59,9 +61,9 @@ fig.set_figwidth(6.78)
 fig.set_figheight(4)
 plt.tight_layout()
 
-plt.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2014Paper/3_revisedversion/figure6.png')
-plt.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2014Paper/3_revisedversion/figure6.tiff', dpi=300)
-plt.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2014Paper/3_revisedversion/figure6.eps')
+#plt.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2014Paper/3_revisedversion/figure6.png')
+plt.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2014Paper/3_revisedversion/figure6_corr.tiff', dpi=300)
+#plt.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2014Paper/3_revisedversion/figure6.eps')
 
 plt.show()
 

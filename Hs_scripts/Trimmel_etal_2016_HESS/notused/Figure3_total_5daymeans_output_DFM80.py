@@ -221,6 +221,40 @@ diff_sp['V100'] = outpd['V100']- max(WT_2013_V100)
 diff.to_csv('/home/lnx/diff_DFM80.csv')
 diff_sp.to_csv('/home/lnx/diff_sp_DFM80.csv')
 
+matrix = [0,1,2,3,4,5,6,7,8,9,10,11,12]
+matrix[0] = [mean(WT_2013_V0) , mean(WT_2013), mean(WT_2013_V100)]
+matrix[1] = [mean(WT_1a_2030_V0), mean(WT_1a_2030), mean(WT_1a_2030_V100)]
+matrix[2] = [mean(WT_5a_2030_V0), mean(WT_5a_2030), mean(WT_5a_2030_V100)]
+matrix[3] = [mean(WT_20a_2030_V0), mean(WT_20a_2030), mean(WT_20a_2030_V100)]
+matrix[4] = [mean(WT_max_2030_V0), mean(WT_max_2030), mean(WT_max_2030_V100)]
+matrix[5] = [mean(WT_1a_2050_V0), mean(WT_1a_2050), mean(WT_1a_2050_V100)]
+matrix[6] = [mean(WT_5a_2050_V0), mean(WT_5a_2050), mean(WT_5a_2050_V100)]
+matrix[7] = [mean(WT_20a_2050_V0), mean(WT_20a_2050), mean(WT_20a_2050_V100)]
+matrix[8] = [mean(WT_max_2050_V0), mean(WT_max_2050), mean(WT_max_2050_V100)]
+matrix[9] = [mean(WT_1a_2085_V0), mean(WT_1a_2085), mean(WT_1a_2085_V100)]
+matrix[10] = [mean(WT_5a_2085_V0), mean(WT_5a_2085), mean(WT_5a_2085_V100)]
+matrix[11] = [mean(WT_20a_2085_V0), mean(WT_20a_2085), mean(WT_20a_2085_V100)]
+matrix[12] = [mean(WT_max_2085_V0), mean(WT_max_2085), mean(WT_max_2085_V100)]
+
+outpd = pd.DataFrame(matrix, index=['2013','2030_1a','2030_5a','2030_20a','2030_max',
+                     '2050_1a','2050_5a','2050_20a','2050_max','2085_1a','2085_5a','2085_20a','2085_max'],
+                    columns =['V0','STQ','V100'])
+
+print outpd
+outpd.to_csv('/home/lnx/mean_DFM80.csv')
+
+diff = outpd - mean(WT_2013)
+
+diff_sp = outpd
+diff_sp['V0'] = outpd['V0']- mean(WT_2013_V0)
+diff_sp['STQ'] = outpd['STQ']- mean(WT_2013)
+diff_sp['V100'] = outpd['V100']- mean(WT_2013_V100)
+
+diff.to_csv('/home/lnx/mean_diff_DFM80.csv')
+diff_sp.to_csv('/home/lnx/mean_diff_sp_DFM80.csv')
+
+quit()
+
 quit()
 
 # # Solution 1, using up and csv: works :-)

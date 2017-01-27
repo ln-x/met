@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from pandas import Series, DataFrame
 
-VTS = pd.read_csv('/home/lnx/PycharmProjects/HS/S250_P_STQ_2085_1a_MLF/outputfiles/VTS.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
+VTS = pd.read_csv('/home/lnx/PycharmProjeprint 'Sw=', Sw_mean.describe()
+cts/HS/S250_P_STQ_2085_1a_MLF/outputfiles/VTS.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
 VTS = VTS.mean()
 VTS_V0 = pd.read_csv('/home/lnx/PycharmProjects/HS/S251_P_V0_2085_1a_MLF/outputfiles/VTS.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
 VTS_V0 = VTS_V0.mean()
@@ -20,6 +21,7 @@ Sw = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_p/outputfiles_2
 Sw_mean = Sw.mean()
 
 print 'Sw=', Sw_mean.describe()
+
 
 Lw = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_p/outputfiles_20130725_0809/Heat_TR.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
 Lw_mean = Lw.mean()
