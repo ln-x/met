@@ -14,7 +14,7 @@ def isWordGuessed(secretWord, lettersGuessed):
     for i in lettersGuessed:
         if i in secretWord:
             count += 1
-            print (i)
+            #print (i)
         else:
             pass
 
@@ -33,7 +33,8 @@ def isWordGuessed(secretWord, lettersGuessed):
 #print (isWordGuessed('grapefruit', []))
 #print (isWordGuessed('coconut', ['z', 'x', 'q', 'c', 'o', 'c', 'o', 'n', 'u', 't']))
 #print(isWordGuessed('durian', ['h', 'a', 'c', 'd', 'i', 'm', 'n', 'r', 't', 'u']))
-print(isWordGuessed('grapefruit', ['z', 'x', 'q', 'g', 'r', 'a', 'p', 'e', 'f', 'r', 'u', 'i', 't']))
+#print(isWordGuessed('grapefruit', ['z', 'x', 'q', 'g', 'r', 'a', 'p', 'e', 'f', 'r', 'u', 'i', 't']))
+print (isWordGuessed('apple', ['a','p','l','e']))
 
 #False
 
