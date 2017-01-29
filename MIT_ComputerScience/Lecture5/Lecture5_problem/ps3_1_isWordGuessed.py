@@ -13,7 +13,10 @@ def isWordGuessed(secretWord, lettersGuessed):
     count = 0
     for i in lettersGuessed:
         if i in secretWord:
-            count += 1
+            occurence = secretWord.count(i)
+            print (i, occurence)
+            count += occurence
+            #count += 1
             #print (i)
         else:
             pass
