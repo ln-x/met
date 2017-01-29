@@ -8,7 +8,7 @@ def getGuessedWord(secretWord, lettersGuessed):
       what letters in secretWord have been guessed so far.
     '''
     if len(lettersGuessed) == 0:
-        return False
+        return ('_ '*len(secretWord))
     else: pass
 
     #guessedWord = '_ '*len(secretWord)
@@ -32,7 +32,8 @@ def getGuessedWord(secretWord, lettersGuessed):
 
 secretWord = 'apple'
 lettersGuessed = ['e', 'i', 'k', 'p', 'r', 's']
-print(getGuessedWord(secretWord, lettersGuessed))
+#print(getGuessedWord(secretWord, lettersGuessed))
+print(getGuessedWord('banana', []))
 
 #'_ pp_ e'
 

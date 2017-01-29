@@ -93,7 +93,8 @@ def getGuessedWord(secretWord, lettersGuessed):
       what letters in secretWord have been guessed so far.
     '''
     if len(lettersGuessed) == 0:
-        return False
+        #return False
+        return ('_ '*len(secretWord))
     else: pass
 
     guessedWord = ['_ ']*len(secretWord)
