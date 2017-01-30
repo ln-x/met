@@ -179,7 +179,7 @@ def hangman(secretWord):
                     break
 
             else:
-                print ("Oops! That letter is not in my word: ")
+                print ("Oops! That letter is not in my word: ", getGuessedWord(secretWord, lettersGuessed))
                 GuessesLeft -= 1
                 if GuessesLeft == 0:
                     print ('_ '*13)
