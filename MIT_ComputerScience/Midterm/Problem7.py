@@ -1,12 +1,8 @@
 __author__ = 'lnx'
 
-
-a = 4
-b = 2
-
 def f(a,b):
     #return a + b
-    #return a > b
+    return a > b
 
 def dict_interdiff(d1, d2):
     '''
@@ -14,10 +10,8 @@ def dict_interdiff(d1, d2):
     Returns a tuple of dictionaries according to the instructions above
     dict_intersect: keys are common in both d1, d2
     '''
-    # Your code here
     dict_intersect = {}
     dict_difference = {}
-
     for i in d1.items():
         if i[0] in d2.keys():
             pass
@@ -34,15 +28,14 @@ def dict_interdiff(d1, d2):
         else:
             dict_difference[i[0]] = i[1]
 
-    if f(a,b) == a + b: #ERROR a is not defined!
-        for i in d1.items():
+    for i in d1.items():
             if i[0] in d2.keys():
-                dict_intersect[i[0]] = i[1] + d2[i[0]]
+                a = i[1]
+                #print (i, i[0], i[1], d2[i[0]])
+                b = d2[i[0]]
+                #print (i, a,b)
+                dict_intersect[i[0]] = f(a,b)
 
-    if f(a,b) == True:
-        #print ("hello")
-        for i in d1.items():
-                dict_intersect[i[0]] = "False"
 
     return (dict_intersect, dict_difference)
     #return dict_difference
@@ -56,10 +49,10 @@ def dict_interdiff(d1, d2):
 d1 = {1:30, 2:20, 3:30}
 d2 = {1:40, 2:50, 3:60}
 #then dict_interdiff(d1, d2) returns ({1: False, 2: False, 3: False}, {})
-#print (dict_interdiff(d1,d2))
+print (dict_interdiff(d1,d2))
 #print (dict_interdiff({}, {}))  #({}, {})
-print (dict_interdiff({1: 1}, {1: 1}))  #({1: True}, {})
-print (dict_interdiff({1: 2}, {2: 1}) ) #({}, {1: 2, 2: 1})
+#print (dict_interdiff({1: 1}, {1: 1}))  #({1: True}, {})
+#print (dict_interdiff({1: 2}, {2: 1}) ) #({}, {1: 2, 2: 1})
 print (dict_interdiff({0: 0, 2: 5, 5: 2}, {0: 0, 2: 5})) #({0: 0, 2: 10}, {5: 2})
 print (dict_interdiff({1: 1, 2: 2, 3: 3}, {1: 1, 2: 2, 3: 3})) #({1: 2, 2: 4, 3: 6}, {})
 print (dict_interdiff({1: 1, 2: 2, 3: 3}, {1: 1, 2: 2, 3: 3})) #({1: 0, 2: 0, 3: 0}, {})
