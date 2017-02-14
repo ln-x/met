@@ -71,10 +71,18 @@ def getWordScore(word, n):
     n: integer (HAND_SIZE; i.e., hand size required for additional points)
     returns: int >= 0
     """
-    # TO DO ... <-- Remove this comment when you code this function
+    score = 0
+    for i in word:
+        #sum of points of lettesr
+        score += SCRABBLE_LETTER_VALUES[i]
+    #muliplied by length of word
+    #print (len(word))
+    score *= len(word)
+    #plus 50 if all n are used
+    if len(word) == n:
+        score += 50
 
-
-
+    return score
 #
 # Problem #2: Make sure you understand how this function works and what it does!
 #
@@ -111,7 +119,7 @@ def dealHand(n):
     returns: dictionary (string -> int)
     """
     hand={}
-    numVowels = n // 3
+    numVowels = n // 3 #integer division (10//3 = 3)
     
     for i in range(numVowels):
         x = VOWELS[random.randrange(0,len(VOWELS))]
@@ -142,8 +150,15 @@ def updateHand(hand, word):
     hand: dictionary (string -> int)    
     returns: dictionary (string -> int)
     """
-    # TO DO ... <-- Remove this comment when you code this function
-
+    handCopy = hand.copy()
+    for i in word:
+        if i in handCopy.keys():
+            #if hand_update[i] > 0:
+                handCopy[i] -= 1
+    #print (hand)
+    #L[:] = L_mutated
+    #hand = hand_update.copy()
+    return handCopy
 
 
 #
@@ -160,9 +175,20 @@ def isValidWord(word, hand, wordList):
     hand: dictionary (string -> int)
     wordList: list of lowercase strings
     """
-    # TO DO ... <-- Remove this comment when you code this function
-
-
+    #print ("hello")
+    handCopy = hand.copy()
+    count = 0
+    if word in wordList:
+        for i in word:
+            if i in handCopy.keys():
+                handCopy[i] -= 1
+                if handCopy[i] == 0:
+                    del handCopy[i]
+                count += 1
+        if count == len(word):
+             return True
+        else:
+            return False
 #
 # Problem #4: Playing a hand
 #
@@ -174,8 +200,12 @@ def calculateHandlen(hand):
     hand: dictionary (string-> int)
     returns: integer
     """
-    # TO DO... <-- Remove this comment when you code this function
+    handlength = 0
+    for letter in hand.keys():
+        for j in range(hand[letter]):
+            handlength += 1
 
+    return handlength
 
 
 def playHand(hand, wordList, n):
