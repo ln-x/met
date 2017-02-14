@@ -8,17 +8,25 @@ import csv
 #path = "/home/lnx/0_TEB/TEB/TEB_v1_1550/output/"
 directory = "/home/lnx/0_TEB/TEB/3_testdata/REALtest/"
 driver = "src_driver/driver.f90"
-scenario = "R03"
-scenario2 = "R03_2020"
-scenario3 = "R03_2020_GZ09"
-#scenario2 = "R03_BF74"
-#scenario3 = "R03_BH20_6"
+scenario1 = "R01"
+scenario2 = "R02"
+scenario3 = "R03"
+scenario4 = "R04"
+scenario5 = "R05"
+scenario6 = "R06"
+scenario7 = "R07"
+scenario8 = "R08"
+scenario9 = "R09"
 
-
-path = directory+"output_"+scenario+"/"
+path = directory+"output_"+scenario1+"/"
 path2 = directory+"output_"+scenario2+"/"
 path3 = directory+"output_"+scenario3+"/"
 path4 = directory+"output_"+scenario4+"/"
+path5 = directory+"output_"+scenario5+"/"
+path6 = directory+"output_"+scenario6+"/"
+path7 = directory+"output_"+scenario7+"/"
+path8 = directory+"output_"+scenario8+"/"
+path9 = directory+"output_"+scenario9+"/"
 
 
 files =  ["H_TOWN.txt",
@@ -42,10 +50,20 @@ data = []
 data2 = []
 data3 = []
 data4 = []
+data5 = []
+data6 = []
+data7 = []
+data8 = []
+data9 = []
 datalabel = []
 datalabel2 = []
 datalabel3 = []
 datalabel4 = []
+datalabel5 = []
+datalabel6 = []
+datalabel7 = []
+datalabel8 = []
+datalabel9 = []
 
 for f in files:
     filename = f
@@ -82,6 +100,49 @@ for f in files:
             #print datalabel
             name = [row for row in reader]
             data4.append(name)
+    filepath = path5+filename
+    with open(filepath) as f:
+        for line in f:
+            reader = csv.reader(f)
+            datalabel5.append(str(name))
+            #print datalabel
+            name = [row for row in reader]
+            data5.append(name)
+
+    filepath = path6+filename
+    with open(filepath) as f:
+        for line in f:
+            reader = csv.reader(f)
+            datalabel6.append(str(name))
+            #print datalabel
+            name = [row for row in reader]
+            data6.append(name)
+    filepath = path7+filename
+    with open(filepath) as f:
+        for line in f:
+            reader = csv.reader(f)
+            datalabel7.append(str(name))
+            #print datalabel
+            name = [row for row in reader]
+            data7.append(name)
+
+    filepath = path8+filename
+    with open(filepath) as f:
+        for line in f:
+            reader = csv.reader(f)
+            datalabel8.append(str(name))
+            #print datalabel
+            name = [row for row in reader]
+            data8.append(name)
+
+    filepath = path9+filename
+    with open(filepath) as f:
+        for line in f:
+            reader = csv.reader(f)
+            datalabel9.append(str(name))
+            #print datalabel
+            name = [row for row in reader]
+            data9.append(name)
 
 start = datetime.datetime(2016,8,4) #year: line 108, month: line 109, day line 110, hour: line 111, column37
 #start = datetime.datetime(year,month,day) #year: line 108, month: line 109, day line 110, hour: line 111, column37
@@ -92,13 +153,6 @@ x = start + np.arange(3166) * datetime.timedelta(minutes=10)
 #TODO: slice weeks of certain thresholds
 #TODO: list important input settings of this simulation (H/W ratio, albedo,...)
 
-#location of options:
-# roughness length: line 600 col 15
-# horizontal building area density
-# fraction of Gardens
-# building height
-# vertical to horizontal surf ratio
-# zroad_dir ...
 
 #---CONVERSIONS---
 
@@ -130,6 +184,14 @@ tempwall1_4 = []
 tempwall2_4 = []
 tempindoor_4 = []
 
+tempcanyon_5 = []
+tempcanyon_6 = []
+tempcanyon_7 = []
+tempcanyon_8 = []
+tempcanyon_9 = []
+
+
+
 def convert_celsius(list,output):
     for line in list:
         line = float(line[0])-273.15
@@ -151,6 +213,29 @@ for line in data4[8]:
     line = float(line[0])-273.15
     tempcanyon_4.append(line)
 
+
+for line in data5[8]:
+    line = float(line[0])-273.15
+    tempcanyon_5.append(line)
+
+
+for line in data6[8]:
+    line = float(line[0])-273.15
+    tempcanyon_6.append(line)
+
+
+for line in data7[8]:
+    line = float(line[0])-273.15
+    tempcanyon_7.append(line)
+
+for line in data8[8]:
+    line = float(line[0])-273.15
+    tempcanyon_8.append(line)
+
+for line in data9[8]:
+    line = float(line[0])-273.15
+    tempcanyon_9.append(line)
+
 convert_celsius(data[9],temproad1)
 convert_celsius(data[10],temproof1)
 convert_celsius(data[11],tempwall1)
@@ -164,32 +249,20 @@ print (np.mean(tempcanyon))
 print (np.max(tempcanyon))
 
 
-# ---PLOTTING---
-#fig = plt.figure()
-#plt.title('energy balance - town, %s' %(scenario))
-#plt.plot(x, data[2], linestyle='-', color = 'orange', label = datalabel[2]) #rn
-#plt.plot(x, data[0], linestyle='-', color = 'red', label = datalabel[0]) #h
-#plt.plot(x, data[1], linestyle='-', color = 'blue', label = datalabel[1]) #le
-#plt.xlabel("time")
-#plt.ylabel("energy flux [Wm-2]")
-#plt.legend(loc=4, ncol=3, fontsize='small')
-#plt.show()
-
 fig = plt.figure()
-plt.title('temperature - canyon, %s' %(scenario))
-plt.plot(x, tempcanyon, linestyle='-', color = 'black', label = "status quo") #datalabel[8]) #Canyon, data[8]
-#plt.plot(x, tempcanyon_2, linestyle='-', color = 'red', label = "builtfraction 0.55 > 0.74") #datalabel[8]) #Canyon, data[8]
-#plt.plot(x, tempcanyon_3, linestyle='-', color = 'blue', label = "building height 14.6 > 20.6") #datalabel[8]) #Canyon, data[8]
-#plt.plot(x, tempcanyon_4, linestyle='-', color = 'green', label = "unsealed fraction 0.28 > 0.00") #datalabel[8]) #Canyon, data[8]
-plt.plot(x, tempcanyon_2, linestyle='-', color = 'red', label = "increased isolation") # 1.7/1.4 > 0.1") # 1520000 > 1496000")# 1.7/1.4 > 0.1
-plt.plot(x, tempcanyon_3, linestyle='-', color = 'blue', label = "increased isolation + glazing") #GR 0.3 > 0.9
+plt.title('temperature - canyon, Realnutzungskategorien' )
+plt.plot(x, tempcanyon, linestyle='-', color = 'yellow', label = "1 -lockeres Wohn(misch)g.")# locker bebautes Wohn(misch)gebiet")
+plt.plot(x, tempcanyon_2, linestyle='-', color = 'green', label = "2 - Gartenstadt")# Gartenstadt")
+plt.plot(x, tempcanyon_3, linestyle='-', color = 'turquoise', label = "3 - dichtes Wohn(misch)g.")# dichtes Wohn(misch)gebiet")
+plt.plot(x, tempcanyon_4, linestyle='-', color = 'blue', label = "4 - grossvolumiger solitaerer Wohnb.")# grossvolumiger solitaerer Wohn(misch)bau")
+plt.plot(x, tempcanyon_5, linestyle='-', color = 'violet', label = "5 - Buero u. Verwaltung")# Buero- und Verwaltungsviertel")
+plt.plot(x, tempcanyon_6, linestyle='-', color = 'pink', label = "6 - Handelssturkturen")# solitaere Handelsstrukturen")
+plt.plot(x, tempcanyon_7, linestyle='-', color = 'red', label = "7 - Geschaefts-Kern-Mischg.")# Geschaefts- Kern- u. Mischgebiete")
+plt.plot(x, tempcanyon_8, linestyle='-', color = 'orange', label = "8 - Mischnutzung - wenig dicht")# solitaere Handelsstrukturen")
+plt.plot(x, tempcanyon_9, linestyle='-', color = 'brown', label = "9 - Industrie, Grosshandel, Lager.")# Geschaefts- Kern- u. Mischgebiete")
+
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
-#plt.plot(x, temproad1, linestyle='-', color = 'blue', label = datalabel[9]) #road1, data[9]
-#plt.plot(x, temproof1, linestyle='-', color = 'red', label = datalabel[10]) #roof1, data[10]
-#plt.plot(x, tempwall1, linestyle='-', color = 'orange', label = datalabel[11]) #walla1, data[11]
-#plt.plot(x, tempwall2, linestyle='-', color = 'yellow', label = datalabel[12]) #wallb1, data[12]
-#plt.plot(x, tempindoor, linestyle='-', color = 'grey', label = datalabel[13]) #ti bld, data[13]
 plt.xlabel("time")
 plt.ylabel("temperature [degC]")
 plt.legend(loc=4, ncol=3, fontsize='small')
