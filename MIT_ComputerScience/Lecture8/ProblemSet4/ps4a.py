@@ -275,6 +275,7 @@ def playHand(hand, wordList, n):
         print ("Run out of letters. Total score: ", total_score, "points.")
     else:
         print ("Goodbye! Total score: ", total_score, "points.")
+        print ()
 
 #
 # Problem #5: Playing a game
@@ -298,10 +299,12 @@ def playGame(wordList):
     n = HAND_SIZE
 
     count = 0
-    how = input('Enter n to deal a new hand, r to replay the last hand, or e to end game: ')
+    how = "n"
     while how != "e":
         how = input('Enter n to deal a new hand, r to replay the last hand, or e to end game: ')
-        if how == "n":
+        if how == "e":
+            break
+        elif how == "n":
             count +=1
             hand_new = dealHand(n)
             playHand(hand_new, wordList, n)
@@ -315,8 +318,6 @@ def playGame(wordList):
 
         else:
             print ("Invalid command.")
-            break
-
 #
 # Build data structures used for entire session and play game
 #
