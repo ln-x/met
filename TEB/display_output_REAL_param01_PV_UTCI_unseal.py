@@ -106,8 +106,12 @@ x = start + np.arange(3166) * datetime.timedelta(minutes=10)
 
 x = x[-288:]
 
+#data2_2 = data2[14][-288]
+#print (np.max(data2_2))
+#print (np.max(data7[14][-288:]))
+
 fig = plt.figure()
-plt.title('24.-25.8.2016, dichtes Wohn(misch)gebiet, Passivhausstandard')
+#plt.title('24.-25.8.2016, dichtes Wohn(misch)gebiet, Passivhausstandard')
 plt.plot(x, data2[14][-288:], linestyle='-', color = 'black', label = "STQ")
 plt.plot(x, data2[15][-288:], linestyle='--', color = 'black')#, label = "STQ")
 #plt.plot(x, data3[14], linestyle='-', color = 'orange', label = "HVAC1 evaporation frac. for condensers: 0") #no change visible
@@ -121,12 +125,12 @@ plt.plot(x, data2[15][-288:], linestyle='--', color = 'black')#, label = "STQ")
 #plt.plot(x, data5[15], linestyle='--', color = 'violet')#, label = "Solar panels on roof")#no change visible
 #plt.plot(x, data6[14], linestyle='-', color = 'green', label = "Green roofs")#no change visible
 #plt.plot(x, data6[15], linestyle='--', color = 'green')#, label = "Green roofs")#no change visible
-plt.plot(x, data7[14][-288:], linestyle='-', color = 'blue', label = "All unbuilt unsealed")
+plt.plot(x, data7[14][-288:], linestyle='-', color = 'blue', label = "Entsieglung")
 plt.plot(x, data7[15][-288:], linestyle='--', color = 'blue')#, label = "All unbuilt unsealed")
 
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
 plt.xlabel("Zeit [UTC]")
 plt.ylabel("UTCI Sonne(-), Schatten(- -)")
-plt.legend(loc=4, ncol=3, fontsize='large')
+plt.legend(loc=2, ncol=3, fontsize='large')
 plt.show()

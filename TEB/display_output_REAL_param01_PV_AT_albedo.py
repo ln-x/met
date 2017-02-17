@@ -4,6 +4,9 @@ import numpy as np
 import datetime
 import csv
 
+from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
+from mpl_toolkits.axes_grid1.inset_locator import mark_inset
+
 # ---READING DATA---
 #path = "/home/lnx/0_TEB/TEB/TEB_v1_1550/output/"
 directory = "/home/lnx/0_TEB/TEB/3_testdata/REALtest/"
@@ -153,44 +156,147 @@ start = datetime.datetime(2016,8,4) #year: line 108, month: line 109, day line 1
 x = start + np.arange(3166) * datetime.timedelta(minutes=10)
 #x = start + np.arange(nrtimestep) * datetime.timedelta(minutes=xstep)
 
+#TODO: calculate threshold criteria (tropische naechte? sommertage, UTCI!)
+#TODO: slice weeks of certain thresholds
+#TODO: list important input settings of this simulation (H/W ratio, albedo,...)
 
-print (len(x),len(data[14]))
 
-print (len(x[2878:]))
-print (len(x[-288:]))
+#---CONVERSIONS---
+
+tempcanyon = []
+temproad1 = []
+temproof1 = []
+tempwall1 = []
+tempwall2 = []
+tempindoor = []
+
+tempcanyon_2 = []
+temproad1_2 = []
+temproof1_2 = []
+tempwall1_2 = []
+tempwall2_2 = []
+tempindoor_2 = []
+
+tempcanyon_3 = []
+temproad1_3 = []
+temproof1_3 = []
+tempwall1_3 = []
+tempwall2_3 = []
+tempindoor_3 = []
+
+tempcanyon_4 = []
+temproad1_4 = []
+temproof1_4 = []
+tempwall1_4 = []
+tempwall2_4 = []
+tempindoor_4 = []
+
+tempcanyon_5 = []
+tempcanyon_6 = []
+tempcanyon_7 = []
+tempcanyon_8 = []
+tempcanyon_9 = []
+
+
+
+def convert_celsius(list,output):
+    for line in list:
+        line = float(line[0])-273.15
+        output.append(line)
+
+for line in data[8]:
+    line = float(line[0])-273.15
+    tempcanyon.append(line)
+
+for line in data2[8]:
+    line = float(line[0])-273.15
+    tempcanyon_2.append(line)
+
+for line in data3[8]:
+    line = float(line[0])-273.15
+    tempcanyon_3.append(line)
+
+for line in data4[8]:
+    line = float(line[0])-273.15
+    tempcanyon_4.append(line)
+
+
+for line in data5[8]:
+    line = float(line[0])-273.15
+    tempcanyon_5.append(line)
+
+
+for line in data6[8]:
+    line = float(line[0])-273.15
+    tempcanyon_6.append(line)
+
+
+for line in data7[8]:
+    line = float(line[0])-273.15
+    tempcanyon_7.append(line)
+
+for line in data8[8]:
+    line = float(line[0])-273.15
+    tempcanyon_8.append(line)
+
+for line in data9[8]:
+    line = float(line[0])-273.15
+    tempcanyon_9.append(line)
+
+convert_celsius(data[9],temproad1)
+convert_celsius(data[10],temproof1)
+convert_celsius(data[11],tempwall1)
+convert_celsius(data[12],tempwall2)
+convert_celsius(data[13],tempindoor)
+
+#convert_celsius(data2[9],temproad1)
+
+
+print (np.mean(tempcanyon_2))
+print (np.max(tempcanyon_2[-288:]))
+print (np.min(tempcanyon_2[-288:]))
+print (np.mean(tempcanyon_3))
+print (np.max(tempcanyon_3[-288:]))
+print (np.min(tempcanyon_3[-288:]))
+print (np.mean(tempcanyon_4))
+print (np.max(tempcanyon_4[-288:]))
+print (np.min(tempcanyon_4[-288:]))
+print (np.mean(tempcanyon_5))
+print (np.max(tempcanyon_5[-288:]))
+print (np.min(tempcanyon_5[-288:]))
 
 x = x[-288:]
 
 fig = plt.figure()
-plt.title('Albedo')
-#plt.plot(x, data[14], linestyle='-', color = 'yellow', label = "STQ")# locker bebautes Wohn(misch)gebiet")
-#plt.plot(x, data2[14][-288:], linestyle='-', color = 'green', label = "STQ, Albedo Wand:0.3, Boden: 0.14")# Gartenstadt")
-#plt.plot(x, data2[15], linestyle='--', color = 'green')#, label = "STQ")# Gartenstadt")
-#plt.plot(x, data3[14][-288:], linestyle='-', color = 'turquoise', label = "Fensteranteil 0.3 -> 0.9")# dichtes Wohn(misch)gebiet")
-#plt.plot(x, data3[15], linestyle='--', color = 'turquoise')#, label = "Fensteranteil 0.3 -> 0.9")# dichtes Wohn(misch)gebiet")
-#plt.plot(x, data4[14][-288:], linestyle='-', color = 'blue', label = "Albedo Wand: 0.1, Boden: 0.14")# grossvolumiger solitaerer Wohn(misch)bau")
-#plt.plot(x, data4[15], linestyle='.', color = 'blue', label = "Albedo Wand 0.3 -> 0.1")# grossvolumiger solitaerer Wohn(misch)bau")
-#plt.plot(x, data5[14][-288:], linestyle='-', color = 'violet', label = "Albedo Wand: 0.5, Boden: 0.14")# Buero- und Verwaltungsviertel")
-#plt.plot(x, data6[14], linestyle='-', color = 'pink', label = "Albedo Boden 0.14 -> 0.5")# solitaere Handelsstrukturen")
-#plt.plot(x, data7[14][-288:], linestyle='-', color = 'red', label = "Albedo Wand: 0.1, Boden: 0.5")# Geschaefts- Kern- u. Mischgebiete")
-#plt.plot(x, data7[15], linestyle='--', color = 'red')#, label = "Albedo Boden 0.14 -> 0.5, Wand 0.1")# Geschaefts- Kern- u. Mischgebiete")
-#plt.plot(x, data8[14][-288:], linestyle='-', color = 'orange', label = "Albedo Wand: 0.5, Boden: 0.5")# solitaere Handelsstrukturen")
-#plt.plot(x, data8[15], linestyle='--', color = 'orange')#, label = "Albedo Boden 0.14 -> 0.5, Wand 0.5")# solitaere Handelsstrukturen")
-
-
-plt.plot(x, data2[14][-288:], linestyle='-', color = 'black', label = "Wand:0.2, Boden:0.18")# Gartenstadt")
-plt.plot(x, data2[15][-288:], linestyle='--', color = 'black')#, label = "STQ")# Gartenstadt")
-plt.plot(x, data3[14][-288:], linestyle='-', color = 'blue', label = "Wand:0.4, Boden:0.18")# dichtes Wohn(misch)gebiet")
-plt.plot(x, data3[15][-288:], linestyle='--', color = 'blue')#, label = "Fensteranteil 0.3 -> 0.9")# dichtes Wohn(misch)gebiet")
-plt.plot(x, data4[14][-288:], linestyle='-', color = 'red', label = "Wand:0.2, Boden:0.4")# grossvolumiger solitaerer Wohn(misch)bau")
-plt.plot(x, data4[15][-288:], linestyle='--', color = 'red')#, label = "Albedo Wand 0.3 -> 0.1")# grossvolumiger solitaerer Wohn(misch)bau")
-plt.plot(x, data5[14][-288:], linestyle='-', color = 'green', label = "Wand:0.4, Boden:0.4")# Buero- und Verwaltungsviertel")
-plt.plot(x, data5[14][-288:], linestyle='--', color = 'green')#, label = "Wand:0.4, Boden:0.4")# Buero- und Verwaltungsviertel")
-
+plt.title('Albedo' )
+#plt.title('24.-25.8.2016, dichtes Wohn(misch)gebiet, Passivhausstandard, Vgl. Albedo')
+#plt.plot(x, tempcanyon[-288:], linestyle='-', color = 'yellow', label = "STQ")# locker bebautes Wohn(misch)gebiet")
+#plt.plot(x, tempcanyon_2[-288:], linestyle='-', color = 'black', label = "STQ, Wand:0.3, Boden:0.14")# - Passivfenster")# Gartenstadt")
+plt.plot(x, tempcanyon_2[-288:], linestyle='-', color = 'black', label = "Wand:0.2, Boden:0.18")# - Passivfenster")# Gartenstadt")
+#plt.plot(x, tempcanyon_3[-288:], linestyle='-', color = 'turquoise', label = "Fensteranteil 0.3 -> 0.9")# dichtes Wohn(misch)gebiet")
+#plt.plot(x, tempcanyon_4[-288:], linestyle='-', color = 'blue', label = "Albedo Wand: 0.1, Boden: 0.14")# grossvolumiger solitaerer Wohn(misch)bau")
+#plt.plot(x, tempcanyon_5[-288:], linestyle='-', color = 'violet', label = "Albedo Wand: 0.5, Boden: 0.14")# Buero- und Verwaltungsviertel")
+#plt.plot(x, tempcanyon_6[-288:], linestyle='-', color = 'pink', label = "Albedo Wand: 0.3, Boden: 0.5")# solitaere Handelsstrukturen")
+plt.plot(x, tempcanyon_3[-288:], linestyle='-', color = 'blue', label = "Wand:0.4, Boden:0.18")# Buero- und Verwaltungsviertel")
+plt.plot(x, tempcanyon_4[-288:], linestyle='-', color = 'red', label = "Wand:0.2, Boden:0.4")# solitaere Handelsstrukturen")
+plt.plot(x, tempcanyon_5[-288:], linestyle='-', color = 'green', label = "Wand:0.4, Boden:0.4")# - Passivfenster")# Gartenstadt")
+#plt.plot(x, tempcanyon_7[-288:], linestyle='-', color = 'red', label = "Albedo Wand: 0.1, Boden: 0.5")# Geschaefts- Kern- u. Mischgebiete")
+#plt.plot(x, tempcanyon_8[-288:], linestyle='-', color = 'orange', label = "Albedo Wand: 0.5, Boden: 0.5")# solitaere Handelsstrukturen")
+#plt.plot(x, tempcanyon_9, linestyle='-', color = 'brown', label = "9 - Industrie, Grosshandel, Lager.")# Geschaefts- Kern- u. Mischgebiete")
 
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
-plt.xlabel("Zeit [UTCI]", fontsize='large')
-plt.ylabel("UTCI Sonne(-), Schatten(- -)", fontsize='large')
+plt.xlabel("Zeit [UTC] ",  fontsize='large')
+plt.ylabel("Lufttemperatur im Canyon [gradC]", fontsize='large')
 plt.legend(loc=4, ncol=2, fontsize='large')
+
+#inset_axes = inset_axes(parent_axes,
+#                        width="30%", # width = 30% of parent_bbox
+#                        height=1., # height : 1 inch
+#                        loc=3)
+
+#inset_axes = zoomed_inset_axes(gca(),
+#                               0.5, # zoom = 0.5
+#                               loc=1)
+
 plt.show()

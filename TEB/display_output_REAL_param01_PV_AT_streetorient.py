@@ -4,19 +4,22 @@ import numpy as np
 import datetime
 import csv
 
+from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
+from mpl_toolkits.axes_grid1.inset_locator import mark_inset
+
 # ---READING DATA---
 #path = "/home/lnx/0_TEB/TEB/TEB_v1_1550/output/"
 directory = "/home/lnx/0_TEB/TEB/3_testdata/REALtest/"
 driver = "src_driver/driver.f90"
 scenario1 = "PV1"
 scenario2 = "PV2_Passivhausfenster"
-scenario3 = "PV3_Passivhausfenster_GZ09"
-scenario4 = "PV4_ALBW01"
-scenario5 = "PV5_ALBW05"
-scenario6 = "PV6_ALBR05"
-scenario7 = "PV7_ALBW01_ALBR05"
-scenario8 = "PV8_ALBW05_ALBR05"
-scenario9 = "R09"
+scenario3 = "PV15_BF75"
+scenario4 = "PV16_BH20"
+scenario5 = "PV17_WO11"
+scenario6 = "PV18_E_W"
+scenario7 = "PV19_N_S"
+scenario8 = "PV20_SW_NO"
+scenario9 = "PV21_NW_SO"
 
 path = directory+"output_"+scenario1+"/"
 path2 = directory+"output_"+scenario2+"/"
@@ -244,58 +247,37 @@ convert_celsius(data[13],tempindoor)
 
 #convert_celsius(data2[9],temproad1)
 
-
-print (np.mean(tempcanyon))
-print (np.max(tempcanyon))
-
 x = x[-288:]
 
+print (np.mean(tempcanyon_2))
+print (np.mean(tempcanyon_6))
+print (np.mean(tempcanyon_7))
+print (np.mean(tempcanyon_8))
+print (np.mean(tempcanyon_9))
+
+
 fig = plt.figure()
-#plt.title('canyon air temperature ' )
-#plt.plot(x, tempcanyon[-288:], linestyle='-', color = 'yellow', label = "STQ")# locker bebautes Wohn(misch)gebiet")
-plt.plot(x, tempcanyon_2[-288:], linestyle='-', color = 'green', label = "STQ, Albedo Wand:0.3, Boden: 0.14")# - Passivfenster")# Gartenstadt")
-#plt.plot(x, tempcanyon_3[-288:], linestyle='-', color = 'turquoise', label = "Fensteranteil 0.3 -> 0.9")# dichtes Wohn(misch)gebiet")
-plt.plot(x, tempcanyon_4[-288:], linestyle='-', color = 'blue', label = "Albedo Wand: 0.1, Boden: 0.14")# grossvolumiger solitaerer Wohn(misch)bau")
-plt.plot(x, tempcanyon_5[-288:], linestyle='-', color = 'violet', label = "Albedo Wand: 0.5, Boden: 0.14")# Buero- und Verwaltungsviertel")
-plt.plot(x, tempcanyon_6[-288:], linestyle='-', color = 'pink', label = "Albedo Wand: 0.3, Boden: 0.5")# solitaere Handelsstrukturen")
-plt.plot(x, tempcanyon_7[-288:], linestyle='-', color = 'red', label = "Albedo Wand: 0.1, Boden: 0.5")# Geschaefts- Kern- u. Mischgebiete")
-plt.plot(x, tempcanyon_8[-288:], linestyle='-', color = 'orange', label = "Albedo Wand: 0.5, Boden: 0.5")# solitaere Handelsstrukturen")
-#plt.plot(x, tempcanyon_9, linestyle='-', color = 'brown', label = "9 - Industrie, Grosshandel, Lager.")# Geschaefts- Kern- u. Mischgebiete")
+#plt.title('Albedo' )
+
+plt.plot(x, tempcanyon_2[-288:], linestyle='-', color = 'black', label = "STQ")
+plt.plot(x, tempcanyon_6[-288:], linestyle='-', color = 'red', label = "Ost-West")
+plt.plot(x, tempcanyon_7[-288:], linestyle='-', color = 'blue', label = "Nord-Sued")
+plt.plot(x, tempcanyon_8[-288:], linestyle='-', color = 'green', label = "Suedwest-Nordost")
+plt.plot(x, tempcanyon_9[-288:], linestyle='-', color = 'orange', label = "Nordwest-Suedost")
 
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
-plt.xlabel("time")
-plt.ylabel("canyon air temperature [degC]")
-plt.legend(loc=4, ncol=3, fontsize='small')
+plt.xlabel("Zeit [UTC] ",  fontsize='large')
+plt.ylabel("Lufttemperatur im Canyon [gradC]", fontsize='large')
+plt.legend(loc=4, ncol=2, fontsize='large')
+
+#inset_axes = inset_axes(parent_axes,
+#                        width="30%", # width = 30% of parent_bbox
+#                        height=1., # height : 1 inch
+#                        loc=3)
+
+#inset_axes = zoomed_inset_axes(gca(),
+#                               0.5, # zoom = 0.5
+#                               loc=1)
+
 plt.show()
-
-"""
-
-fig = plt.figure()
-
-ax = fig.add_subplot(411)
-plt.title('canyon, %s' %(scenario))
-plt.plot(x, data[5], linestyle='-', color = 'black', label = datalabel[8]) #wind
-plt.ylabel("wind speed [m s-1]")
-#plt.legend(loc=4, ncol=3, fontsize='small')
-
-ax = fig.add_subplot(412)
-plt.plot(x, data[6], linestyle='-', color = 'blue', label = datalabel[9]) #pressure
-plt.ylabel("air pressure [Pa]")
-#plt.legend(loc=4, ncol=3, fontsize='small')
-
-ax = fig.add_subplot(413)
-plt.plot(x, data[7], linestyle='-', color = 'red', label = datalabel[10]) #q
-plt.ylabel("specific humidity [g g-2]")
-#plt.legend(loc=4, ncol=3, fontsize='small')
-
-ax = fig.add_subplot(414)
-plt.plot(x, tempcanyon, linestyle='-', color = 'orange', label = datalabel[11]) #airtemp
-plt.xlabel("time") #TODO:convert to days/hours
-plt.ylabel("temperature [degC]")
-#plt.legend(loc=4, ncol=3, fontsize='small')
-plt.show()
-
-#fig.savefig(/home/lnx/0_TEB/TEB/output_graphs/test.png)
-
-"""

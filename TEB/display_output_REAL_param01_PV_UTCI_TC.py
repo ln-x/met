@@ -8,21 +8,30 @@ import csv
 #path = "/home/lnx/0_TEB/TEB/TEB_v1_1550/output/"
 directory = "/home/lnx/0_TEB/TEB/3_testdata/REALtest/"
 driver = "src_driver/driver.f90"
+scenario1 = "R03"
 scenario2 = "PV2_Passivhausfenster"
-scenario3 = "PV10_HVAC1"
-scenario4 = "PV10_HVAC2"
-scenario5 = "PV10_HVAC3"
+scenario2 = "PV7_ALBW02_ALBR018"
+scenario3 = "PV7_ALBW04_ALBR018"
+scenario4 = "PV7_ALBW02_ALBR04"
+scenario5 = "PV7_ALBW04_ALBR04"
+#scenario3 = "PV3_Passivhausfenster_GZ09"
+#scenario4 = "PV4_ALBW01"
+#scenario5 = "PV5_ALBW05"
+scenario6 = "PV6_ALBR05"
+scenario7 = "PV7_ALBW01_ALBR05"
+scenario8 = "PV8_ALBW05_ALBR05"
+scenario9 = "R09"
 
-#scenario5 = "PV12_PVF1"
-scenario6 = "PV13_GRF1"
-scenario7 = "PV14_GF045" #garden fraction full
-
+path = directory+"output_"+scenario1+"/"
 path2 = directory+"output_"+scenario2+"/"
 path3 = directory+"output_"+scenario3+"/"
 path4 = directory+"output_"+scenario4+"/"
 path5 = directory+"output_"+scenario5+"/"
 path6 = directory+"output_"+scenario6+"/"
 path7 = directory+"output_"+scenario7+"/"
+path8 = directory+"output_"+scenario8+"/"
+path9 = directory+"output_"+scenario9+"/"
+
 
 files =  ["H_TOWN.txt",
           "LE_TOWN.txt",
@@ -41,27 +50,42 @@ files =  ["H_TOWN.txt",
            "UTCI_OUTSHADE.txt",
            "UTCI_OUTSUN.txt"]
 
+data = []
 data2 = []
 data3 = []
 data4 = []
 data5 = []
 data6 = []
 data7 = []
+data8 = []
+data9 = []
+datalabel = []
 datalabel2 = []
 datalabel3 = []
 datalabel4 = []
 datalabel5 = []
 datalabel6 = []
 datalabel7 = []
+datalabel8 = []
+datalabel9 = []
 
 for f in files:
     filename = f
     name = f[:-4]
+    filepath = path+filename
+    with open(filepath) as f:
+        for line in f:
+            reader = csv.reader(f)
+            datalabel.append(str(name))
+            #print datalabel
+            name = [row for row in reader]
+            data.append(name)
     filepath = path2+filename
     with open(filepath) as f:
         for line in f:
             reader = csv.reader(f)
             datalabel2.append(str(name))
+            #print datalabel
             name = [row for row in reader]
             data2.append(name)
     filepath = path3+filename
@@ -69,6 +93,7 @@ for f in files:
         for line in f:
             reader = csv.reader(f)
             datalabel3.append(str(name))
+            #print datalabel
             name = [row for row in reader]
             data3.append(name)
     filepath = path4+filename
@@ -76,6 +101,7 @@ for f in files:
         for line in f:
             reader = csv.reader(f)
             datalabel4.append(str(name))
+            #print datalabel
             name = [row for row in reader]
             data4.append(name)
     filepath = path5+filename
@@ -83,6 +109,7 @@ for f in files:
         for line in f:
             reader = csv.reader(f)
             datalabel5.append(str(name))
+            #print datalabel
             name = [row for row in reader]
             data5.append(name)
 
@@ -91,6 +118,7 @@ for f in files:
         for line in f:
             reader = csv.reader(f)
             datalabel6.append(str(name))
+            #print datalabel
             name = [row for row in reader]
             data6.append(name)
     filepath = path7+filename
@@ -98,35 +126,54 @@ for f in files:
         for line in f:
             reader = csv.reader(f)
             datalabel7.append(str(name))
+            #print datalabel
             name = [row for row in reader]
             data7.append(name)
 
+    filepath = path8+filename
+    with open(filepath) as f:
+        for line in f:
+            reader = csv.reader(f)
+            datalabel8.append(str(name))
+            #print datalabel
+            name = [row for row in reader]
+            data8.append(name)
+
+    filepath = path9+filename
+    with open(filepath) as f:
+        for line in f:
+            reader = csv.reader(f)
+            datalabel9.append(str(name))
+            #print datalabel
+            name = [row for row in reader]
+            data9.append(name)
+
 start = datetime.datetime(2016,8,4) #year: line 108, month: line 109, day line 110, hour: line 111, column37
+#start = datetime.datetime(year,month,day) #year: line 108, month: line 109, day line 110, hour: line 111, column37
 x = start + np.arange(3166) * datetime.timedelta(minutes=10)
+#x = start + np.arange(nrtimestep) * datetime.timedelta(minutes=xstep)
+
+
+print (len(x),len(data[14]))
+
+print (len(x[2878:]))
+print (len(x[-288:]))
 
 x = x[-288:]
 
 fig = plt.figure()
-plt.title('24.-25.8.2016, dichtes Wohn(misch)gebiet, Passivhausstandard')
-plt.plot(x, data2[14][-288:], linestyle='-', color = 'black', label = "STQ")
-plt.plot(x, data2[15][-288:], linestyle='--', color = 'black')#, label = "STQ")
-#plt.plot(x, data3[14], linestyle='-', color = 'orange', label = "HVAC1 evaporation frac. for condensers: 0") #no change visible
-#plt.plot(x, data3[15], linestyle='--', color = 'orange')#, label = "HVAC1")#no change visible
-#plt.plot(x, data4[14], linestyle='-', color = 'red', label = "HVAC2 evaporation frac. for condenser: 1")
-#plt.plot(x, data4[15], linestyle='--', color = 'red')#, label = "HVACmax")
-#plt.plot(x, data5[14], linestyle='-', color = 'blue', label = "HVAC3")
-#plt.plot(x, data5[15], linestyle='--', color = 'blue', label = "HVAC3")
+plt.title('thermische Leitfaehigkeit Fassade' )
 
-#plt.plot(x, data5[14], linestyle='-', color = 'violet', label = "Solar panels on roof")#no change visible
-#plt.plot(x, data5[15], linestyle='--', color = 'violet')#, label = "Solar panels on roof")#no change visible
-#plt.plot(x, data6[14], linestyle='-', color = 'green', label = "Green roofs")#no change visible
-#plt.plot(x, data6[15], linestyle='--', color = 'green')#, label = "Green roofs")#no change visible
-plt.plot(x, data7[14][-288:], linestyle='-', color = 'blue', label = "All unbuilt unsealed")
-plt.plot(x, data7[15][-288:], linestyle='--', color = 'blue')#, label = "All unbuilt unsealed")
+plt.plot(x, data[14][-288:], linestyle='-', color = 'red', label = "Bestand: 1.7 [W/mK]")
+plt.plot(x, data[15][-288:], linestyle='--', color = 'red', label = "Bestand: 1.7 [W/mK]")
+plt.plot(x, data2[14][-288:], linestyle='-', color = 'black', label = "saniert:    0.1 [W/mK]")
+plt.plot(x, data2[15][-288:], linestyle='--', color = 'black', label = "saniert:    0.1 [W/mK]")
+
+
 
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
-plt.xlabel("Zeit [UTC]")
-plt.ylabel("UTCI Sonne(-), Schatten(- -)")
-plt.legend(loc=4, ncol=3, fontsize='large')
+plt.xlabel("Zeit [UTCI]", fontsize='large')
+plt.ylabel("UTCI Sonne(-), Schatten(- -)", fontsize='large')
+plt.legend(loc=3, ncol=1, fontsize='large')
 plt.show()

@@ -4,21 +4,35 @@ import numpy as np
 import datetime
 import csv
 
+from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
+from mpl_toolkits.axes_grid1.inset_locator import mark_inset
+
 # ---READING DATA---
 #path = "/home/lnx/0_TEB/TEB/TEB_v1_1550/output/"
 directory = "/home/lnx/0_TEB/TEB/3_testdata/REALtest/"
 driver = "src_driver/driver.f90"
 scenario1 = "PV1"
-scenario2 = "PV2_Passivhausfenster"
-scenario3 = "PV10_HVAC1"
-scenario4 = "PV10_HVAC2"
-scenario5 = "PV10_HVAC3"
+#scenario2 = "PV2_Passivhausfenster"
+scenario2 = "PV2_copy"
+scenario3 = "PV3_Passivhausfenster_GZ09"
+scenario4 = "PV5_pvglass_C03"
+scenario5 = "PV5_pvglass_C004"
+#scenario4 = "PV4_ALBW01"
+#scenario5 = "PV5_ALBW05"
+scenario6 = "PV6_ALBR05"
+scenario7 = "PV7_ALBW01_ALBR05"
+scenario8 = "PV8_ALBW05_ALBR05"
+scenario9 = "R09"
 
 path = directory+"output_"+scenario1+"/"
 path2 = directory+"output_"+scenario2+"/"
 path3 = directory+"output_"+scenario3+"/"
 path4 = directory+"output_"+scenario4+"/"
 path5 = directory+"output_"+scenario5+"/"
+path6 = directory+"output_"+scenario6+"/"
+path7 = directory+"output_"+scenario7+"/"
+path8 = directory+"output_"+scenario8+"/"
+path9 = directory+"output_"+scenario9+"/"
 
 
 files =  ["H_TOWN.txt",
@@ -43,12 +57,19 @@ data2 = []
 data3 = []
 data4 = []
 data5 = []
+data6 = []
+data7 = []
+data8 = []
+data9 = []
 datalabel = []
 datalabel2 = []
 datalabel3 = []
 datalabel4 = []
 datalabel5 = []
-
+datalabel6 = []
+datalabel7 = []
+datalabel8 = []
+datalabel9 = []
 
 for f in files:
     filename = f
@@ -94,6 +115,41 @@ for f in files:
             name = [row for row in reader]
             data5.append(name)
 
+    filepath = path6+filename
+    with open(filepath) as f:
+        for line in f:
+            reader = csv.reader(f)
+            datalabel6.append(str(name))
+            #print datalabel
+            name = [row for row in reader]
+            data6.append(name)
+    filepath = path7+filename
+    with open(filepath) as f:
+        for line in f:
+            reader = csv.reader(f)
+            datalabel7.append(str(name))
+            #print datalabel
+            name = [row for row in reader]
+            data7.append(name)
+
+    filepath = path8+filename
+    with open(filepath) as f:
+        for line in f:
+            reader = csv.reader(f)
+            datalabel8.append(str(name))
+            #print datalabel
+            name = [row for row in reader]
+            data8.append(name)
+
+    filepath = path9+filename
+    with open(filepath) as f:
+        for line in f:
+            reader = csv.reader(f)
+            datalabel9.append(str(name))
+            #print datalabel
+            name = [row for row in reader]
+            data9.append(name)
+
 start = datetime.datetime(2016,8,4) #year: line 108, month: line 109, day line 110, hour: line 111, column37
 #start = datetime.datetime(year,month,day) #year: line 108, month: line 109, day line 110, hour: line 111, column37
 x = start + np.arange(3166) * datetime.timedelta(minutes=10)
@@ -135,6 +191,11 @@ tempwall2_4 = []
 tempindoor_4 = []
 
 tempcanyon_5 = []
+tempcanyon_6 = []
+tempcanyon_7 = []
+tempcanyon_8 = []
+tempcanyon_9 = []
+
 
 
 def convert_celsius(list,output):
@@ -164,6 +225,23 @@ for line in data5[8]:
     tempcanyon_5.append(line)
 
 
+for line in data6[8]:
+    line = float(line[0])-273.15
+    tempcanyon_6.append(line)
+
+
+for line in data7[8]:
+    line = float(line[0])-273.15
+    tempcanyon_7.append(line)
+
+for line in data8[8]:
+    line = float(line[0])-273.15
+    tempcanyon_8.append(line)
+
+for line in data9[8]:
+    line = float(line[0])-273.15
+    tempcanyon_9.append(line)
+
 convert_celsius(data[9],temproad1)
 convert_celsius(data[10],temproof1)
 convert_celsius(data[11],tempwall1)
@@ -172,22 +250,36 @@ convert_celsius(data[13],tempindoor)
 
 #convert_celsius(data2[9],temproad1)
 
-
-print (np.mean(tempcanyon))
-print (np.max(tempcanyon))
+print (np.mean(tempcanyon_3))
+print (np.max(tempcanyon_3[-288:]))
+print (np.min(tempcanyon_3[-288:]))
+print (np.mean(tempcanyon_4))
+print (np.max(tempcanyon_4[-288:]))
+print (np.min(tempcanyon_4[-288:]))
 
 x = x[-288:]
+
 fig = plt.figure()
-#plt.title('canyon air temperature' )
-plt.plot(x, tempcanyon_2[-288:], linestyle='-', color = 'black', label = "STQ")
-plt.plot(x, tempcanyon_3[-288:], linestyle='-', color = 'orange', label = "Klimaanlage")#"HVAC1 evaporation frac. for condensers: 0") #no change visible
-#plt.plot(x, tempcanyon_4[-288:], linestyle='-', color = 'red', label = "HVAC2 evaporation frac. for condenser: 1")
+#plt.title('canyon air temperature ' )
+#plt.title('dichtes Wohn(misch)gebiet, Passivhausstandard')
+#plt.plot(x, tempcanyon[-288:], linestyle='-', color = 'yellow', label = "STQ")# locker bebautes Wohn(misch)gebiet")
+plt.plot(x, tempcanyon_2[-288:], linestyle='-', color = 'black', label = "STQ")# -
+plt.plot(x, tempcanyon_3[-288:], linestyle='-', color = 'turquoise', label = "Vollverglasung")# d
+#plt.plot(x, tempcanyon_4[-288:], linestyle='-', color = 'blue', label = "PV Fassade")# thermal conductiv. 0.3
+#plt.plot(x, tempcanyon_5, linestyle='-', color = 'violet', label = "PV Fassade 2")# thermal conduct. 0.04
+
 
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
-plt.xlabel("Zeit [UTC]",fontsize='large')
-plt.ylabel("Lufttemperatur im Canyon [gradC]",fontsize='large')
+plt.xlabel("Zeit [UTC] ",  fontsize='large')
+plt.ylabel("Lufttemperatur [gradC]", fontsize='large')
 plt.legend(loc=2, ncol=3, fontsize='large')
+
+#inset_axes = inset_axes(parent_axes,
+#                        width="30%", # width = 30% of parent_bbox
+#                        height=1., # height : 1 inch
+#                        loc=3)
+
 plt.show()
 
 """

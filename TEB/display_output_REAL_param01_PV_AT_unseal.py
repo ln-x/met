@@ -4,6 +4,8 @@ import numpy as np
 import datetime
 import csv
 
+## coding: utf-8
+
 # ---READING DATA---
 #path = "/home/lnx/0_TEB/TEB/TEB_v1_1550/output/"
 directory = "/home/lnx/0_TEB/TEB/3_testdata/REALtest/"
@@ -12,7 +14,8 @@ scenario1 = "PV1"
 scenario2 = "PV2_Passivhausfenster"
 scenario3 = "PV10_HVAC1"
 scenario4 = "PV10_HVAC2"
-scenario5 = "PV10_HVAC3"
+scenario5 = "PV14_GF045" #garden fraction full
+
 
 path = directory+"output_"+scenario1+"/"
 path2 = directory+"output_"+scenario2+"/"
@@ -172,51 +175,24 @@ convert_celsius(data[13],tempindoor)
 
 #convert_celsius(data2[9],temproad1)
 
+print (np.mean(tempcanyon_2))
+print (np.max(tempcanyon_2[-288:]))
+print (np.min(tempcanyon_2[-288:]))
 
-print (np.mean(tempcanyon))
-print (np.max(tempcanyon))
+print (np.mean(tempcanyon_5))
+print (np.max(tempcanyon_5[-288:]))
+print (np.min(tempcanyon_5[-288:]))
 
 x = x[-288:]
 fig = plt.figure()
 #plt.title('canyon air temperature' )
 plt.plot(x, tempcanyon_2[-288:], linestyle='-', color = 'black', label = "STQ")
-plt.plot(x, tempcanyon_3[-288:], linestyle='-', color = 'orange', label = "Klimaanlage")#"HVAC1 evaporation frac. for condensers: 0") #no change visible
-#plt.plot(x, tempcanyon_4[-288:], linestyle='-', color = 'red', label = "HVAC2 evaporation frac. for condenser: 1")
+#plt.plot(x, tempcanyon_3[-288:], linestyle='-', color = 'orange', label = "HVAC1 evaporation frac. for condensers: 0") #no change visible
+plt.plot(x, tempcanyon_5[-288:], linestyle='-', color = 'blue', label = "Entsiegelung")
 
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
 plt.xlabel("Zeit [UTC]",fontsize='large')
-plt.ylabel("Lufttemperatur im Canyon [gradC]",fontsize='large')
+plt.ylabel("Luftemperatur im Canyon [gradC]",fontsize='large')
 plt.legend(loc=2, ncol=3, fontsize='large')
 plt.show()
-
-"""
-
-fig = plt.figure()
-
-ax = fig.add_subplot(411)
-plt.title('canyon, %s' %(scenario))
-plt.plot(x, data[5], linestyle='-', color = 'black', label = datalabel[8]) #wind
-plt.ylabel("wind speed [m s-1]")
-#plt.legend(loc=4, ncol=3, fontsize='small')
-
-ax = fig.add_subplot(412)
-plt.plot(x, data[6], linestyle='-', color = 'blue', label = datalabel[9]) #pressure
-plt.ylabel("air pressure [Pa]")
-#plt.legend(loc=4, ncol=3, fontsize='small')
-
-ax = fig.add_subplot(413)
-plt.plot(x, data[7], linestyle='-', color = 'red', label = datalabel[10]) #q
-plt.ylabel("specific humidity [g g-2]")
-#plt.legend(loc=4, ncol=3, fontsize='small')
-
-ax = fig.add_subplot(414)
-plt.plot(x, tempcanyon, linestyle='-', color = 'orange', label = datalabel[11]) #airtemp
-plt.xlabel("time") #TODO:convert to days/hours
-plt.ylabel("temperature [degC]")
-#plt.legend(loc=4, ncol=3, fontsize='small')
-plt.show()
-
-#fig.savefig(/home/lnx/0_TEB/TEB/output_graphs/test.png)
-
-"""
