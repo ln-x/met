@@ -18,12 +18,10 @@ class Clip:
         """Constructor.
 
         """
-
-        #self.data_path = 'D:/Michael/Documents/Studium/Doktorat/UMEP/umep-3d/SEBE/SEBEdata/'
-        self.data_path = 'C:/Users/ReveszM/Doktorat/02_Simulationen/03_UMEP_Stadtklimasimulation/BOKU-Schwackhoefer_albedo/'
-        self.difflayer = 'BOKU-dom-dgm-diff.tif'
-        self.masklayer = 'buildveg-mask.tif'
-        self.vegdsmlayer = 'BOKU-vegdsm.tif'
+        self.data_path = '/home/lnx/0_TEB/_Input/TESTdata/SOLWEIG_Wien35_4/'
+        self.difflayer = '35_4_DSM_DGM_diff.tif'
+        self.masklayer = '35_4_bkm_buffer_05m_mask_5001.tif'
+        self.vegdsmlayer = 'vegdsm.tif'
 
         self.scale = None
         self.gdal_diff = None
@@ -44,7 +42,7 @@ class Clip:
         # load raster
         gdal.AllRegister()
 
-        self.vdsm = self.diff * self.mask
+        self.vdsm = self.diff * abs(1-self.mask)
         saveraster(self.gdal_diff, (self.data_path + self.vegdsmlayer), self.vdsm)
 
 

@@ -24,8 +24,9 @@ class Coordinate(object):
             return False
 
     def __repr__(self):
+        return "Coordinate(%s,%s)" % (self.x, self.y)
 
 
-#Define __repr__, a special method that returns a string that looks like a valid Python expression
-# that could be used to recreate an object with the same value. In other words,
-# eval(repr(c)) == c given the definition of __eq__ from part 1
+print (repr(Coordinate(1,2)))
+c = (Coordinate(1,2))
+print (eval(repr(c)) == c)

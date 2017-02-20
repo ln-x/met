@@ -6,8 +6,8 @@
 import sys                                                          # for this main application needed!
 import os.path
 import ogr
-#from osgeo import gdal, osr
-#from osgeo.gdalconst import *
+from osgeo import gdal, osr
+from osgeo.gdalconst import *
 import numpy as np
 
 
@@ -22,7 +22,8 @@ class Clip:
 
         #self.data_path = 'D:/Michael/Documents/Studium/Doktorat/UMEP/umep-3d/SEBE/SEBEdata/'
         #self.data_path = 'C:/Users/ReveszM/Doktorat/02_Simulationen/03_UMEP_Stadtklimasimulation/BOKU-Schwackhoefer_albedo/'
-        self.data_path = 'D:/_URBANIA/GEODATA/TESTdata/35_4'
+        #self.data_path = 'D:/_URBANIA/GEODATA/TESTdata/35_4'
+        self.data_path = '/home/lnx/0_TEB/_Input/TESTdata/SOLWEIG_Wien35_4/'
         #self.dgmlayer = 'BOKU_dgm.tif'
         #self.dsmlayer = 'BOKU_dom.tif'
         #self.dsmlayernew = 'BOKU-dom-dgm-diff.tif'

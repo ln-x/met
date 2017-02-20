@@ -18,12 +18,12 @@ class Clip:
         """Constructor.
 
         """
-
-        #self.data_path = 'D:/Michael/Documents/Studium/Doktorat/UMEP/umep-3d/SEBE/SEBEdata/'
-        self.data_path = 'C:/Users/ReveszM/Doktorat/02_Simulationen/03_UMEP_Stadtklimasimulation/BOKU-Schwackhoefer_albedo/'
-        self.dsmlayer = 'BOKU_dom.tif'
-        self.vdsmlayer = 'BOKU-vegdsm.tif'
-        self.dsmlayernew = 'BOKU-dsm-woveg.tif'
+        self.data_path = '/home/lnx/0_TEB/_Input/TESTdata/SOLWEIG_Wien35_4/'
+        self.dsmlayer = '35_4_DOM.tif'
+        self.vdsmlayer ='vegdsm.tif'
+        self.dsmlayernew = 'dsm_woveg.tif'
+        #self.vdsmlayer = 'BOKU-vegdsm.tif'
+        #self.dsmlayernew = 'BOKU-dsm-woveg.tif'
 
         self.scale = None
         self.gdal_dsm = None
