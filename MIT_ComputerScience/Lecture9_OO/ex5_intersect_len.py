@@ -32,32 +32,46 @@ class intSet(object):
         self.vals.sort()
         return '{' + ','.join([str(e) for e in self.vals]) + '}'
 
-    def intersect(self, a):
+    def intersect(self, b):
         intersect_list = intSet()
-        for i in a:
-            if i in self.vals:
-                    intersect_list.insert(i)
+        #print (b.vals)
+        #print (self.vals)
+        for i in range(len(b.vals)):
+            for j in range(len(self.vals)):
+                #print (i,j)
+                if b.vals[i] == self.vals[j]:
+                    #print(b.vals[i])
+                    intersect_list.insert(b.vals[i])
         return intersect_list
 
     def __len__(self):
         return len(self.vals)
 
-a = intSet()
-a.insert(1)
-a.insert(2)
-print (a)
-print len(a)
+setA = intSet()
+setA.insert(5)
+setA.insert(2)
+setB = intSet()
+setB.insert(5)
+setB.insert(4)
+print (setA.intersect(setB))
+#print setA
+#print len(setA)
+#print setB
+#print len(setB)
+#intersecList = intSet.intersect(a,b)
+#print intersecList
+#setA = [-17,-15,-10,0,12,14,15,19]
+#setB = [19,-8,4,5,6,10,18]
+#setA = intSet(setA)
 
-b = [2,4]
-intersecList = intSet.intersect(a,b)
-print intersecList
 
-#setA: {-17,-15,-10,0,12,14,15,19}
-#setB: {-19,-8,4,5,6,10,18}
+
 #Traceback (most recent call last):
 #  File "submission.py", line 36, in intersect
 #    for i in a:
 #TypeError: 'intSet' object is not iterable
+
+#setA.intersect(setB): {}
 
 #setA: {-20,-11,-6,3,9,10,13}
 #setB: {-10,-3,2,3,4,8,15,18,19}
@@ -68,9 +82,6 @@ print intersecList
 #setA.intersect(setB): {-17,-15,1,7}
 #setB.intersect(setA): {-17,-15,1,7}
 
-#setA: {-17,-15,-10,0,12,14,15,19}
-#setB: {-19,-8,4,5,6,10,18}
-#setA.intersect(setB): {}
 
 #setA: {}
 #setB: {}
