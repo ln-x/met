@@ -1,5 +1,6 @@
 __author__ = 'lnx'
 import matplotlib.pyplot as plt
+import pylab as p
 import numpy as np
 import datetime
 import csv
@@ -158,20 +159,21 @@ print (len(x[2878:]))
 print (len(x[-288:]))
 
 x = x[-288:]
+axisrange = [735082,735088,15,45]
 
 fig = plt.figure()
 #plt.title('24.-25.8.2016, dichtes Wohn(misch)gebiet, Passivhausstandard, Vgl. PV')
 #plt.plot(x, data[14], linestyle='-', color = 'yellow', label = "STQ")# locker bebautes Wohn(misch)gebiet")
-plt.plot(x, data2[14][-288:], linestyle='-', color = 'black', label = "STQ")# Gartenstadt")
-plt.plot(x, data2[15][-288:], linestyle='--', color = 'black')#, label = "STQ")# Gartenstadt")
-plt.plot(x, data3[14][-288:], linestyle='-', color = 'turquoise', label = "Vollverglasung")# dichtes Wohn(misch)gebiet")
-plt.plot(x, data3[15][-288:], linestyle='--', color = 'turquoise')#, label = "Fensteranteil 0.3 -> 0.9")# dichtes Wohn(misch)gebiet")
-#plt.plot(x, data4[14][-288:], linestyle='-', color = 'blue', label = "PV Fassade")# grossvolumiger solitaerer Wohn(misch)bau")
-#plt.plot(x, data4[15][-288:], linestyle='--', color = 'blue')#, label = "PV Fassade")# grossvolumiger solitaerer Wohn(misch)bau")
+plt.plot(x, data2[14][-288:], linestyle='-', color = 'black', label = "STQ, Sonne")# Gartenstadt")
+plt.plot(x, data2[15][-288:], linestyle='--', color = 'black', label = "STQ, Schatten")# Gartenstadt")
+#plt.plot(x, data3[14][-288:], linestyle='-', color = 'turquoise', label = "Vollverglasung")# dichtes Wohn(misch)gebiet")
+#plt.plot(x, data3[15][-288:], linestyle='--', color = 'turquoise')#, label = "Fensteranteil 0.3 -> 0.9")# dichtes Wohn(misch)gebiet")
+plt.plot(x, data4[14][-288:], linestyle='-', color = 'blue', label = "PV Fassade, Sonne")# grossvolumiger solitaerer Wohn(misch)bau")
+plt.plot(x, data4[15][-288:], linestyle='--', color = 'blue', label = "PV Fassade, Schatten")# grossvolumiger solitaerer Wohn(misch)bau")
 
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
-plt.xlabel("Zeit [UTCI]", fontsize='large')
-plt.ylabel("UTCI Sonne(-), Schatten(- -)", fontsize='large')
-plt.legend(loc=2, ncol=3, fontsize='large')
+plt.xlabel("Zeit [UTC]", fontsize='large')
+plt.ylabel("UTCI [gradC]", fontsize='large')
+plt.legend(loc=2, ncol=2, fontsize='large')
 plt.show()

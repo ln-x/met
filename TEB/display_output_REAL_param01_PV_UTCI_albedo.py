@@ -162,7 +162,7 @@ print (len(x[-288:]))
 x = x[-288:]
 
 fig = plt.figure()
-plt.title('Albedo')
+plt.title('UTCI Sonne (-), Schatten (--)')
 #plt.plot(x, data[14], linestyle='-', color = 'yellow', label = "STQ")# locker bebautes Wohn(misch)gebiet")
 #plt.plot(x, data2[14][-288:], linestyle='-', color = 'green', label = "STQ, Albedo Wand:0.3, Boden: 0.14")# Gartenstadt")
 #plt.plot(x, data2[15], linestyle='--', color = 'green')#, label = "STQ")# Gartenstadt")
@@ -190,7 +190,7 @@ plt.plot(x, data5[14][-288:], linestyle='--', color = 'green')#, label = "Wand:0
 
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
-plt.xlabel("Zeit [UTCI]", fontsize='large')
-plt.ylabel("UTCI Sonne(-), Schatten(- -)", fontsize='large')
-plt.legend(loc=4, ncol=2, fontsize='large')
+plt.xlabel("Zeit [UTC]", fontsize='large')
+plt.ylabel("UTCI [gradC]", fontsize='large')
+plt.legend(loc=2, ncol=2, fontsize='large')
 plt.show()

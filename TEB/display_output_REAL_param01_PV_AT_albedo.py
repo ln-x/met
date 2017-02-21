@@ -288,7 +288,7 @@ plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
 plt.xlabel("Zeit [UTC] ",  fontsize='large')
 plt.ylabel("Lufttemperatur im Canyon [gradC]", fontsize='large')
-plt.legend(loc=4, ncol=2, fontsize='large')
+plt.legend(loc=2, ncol=2, fontsize='large')
 
 #inset_axes = inset_axes(parent_axes,
 #                        width="30%", # width = 30% of parent_bbox
