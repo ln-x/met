@@ -162,18 +162,18 @@ print (len(x[-288:]))
 x = x[-288:]
 
 fig = plt.figure()
-plt.title('thermische Leitfaehigkeit Fassade' )
+plt.title('UTCI Sonne (-), Schatten (--)')
 
 plt.plot(x, data[14][-288:], linestyle='-', color = 'red', label = "Bestand: 1.7 [W/mK]")
-plt.plot(x, data[15][-288:], linestyle='--', color = 'red', label = "Bestand: 1.7 [W/mK]")
+plt.plot(x, data[15][-288:], linestyle='--', color = 'red')#, label = "Bestand: 1.7 [W/mK]")
 plt.plot(x, data2[14][-288:], linestyle='-', color = 'black', label = "saniert:    0.1 [W/mK]")
-plt.plot(x, data2[15][-288:], linestyle='--', color = 'black', label = "saniert:    0.1 [W/mK]")
+plt.plot(x, data2[15][-288:], linestyle='--', color = 'black')#', label = "saniert:    0.1 [W/mK]")
 
 
 
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
-plt.xlabel("Zeit [UTCI]", fontsize='large')
-plt.ylabel("UTCI Sonne(-), Schatten(- -)", fontsize='large')
+plt.xlabel("Zeit [UTC]", fontsize='large')
+plt.ylabel("UTCI [gradC]", fontsize='large')
 plt.legend(loc=3, ncol=1, fontsize='large')
 plt.show()

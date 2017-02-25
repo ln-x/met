@@ -112,8 +112,8 @@ x = x[-288:]
 
 fig = plt.figure()
 #plt.title('24.-25.8.2016, dichtes Wohn(misch)gebiet, Passivhausstandard')
-plt.plot(x, data2[14][-288:], linestyle='-', color = 'black', label = "STQ")
-plt.plot(x, data2[15][-288:], linestyle='--', color = 'black')#, label = "STQ")
+plt.plot(x, data2[14][-288:], linestyle='-', color = 'black', label = "STQ, Sonne")
+plt.plot(x, data2[15][-288:], linestyle='--', color = 'black', label = "STQ, Schatten")
 #plt.plot(x, data3[14], linestyle='-', color = 'orange', label = "HVAC1 evaporation frac. for condensers: 0") #no change visible
 #plt.plot(x, data3[15], linestyle='--', color = 'orange')#, label = "HVAC1")#no change visible
 #plt.plot(x, data4[14], linestyle='-', color = 'red', label = "HVAC2 evaporation frac. for condenser: 1")
@@ -125,12 +125,12 @@ plt.plot(x, data2[15][-288:], linestyle='--', color = 'black')#, label = "STQ")
 #plt.plot(x, data5[15], linestyle='--', color = 'violet')#, label = "Solar panels on roof")#no change visible
 #plt.plot(x, data6[14], linestyle='-', color = 'green', label = "Green roofs")#no change visible
 #plt.plot(x, data6[15], linestyle='--', color = 'green')#, label = "Green roofs")#no change visible
-plt.plot(x, data7[14][-288:], linestyle='-', color = 'blue', label = "Entsieglung")
-plt.plot(x, data7[15][-288:], linestyle='--', color = 'blue')#, label = "All unbuilt unsealed")
+plt.plot(x, data7[14][-288:], linestyle='-', color = 'blue', label = "Entsieglung, Sonne")
+plt.plot(x, data7[15][-288:], linestyle='--', color = 'blue', label = "Entsiegelung, Schatten")
 
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
 plt.xlabel("Zeit [UTC]")
-plt.ylabel("UTCI Sonne(-), Schatten(- -)")
-plt.legend(loc=2, ncol=3, fontsize='large')
+plt.ylabel("UTCI [gradC]")
+plt.legend(loc=2, ncol=2, fontsize='large')
 plt.show()

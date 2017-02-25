@@ -158,18 +158,34 @@ print (len(x),len(data[14]))
 print (len(x[2878:]))
 print (len(x[-288:]))
 
+utci2_sun = []
+utci4_sun = []
+
+for line in data2[14]:
+    line = float(line[0])
+    utci2_sun.append(line)
+
+for line in data4[14]:
+    line = float(line[0])
+    utci4_sun.append(line)
+
+print (np.mean(utci4_sun)-np.mean(utci2_sun)) #PV - STQ
+print (np.max(utci4_sun[-288])-np.max(utci2_sun[-288]))
+
+
+
 x = x[-288:]
 axisrange = [735082,735088,15,45]
 
 fig = plt.figure()
 #plt.title('24.-25.8.2016, dichtes Wohn(misch)gebiet, Passivhausstandard, Vgl. PV')
-#plt.plot(x, data[14], linestyle='-', color = 'yellow', label = "STQ")# locker bebautes Wohn(misch)gebiet")
-plt.plot(x, data2[14][-288:], linestyle='-', color = 'black', label = "STQ, Sonne")# Gartenstadt")
-plt.plot(x, data2[15][-288:], linestyle='--', color = 'black', label = "STQ, Schatten")# Gartenstadt")
-#plt.plot(x, data3[14][-288:], linestyle='-', color = 'turquoise', label = "Vollverglasung")# dichtes Wohn(misch)gebiet")
-#plt.plot(x, data3[15][-288:], linestyle='--', color = 'turquoise')#, label = "Fensteranteil 0.3 -> 0.9")# dichtes Wohn(misch)gebiet")
-plt.plot(x, data4[14][-288:], linestyle='-', color = 'blue', label = "PV Fassade, Sonne")# grossvolumiger solitaerer Wohn(misch)bau")
-plt.plot(x, data4[15][-288:], linestyle='--', color = 'blue', label = "PV Fassade, Schatten")# grossvolumiger solitaerer Wohn(misch)bau")
+#plt.plot(x, data[14], linestyle='-', color = 'yellow', label = "STQ")
+plt.plot(x, data2[14][-288:], linestyle='-', color = 'black', label = "STQ, Sonne")
+plt.plot(x, data2[15][-288:], linestyle='--', color = 'black', label = "STQ, Schatten")
+plt.plot(x, data3[14][-288:], linestyle='-', color = 'turquoise', label = "Vollverglasung, Sonne")
+plt.plot(x, data3[15][-288:], linestyle='--', color = 'turquoise', label = "Vollverglasung, Schatten")
+#plt.plot(x, data4[14][-288:], linestyle='-', color = 'blue', label = "PV Fassade, Sonne")
+#plt.plot(x, data4[15][-288:], linestyle='--', color = 'blue', label = "PV Fassade, Schatten")
 
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')

@@ -251,8 +251,7 @@ convert_celsius(data[13],tempindoor)
 
 #convert_celsius(data2[9],temproad1)
 
-
-print (np.mean(tempcanyon_2))
+print (np.mean(tempcanyon_2)-np.mean(tempcanyon))
 print (np.max(tempcanyon_2[-288:]))
 print (np.min(tempcanyon_2[-288:]))
 print (np.mean(tempcanyon_3))

@@ -149,15 +149,15 @@ x = start + np.arange(3166) * datetime.timedelta(minutes=10)
 x = x[-288:]
 
 fig = plt.figure()
-#plt.title('24.-25.8.2016, dichtes Wohn(misch)gebiet, Passivhausstandard, Vgl. Stadtmorphologie')
+plt.title('UTCI Sonne (-), Schatten (--)')
 #plt.plot(x, data[14], linestyle='-', color = 'yellow', label = "STQ")
 plt.plot(x, data2[14][-288:], linestyle='-', color = 'black', label = "STQ")
 plt.plot(x, data2[15][-288:], linestyle='--', color = 'black')#,
-plt.plot(x, data3[14][-288:], linestyle='-', color = 'red', label = "Hoehe/Breite 2 -> 4")
+plt.plot(x, data3[14][-288:], linestyle='-', color = 'red', label = "Bebauung +0.25")#"Hoehe/Breite 2 -> 4")
 plt.plot(x, data3[15][-288:], linestyle='--', color = 'red')#,
-plt.plot(x, data4[14][-288:], linestyle='-', color = 'blue', label = "Bauhoehe + 5m")
+plt.plot(x, data4[14][-288:], linestyle='-', color = 'blue', label = "Bauhoehe +5m")
 plt.plot(x, data4[15][-288:], linestyle='--', color = 'blue')#,
-plt.plot(x, data5[14][-288:], linestyle='-', color = 'green', label = "offenere Bauweise")
+plt.plot(x, data5[14][-288:], linestyle='-', color = 'green', label = "vertikal/horiz.Flaeche 2.1 -> 1.1") #offenere Bauweise
 plt.plot(x, data5[15][-288:], linestyle='--', color = 'green')#,
 
 #plt.plot(x, data3[14][-288:], linestyle='-', color = 'turquoise', label = "BF 0.55 -> 0.75")
@@ -170,6 +170,6 @@ plt.plot(x, data5[15][-288:], linestyle='--', color = 'green')#,
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
 plt.xlabel("Zeit [UTC]", fontsize='large')
-plt.ylabel("UTCI Sonne(-), Schatten(- -)", fontsize='large')
+plt.ylabel("UTCI [gradC]", fontsize='large')
 plt.legend(loc=4, ncol=2, fontsize='large')
 plt.show()

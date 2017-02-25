@@ -247,7 +247,7 @@ convert_celsius(data[13],tempindoor)
 
 #convert_celsius(data2[9],temproad1)
 
-
+"""
 print (np.mean(tempcanyon_2))
 print (np.max(tempcanyon_2[-288:]))
 print (np.min(tempcanyon_2[-288:]))
@@ -260,16 +260,30 @@ print (np.min(tempcanyon_4[-288:]))
 print (np.mean(tempcanyon_5))
 print (np.max(tempcanyon_5[-288:]))
 print (np.min(tempcanyon_5[-288:]))
+"""
 
 x = x[-288:]
+
+print (np.mean(tempcanyon_2))
+print (np.mean(tempcanyon_3))
+print (np.mean(tempcanyon_4))
+print (np.mean(tempcanyon_5))
+
+exit()
+
 
 fig = plt.figure()
 #plt.title('Albedo' )
 
+#fig.set_size_inches(3.39,2.54)
+#axisrange = [220,270,15,40]
+#plt.axis(axisrange)
+plt.ylim(14, 28)
+
 plt.plot(x, tempcanyon_2[-288:], linestyle='-', color = 'black', label = "STQ")
-plt.plot(x, tempcanyon_3[-288:], linestyle='-', color = 'red', label = "Hoehe/Breite 2 > 4")
-plt.plot(x, tempcanyon_4[-288:], linestyle='-', color = 'blue', label = "Bauhoehe + 5m")
-plt.plot(x, tempcanyon_5[-288:], linestyle='-', color = 'green', label = "offenere Bauweise")
+plt.plot(x, tempcanyon_3[-288:], linestyle='-', color = 'red', label = "Bebauung +0.25")
+plt.plot(x, tempcanyon_4[-288:], linestyle='-', color = 'blue', label = "Bauhoehe +5m")
+plt.plot(x, tempcanyon_5[-288:], linestyle='-', color = 'green', label = "vertikal/horiz.Flaeche 2.1 -> 1.1")
 
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
