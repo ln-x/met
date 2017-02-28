@@ -7,7 +7,8 @@ import csv
 
 directory = "/home/lnx/0_TEB/TEB/3_testdata/REALtest/"
 
-scenarios = ["PV1",
+scenarios = ["R03",
+             "PV1",
              "PV2_Passivhausfenster",
              "PV3_Passivhausfenster_GZ09",
              "PV5_pvglass_C03",
@@ -69,3 +70,15 @@ for i in scenarios:
     print ("min", np.min(utci_sun[:288])-13.685273443704533)
     print ('')
 
+'''
+for i in scenarios:
+    utci_sun = getValues(directory,i,files)
+    print (i)
+    print ("mean", np.mean(utci_sun)- 21.0685871148) #Differenz zu PV2_Passivhausfenster
+    print ("max", np.max(utci_sun) - 35.8765829905)
+    print ("min", np.min(utci_sun)-  9.34972664252)
+    print ("mean", np.mean(utci_sun[:288])-22.085736853344841) #Differenz zu PV2_Passivhausfenster
+    print ("max", np.max(utci_sun[:288])-35.876582990453528)
+    print ("min", np.min(utci_sun[:288])-13.685273443704533)
+    print ('')
+'''

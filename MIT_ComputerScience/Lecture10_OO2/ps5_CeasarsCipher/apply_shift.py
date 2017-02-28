@@ -1,7 +1,5 @@
 __author__ = 'lnx'
 
-#from ps6 import *
-
 def apply_shift(self, shift):
 
 

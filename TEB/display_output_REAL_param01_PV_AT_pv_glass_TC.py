@@ -11,7 +11,8 @@ from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 #path = "/home/lnx/0_TEB/TEB/TEB_v1_1550/output/"
 directory = "/home/lnx/0_TEB/TEB/3_testdata/REALtest/"
 driver = "src_driver/driver.f90"
-scenario1 = "PV1"
+scenario1 = "R03"
+#scenario1 = "PV1"
 #scenario2 = "PV2_Passivhausfenster"
 scenario2 = "PV2_copy"
 scenario3 = "PV3_Passivhausfenster_GZ09"
@@ -250,22 +251,26 @@ convert_celsius(data[13],tempindoor)
 
 #convert_celsius(data2[9],temproad1)
 
-print (np.mean(tempcanyon_3))
+print ("Bestand", np.mean(tempcanyon))
+print ("saniert", np.mean(tempcanyon_2))
+print ("Vollverglasung", np.mean(tempcanyon_3))
+print ("PV", np.mean(tempcanyon_4))
+
+"""
 print (np.max(tempcanyon_3[-288:]))
 print (np.min(tempcanyon_3[-288:]))
-print (np.mean(tempcanyon_4))
 print (np.max(tempcanyon_4[-288:]))
 print (np.min(tempcanyon_4[-288:]))
-
-x = x[-288:]
+"""
+x = x[:144]
 
 fig = plt.figure()
 #plt.title('canyon air temperature ' )
 #plt.title('dichtes Wohn(misch)gebiet, Passivhausstandard')
-#plt.plot(x, tempcanyon[-288:], linestyle='-', color = 'yellow', label = "STQ")# locker bebautes Wohn(misch)gebiet")
-plt.plot(x, tempcanyon_2[-288:], linestyle='-', color = 'black', label = "STQ")# -
-plt.plot(x, tempcanyon_3[-288:], linestyle='-', color = 'turquoise', label = "Vollverglasung")# d
-#plt.plot(x, tempcanyon_4[-288:], linestyle='-', color = 'blue', label = "PV Fassade")# thermal conductiv. 0.3
+plt.plot(x, tempcanyon[:144], linestyle='-', color = 'red', label = "Bestand: 1.7 [W/mK]")# locker bebautes Wohn(misch)gebiet")
+plt.plot(x, tempcanyon_2[:144], linestyle='-', color = 'black', label = "saniert: 0.1 [W/mK] ")# -
+plt.plot(x, tempcanyon_3[:144], linestyle='-', color = 'turquoise', label = "Vollverglasung")# d
+plt.plot(x, tempcanyon_4[:144], linestyle='-', color = 'blue', label = "PV Fassade")# thermal conductiv. 0.3
 #plt.plot(x, tempcanyon_5, linestyle='-', color = 'violet', label = "PV Fassade 2")# thermal conduct. 0.04
 
 
@@ -273,7 +278,7 @@ plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
 plt.xlabel("Zeit [UTC] ",  fontsize='large')
 plt.ylabel("Lufttemperatur [gradC]", fontsize='large')
-plt.legend(loc=2, ncol=3, fontsize='large')
+plt.legend(loc=4, ncol=2, fontsize='large')
 
 #inset_axes = inset_axes(parent_axes,
 #                        width="30%", # width = 30% of parent_bbox
