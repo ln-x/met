@@ -11,7 +11,6 @@ from osgeo.gdalconst import *
 import numpy as np
 
 
-
 class Clip:
     """Main implementation for testing. Usage without QGIS."""
 
