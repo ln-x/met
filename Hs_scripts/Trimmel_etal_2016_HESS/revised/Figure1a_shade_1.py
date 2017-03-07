@@ -6,7 +6,6 @@ import matplotlib.ticker as ticker
 import pandas as pd
 from matplotlib.offsetbox import AnchoredOffsetbox, AuxTransformBox, VPacker,\
     TextArea, DrawingArea
-from pandas import Series, DataFrame
 
 VTS = pd.read_csv('/home/lnx/PycharmProjects/HS/S250_P_STQ_2085_1a_MLF/outputfiles/VTS.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
 VTS = VTS.mean()
@@ -15,16 +14,13 @@ VTS_V0 = VTS_V0.mean()
 VTS_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/S252_P_V100_2085_1a_MLF/outputfiles/VTS.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
 VTS_V100 = VTS_V100.mean()
 
-
 Shade = pd.read_csv('/home/lnx/PycharmProjects/HS/S250_P_STQ_2085_1a_MLF/outputfiles/Shade.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
 Shade_mean = Shade.mean()
 Shade_V0 = pd.read_csv('/home/lnx/PycharmProjects/HS/S251_P_V0_2085_1a_MLF/outputfiles/Shade.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
 Shade_V0_mean = Shade_V0.mean()
 Shade_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/S252_P_V100_2085_1a_MLF/outputfiles/Shade.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
 Shade_V100_mean = Shade_V100.mean()
-
-print 'Shade=', Shade_mean.describe()
-
+#print 'Shade=', Shade_mean.describe()
 
 Topwidth = pd.read_csv('/home/lnx/PycharmProjects/HS/S250_P_STQ_2085_1a_MLF/outputfiles/Hyd_WT.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
 Topwidth_mean = Topwidth.mean()
@@ -34,7 +30,6 @@ Topwidth_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/S252_P_V100_2085_1a_ML
 Topwidth_V100_mean = Topwidth_V100.mean()
 Condition = pd.read_csv('/home/lnx/PycharmProjects/HS/S250_P_STQ_2085_1a_MLF/outputfiles/Condition.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
 Condition_mean = Condition.mean()
-
 
 """
 Sw = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_p/outputfiles_20130804_08/Heat_SR6.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
@@ -90,7 +85,6 @@ class AnchoredText(AnchoredOffsetbox):
 def my_formatter_2dig(x,p):
     return "%1.2f" %x
 
-
 def my_formatter_1dig(x,p):
     return "%1.1f" %x
 
@@ -134,8 +128,8 @@ ax3_2.plot(Rkm, Condition_mean, color='red', lw=1.0)#, label="anthropogen influe
 ax3_2.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter))
 ax3_2.set_ylim(1, 5)
 ax3_2.set_ylabel('anthropogenic influence [1-5]')
-
 ax3.legend(fontsize='small')
+
 
 """
 
