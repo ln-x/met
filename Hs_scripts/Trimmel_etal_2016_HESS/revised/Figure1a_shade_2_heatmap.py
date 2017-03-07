@@ -153,7 +153,6 @@ ax4.add_artist(at)
 ax4 = sns.heatmap(Condition, vmin=1, vmax=5, cmap=temps_cmap, xticklabels=False, yticklabels=False)
             #cbar_kws={"label":"anthropogenic influence"})
 #figure.tight_layout()
-
 """
 
 at = AnchoredText("d",loc=2, frameon=True)
