@@ -20,23 +20,19 @@ Bilanz = Sw + Lw + Cv + Cd + Ev
 
 fig = plt.figure()
 plt.ylim([-750,750])
-plt.plot(Bilanz['65.500'], linestyle='-', color = 'black', label='Bal')
+plt.plot(Bilanz['61.000'], linestyle='-', color = 'black', label='Bal')
 #plt.plot(Bilanz_mt['51.000'], linestyle='--', color = 'black', label='Bal_mt')
-plt.plot(Lw['65.500'], linestyle='-', color = 'orange', label='Lw')
-plt.plot(Sw['65.500'], linestyle='-', color = 'yellow', label='Sw')
-plt.plot(Cv['65.500'], linestyle='-', color = 'red', label='Cv')
+plt.plot(Lw['61.000'], linestyle='-', color = 'orange', label='Lw')
+plt.plot(Sw['61.500'], linestyle='-', color = 'yellow', label='Sw')
+plt.plot(Cv['61.500'], linestyle='-', color = 'red', label='Cv')
 #plt.plot(Cv_mt['61.000'], linestyle='--', color = 'red', label='Cv_mt')
-plt.plot(Ev['65.500'], linestyle='-', color = 'green', label='Ev')
+plt.plot(Ev['61.500'], linestyle='-', color = 'green', label='Ev')
 #plt.plot(Ev_mt['61.000'], linestyle='--', color = 'green', linewidth=2.0, label='Ev_mt')
-plt.plot(Cd['65.500'], linestyle='-', color = 'violet', label='Cd')
-
+plt.plot(Cd['61.500'], linestyle='-', color = 'violet', label='Cd')
 plt.ylabel('W m-2', fontsize='small')
 plt.xlabel('time from episode start [h]', fontsize='small')
-
 plt.legend(loc=4, ncol=3, fontsize='small')
-
-fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Heatfluxes_DFM65_5.tiff')
-
+#fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Heatfluxes_DFM65_5.tiff')
 plt.show()
 
 

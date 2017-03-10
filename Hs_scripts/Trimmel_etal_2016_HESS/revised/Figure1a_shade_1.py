@@ -6,7 +6,6 @@ import matplotlib.ticker as ticker
 import pandas as pd
 from matplotlib.offsetbox import AnchoredOffsetbox, AuxTransformBox, VPacker,\
     TextArea, DrawingArea
-from pandas import Series, DataFrame
 
 VTS = pd.read_csv('/home/lnx/PycharmProjects/HS/S250_P_STQ_2085_1a_MLF/outputfiles/VTS.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
 VTS = VTS.mean()
@@ -15,6 +14,24 @@ VTS_V0 = VTS_V0.mean()
 VTS_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/S252_P_V100_2085_1a_MLF/outputfiles/VTS.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
 VTS_V100 = VTS_V100.mean()
 
+Shade = pd.read_csv('/home/lnx/PycharmProjects/HS/S250_P_STQ_2085_1a_MLF/outputfiles/Shade.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
+Shade_mean = Shade.mean()
+Shade_V0 = pd.read_csv('/home/lnx/PycharmProjects/HS/S251_P_V0_2085_1a_MLF/outputfiles/Shade.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
+Shade_V0_mean = Shade_V0.mean()
+Shade_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/S252_P_V100_2085_1a_MLF/outputfiles/Shade.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
+Shade_V100_mean = Shade_V100.mean()
+#print 'Shade=', Shade_mean.describe()
+
+Topwidth = pd.read_csv('/home/lnx/PycharmProjects/HS/S250_P_STQ_2085_1a_MLF/outputfiles/Hyd_WT.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
+Topwidth_mean = Topwidth.mean()
+Topwidth_V0 = pd.read_csv('/home/lnx/PycharmProjects/HS/S251_P_V0_2085_1a_MLF/outputfiles/Hyd_WT.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
+Topwidth_V0_mean = Topwidth_V0.mean()
+Topwidth_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/S252_P_V100_2085_1a_MLF/outputfiles/Hyd_WT.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
+Topwidth_V100_mean = Topwidth_V100.mean()
+Condition = pd.read_csv('/home/lnx/PycharmProjects/HS/S250_P_STQ_2085_1a_MLF/outputfiles/Condition.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
+Condition_mean = Condition.mean()
+
+"""
 Sw = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_p/outputfiles_20130804_08/Heat_SR6.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
 Sw_mean = Sw.mean()
 Sw_V0 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V0_2013_MLF_p/outputfiles_20130804_08/Heat_SR6.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
@@ -23,59 +40,7 @@ Sw_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V100_2013_MLF_p/out
 Sw_V100_mean = Sw_V100.mean()
 
 print 'Sw=', Sw_mean.describe()
-
-
-Lw = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_p/outputfiles_20130804_08/Heat_TR.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
-Lw_mean = Lw.mean()
-Lw_V0 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V0_2013_MLF_p/outputfiles_20130804_08/Heat_TR.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
-Lw_V0_mean = Lw_V0.mean()
-Lw_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V100_2013_MLF_p/outputfiles_20130804_08/Heat_TR.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
-Lw_V100_mean = Lw_V100.mean()
-
-print 'Lw=', Lw_mean.describe()
-
-
-Cv = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_p/outputfiles_20130804_08/Heat_Conv.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
-Cv_mean = Cv.mean()
-Cv_V0 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V0_2013_MLF_p/outputfiles_20130804_08/Heat_Conv.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
-Cv_V0_mean = Cv_V0.mean()
-Cv_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V100_2013_MLF_p/outputfiles_20130804_08/Heat_Conv.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
-Cv_V100_mean = Cv_V100.mean()
-
-print 'Cv_p=', Cv_mean.describe()
-
-
-Ev = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_p/outputfiles_20130804_08/Heat_Evap.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
-Ev_mean = Ev.mean() #*(-1)
-Ev_V0 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V0_2013_MLF_p/outputfiles_20130804_08/Heat_Evap.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
-Ev_V0_mean = Ev_V0.mean() #*(-1)
-Ev_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V100_2013_MLF_p/outputfiles_20130804_08/Heat_Evap.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
-Ev_V100_mean = Ev_V100.mean() #*(-1)
-
-print 'Ev_=', Ev_mean.describe()
-#print 'Ev_mt=', Ev_mt_mean.describe()
-
-Cd = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_p/outputfiles_20130804_08/Heat_Cond.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
-Cd_mean = Cd.mean() #*(-1)
-Cd_V0 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V0_2013_MLF_p/outputfiles_20130804_08/Heat_Cond.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
-Cd_V0_mean = Cd_V0.mean() #*(-1)
-Cd_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V100_2013_MLF_p/outputfiles_20130804_08/Heat_Cond.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
-Cd_V100_mean = Cd_V100.mean() #*(-1)
-
-print 'Cd=', Cd_mean.describe()
-
-
-
-Bal_V0_mean = Sw_V0_mean + Lw_V0_mean + Cv_V0_mean + Ev_V0_mean + Cd_V0_mean
-Bal_mean = Sw_mean + Lw_mean + Cv_mean + Ev_mean + Cd_mean
-Bal_V100_mean = Sw_V100_mean + Lw_V100_mean + Cv_V100_mean + Ev_V100_mean + Cd_V100_mean
-
-print "Bal_V0_mean", Bal_V0_mean.mean() #54.8867543404
-print "Bal STQ_mean", Bal_mean.mean() #54.8867543404
-print "Bal_V100_mean", Bal_V100_mean.mean() #22.2423318387
-print "Bal_V0_max", Bal_V0_mean.max() #199.786929167
-print "Bal STQ_max", Bal_mean.max() #136.396542803
-print "Bal_V100_max", Bal_V100_mean.max() #90.8038903983
+"""
 
 WT = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_p/outputfiles_20130804_08/Temp_H2O.txt', skiprows=6, sep='\s+', index_col='Datetime') #, parse_dates="Datetime"
 WT_mean = WT.mean()
@@ -102,7 +67,9 @@ print len(meas_mean)
 #meas_mean = pd.Series(meas_mean)
 #print 'WT_meas=', meas_mean.describe()
 
-fig, (ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8) = plt.subplots(8,1, sharex= True)
+#fig, (ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8) = plt.subplots(8,1, sharex= True)
+fig, (ax1, ax2, ax3) = plt.subplots(3,1, sharex= True)
+
 #fig.set_size_inches(3.39,2.54)
 #plt.title("4-8 August 2013, Pinka")
 
@@ -118,6 +85,9 @@ class AnchoredText(AnchoredOffsetbox):
 def my_formatter_2dig(x,p):
     return "%1.2f" %x
 
+def my_formatter_1dig(x,p):
+    return "%1.1f" %x
+
 def my_formatter(x,p):
     return "%5.f" %x
 
@@ -129,28 +99,39 @@ ax1.add_artist(at)
 ax1.plot(Rkm, VTS_V0, color='black', linestyle='dashed', lw=0.5, label='VTS_V0')
 ax1.plot(Rkm, VTS, color='black', lw=0.5, label='VTS_STQ')
 ax1.plot(Rkm, VTS_V100, color='black', lw=1, label='VTS_V100')
-ax1.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter_2dig))
-ax1.set_ylim(0,1)
-ax1.set_ylabel('view to sky')
+ax1.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter_1dig))
+ax1.set_ylim(-0.1,1.1)
+ax1.set_xlim(8,70)
+ax1.set_ylabel('view to sky [0-1]')
 ax1.legend(fontsize='small')
 
 at = AnchoredText("b",loc=2, frameon=True)
 ax2.add_artist(at)
-ax2.plot(Rkm, Sw_V0_mean, color='black', lw=0.5, linestyle="dashed", label="Q_sw, V0")
-ax2.plot(Rkm, Sw_mean, color='black', lw=0.5, label="Q_sw, STQ")
-ax2.plot(Rkm, Sw_V100_mean, color='black', lw=1.0, label="Q_sw, V100")
-ax2.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter))
-ax2.set_ylabel('[W m-2]')
+ax2.plot(Rkm, Shade_V0_mean, color='black', lw=0.5, linestyle="dashed", label="Shade, V0")
+ax2.plot(Rkm, Shade_mean, color='black', lw=0.5, label="Shade, STQ")
+ax2.plot(Rkm, Shade_V100_mean, color='black', lw=1.0, label="Shade, V100")
+ax2.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter_1dig))
+ax2.set_ylabel('shade [0-1]')
+ax2.set_xlim(8,70)
 ax2.legend(fontsize='small')
 
 at = AnchoredText("c",loc=2, frameon=True)
 ax3.add_artist(at)
-ax3.plot(Rkm, Lw_V0_mean, color='black', lw=0.5, linestyle="dashed", label="Q_lw, V0")
-ax3.plot(Rkm, Lw_mean, color='black', lw=0.5, label="Q_lw, STQ")
-ax3.plot(Rkm, Lw_V100_mean, color='black', lw=1.0, label="Q_lw, V100")
+#ax3.plot(Rkm, Topwidth_V0_mean, color='black', lw=0.5, linestyle="dashed", label="bankfull width, V0")
+ax3.plot(Rkm, Topwidth_mean, color='black', lw=0.5)#, label="bankfull width, STQ")
+#ax3.plot(Rkm, Topwidth_V100_mean, color='black', lw=1.0, label="bankfll width, V100")
 ax3.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter))
-ax3.set_ylabel('[W m-2]')
+ax3.set_ylabel('bankfull width [m]')
+ax3.set_xlim(8,70)
+ax3_2 = ax3.twinx()
+ax3_2.plot(Rkm, Condition_mean, color='red', lw=1.0)#, label="anthropogen influence")
+ax3_2.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter))
+ax3_2.set_ylim(1, 5)
+ax3_2.set_ylabel('anthropogenic influence [1-5]')
 ax3.legend(fontsize='small')
+
+
+"""
 
 at = AnchoredText("d",loc=2, frameon=True)
 ax4.add_artist(at)
@@ -199,6 +180,7 @@ ax8.set_xlabel('distance from source [km]')
 ax8.set_ylabel('[degC]')
 ax8.legend(fontsize='small')
 
+"""
 #fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure1_298p1.tiff')
 
 plt.show()
