@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 __author__ = 'Heidelinde'
-from scipy.optimize import linprog
+#from scipy.optimize import linprog
+import scipy.optimize
 
 #Minimize: f = -1*x[0] + 4*x[1]
 #Subject to: -3*x[0] + 1*x[1] <= 6
@@ -44,6 +45,6 @@ c = [20,30]
 A = [[1/60],[1/50]]
 b = [8]
 
-res = linprog(c,A_ub=A, b_ub=b, bounds=(x_bounds, y_bounds), options={"disp":True})
+res = scipy.optimize.linprog(c,A_ub=A, b_ub=b, bounds=(x_bounds, y_bounds), options={"disp":True})
 
 print (res)
