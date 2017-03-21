@@ -320,6 +320,7 @@ C_20a_2085 = C_20a_2085_0.set_index('datetime')
 C_20a_2085_max5days = C_20a_2085.ix[240:]
 C_20a_2085_max5days['Rad'] = C_20a_2085_max5days['Rad'].resample('D', how='sum') * 0.0036
 C_20a_2085_max5days_mean = C_20a_2085_max5days.mean()
+C_20a_2085_max5days_max = C_20a_2085_max5days.max()
 Ta_20a_2085 = C_20a_2085_max5days_mean.ix['AirT']
 
 #print '2085 20a: \n', C_20a_2085_max5days_mean
@@ -329,6 +330,7 @@ C_max_2085 = C_max_2085_0.set_index('datetime')
 C_max_2085_max5days = C_max_2085.ix[240:]
 C_max_2085_max5days['Rad'] = C_max_2085_max5days['Rad'].resample('D', how='sum') * 0.0036
 C_max_2085_max5days_mean = C_max_2085_max5days.mean()
+C_max_2085_max5days_max = C_max_2085_max5days.max()
 Ta_max_2085 = C_max_2085_max5days_mean.ix['AirT']
 
 fs = 10  # fontsize
