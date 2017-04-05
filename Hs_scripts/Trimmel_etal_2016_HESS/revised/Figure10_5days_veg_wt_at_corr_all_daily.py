@@ -1,4 +1,5 @@
 __author__ = 'lnx'
+# -*- coding: utf-8 -*-
 
 from pylab import *
 import numpy as np
@@ -6,18 +7,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import scipy
 from scipy.stats import *
-
-
-#path = ['/home/lnx/PycharmProjects/HS/298_P500_STQ_2013_MLF_p/outputfiles_orig/Temp_H2O.txt',
-#        '/home/lnx/PycharmProjects/HS/298_P500_V0_2013_MLF_p/outputfiles/Temp_H2O.txt',
-#        '/home/lnx/PycharmProjects/HS/298_P500_V100_2013_MLF_p/outputfiles/Temp_H2O.txt']
-#
-#WT_max = []
-#for i in range(len(path)):
-#    WT_max[i] =  pd.read_csv(path[i-1], skiprows=6, sep='\s+')
-#    WT_max[i] = WT_2013[i].ix[240:359].drop(['Datetime'],axis=1)   #only last 5days, drop "Datetime" column  1.July-3.Aug: 744+72=816h
-#    WT_max[i] = np.array(WT_2013[i]['61.000']) #select only reference station Unterwart DFM 61km ~ DFS 39
-#    WT_max[i] = WT_2013[i].ravel()
+#import operator
+import itertools
 
 path = ['/home/lnx/PycharmProjects/HS/S190_P_STQ_2030_1a_MLF/outputfiles/Temp_H2O.txt',
        '/home/lnx/PycharmProjects/HS/S191_P_V0_2030_1a_MLF/outputfiles/Temp_H2O.txt',
@@ -124,7 +115,7 @@ for i in range(len(C_path)):
     TA_dailymean[i] = C[i]['AirT'].resample('D').mean()
     TA_dailymax[i] = C[i]['AirT'].resample('D').max()
     TA_dailymin[i] = C[i]['AirT'].resample('D').min()
-    print WT_dailymax[i].head()
+    #print WT_dailymax[i].head()
 
 
 fig = plt.figure()
@@ -135,7 +126,7 @@ watertemp_V100 = [WT_dailymean[i] for i in range(2,62,5)]
 watertemp_V50 = [WT_dailymean[i] for i in range(3,62,5)]
 watertemp_V100VD70 = [WT_dailymean[i] for i in range(4,62,5)]
 airtemp = [TA_dailymean[i] for i in range(12)]
-print len(airtemp[1]), len(watertemp_STQ[1])
+#print len(airtemp[1]), len(watertemp_STQ[1])
 
 watertemp_STQall = []
 watertemp_V0all = []
@@ -154,24 +145,30 @@ for i in range(len(watertemp_STQ)):
 
 #print len(airtemp_all), len(watertemp_V0all)
 #print type(watertemp_STQall)
-plt.scatter(airtemp_all,watertemp_STQall,color='lightgrey', s=3, label="STQ, mean")
-plt.scatter(airtemp_all,watertemp_V0all,color='#d95f02',  s=3,label="V0, mean")
-plt.scatter(airtemp_all,watertemp_V50all, color='orange',  s=3,label="V50, mean")
-plt.scatter(airtemp_all,watertemp_V100VD70all, color='green',  s=3,label="V100 VD70, mean")
-plt.scatter(airtemp_all,watertemp_V100all, color='blue',  s=3,label="V100, mean")
+plt.scatter(airtemp_all,watertemp_STQall,color='lightgrey', s=3, label=u"STQ,  R²=0.92")
+plt.scatter(airtemp_all,watertemp_V0all,color='#d95f02',  s=3,label=u"V0,     R²=0.89")
+plt.scatter(airtemp_all,watertemp_V50all, color='orange',  s=3,label=u"V50,   R²=0.91")
+plt.scatter(airtemp_all,watertemp_V100VD70all, color='green',  s=3,label=u"V70,   R²=0.91")
+plt.scatter(airtemp_all,watertemp_V100all, color='blue',  s=3,label=u"V100, R²=0.90")
 plt.axis([10,40,10,40])
 plt.ylabel('water temperature [degC]',fontsize="large")
 plt.xlabel('air temperature [degC]',fontsize="large")
-plt.legend(loc="2")
+plt.legend(loc="upper left", title="DAILY MEAN")
 
-airtemp_all1 = reduce(lambda x,y: x+y,airtemp_all)
-watertemp_STQall1 = reduce(lambda x,y: x+y,watertemp_STQall)
-watertemp_V0all1 = reduce(lambda x,y: x+y,watertemp_V0all)
-watertemp_V50all1 = reduce(lambda x,y: x+y,watertemp_V50all)
-watertemp_V100all1 = reduce(lambda x,y: x+y,watertemp_V100all)
-watertemp_V100VD70all1 = reduce(lambda x,y: x+y,watertemp_V100VD70all)
-print airtemp_all1.head(), watertemp_V0all1.head()
-exit()
+airtemp_all = np.array(airtemp_all,dtype=pd.Series)
+watertemp_STQall = np.array(watertemp_STQall,dtype=pd.Series)
+watertemp_V0all = np.array(watertemp_V0all,dtype=pd.Series)
+watertemp_V50all = np.array(watertemp_V50all,dtype=pd.Series)
+watertemp_V100all = np.array(watertemp_V100all,dtype=pd.Series)
+watertemp_V100VD70all = np.array(watertemp_V100VD70all,dtype=pd.Series)
+#airtemp_all2 = reduce(operator.add, airtemp_all1) #Version1
+#airtemp_all2 = reduce(lambda x,y: x+y,airtemp_all1) #Version2
+airtemp_all1 = list(itertools.chain(*airtemp_all)) #Version3
+watertemp_STQall1 = list(itertools.chain(*watertemp_STQall))
+watertemp_V0all1 = list(itertools.chain(*watertemp_V0all))
+watertemp_V50all1 = list(itertools.chain(*watertemp_V50all))
+watertemp_V100all1 = list(itertools.chain(*watertemp_V100all))
+watertemp_V100VD70all1 = list(itertools.chain(*watertemp_V100VD70all))
 
 axes = plt.gca()
 m1, b1 = np.polyfit(airtemp_all1, watertemp_V0all1, 1)
@@ -185,13 +182,16 @@ plt.plot(X_plot, m2*X_plot + b2, '-', color="lightgrey")
 plt.plot(X_plot, m3*X_plot + b3, '-', color="blue") ##1b9e77
 plt.plot(X_plot, m4*X_plot + b4, '-', color="orange")
 plt.plot(X_plot, m5*X_plot + b5, '-', color="green")
-#plt.text(1,1,s1)
+plt.text(37,37,"a", horizontalalignment='center', verticalalignment='center',fontsize=20,
+         bbox=dict(facecolor='none', edgecolor='black', pad=10.0))
+#plt.text(0.9, 0.9,'matplotlib',horizontalalignment='center', verticalalignment='center',transform = plt.transAxes)
+
 print "MEAN"
-print "Spearmann STQ", (scipy.stats.spearmanr(airtemp,watertemp_STQ)[0])**2, scipy.stats.spearmanr(airtemp,watertemp_STQ)
-print "Spearmann V0", (scipy.stats.spearmanr(airtemp,watertemp_V0)[0])**2
-print "Spearmann V100", (scipy.stats.spearmanr(airtemp,watertemp_V100)[0])**2
-print "Spearmann V50", (scipy.stats.spearmanr(airtemp,watertemp_V50)[0])**2
-print "Spearmann V100VD70", (scipy.stats.spearmanr(airtemp,watertemp_V100VD70)[0])**2
+print "Spearmann STQ- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[1]
+print "Spearmann V0- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V0all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V0all1)[1]
+print "Spearmann V100- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V100all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V100all1)[1]
+print "Spearmann V50- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V50all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V50all1)[1]
+print "Spearmann V100VD70- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V100VD70all1)[0])**2,  scipy.stats.spearmanr(airtemp_all1,watertemp_V100VD70all1)[1]
 print (m3-m1)/m3
 print "p= %.2E" %(ttest_rel(m1*X_plot + b1, m3*X_plot + b3)[1])
 
@@ -200,7 +200,6 @@ ax.spines['top'].set_color('none')
 #ax.set_xticks([])
 plt.margins(0.2)
 plt.show()
-
 
 fig = plt.figure()
 # fig.set_size_inches(3.39,2.54)
@@ -228,31 +227,44 @@ for i in range(len(watertemp_STQ)):
 
 plt.axis([5,35,5,35])
 #axisrange = [16,26,16,26]
-plt.scatter(airtemp,watertemp_STQall,color='lightgrey', label="STQ, min")
-plt.scatter(airtemp,watertemp_V0all,color='#d95f02', label="V0, min")
-plt.scatter(airtemp,watertemp_V50all, color='orange', label="V50, min")
-plt.scatter(airtemp,watertemp_V100VD70all, color='green', label="V100 VD70, min")
-plt.scatter(airtemp,watertemp_V100all, color='blue', label="V100, min")
+plt.scatter(airtemp_all,watertemp_STQall,color='lightgrey',  s=3,label=u"STQ,  R²=0.88")
+plt.scatter(airtemp_all,watertemp_V0all,color='#d95f02', s=3, label=u"V0,     R²=0.86")
+plt.scatter(airtemp_all,watertemp_V50all, color='orange', s=3, label=u"V50,   R²=0.87")
+plt.scatter(airtemp_all,watertemp_V100VD70all, color='green', s=3, label=u"V70,   R²=0.87")
+plt.scatter(airtemp_all,watertemp_V100all, color='blue', s=3, label=u"V100, R²=0.86")
 
-"""
+airtemp_all = np.array(airtemp_all,dtype=pd.Series)
+watertemp_STQall = np.array(watertemp_STQall,dtype=pd.Series)
+watertemp_V0all = np.array(watertemp_V0all,dtype=pd.Series)
+watertemp_V50all = np.array(watertemp_V50all,dtype=pd.Series)
+watertemp_V100all = np.array(watertemp_V100all,dtype=pd.Series)
+watertemp_V100VD70all = np.array(watertemp_V100VD70all,dtype=pd.Series)
+
+airtemp_all1 = list(itertools.chain(*airtemp_all))
+watertemp_STQall1 = list(itertools.chain(*watertemp_STQall))
+watertemp_V0all1 = list(itertools.chain(*watertemp_V0all))
+watertemp_V50all1 = list(itertools.chain(*watertemp_V50all))
+watertemp_V100all1 = list(itertools.chain(*watertemp_V100all))
+watertemp_V100VD70all1 = list(itertools.chain(*watertemp_V100VD70all))
+
 axes = plt.gca()
-m1, b1 = np.polyfit(airtemp, watertemp_V0, 1)
-m2, b2 = np.polyfit(airtemp, watertemp_STQ, 1)
-m3, b3 = np.polyfit(airtemp, watertemp_V100, 1)
-m4, b4 = np.polyfit(airtemp, watertemp_V50, 1)
-m5, b5 = np.polyfit(airtemp, watertemp_V100VD70, 1)
+m1, b1 = np.polyfit(airtemp_all1, watertemp_V0all1, 1)
+m2, b2 = np.polyfit(airtemp_all1, watertemp_STQall1, 1)
+m3, b3 = np.polyfit(airtemp_all1, watertemp_V100all1, 1)
+m4, b4 = np.polyfit(airtemp_all1, watertemp_V50all1, 1)
+m5, b5 = np.polyfit(airtemp_all1, watertemp_V100VD70all1, 1)
 s1 =  "V0:", m1, "*x + ", b1
 s2 = "STQ:", m2, "*x + ", b2
 s3 = "V100:", m3, "*x + ", b3
 s4 = "V50:", m4, "*x + ", b4
 s5 = "V100VD70:", m5, "*x + ", b5
 
-print "MIN"
-print "Spearmann STQ", (scipy.stats.spearmanr(airtemp,watertemp_STQ)[0])**2, scipy.stats.spearmanr(airtemp,watertemp_STQ)
-print "Spearmann V0", (scipy.stats.spearmanr(airtemp,watertemp_V0)[0])**2
-print "Spearmann V100", (scipy.stats.spearmanr(airtemp,watertemp_V100)[0])**2
-print "Spearmann V50", (scipy.stats.spearmanr(airtemp,watertemp_V50)[0])**2
-print "Spearmann V100VD70", (scipy.stats.spearmanr(airtemp,watertemp_V100VD70)[0])**2
+print "DAILYMIN"
+print "Spearmann STQ- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[1]
+print "Spearmann V0- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V0all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V0all1)[1]
+print "Spearmann V100- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V100all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V100all1)[1]
+print "Spearmann V50- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V50all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V50all1)[1]
+print "Spearmann V100VD70- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V100VD70all1)[0])**2,  scipy.stats.spearmanr(airtemp_all1,watertemp_V100VD70all1)[1]
 
 
 X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
@@ -261,12 +273,7 @@ plt.plot(X_plot, m2*X_plot + b2, '-', color="lightgrey")
 plt.plot(X_plot, m3*X_plot + b3, '-', color="blue")
 plt.plot(X_plot, m4*X_plot + b4, '-', color="orange")
 plt.plot(X_plot, m5*X_plot + b5, '-', color="green")
-plt.text(1,1,s1)
-r_STQ = linregress(airtemp,watertemp_STQ)[2] #r-value  coefficient of correlation
-r_V0 = linregress(airtemp,watertemp_V0)[2] #r-value  coefficient of correlation
-r_V100 = linregress(airtemp,watertemp_V100)[2] #r-value  coefficient of correlation
 
-print r_STQ, r_V0, r_V100
 print s1
 print s2
 print s3
@@ -274,12 +281,13 @@ print s4
 print s5
 print (m3-m1)/m3
 print "p= %.2E" %(ttest_rel(m1*X_plot + b1, m3*X_plot + b3)[1])
-"""
+
 
 plt.ylabel('water temperature [degC]',fontsize="large")
 plt.xlabel('air temperature [degC]',fontsize="large")
-plt.legend(loc="2")
-
+plt.legend(loc="upper left", title="DAILY MINIMA")
+plt.text(32,32,"b", horizontalalignment='center', verticalalignment='center',fontsize=20,
+         bbox=dict(facecolor='none', edgecolor='black', pad=10.0))
 ax = gca()
 ax.spines['top'].set_color('none')
 
@@ -294,7 +302,7 @@ fig = plt.figure()
 # fig.set_size_inches(3.39,2.54)
 watertemp_STQ = [WT_dailymax[i] for i in range (0,60,5)]
 watertemp_V0 = [WT_dailymax[i] for i in range(1,61,5)]
-watertemp_V100 = [WT_dailymin[i] for i in range(2,62,5)]
+watertemp_V100 = [WT_dailymax[i] for i in range(2,62,5)]
 watertemp_V50 = [WT_dailymax[i] for i in range(3,62,5)]
 watertemp_V100VD70 = [WT_dailymax[i] for i in range(4,62,5)]
 airtemp = [TA_dailymax[i] for i in range(12)]
@@ -315,30 +323,43 @@ for i in range(len(watertemp_STQ)):
     airtemp_all.append(airtemp[i])
 
 plt.axis([10,45,10,45])
-plt.scatter(airtemp,watertemp_STQall,color='lightgrey', label="STQ, dailymax")
-plt.scatter(airtemp,watertemp_V0all,color='#d95f02', label="V0, dailymax")
-plt.scatter(airtemp,watertemp_V50all, color='orange', label="V50, dailymax")
-plt.scatter(airtemp,watertemp_V100VD70all, color='green', label="V100 VD70, dailymax")
-plt.scatter(airtemp,watertemp_V100all, color='blue', label="V100, dailymax")
-"""
+plt.scatter(airtemp,watertemp_STQall,color='lightgrey', s=3, label=u"STQ,  R²=0.93")
+plt.scatter(airtemp,watertemp_V0all,color='#d95f02', s=3, label=u"V0,     R²=0.88")
+plt.scatter(airtemp,watertemp_V50all, color='orange', s=3, label=u"V50,   R²=0.90")
+plt.scatter(airtemp,watertemp_V100VD70all, color='green', s=3, label=u"V70,   R²=0.90")
+plt.scatter(airtemp,watertemp_V100all, color='blue', s=3, label=u"V100, R²=0.78")
+
+airtemp_all = np.array(airtemp_all,dtype=pd.Series)
+watertemp_STQall = np.array(watertemp_STQall,dtype=pd.Series)
+watertemp_V0all = np.array(watertemp_V0all,dtype=pd.Series)
+watertemp_V50all = np.array(watertemp_V50all,dtype=pd.Series)
+watertemp_V100all = np.array(watertemp_V100all,dtype=pd.Series)
+watertemp_V100VD70all = np.array(watertemp_V100VD70all,dtype=pd.Series)
+
+airtemp_all1 = list(itertools.chain(*airtemp_all))
+watertemp_STQall1 = list(itertools.chain(*watertemp_STQall))
+watertemp_V0all1 = list(itertools.chain(*watertemp_V0all))
+watertemp_V50all1 = list(itertools.chain(*watertemp_V50all))
+watertemp_V100all1 = list(itertools.chain(*watertemp_V100all))
+watertemp_V100VD70all1 = list(itertools.chain(*watertemp_V100VD70all))
+
 axes = plt.gca()
-m1, b1 = np.polyfit(airtemp, watertemp_V0, 1)
-m2, b2 = np.polyfit(airtemp, watertemp_STQ, 1)
-m3, b3 = np.polyfit(airtemp, watertemp_V100, 1)
-m4, b4 = np.polyfit(airtemp, watertemp_V50, 1)
-m5, b5 = np.polyfit(airtemp, watertemp_V100VD70, 1)
-s1 =  "V0:", m1, "*x + ", b1
+m1, b1 = np.polyfit(airtemp_all1, watertemp_V0all1, 1)
+m2, b2 = np.polyfit(airtemp_all1, watertemp_STQall1, 1)
+m3, b3 = np.polyfit(airtemp_all1, watertemp_V100all1, 1)
+m4, b4 = np.polyfit(airtemp_all1, watertemp_V50all1, 1)
+m5, b5 = np.polyfit(airtemp_all1, watertemp_V100VD70all1, 1)
 s2 = "STQ:", m2, "*x + ", b2
 s3 = "V100:", m3, "*x + ", b3
 s4 = "V50:", m4, "*x + ", b4
 s5 = "V100VD70:", m5, "*x + ", b5
 
 print "DAILYMAX"
-print "Spearmann STQ", (scipy.stats.spearmanr(airtemp,watertemp_STQ)[0])**2, scipy.stats.spearmanr(airtemp,watertemp_STQ)
-print "Spearmann V0", (scipy.stats.spearmanr(airtemp,watertemp_V0)[0])**2
-print "Spearmann V100", (scipy.stats.spearmanr(airtemp,watertemp_V100)[0])**2
-print "Spearmann V50", (scipy.stats.spearmanr(airtemp,watertemp_V50)[0])**2
-print "Spearmann V100VD70", (scipy.stats.spearmanr(airtemp,watertemp_V100VD70)[0])**2
+print "Spearmann STQ- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[1]
+print "Spearmann V0- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V0all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V0all1)[1]
+print "Spearmann V100- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V100all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V100all1)[1]
+print "Spearmann V50- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V50all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V50all1)[1]
+print "Spearmann V100VD70- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V100VD70all1)[0])**2,  scipy.stats.spearmanr(airtemp_all1,watertemp_V100VD70all1)[1]
 
 X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
 plt.plot(X_plot, m1*X_plot + b1, '-', color="#d95f02")
@@ -346,12 +367,7 @@ plt.plot(X_plot, m2*X_plot + b2, '-', color="lightgrey")
 plt.plot(X_plot, m3*X_plot + b3, '-', color="blue")
 plt.plot(X_plot, m4*X_plot + b4, '-', color="orange")
 plt.plot(X_plot, m5*X_plot + b5, '-', color="green")
-plt.text(1,1,s1)
-r_STQ = linregress(airtemp,watertemp_STQ)[2] #r-value  coefficient of correlation
-r_V0 = linregress(airtemp,watertemp_V0)[2] #r-value  coefficient of correlation
-r_V100 = linregress(airtemp,watertemp_V100)[2] #r-value  coefficient of correlation
 
-print r_STQ, r_V0, r_V100
 print s1
 print s2
 print s3
@@ -359,10 +375,12 @@ print s4
 print s5
 print (m3-m1)/m3
 print "p= %.2E" %(ttest_rel(m1*X_plot + b1, m3*X_plot + b3)[1])
-"""
+
 plt.ylabel('water temperature [degC]',fontsize="large")
 plt.xlabel('air temperature [degC]',fontsize="large")
-plt.legend(loc="2")
+plt.legend(loc="upper left", title="DAILY MAXIMA")
+plt.text(42,42,"c", horizontalalignment='center', verticalalignment='center',fontsize=20,
+         bbox=dict(facecolor='none', edgecolor='black', pad=10.0))
 ax = gca()
 ax.spines['top'].set_color('none')
 plt.margins(0.2)
