@@ -80,7 +80,6 @@ V70_balance = WT_20a_2085_Sw_V70['39.000'][-120:].mean() + WT_20a_2085_Lw_V70['3
 V70_balance_s = "bal = %1.2f W m-2" %V70_balance
 V70_WT = "WT = %1.2f,%1.2f degC" %(WT_20a_2085_V70['39.000'][-120:].mean(),WT_20a_2085_V70['39.000'][-120:].max())
 
-
 WT_20a_2085_Sw_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/S264_P_V100_2085_20a_MLF/outputfiles/Heat_SR6.txt', skiprows=6, sep='\s+')
 WT_20a_2085_Lw_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/S264_P_V100_2085_20a_MLF/outputfiles/Heat_TR.txt', skiprows=6, sep='\s+')
 WT_20a_2085_Cv_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/S264_P_V100_2085_20a_MLF/outputfiles/Heat_Conv.txt', skiprows=6, sep='\s+')

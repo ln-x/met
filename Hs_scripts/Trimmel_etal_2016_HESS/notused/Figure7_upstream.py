@@ -17,6 +17,7 @@ WT_20a_1995_ER_V0 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V0_2013_M
 WT_20a_1995_V0 = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V0_2013_MLF_p/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+')
 WT_20a_1995_V0_Flow = pd.read_csv('/home/lnx/PycharmProjects/HS/298_P500_V0_2013_MLF_p/outputfiles/Hyd_Flow.txt', skiprows=6, sep='\s+')
 
+
 #last day : [-24:], last 5days: [-120:]
 V0_now_balance = WT_20a_1995_Sw_V0['80.000'][-120:].mean() + WT_20a_1995_Lw_V0['80.000'][-120:].mean()+ WT_20a_1995_Cv_V0['80.000'][-120:].mean()+ \
              WT_20a_1995_Ev_V0['80.000'][-120:].mean()+ WT_20a_1995_Cd_V0['80.000'][-120:].mean()

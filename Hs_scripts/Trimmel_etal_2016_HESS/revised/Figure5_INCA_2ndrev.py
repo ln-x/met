@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from pylab import *
 import matplotlib.pyplot as plt
 from pandas import Series, DataFrame
@@ -165,6 +167,9 @@ e= ax.plot(Rkm, WT_2030_V0_mean, color='#d95f02', lw=0.9, label='V0')
 f= ax.plot(Rkm, WT_2030_V0_max, color='#d95f02', lw=0.9, linestyle='dotted',  label='V0_max')
 g= ax.plot(Rkm, WT_2030_V100_mean, color='#1b9e77', lw=0.9, label='V100')
 h= ax.plot(Rkm, WT_2030_V100_max, color='#1b9e77', lw=0.9, linestyle='dotted', label='V100_max')
+#ax.tick_params(axis="y", which="major", labelsize=8)
+for label in ax.get_yticklabels()[::2]:
+    label.set_visible(False)
 
 ax.set(xticklabels=('','','','',''))
 #plt.legend(loc=9, ncol=4, fontsize='small')
@@ -187,9 +192,12 @@ ax.plot(Rkm, WT_2050_V0_mean, color='#d95f02', lw=0.9, label='V0')
 ax.plot(Rkm, WT_2050_V0_max, color='#d95f02', lw=0.9, linestyle='dotted',  label='V0_max')
 ax.plot(Rkm, WT_2050_V100_mean, color='#1b9e77', lw=0.9, label='V100')
 ax.plot(Rkm, WT_2050_V100_max, color='#1b9e77', lw=0.9, linestyle='dotted', label='V100_max')
+#ax.tick_params(axis="y", which="major", labelsize=8)
+for label in ax.get_yticklabels()[::2]:
+    label.set_visible(False)
 ax.set(xticklabels=('','','','',''))
 #plt.legend(loc=9, ncol=4, fontsize='small')
-plt.ylabel('water temperature [degC]')
+plt.ylabel(u'water temperature [°C]')
 
 
 ax = fig.add_subplot(413)
@@ -199,7 +207,7 @@ ax.set_title('  2085 MAX', fontsize='small', loc='left')
 axisrange = [10,61,12,30]
 ax.axis(axisrange)
 #ticks = [10,15,20,25,30]
-#ax.set_ticks(ticks, minor = False)
+#ax.tick_params(axis="y", which="major", labelsize=8)
 ax.plot(Rkm, WT_mean, color='black', lw=0.9)
 ax.plot(Rkm, WT_max, color='black', lw=0.9,  linestyle='dashed')
 ax.plot(Rkm, WT_max_2085_mean, color='orange', lw=0.9)
@@ -209,6 +217,8 @@ ax.plot(Rkm, WT_max_2085_max, color='orange', lw=0.9, linestyle='dotted')
 ax.plot(Rkm, WT_max_2085_V0_max, color='#d95f02', lw=0.9, linestyle='dotted')
 ax.plot(Rkm, WT_max_2085_V100_max, color='#1b9e77', lw=0.9, linestyle='dotted')
 ax.set(xticklabels=('','','','',''))
+for label in ax.get_yticklabels()[::2]:
+    label.set_visible(False)
 #plt.ylabel('water temperature [degC]')
 
 ax = fig.add_subplot(414)
@@ -225,6 +235,9 @@ ax.plot(Rkm, WT_2050_V0_diff, color='#d95f02', lw=0.9, linestyle='dashed', label
 ax.plot(Rkm, WT_2050_V100_diff, color='#1b9e77', lw=0.9, linestyle='dashed',label='2050: STQ-V100')
 ax.plot(Rkm, WT_2085_V0_diff, color='#d95f02', lw=0.9, linestyle='dotted', label='2085: STQ-V0 *-1')
 ax.plot(Rkm, WT_2085_V100_diff, color='#1b9e77', lw=0.9,linestyle='dotted', label='2085: STQ-V100')
+#ax.tick_params(axis="y", which="major", labelsize=8)
+for label in ax.get_yticklabels()[::2]:
+    label.set_visible(False)
 #ax.grid(b=True, which='major', linestyle='--')
 plt.legend(fontsize='small', loc=4, ncol=3)
 #plt.ylabel('water temperature difference [degC]')

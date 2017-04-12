@@ -1,4 +1,5 @@
 __author__ = 'lnx'
+# -*- coding: utf-8 -*-
 
 from pylab import *
 import numpy as np
@@ -284,8 +285,8 @@ axisrange = [0,2,16,30]
 plt.axis(axisrange)
 
 plt.boxplot(WT_2013_all)
-plt.title('2013', fontsize=fs)
-plt.ylabel('water temperature [degC]', fontsize=fs)
+plt.title('OBS_20a', fontsize=fs)
+plt.ylabel(u'water temperature [°C]', fontsize=fs)
 
 ax = gca()
 ax.xaxis.set_ticklabels(['V0','STQ','V100'])
@@ -297,16 +298,16 @@ fig, axes = plt.subplots(nrows=3, ncols=3, sharex='col', sharey='row') #, figsiz
 
 axes[0, 0].boxplot(WT_2030_1a) # labels=labels) #, showfliers=False)
 axes[0, 0].set_title('2030_1a', fontsize=fs)
-axes[0, 0].set_ylabel('water temperature [degC]', fontsize=fs)
+axes[0, 0].set_ylabel(u'water temperature [°C]', fontsize=fs)
 axes[0, 0].set(xticklabels=('V0','STQ','V100'))
 
 axes[1, 0].boxplot(WT_2030_5a)
 axes[1, 0].set_title('2030_5a', fontsize=fs)
-axes[1, 0].set_ylabel('water temperature [degC]', fontsize=fs)
+axes[1, 0].set_ylabel(u'water temperature [°C]', fontsize=fs)
 
 axes[2, 0].boxplot(WT_2030_20a)
 axes[2, 0].set_title('2030_20a', fontsize=fs)
-axes[2, 0].set_ylabel('water temperature [degC]', fontsize=fs)
+axes[2, 0].set_ylabel(u'water temperature [°C]', fontsize=fs)
 
 axes[0, 1].boxplot(WT_2050_1a)
 axes[0, 1].set_title('2050_1a', fontsize=fs)

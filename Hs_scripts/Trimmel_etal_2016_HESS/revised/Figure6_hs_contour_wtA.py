@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Hs_scripts import hs_loader
 from pylab import *
 __author__ = 'lnx'
@@ -45,30 +46,14 @@ ax.contourf(Yi, Xi, Z, alpha=0.7, cmap=plt.cm.jet);
 
 contour_levels = arange(10, 30, 0.5)
 
-#fig, ax = subplots(subplot_kw=dict(projection='polar'))
-#cax = ax.contourf(thetas, r, values, contour_levels)
-#cb1 = fig.colorbar(cax)
-
-X = WT_20a_1995_V100.columns.values
-Y = WT_20a_1995_V100.index.values
-Z = WT_20a_1995_V100.values
-Xi,Yi = np.meshgrid(X, Y)
-CS = plt.contourf(Yi, Xi, Z, contour_levels, alpha=0.7, cmap=plt.cm.jet)
-plt.clabel(CS, inline=True, fmt='%1.1f', fontsize=10)
-plt.colorbar(CS)
-plt.title('Water temperature [degC] 1995/20a, V100, MLF')
-plt.xlabel('time [days]')
-plt.ylabel('distance from mouth [km]')
-show()
-
 X = WT_20a_2085_V100.columns.values
 Y = WT_20a_2085_V100.index.values
 Z = WT_20a_2085_V100.values
 Xi,Yi = np.meshgrid(X, Y)
 CS = plt.contourf(Yi, Xi, Z, contour_levels, alpha=0.7, cmap=plt.cm.jet);
-plt.clabel(CS, inline=True, fmt='%1.1f', fontsize=10)
+#plt.clabel(CS, inline=True, fmt='%1.1f', fontsize=10)
 plt.colorbar(CS)
-plt.title('Water temperature [degC] 2085/20a, V100, MLF')
+plt.title(u'water temperature [°C] 2085/20a, V100, MLF')
 plt.xlabel('time [days]')
 plt.ylabel('distance from mouth [km]')
 show()
@@ -78,13 +63,14 @@ Y = WT_20a_2085_V0.index.values
 Z = WT_20a_2085_V0.values
 Xi,Yi = np.meshgrid(X, Y)
 CS = plt.contourf(Yi, Xi, Z, contour_levels, alpha=0.7, cmap=plt.cm.jet);
-plt.clabel(CS, inline=True, fmt='%1.1f', fontsize=10)
+#plt.clabel(CS, inline=True, fmt='%1.1f', fontsize=10)
 plt.colorbar(CS)
-plt.title('Water temperature [degC] 2085/20a, V100, MLF')
+plt.title(u'water temperature [°C] 2085/20a, V0, MLF')
 plt.xlabel('time [days]')
 plt.ylabel('distance from mouth [km]')
 show()
 
+exit()
 X = WT_20a_1995_V70.columns.values
 Y = WT_20a_1995_V70.index.values
 Z = WT_20a_1995_V70.values

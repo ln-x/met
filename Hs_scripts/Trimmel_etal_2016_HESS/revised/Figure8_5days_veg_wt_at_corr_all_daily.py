@@ -151,8 +151,8 @@ plt.scatter(airtemp_all,watertemp_V50all, color='orange',  s=3,label=u"V50,   R�
 plt.scatter(airtemp_all,watertemp_V100VD70all, color='green',  s=3,label=u"V70,   R²=0.91")
 plt.scatter(airtemp_all,watertemp_V100all, color='blue',  s=3,label=u"V100, R²=0.90")
 plt.axis([10,40,10,40])
-plt.ylabel('water temperature [degC]',fontsize="large")
-plt.xlabel('air temperature [degC]',fontsize="large")
+plt.ylabel(u'water temperature [°C]',fontsize="large")
+plt.xlabel(u'air temperature [°C]',fontsize="large")
 plt.legend(loc="upper left", title="DAILY MEAN")
 
 airtemp_all = np.array(airtemp_all,dtype=pd.Series)
@@ -185,6 +185,15 @@ plt.plot(X_plot, m5*X_plot + b5, '-', color="green")
 plt.text(37,37,"a", horizontalalignment='center', verticalalignment='center',fontsize=20,
          bbox=dict(facecolor='none', edgecolor='black', pad=10.0))
 #plt.text(0.9, 0.9,'matplotlib',horizontalalignment='center', verticalalignment='center',transform = plt.transAxes)
+
+print "MEAN - slope of V0, STQ, V100, V50, V70:", m1,m2,m3,m4,m5
+#print s1
+#print s2
+#print s3
+#print s4
+#print s5
+print (m3-m1)/m3
+print (m5-m4)/m5
 
 print "MEAN"
 print "Spearmann STQ- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[1]
@@ -253,6 +262,8 @@ m2, b2 = np.polyfit(airtemp_all1, watertemp_STQall1, 1)
 m3, b3 = np.polyfit(airtemp_all1, watertemp_V100all1, 1)
 m4, b4 = np.polyfit(airtemp_all1, watertemp_V50all1, 1)
 m5, b5 = np.polyfit(airtemp_all1, watertemp_V100VD70all1, 1)
+
+
 s1 =  "V0:", m1, "*x + ", b1
 s2 = "STQ:", m2, "*x + ", b2
 s3 = "V100:", m3, "*x + ", b3
@@ -274,17 +285,20 @@ plt.plot(X_plot, m3*X_plot + b3, '-', color="blue")
 plt.plot(X_plot, m4*X_plot + b4, '-', color="orange")
 plt.plot(X_plot, m5*X_plot + b5, '-', color="green")
 
+print "MEAN - slope of V0, STQ, V100, V50, V70:", m1,m2,m3,m4,m5
 print s1
 print s2
 print s3
 print s4
 print s5
 print (m3-m1)/m3
+print (m5-m4)/m5
+
 print "p= %.2E" %(ttest_rel(m1*X_plot + b1, m3*X_plot + b3)[1])
 
 
-plt.ylabel('water temperature [degC]',fontsize="large")
-plt.xlabel('air temperature [degC]',fontsize="large")
+plt.ylabel(u'water temperature [°C]',fontsize="large")
+plt.xlabel(u'air temperature [°C]',fontsize="large")
 plt.legend(loc="upper left", title="DAILY MINIMA")
 plt.text(32,32,"b", horizontalalignment='center', verticalalignment='center',fontsize=20,
          bbox=dict(facecolor='none', edgecolor='black', pad=10.0))
@@ -349,10 +363,14 @@ m2, b2 = np.polyfit(airtemp_all1, watertemp_STQall1, 1)
 m3, b3 = np.polyfit(airtemp_all1, watertemp_V100all1, 1)
 m4, b4 = np.polyfit(airtemp_all1, watertemp_V50all1, 1)
 m5, b5 = np.polyfit(airtemp_all1, watertemp_V100VD70all1, 1)
+
+print "MEAN - slope of V0, STQ, V100, V50, V70:", m1,m2,m3,m4,m5
 s2 = "STQ:", m2, "*x + ", b2
 s3 = "V100:", m3, "*x + ", b3
 s4 = "V50:", m4, "*x + ", b4
 s5 = "V100VD70:", m5, "*x + ", b5
+print (m3-m1)/m3
+print (m5-m4)/m5
 
 print "DAILYMAX"
 print "Spearmann STQ- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[1]
@@ -376,8 +394,8 @@ print s5
 print (m3-m1)/m3
 print "p= %.2E" %(ttest_rel(m1*X_plot + b1, m3*X_plot + b3)[1])
 
-plt.ylabel('water temperature [degC]',fontsize="large")
-plt.xlabel('air temperature [degC]',fontsize="large")
+plt.ylabel(u'water temperature [°C]',fontsize="large")
+plt.xlabel(u'air temperature [°C]',fontsize="large")
 plt.legend(loc="upper left", title="DAILY MAXIMA")
 plt.text(42,42,"c", horizontalalignment='center', verticalalignment='center',fontsize=20,
          bbox=dict(facecolor='none', edgecolor='black', pad=10.0))

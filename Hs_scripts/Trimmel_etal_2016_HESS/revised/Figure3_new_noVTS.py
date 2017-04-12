@@ -1,4 +1,5 @@
 __author__ = 'lnx'
+# -*- coding: utf-8 -*-
 
 from pylab import *
 import matplotlib.pyplot as plt
@@ -142,7 +143,7 @@ ax2.plot(Rkm, Sw_V0_mean, color='black', lw=0.5, linestyle="dashed", label="Q_sw
 ax2.plot(Rkm, Sw_mean, color='black', lw=0.5, label="Q_sw, STQ")
 ax2.plot(Rkm, Sw_V100_mean, color='black', lw=1.0, label="Q_sw, V100")
 ax2.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter))
-ax2.set_ylabel('[W m-2]')
+ax2.set_ylabel(u'[W/m²]')
 ax2.set_xlim(8,70)
 ax2.legend(fontsize='small')
 
@@ -152,7 +153,7 @@ ax3.plot(Rkm, Lw_V0_mean, color='black', lw=0.5, linestyle="dashed", label="Q_lw
 ax3.plot(Rkm, Lw_mean, color='black', lw=0.5, label="Q_lw, STQ")
 ax3.plot(Rkm, Lw_V100_mean, color='black', lw=1.0, label="Q_lw, V100")
 ax3.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter))
-ax3.set_ylabel('[W m-2]')
+ax3.set_ylabel(u'[W/m²]')
 ax3.legend(fontsize='small')
 
 at = AnchoredText("c",loc=2, frameon=True)
@@ -161,7 +162,7 @@ ax4.plot(Rkm, Ev_V0_mean, color='black', lw=0.5, linestyle='dashed', label="LE, 
 ax4.plot(Rkm, Ev_mean, color='black', lw=0.5, label="LE, STQ")
 ax4.plot(Rkm, Ev_V100_mean, color='black', lw=1.0, linestyle='solid', label="LE, V100")
 ax4.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter))
-ax4.set_ylabel('[W m-2]')
+ax4.set_ylabel(u'[W/m²]')
 ax4.legend(fontsize='small')
 
 at = AnchoredText("d",loc=2, frameon=True)
@@ -170,7 +171,7 @@ ax5.plot(Rkm, Cv_V0_mean, color='black', lw=0.5, linestyle="dashed", label="H, V
 ax5.plot(Rkm, Cv_mean, color='black', lw=0.5, label="H, STQ")
 ax5.plot(Rkm, Cv_V100_mean, color='black', lw=1.0, label="H, V100")
 ax5.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter))
-ax5.set_ylabel('[W m-2]')
+ax5.set_ylabel(u'[W/m²]')
 ax5.legend(fontsize='small')
 
 at = AnchoredText("e",loc=2, frameon=True)
@@ -179,7 +180,7 @@ ax6.plot(Rkm, Cd_V0_mean, color='black', lw=0.5, linestyle="dashed", label="Cd, 
 ax6.plot(Rkm, Cd_mean, color='black', lw=0.5, label="Cd, STQ")
 ax6.plot(Rkm, Cd_V100_mean, color='black', lw=1.0, label="Cd, V100")
 ax6.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter))
-ax6.set_ylabel('[W m-2]')
+ax6.set_ylabel(u'[W/m²]')
 ax6.legend(fontsize='small')
 
 at = AnchoredText("f",loc=2, frameon=True)
@@ -188,7 +189,7 @@ ax7.plot(Rkm, Bal_V0_mean, color='black', lw=0.5, linestyle="dashed", label="Bal
 ax7.plot(Rkm, Bal_mean, color='black', lw=0.5, label="Bal, STQ")
 ax7.plot(Rkm, Bal_V100_mean, color='black', lw=1.0, label="Bal, V100")
 ax7.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter))
-ax7.set_ylabel('[W m-2]')
+ax7.set_ylabel(u'[W/m²]')
 ax7.legend(fontsize='small')
 
 at = AnchoredText("g",loc=2, frameon=True)
@@ -199,7 +200,7 @@ ax8.plot(Rkm, WT_V100_mean, color='black', linestyle="solid", lw=1.0, label='WT_
 ax8.plot(Rkm, meas_mean, marker='x',linestyle="none", color='blue', lw=0.5, label='measured')
 ax8.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter))
 ax8.set_xlabel('distance from source [km]')
-ax8.set_ylabel('[degC]')
+ax8.set_ylabel(u'[°C]')
 ax8.legend(fontsize='small')
 
 #fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure1_298p1.tiff')
