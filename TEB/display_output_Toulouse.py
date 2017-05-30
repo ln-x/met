@@ -1,5 +1,8 @@
 __author__ = 'lnx'
+# -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
+from matplotlib.dates import *
+from pylab import *
 import numpy as np
 import datetime
 import csv
@@ -119,26 +122,35 @@ print np.max(tempcanyon)
 
 # ---PLOTTING---
 fig = plt.figure()
-plt.title('energy balance - town, %s' %(scenario),fontsize='large' )
-plt.plot(x, data[2], linestyle='-', color = 'orange', label = datalabel[2]) #rn
-plt.plot(x, data[0], linestyle='-', color = 'red', label = datalabel[0]) #h
-plt.plot(x, data[1], linestyle='-', color = 'blue', label = datalabel[1]) #le
+#plt.title('energy balance - town, %s' %(scenario),fontsize='large' )
+plt.plot(x[:144], data[2][:144], linestyle='-', color = 'orange', label = datalabel[2]) #rn
+plt.plot(x[:144], data[0][:144], linestyle='-', color = 'red', label = datalabel[0]) #h
+plt.plot(x[:144], data[1][:144], linestyle='-', color = 'blue', label = datalabel[1]) #le
 plt.xlabel("time [UTC]", fontsize='large')
-plt.ylabel("energy flux [Wm-2]", fontsize='large')
-plt.legend(loc=4, ncol=3, fontsize='large')
+plt.grid(b=True, which='major', color='black', linestyle=':')
+plt.grid(b=True, which='minor', color='r', linestyle=':')
+plt.ylabel(u"energy flux [Wm²]", fontsize='large')
+plt.legend(loc=2, ncol=1, fontsize='large')
 plt.show()
 
 fig = plt.figure()
-plt.title('temperature - canyon %s' %(scenario), fontsize='large')
+#plt.title('temperature - canyon %s' %(scenario), fontsize='large')
 plt.plot(x, tempcanyon, linestyle='-', color = 'black', label = datalabel[8]) #Canyon, data[8]
 plt.plot(x, temproad1, linestyle='-', color = 'blue', label = datalabel[9]) #road1, data[9]
 plt.plot(x, temproof1, linestyle='-', color = 'red', label = datalabel[10]) #roof1, data[10]
 plt.plot(x, tempwall1, linestyle='-', color = 'orange', label = datalabel[11]) #walla1, data[11]
 plt.plot(x, tempwall2, linestyle='-', color = 'yellow', label = datalabel[12]) #wallb1, data[12]
 plt.plot(x, tempindoor, linestyle='-', color = 'grey', label = datalabel[13]) #ti bld, data[13]
+#for label in plt.get_xticklabels()[::2]:
+#    label.set_visible(False)
 plt.xlabel("time [UTC]", fontsize='large')
-plt.ylabel("temperature [degC]", fontsize='large')
+plt.grid(b=True, which='major', color='black', linestyle=':')
+plt.grid(b=True, which='minor', color='r', linestyle=':')
+#formatter.scaled[1/(24.*60.)] = '%M:%S' # only show min and sec
+plt.ylim([0,50])
+plt.ylabel(u"temperature [°C]", fontsize='large')
 plt.legend(loc=4, ncol=3, fontsize='large')
+fig.autofmt_xdate()
 plt.show()
 
 

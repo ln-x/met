@@ -1,6 +1,5 @@
-__author__ = 'lnx'
 # -*- coding: utf-8 -*-
-
+__author__ = 'lnx'
 import matplotlib.pyplot as plt
 import numpy as np
 import datetime
@@ -14,12 +13,12 @@ from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 directory = "/home/lnx/0_TEB/TEB/3_testdata/REALtest/"
 driver = "src_driver/driver.f90"
 scenario1 = "R03"
-#scenario1 = "PV1"
-#scenario2 = "PV2_Passivhausfenster"
-scenario2 = "PV2_copy"
-scenario3 = "PV3_Passivhausfenster_GZ09"
-scenario4 = "PV5_pvglass_C03"
-scenario5 = "PV5_pvglass_C004"
+scenario2 = "PV2_Passivhausfenster"
+#scenario2 = "PV7_ALBW02_ALBR018"
+scenario3 = "PV7_ALBW04_ALBR018"
+scenario4 = "PV7_ALBW02_ALBR04"
+scenario5 = "PV7_ALBW04_ALBR04"
+#scenario3 = "PV3_Passivhausfenster_GZ09"
 #scenario4 = "PV4_ALBW01"
 #scenario5 = "PV5_ALBW05"
 scenario6 = "PV6_ALBR05"
@@ -253,69 +252,46 @@ convert_celsius(data[13],tempindoor)
 
 #convert_celsius(data2[9],temproad1)
 
-print ("Bestand", np.mean(tempcanyon))
-print ("saniert", np.mean(tempcanyon_2))
-print ("Vollverglasung", np.mean(tempcanyon_3))
-print ("PV", np.mean(tempcanyon_4))
-
-"""
+print (np.mean(tempcanyon_2)-np.mean(tempcanyon))
+print (np.max(tempcanyon_2[-288:]))
+print (np.min(tempcanyon_2[-288:]))
+print (np.mean(tempcanyon_3))
 print (np.max(tempcanyon_3[-288:]))
 print (np.min(tempcanyon_3[-288:]))
+print (np.mean(tempcanyon_4))
 print (np.max(tempcanyon_4[-288:]))
 print (np.min(tempcanyon_4[-288:]))
-"""
-x = x[:144]
+print (np.mean(tempcanyon_5))
+print (np.max(tempcanyon_5[-288:]))
+print (np.min(tempcanyon_5[-288:]))
 
-fig = plt.figure()
-#plt.title('canyon air temperature ' )
-#plt.title('dichtes Wohn(misch)gebiet, Passivhausstandard')
-plt.plot(x, tempcanyon[:144], linestyle='-', color = 'red', label = "Bestand: 1.7 [W/mK]")# locker bebautes Wohn(misch)gebiet")
-plt.plot(x, tempcanyon_2[:144], linestyle='-', color = 'black', label = "saniert: 0.1 [W/mK] ")# -
-plt.plot(x, tempcanyon_3[:144], linestyle='-', color = 'turquoise', label = "Vollverglasung")# d
-#plt.plot(x, tempcanyon_4[:144], linestyle='-', color = 'blue', label = "PV Fassade")# thermal conductiv. 0.3
-#plt.plot(x, tempcanyon_5, linestyle='-', color = 'violet', label = "PV Fassade 2")# thermal conduct. 0.04
-
-
+fig1 = plt.figure()
+ax1 = fig1.add_subplot(111)
+plt.title('thermal conductivity facade' )
+#plt.title('24.-25.8.2016, dichtes Wohn(misch)gebiet, Passivhausstandard, Vgl. Albedo')
+#plt.plot(x[-288:], tempcanyon[-288:], linestyle='-', color = 'red', label = "typical building: 1.7[W/mK]")# locker bebautes Wohn(misch)gebiet")
+#plt.plot(x[-288:], tempcanyon_2[-288:], linestyle='-', color = 'black', label = "expected insulation: 0.1[W/mK]")# - Passivfenster")# Gartenstadt")
+plt.plot(x[:120], tempcanyon[:120], linestyle='-', color = 'red', label = "typical building: 1.7[W/mK]")# locker bebautes Wohn(misch)gebiet")
+plt.plot(x[:120], tempcanyon_2[:120], linestyle='-', color = 'black', label = "expected insulation: 0.1[W/mK]")# - Passivfenster")# Gartenstadt")
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')
-plt.xlabel("Zeit [UTC] ",  fontsize='large')
-plt.ylabel(u"Lufttemperatur [°C]", fontsize='large')
-plt.legend(loc=4, ncol=2, fontsize='large')
+for label in ax1.get_xticklabels()[::2]:
+    label.set_visible(False)
+plt.xlabel("time [UTC] ",  fontsize='large')
+plt.grid(b=True, which='major', color='grey', linestyle=':')
+plt.ylabel(u'air temperature [°C]', fontsize='large')
+#plt.legend(loc=3, ncol=1, fontsize='large')
+
+plt.legend(bbox_to_anchor=(0., 1.01, 1., .102), loc='lower center',
+           ncol=2, mode="expand", borderaxespad=0.,fontsize='large')
 
 #inset_axes = inset_axes(parent_axes,
 #                        width="30%", # width = 30% of parent_bbox
 #                        height=1., # height : 1 inch
 #                        loc=3)
 
+#inset_axes = zoomed_inset_axes(gca(),
+#                               0.5, # zoom = 0.5
+#                               loc=1)
+
 plt.show()
-
-"""
-
-fig = plt.figure()
-
-ax = fig.add_subplot(411)
-plt.title('canyon, %s' %(scenario))
-plt.plot(x, data[5], linestyle='-', color = 'black', label = datalabel[8]) #wind
-plt.ylabel("wind speed [m s-1]")
-#plt.legend(loc=4, ncol=3, fontsize='small')
-
-ax = fig.add_subplot(412)
-plt.plot(x, data[6], linestyle='-', color = 'blue', label = datalabel[9]) #pressure
-plt.ylabel("air pressure [Pa]")
-#plt.legend(loc=4, ncol=3, fontsize='small')
-
-ax = fig.add_subplot(413)
-plt.plot(x, data[7], linestyle='-', color = 'red', label = datalabel[10]) #q
-plt.ylabel("specific humidity [g g-2]")
-#plt.legend(loc=4, ncol=3, fontsize='small')
-
-ax = fig.add_subplot(414)
-plt.plot(x, tempcanyon, linestyle='-', color = 'orange', label = datalabel[11]) #airtemp
-plt.xlabel("time") #TODO:convert to days/hours
-plt.ylabel("temperature [degC]")
-#plt.legend(loc=4, ncol=3, fontsize='small')
-plt.show()
-
-#fig.savefig(/home/lnx/0_TEB/TEB/output_graphs/test.png)
-
-"""

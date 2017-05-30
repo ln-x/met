@@ -1,4 +1,5 @@
 __author__ = 'lnx'
+# -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 import numpy as np
 import datetime
@@ -280,10 +281,10 @@ fig = plt.figure()
 #plt.axis(axisrange)
 plt.ylim(14, 28)
 
-plt.plot(x, tempcanyon_2[-288:], linestyle='-', color = 'black', label = "STQ")
-plt.plot(x, tempcanyon_3[-288:], linestyle='-', color = 'red', label = "Bebauung +0.25")
-plt.plot(x, tempcanyon_4[-288:], linestyle='-', color = 'blue', label = "Bauhoehe +5m")
-plt.plot(x, tempcanyon_5[-288:], linestyle='-', color = 'green', label = "vertikal/horiz.Flaeche 2.1 -> 1.1")
+plt.plot(x, tempcanyon_2[-144:], linestyle='-', color = 'black', label = "STQ")
+plt.plot(x, tempcanyon_3[-144:], linestyle='-', color = 'red', label = "Bebauung +0.25")
+plt.plot(x, tempcanyon_4[-144:], linestyle='-', color = 'blue', label = "Bauhoehe +5m")
+plt.plot(x, tempcanyon_5[-144:], linestyle='-', color = 'green', label = "vertikal/horiz.Flaeche 2.1 -> 1.1")
 
 plt.grid(b=True, which='major', color='black', linestyle='-')
 plt.grid(b=True, which='minor', color='r', linestyle='--')

@@ -1,4 +1,6 @@
 __author__ = 'lnx'
+# -*- coding: utf-8 -*-
+
 import matplotlib.pyplot as plt
 import numpy as np
 import datetime
@@ -250,22 +252,22 @@ print (np.max(tempcanyon))
 
 
 fig = plt.figure()
-plt.title('temperature - canyon, Realnutzungskategorien' )
-plt.plot(x, tempcanyon, linestyle='-', color = 'yellow', label = "1 -lockeres Wohn(misch)g.")# locker bebautes Wohn(misch)gebiet")
+#plt.title('temperature - canyon, Realnutzungskategorien' )
+plt.plot(x, tempcanyon, linestyle='-', color = 'yellow', label = "1 - lockeres Wohn(misch)g.")# locker bebautes Wohn(misch)gebiet")
 plt.plot(x, tempcanyon_2, linestyle='-', color = 'green', label = "2 - Gartenstadt")# Gartenstadt")
 plt.plot(x, tempcanyon_3, linestyle='-', color = 'turquoise', label = "3 - dichtes Wohn(misch)g.")# dichtes Wohn(misch)gebiet")
-plt.plot(x, tempcanyon_4, linestyle='-', color = 'blue', label = "4 - grossvolumiger solitaerer Wohnb.")# grossvolumiger solitaerer Wohn(misch)bau")
-plt.plot(x, tempcanyon_5, linestyle='-', color = 'violet', label = "5 - Buero u. Verwaltung")# Buero- und Verwaltungsviertel")
-plt.plot(x, tempcanyon_6, linestyle='-', color = 'pink', label = "6 - Handelssturkturen")# solitaere Handelsstrukturen")
-plt.plot(x, tempcanyon_7, linestyle='-', color = 'red', label = "7 - Geschaefts-Kern-Mischg.")# Geschaefts- Kern- u. Mischgebiete")
+plt.plot(x, tempcanyon_4, linestyle='-', color = 'blue', label = u"4 - großvolumiger solitärer Wohnb.")# grossvolumiger solitaerer Wohn(misch)bau")
+plt.plot(x, tempcanyon_5, linestyle='-', color = 'violet', label = u"5 - Büro u. Verwaltung")# Buero- und Verwaltungsviertel")
+plt.plot(x, tempcanyon_6, linestyle='-', color = 'pink', label = "6 - Handelsstrukturen")# solitaere Handelsstrukturen")
+plt.plot(x, tempcanyon_7, linestyle='-', color = 'red', label = u"7 - Geschäfts-Kern-Mischg.")# Geschaefts- Kern- u. Mischgebiete")
 plt.plot(x, tempcanyon_8, linestyle='-', color = 'orange', label = "8 - Mischnutzung - wenig dicht")# solitaere Handelsstrukturen")
-plt.plot(x, tempcanyon_9, linestyle='-', color = 'brown', label = "9 - Industrie, Grosshandel, Lager.")# Geschaefts- Kern- u. Mischgebiete")
+plt.plot(x, tempcanyon_9, linestyle='-', color = 'brown', label = u"9 - Industrie, Großhandel, Lager.")# Geschaefts- Kern- u. Mischgebiete")
 
-plt.grid(b=True, which='major', color='black', linestyle='-')
-plt.grid(b=True, which='minor', color='r', linestyle='--')
-plt.xlabel("time")
-plt.ylabel("temperature [degC]")
-plt.legend(loc=4, ncol=3, fontsize='small')
+plt.grid(b=True, which='major', color='black', linestyle=':')
+plt.grid(b=True, which='minor', color='r', linestyle=':')
+plt.xlabel("time [UTC]", fontsize="large")
+plt.ylabel(u"air temperature [°C]", fontsize="large")
+plt.legend(loc=4, ncol=2, fontsize='large')
 plt.show()
 
 """

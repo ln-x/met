@@ -171,6 +171,8 @@ ax5.plot(Rkm, Cv_V0_mean, color='black', lw=0.5, linestyle="dashed", label="H, V
 ax5.plot(Rkm, Cv_mean, color='black', lw=0.5, label="H, STQ")
 ax5.plot(Rkm, Cv_V100_mean, color='black', lw=1.0, label="H, V100")
 ax5.get_yaxis().set_major_formatter(ticker.FuncFormatter(my_formatter))
+for label in ax5.get_yticklabels()[::2]:
+    label.set_visible(False)
 ax5.set_ylabel(u'[W/m²]')
 ax5.legend(fontsize='small')
 

@@ -1,6 +1,5 @@
-__author__ = 'lnx'
+from __future__ import print_function  # Only needed for Python 2
 # -*- coding: utf-8 -*-
-
 from pylab import *
 import numpy as np
 import matplotlib.pyplot as plt
@@ -181,46 +180,31 @@ watertemp_V50all1 = list(itertools.chain(*watertemp_V50all))
 watertemp_V100all1 = list(itertools.chain(*watertemp_V100all))
 watertemp_V100VD70all1 = list(itertools.chain(*watertemp_V100VD70all))
 
+all = pd.DataFrame({'air':airtemp_all1,'STQ':watertemp_STQall1, 'V0':watertemp_V0all1,'V50': watertemp_V50all1, 'V70':watertemp_V100VD70all1, 'V100':watertemp_V100all1})
+#print (all.head())
+all.to_csv("/home/lnx/dailymeans.csv", index=False, cols=('air','STQ','V0','V50','V70','V100'))
+
+
+covariance = np.cov(airtemp_all1,watertemp_STQall1,bias=True)[0][1]
+print (covariance)
+
+
+#factor_groups
+
+formula = ''
+
 axes = plt.gca()
 STQpoly = np.polyfit(airtemp_all1, watertemp_V0all1, 1, full=False, cov=True)
 m1, b1 = np.polyfit(airtemp_all1, watertemp_V0all1, 1)
 
-print STQpoly
-print m1,b1
+#print STQpoly
+#print m1,b1
 
-exit()
 m2, b2 = np.polyfit(airtemp_all1, watertemp_STQall1, 1)
 m3, b3 = np.polyfit(airtemp_all1, watertemp_V100all1, 1)
 m4, b4 = np.polyfit(airtemp_all1, watertemp_V50all1, 1)
 m5, b5 = np.polyfit(airtemp_all1, watertemp_V100VD70all1, 1)
 X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
-ax.plot(X_plot, m1*X_plot + b1, '-', color="#d95f02")
-ax.plot(X_plot, m2*X_plot + b2, '-', color="lightgrey")
-ax.plot(X_plot, m3*X_plot + b3, '-', color="blue") ##1b9e77
-ax.plot(X_plot, m4*X_plot + b4, '-', color="orange")
-ax.plot(X_plot, m5*X_plot + b5, '-', color="green")
-ax.text(37,37,"a", horizontalalignment='center', verticalalignment='center',fontsize=20,
-         bbox=dict(facecolor='none', edgecolor='black', pad=10.0))
-#plt.text(0.9, 0.9,'matplotlib',horizontalalignment='center', verticalalignment='center',transform = plt.transAxes)
-
-print "MEAN - slope of V0, STQ, V100, V50, V70:", m1,m2,m3,m4,m5
-#print s1
-#print s2
-#print s3
-#print s4
-#print s5
-print (m3-m1)/m3
-print (m5-m4)/m5
-
-print "MEAN"
-print "Spearmann STQ- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[1]
-print "Spearmann V0- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V0all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V0all1)[1]
-print "Spearmann V100- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V100all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V100all1)[1]
-print "Spearmann V50- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V50all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V50all1)[1]
-print "Spearmann V100VD70- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V100VD70all1)[0])**2,  scipy.stats.spearmanr(airtemp_all1,watertemp_V100VD70all1)[1]
-print (m3-m1)/m3
-print "p= %.2E" %(ttest_rel(m1*X_plot + b1, m3*X_plot + b3)[1])
-
 
 
 ax = gca()
@@ -275,46 +259,17 @@ watertemp_V50all1 = list(itertools.chain(*watertemp_V50all))
 watertemp_V100all1 = list(itertools.chain(*watertemp_V100all))
 watertemp_V100VD70all1 = list(itertools.chain(*watertemp_V100VD70all))
 
+allmin = pd.DataFrame({'air':airtemp_all1,'STQ':watertemp_STQall1, 'V0':watertemp_V0all1,'V50': watertemp_V50all1, 'V70':watertemp_V100VD70all1, 'V100':watertemp_V100all1})
+#print (all.head())
+allmin.to_csv("/home/lnx/dailymin.csv", index=False, cols=('air','STQ','V0','V50','V70','V100'))
+
+
 axes = plt.gca()
 m1, b1 = np.polyfit(airtemp_all1, watertemp_V0all1, 1)
 m2, b2 = np.polyfit(airtemp_all1, watertemp_STQall1, 1)
 m3, b3 = np.polyfit(airtemp_all1, watertemp_V100all1, 1)
 m4, b4 = np.polyfit(airtemp_all1, watertemp_V50all1, 1)
 m5, b5 = np.polyfit(airtemp_all1, watertemp_V100VD70all1, 1)
-
-
-s1 =  "V0:", m1, "*x + ", b1
-s2 = "STQ:", m2, "*x + ", b2
-s3 = "V100:", m3, "*x + ", b3
-s4 = "V50:", m4, "*x + ", b4
-s5 = "V100VD70:", m5, "*x + ", b5
-
-print "DAILYMIN"
-print "Spearmann STQ- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[1]
-print "Spearmann V0- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V0all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V0all1)[1]
-print "Spearmann V100- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V100all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V100all1)[1]
-print "Spearmann V50- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V50all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V50all1)[1]
-print "Spearmann V100VD70- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V100VD70all1)[0])**2,  scipy.stats.spearmanr(airtemp_all1,watertemp_V100VD70all1)[1]
-
-
-X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
-ax1.plot(X_plot, m1*X_plot + b1, '-', color="#d95f02")
-ax1.plot(X_plot, m2*X_plot + b2, '-', color="lightgrey")
-ax1.plot(X_plot, m3*X_plot + b3, '-', color="blue")
-ax1.plot(X_plot, m4*X_plot + b4, '-', color="orange")
-ax1.plot(X_plot, m5*X_plot + b5, '-', color="green")
-
-print "MIN - slope of V0, STQ, V100, V50, V70:", m1,m2,m3,m4,m5
-print s1
-print s2
-print s3
-print s4
-print s5
-print (m3-m1)/m3
-print (m5-m4)/m5
-
-print "p= %.2E" %(ttest_rel(m1*X_plot + b1, m3*X_plot + b3)[1])
-
 
 ax1.set_ylabel(u'water temperature [°C]',fontsize="large")
 #ax1.set_xlabel(u'air temperature [°C]',fontsize="large")
@@ -378,6 +333,10 @@ watertemp_V50all1 = list(itertools.chain(*watertemp_V50all))
 watertemp_V100all1 = list(itertools.chain(*watertemp_V100all))
 watertemp_V100VD70all1 = list(itertools.chain(*watertemp_V100VD70all))
 
+allmax = pd.DataFrame({'air':airtemp_all1,'STQ':watertemp_STQall1, 'V0':watertemp_V0all1,'V50': watertemp_V50all1, 'V70':watertemp_V100VD70all1, 'V100':watertemp_V100all1})
+#print (all.head())
+allmax.to_csv("/home/lnx/dailymax.csv", index=False, cols=('air','STQ','V0','V50','V70','V100'))
+
 axes = plt.gca()
 m1, b1 = np.polyfit(airtemp_all1, watertemp_V0all1, 1)
 m2, b2 = np.polyfit(airtemp_all1, watertemp_STQall1, 1)
@@ -385,35 +344,6 @@ m3, b3 = np.polyfit(airtemp_all1, watertemp_V100all1, 1)
 m4, b4 = np.polyfit(airtemp_all1, watertemp_V50all1, 1)
 m5, b5 = np.polyfit(airtemp_all1, watertemp_V100VD70all1, 1)
 
-print "MEAN - slope of V0, STQ, V100, V50, V70:", m1,m2,m3,m4,m5
-s2 = "STQ:", m2, "*x + ", b2
-s3 = "V100:", m3, "*x + ", b3
-s4 = "V50:", m4, "*x + ", b4
-s5 = "V100VD70:", m5, "*x + ", b5
-print (m3-m1)/m3
-print (m5-m4)/m5
-
-print "DAILYMAX"
-print "Spearmann STQ- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_STQall1)[1]
-print "Spearmann V0- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V0all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V0all1)[1]
-print "Spearmann V100- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V100all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V100all1)[1]
-print "Spearmann V50- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V50all1)[0])**2, scipy.stats.spearmanr(airtemp_all1,watertemp_V50all1)[1]
-print "Spearmann V100VD70- R2, p:", (scipy.stats.spearmanr(airtemp_all1,watertemp_V100VD70all1)[0])**2,  scipy.stats.spearmanr(airtemp_all1,watertemp_V100VD70all1)[1]
-
-X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
-ax2.plot(X_plot, m1*X_plot + b1, '-', color="#d95f02")
-ax2.plot(X_plot, m2*X_plot + b2, '-', color="lightgrey")
-ax2.plot(X_plot, m3*X_plot + b3, '-', color="blue")
-ax2.plot(X_plot, m4*X_plot + b4, '-', color="orange")
-ax2.plot(X_plot, m5*X_plot + b5, '-', color="green")
-
-print s1
-print s2
-print s3
-print s4
-print s5
-print (m3-m1)/m3
-print "p= %.2E" %(ttest_rel(m1*X_plot + b1, m3*X_plot + b3)[1])
 
 ax2.set_ylabel(u'water temperature [°C]',fontsize="large")
 ax2.set_xlabel(u'air temperature [°C]',fontsize="large")
