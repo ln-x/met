@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 ##read stq rasters of relevant information
 #LCZ = ...
 #LCZ_new = .... #LCZ with densificated properties (height + 3m)
-
+#MASK1 = PGO_FreeScenario
+#MASK2 = PGO_Structured, STEP25_built, STEP25_green
 import random
 print random.sample([[1,2],[3,4],[5,6]], 1)
 
