@@ -186,7 +186,7 @@ blue=[np.sum(w102[15:19])*10,np.sum(w201[15:19])*10,np.sum(w301[15:19])*10,np.su
 
 #plt.hist([1, 2, 1], bins=[0, 1, 2, 3])
 
-exit()
+
 
 fig = plt.figure()
 
