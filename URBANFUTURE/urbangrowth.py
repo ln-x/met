@@ -9,11 +9,10 @@ import matplotlib.pyplot as plt
 import random
 print random.sample([[1,2],[3,4],[5,6]], 1)
 
-exit()
+#exit()
 
 ##parameters:
 BWGF_add = 1000000 #Bruttowohngeschossflaeche
-
 
 #2) new BWGF is  split in densification and urban expansion
 SplitFactor = 0.7
