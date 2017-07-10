@@ -257,6 +257,31 @@ for i in weight_tuples:
     #print len(weight_label[i]),i
     print "integrated_albedo=",IntegratedAlbedo(i[1]), "mean_albedo=",np.mean(i[2]), i[0]
 
+#http://www.intl-light.com/handbookthanks.html - Referenzen in "OSA Handbook of Optics"
+lambda_day = [(380,0.000039), (390, 0.000120), (400, 0.000396), (410, 0.001210),(420, 0.004000),
+    (430,     0.011600),    (440,     0.023000),    (450,     0.038000),    (460,     0.060000),
+    (470,     0.090980),    (480,     0.139020),    (490,     0.208020),    (500,     0.323000),
+    (507,     0.444310),    (510,     0.503000),    (520,     0.710000),    (530,     0.862000),
+    (540,     0.954000),    (550,     0.994950),    (555,     1.000000),    (560,     0.995000),
+    (570,     0.952000),    (580,     0.870000),    (590,     0.757000),    (600,     0.631000),
+    (620,     0.381000),    (630,     0.265000),    (640,     0.175000),    (650,     0.107000),
+    (660,     0.061000),    (670,     0.032000),    (680,     0.017000),    (690,     0.008210),
+    (700,     0.004102),    (710,    0.002091),    (720,     0.001047),    (730,     0.000520),
+    (740,    0.000249),    (750,     0.000120),    (760,    0.000060),    (770,     0.000030)]
+
+
+
+def Eye_response(a):
+    Spec3_cut = Spec2_10nm[10:50] #measurements only available from 380 to 770 nanometer, therefore cut spectrum
+    data_x2 = np.arange(380,780,10)
+    #print Spec3_cut, data_x2
+    #a = Meas2_tis_d10nm2.iloc[:,0]/100
+    a_cut = a[8:48]
+    #print a_cut
+    response = lambda_day ...
+    return response
+
+
 
 """
 print 'mean albedo: 102_w', np.mean(a102_1nm)
