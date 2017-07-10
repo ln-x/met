@@ -18,14 +18,13 @@ directory = "D:/_URBANIA/METDATA/GerhardPeharz_Johanneum/2_raw"
 #spec = "ASTMG173_2.csv"
 spec = "IECNorm 60904-3/82_1071e_FDIS.xlsx"
 
-"""
 mea1 = "2017_04_21_Reflexion_Betonproben.txt"
 mea2_diff = "2017_05_26_Betonproben_R_DIFF.txt"
 mea2_tis = "2017_05_26_Betonproben_R_TIS.txt" #TIS = total integrated sphere
 meas1 = os.path.join(directory, mea1)
 meas2_diff = os.path.join(directory, mea2_diff)
 meas2_tis = os.path.join(directory, mea2_tis)
-"""
+
 spectrum = os.path.join(directory, spec)
 #Spec1 = pd.read_csv(spectrum, skiprows=1,index_col=0) #delta 0.5 nm
 
@@ -43,22 +42,27 @@ Spec2_10nm = Spec2_10nm.fillna(0)
 #print Spec2_10nm
 n = Spec2.iloc[:,0].size
 m = Spec2_10nm.iloc[:,0].size
-print n,m
+#print n,m
+#print Spec2_10nm.iloc[:,0].head()
+
+#print 2002, Spec2.iloc[2002,0], Spec2.iloc[2002,1] #"yes"
 
 j=0
-for i in range(0,n-1):
-    if Spec2.iloc[i,0]%10==0:
-        #print Spec2.iloc[i,1] #"yes"
-        Spec2.iloc[i,1] = Spec2_10nm.iloc[j,1]
+for i in range(0,n-5): #last five lines contain comments!
+    if Spec2.iloc[i,0]%10 == 0:
+        #print i, Spec2.iloc[i,0], Spec2.iloc[i,1] #"yes"
+        #j = Spec2.iloc[i,0]
+        Spec2_10nm.iloc[j,0] = Spec2.iloc[i,1]
         j+=1
     else:
         pass #print "no"
     #print j
 
-print Spec2_10nm.head()
+Spec2_cut = Spec2_10nm[2:223] #measurements only available from 300 to 2500 nanometer, therefore cut spectrum
+#print Spec2_cut
 
-exit()
-
+#print Spec2_10nm.head()
+#print Spec2_10nm.iloc[:,0].size
 
 Meas1 = pd.read_csv(meas1, delimiter='\t', index_col=0) #delta 10nm
 #print Meas1 #MV4_03 [%]  MV4_02 [%]  MV4_01 [%]  MV3_03 [%]  MV3_02 [%]
@@ -80,8 +84,6 @@ Meas2_tis_d10nm2 = Meas2_tis_d10nm.sort_index(ascending=True)#)
 #print Meas1.iloc[:,1].head() #MV4_02 (2te Spate)
 #print Spec1.head()
 #print Spec1.iloc[:,2].head() #dircirc
-
-
 
 #print Meas1.head()
 
@@ -174,18 +176,18 @@ plt.show()
 """
 #exit()
 
-Meas1.loc[:,'302_w'] = (Meas1.iloc[:,4]/100) * Spec1.iloc[:,2]
-Meas1.loc[:,'202_w'] = (Meas1.iloc[:,6]/100) * Spec1.iloc[:,2]
-Meas1.loc[:,'201_w'] = (Meas1.iloc[:,7]/100) * Spec1.iloc[:,2]
-Meas1.loc[:,'102_w'] = (Meas1.iloc[:,8]/100) * Spec1.iloc[:,2]
-Meas1.loc[:,'101_w'] = (Meas1.iloc[:,9]/100) * Spec1.iloc[:,2]
+Meas1.loc[:,'302_w'] = (Meas1.iloc[:,4]/100) * Spec2_cut.iloc[:,0]
+Meas1.loc[:,'202_w'] = (Meas1.iloc[:,6]/100) * Spec2_cut.iloc[:,0]
+Meas1.loc[:,'201_w'] = (Meas1.iloc[:,7]/100) * Spec2_cut.iloc[:,0]
+Meas1.loc[:,'102_w'] = (Meas1.iloc[:,8]/100) * Spec2_cut.iloc[:,0]
+Meas1.loc[:,'101_w'] = (Meas1.iloc[:,9]/100) * Spec2_cut.iloc[:,0]
 
-Meas2_tis_d10nm2.loc[:,'102_w'] = (Meas2_tis_d10nm2.iloc[:,0]/100) * Spec1.iloc[:,2]
-Meas2_tis_d10nm2.loc[:,'201_w'] = (Meas2_tis_d10nm2.iloc[:,1]/100) * Spec1.iloc[:,2]
-Meas2_tis_d10nm2.loc[:,'301_w'] = (Meas2_tis_d10nm2.iloc[:,3]/100) * Spec1.iloc[:,2]
-Meas2_tis_d10nm2.loc[:,'401_w'] = (Meas2_tis_d10nm2.iloc[:,5]/100) * Spec1.iloc[:,2]
-Meas2_tis_d10nm2.loc[:,'303_w'] = (Meas2_tis_d10nm2.iloc[:,4]/100) * Spec1.iloc[:,2]
-Meas2_tis_d10nm2.loc[:,'403_w'] = (Meas2_tis_d10nm2.iloc[:,6]/100) * Spec1.iloc[:,2]
+Meas2_tis_d10nm2.loc[:,'102_w'] = (Meas2_tis_d10nm2.iloc[:,0]/100) * Spec2_cut.iloc[:,0]
+Meas2_tis_d10nm2.loc[:,'201_w'] = (Meas2_tis_d10nm2.iloc[:,1]/100) * Spec2_cut.iloc[:,0]
+Meas2_tis_d10nm2.loc[:,'301_w'] = (Meas2_tis_d10nm2.iloc[:,3]/100) * Spec2_cut.iloc[:,0]
+Meas2_tis_d10nm2.loc[:,'401_w'] = (Meas2_tis_d10nm2.iloc[:,5]/100) * Spec2_cut.iloc[:,0]
+Meas2_tis_d10nm2.loc[:,'303_w'] = (Meas2_tis_d10nm2.iloc[:,4]/100) * Spec2_cut.iloc[:,0]
+Meas2_tis_d10nm2.loc[:,'403_w'] = (Meas2_tis_d10nm2.iloc[:,6]/100) * Spec2_cut.iloc[:,0]
 
 w102 = np.array(Meas2_tis_d10nm2.loc[:,'102_w'])
 w201 = np.array(Meas2_tis_d10nm2.loc[:,'201_w'])
@@ -193,6 +195,80 @@ w301 = np.array(Meas2_tis_d10nm2.loc[:,'301_w'])
 w401 = np.array(Meas2_tis_d10nm2.loc[:,'401_w'])
 w303 = np.array(Meas2_tis_d10nm2.loc[:,'303_w'])
 w403 = np.array(Meas2_tis_d10nm2.loc[:,'403_w'])
+
+#INTERPOLATE
+def Interpolate_10to1nm(a):
+    interpolated_x = np.arange(300,2501,1)
+    data_x = np.arange(300,2510,10)
+    interp_1nm = np.interp(interpolated_x, data_x, a)
+    return interp_1nm
+
+a102_1nm = Interpolate_10to1nm(Meas2_tis_d10nm2.iloc[:,0]/100) #'102_w'
+w102_1nm = Interpolate_10to1nm(w102) #'102_w'
+total_irrad = Interpolate_10to1nm(Spec2_cut.iloc[:,0])
+#print Meas2_tis_d10nm2.iloc[:,0]/100
+#print w102_1nm
+
+#INTEGRATED ALBEDO, IRRADIANCE
+def IntegratedAlbedo(a):
+    total_irrad_1nm = Interpolate_10to1nm(Spec2_cut.iloc[:,0])
+    total_irrad_integrated = np.trapz(total_irrad_1nm)
+    weighted_irrad_1nm = Interpolate_10to1nm(a)
+    weighted_irrad_integrated = np.trapz(weighted_irrad_1nm)
+    integratedalbedo = weighted_irrad_integrated/total_irrad_integrated
+    return integratedalbedo
+
+"""
+#Version1
+#for i in weighted:
+#    print IntegratedAlbedo(i)
+
+weight_label = {(u"Gehwege",u"Normalbeton, Besenstrich") : "Meas2_tis_d10nm2['102_w']",
+                (u"Gehwege",u"Normalbeton hell, Besenstrich") : "Meas2_tis_d10nm2['201_w']",
+                (u"nicht befahrbare Betonfäche",u"Normalbeton, glatt abgezogen"): "Meas1['101_w']",
+                (u"nicht befahrbare Betonfäche",u"Straßenbeton, glatt abgezogen"): "Meas1['302_w']",
+                (u"Sichtbetonmauer",u"Normalbeton Schalfläche, glatt abgezogen"): "Meas1['102_w']",
+                (u"Sichtbetonmauer",u"Normalbeton hell, Schalfläche"): "Meas1['201_w']",
+                (u"Sichtbetonmauer",u"Normalbeton hell, Schalfläche2"): "Meas1['202_w']",
+                (u"Stasse niederangig",u"Straßenbeton, Besenstrich"): "Meas2_tis_d10nm2['301_w']",
+                (u"Stasse niederangig",u"Straßenbeton hell, Besenstrich"): "Meas2_tis_d10nm2['401_w']",
+                (u"Stasse hochrangig",u"Straßenbeton , Waschbetonstruktur"): "Meas2_tis_d10nm2['303_w']",
+                (u"Stasse hochrangig",u"Straßenbeton hell, Waschbetonstruktur"): "Meas2_tis_d10nm2['403_w']"}
+#Version2
+#for i in weight_label.keys():
+#    print len(weight_label[i]),i
+"""
+
+#Version3
+weight_tuples = [((u"Gehwege",u"Normalbeton, Besenstrich"), Meas2_tis_d10nm2['102_w'],Meas2_tis_d10nm2.iloc[:,0]/100),
+                ((u"Gehwege",u"Normalbeton hell, Besenstrich"), Meas2_tis_d10nm2['201_w'],Meas2_tis_d10nm2.iloc[:,1]/100),
+                ((u"nicht befahrbare Betonfäche",u"Normalbeton, glatt abgezogen"), Meas1['101_w'],Meas1.iloc[:,9]/100),
+                ((u"nicht befahrbare Betonfäche",u"Straßenbeton, glatt abgezogen"), Meas1['302_w'],Meas1.iloc[:,4]/100),
+                ((u"Sichtbetonmauer",u"Normalbeton Schalfläche, glatt abgezogen"), Meas1['102_w'],Meas1.iloc[:,8]/100),
+                ((u"Sichtbetonmauer",u"Normalbeton hell, Schalfläche"), Meas1['201_w'],Meas1.iloc[:,7]/100),
+                ((u"Sichtbetonmauer",u"Normalbeton hell, Schalfläche2"), Meas1['202_w'],Meas1.iloc[:,6]/100),
+                ((u"Stasse niederangig",u"Straßenbeton, Besenstrich"), Meas2_tis_d10nm2['301_w'], Meas2_tis_d10nm2.iloc[:,3]/100),
+                ((u"Stasse niederangig",u"Straßenbeton hell, Besenstrich"), Meas2_tis_d10nm2['401_w'], Meas2_tis_d10nm2.iloc[:,5]/100),
+                ((u"Stasse hochrangig",u"Straßenbeton , Waschbetonstruktur"), Meas2_tis_d10nm2['303_w'],Meas2_tis_d10nm2.iloc[:,4]/100),
+                ((u"Stasse hochrangig",u"Straßenbeton hell, Waschbetonstruktur"), Meas2_tis_d10nm2['403_w'],Meas2_tis_d10nm2.iloc[:,6]/100)]
+
+
+for i in weight_tuples:
+    #print len(weight_label[i]),i
+    print "integrated_albedo=",IntegratedAlbedo(i[1]), "mean_albedo=",np.mean(i[2]), i[0]
+
+
+"""
+print 'mean albedo: 102_w', np.mean(a102_1nm)
+#print '102_w', np.mean(Meas2_tis_d10nm2.iloc[:,0]/100)
+print 'integrated albedo: 102_w', np.trapz(a102_1nm)
+print 'integrated irradiance: 102_w', np.trapz(w102_1nm)
+print 'integrated irradiance: total', np.trapz(total_irrad)
+print 'integrated albedo?: 102,w ',  np.trapz(w102_1nm)/np.trapz(total_irrad)
+"""
+
+
+exit()
 
 print "w102","w201","w301","w401","w303","w403"
 print np.sum(w102),np.sum(w201),np.sum(w301),np.sum(w401),np.sum(w303),np.sum(w403)
@@ -222,6 +298,9 @@ blue=[np.sum(w102[15:19])*10,np.sum(w201[15:19])*10,np.sum(w301[15:19])*10,np.su
 #pyplot.hist(violet, bins, alpha=0.5)
 
 #plt.hist([1, 2, 1], bins=[0, 1, 2, 3])
+
+#from scipy.integrate import quad
+#df['C'] = df.apply(lambda x: quad(lambda x: x, x[0], x[1])[0], axis=1)
 
 
 
