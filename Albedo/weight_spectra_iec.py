@@ -216,7 +216,12 @@ def IntegratedAlbedo(a):
     weighted_irrad_1nm = Interpolate_10to1nm(a)
     weighted_irrad_integrated = np.trapz(weighted_irrad_1nm)
     integratedalbedo = weighted_irrad_integrated/total_irrad_integrated
-    return integratedalbedo
+    return round(integratedalbedo,2)
+
+def WeightedIrradiance(a):
+    weighted_irrad_1nm = Interpolate_10to1nm(a)
+    weighted_irrad_integrated = np.trapz(weighted_irrad_1nm)
+    return round(weighted_irrad_integrated,2)
 
 """
 #Version1
@@ -253,9 +258,7 @@ weight_tuples = [((u"Gehwege",u"Normalbeton, Besenstrich"), Meas2_tis_d10nm2['10
                 ((u"Stasse hochrangig",u"Straßenbeton hell, Waschbetonstruktur"), Meas2_tis_d10nm2['403_w'],Meas2_tis_d10nm2.iloc[:,6]/100)]
 
 
-for i in weight_tuples:
-    #print len(weight_label[i]),i
-    print "integrated_albedo=",IntegratedAlbedo(i[1]), "mean_albedo=",np.mean(i[2]), i[0]
+
 
 #http://www.intl-light.com/handbookthanks.html - Referenzen in "OSA Handbook of Optics"
 lambda_day = [(380,0.000039), (390, 0.000120), (400, 0.000396), (410, 0.001210),(420, 0.004000),
@@ -270,18 +273,68 @@ lambda_day = [(380,0.000039), (390, 0.000120), (400, 0.000396), (410, 0.001210),
     (740,    0.000249),    (750,     0.000120),    (760,    0.000060),    (770,     0.000030)]
 
 
+a= Meas2_tis_d10nm2.iloc[:,0]/100
 
 def Eye_response(a):
-    Spec3_cut = Spec2_10nm[10:50] #measurements only available from 380 to 770 nanometer, therefore cut spectrum
+    #total irradiance
+    total_irrad_1nm = Interpolate_10to1nm(Spec2_cut.iloc[:,0])
+    #print len(total_irrad_1nm) #2201
+    total_irrad_1nm_vis = total_irrad_1nm[80:471] #measurements only available from 380 to 770 nanometer, therefore cut spectrum from 300 to 2500
+    total_irrad_1nm_vis_integrated = np.trapz(total_irrad_1nm_vis)
+
+    #weighted irradiance
+    weighted_irrad_1nm = Interpolate_10to1nm(a)
+    weighted_irrad_1nm_vis = weighted_irrad_1nm[80:471]
+    #weighted_irrad_1nm_integrated = np.trapz(weighted_irrad_1nm_vis)
+
+    #eye responsiveness
     data_x2 = np.arange(380,780,10)
+    interpolated_x2 = np.arange(380,771,1)
     #print Spec3_cut, data_x2
     #a = Meas2_tis_d10nm2.iloc[:,0]/100
     a_cut = a[8:48]
-    #print a_cut
-    response = lambda_day ...
-    return response
+    a_interp_1nm = np.interp(interpolated_x2, data_x2, a_cut)
+    #print len(a_interp_1nm), len(weighted_irrad_1nm_vis)
+    a_1nm_eye_weighted = a_interp_1nm * weighted_irrad_1nm_vis
+    weighted_irrad_1nm_integrated = np.trapz(a_1nm_eye_weighted)
+    return round(weighted_irrad_1nm_integrated,2)
+
+#print Eye_response(a)
+
+eye_r = []
+total_ir = []
+
+for i in weight_tuples:
+    #print len(weight_label[i]),i
+    print "integr.albedo=",IntegratedAlbedo(i[1]), "mean_albedo=",round(np.mean(i[2]),2),\
+       "eye weighted irrad.=",Eye_response(i[1]), "weighted irrad.=",WeightedIrradiance(i[1]), i[0]
+    eye_r.append(Eye_response(i[1]))
+    total_ir.append(WeightedIrradiance(i[1]))
 
 
+print eye_r, total_ir
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+import plotly.plotly as py
+# Learn about API authentication here: https://plot.ly/python/getting-started
+# Find your api_key here: https://plot.ly/settings/api
+
+x = eye_r
+y = range(1,len(eye_r))
+n, bins, patches = plt.hist([x, y])
+
+#plt.hist(eye_r)
+#plt.hist(total_ir)
+plt.title("total irradiance")
+plt.xlabel("probes")
+plt.ylabel(u"W/m²")
+
+fig = plt.gcf()
+plt.show()
+
+exit()
 
 """
 print 'mean albedo: 102_w', np.mean(a102_1nm)
