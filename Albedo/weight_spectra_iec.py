@@ -1,23 +1,13 @@
 # -*- coding: utf-8 -*-
 import os, csv
-import numpy as np
 import datetime as dt
-import matplotlib.pyplot as plt
 import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
 #import plotly.plotly as py  # tools to communicate with Plotly's server
 
+#READING and PREPARING INPUT DATA
 directory = "D:/_URBANIA/METDATA/GerhardPeharz_Johanneum/2_raw"
-#http://rredc.nrel.gov/solar/spectra/am1.5/astmg173/astmg173.html
-#0 Wvlgth nm
-#1 Etr W*m-2*nm-1  Extraterrestrial Radiation (solar spectrum at TOA) at mean Earth Sun distance
-#2 Global tilt  W*m-2*nm-1  Spectral radiation from solar disk plus sky diffuse and diffuse reflected from ground on south facing surface tilted 37deg from horizontal
-#3 Direct+circumsolar W*m-2*nm-1  Direct=Direct Normal Irradiance Nearly parallel (0.5 deg divergent cone) radiation on surface with surface normal tracking (pointing to) the sun, excluding scattered sky and reflected ground radiation
-#Circumsolar=Spectral irradiance within +/- 2.5 degree (5 degree diameter) field of view centered on the 0.5 deg diameter solar disk, but excluding the radiation from the disk
-#
-#
-#spec = "ASTMG173_2.csv"
-spec = "IECNorm 60904-3/82_1071e_FDIS.xlsx"
-
 mea1 = "2017_04_21_Reflexion_Betonproben.txt"
 mea2_diff = "2017_05_26_Betonproben_R_DIFF.txt"
 mea2_tis = "2017_05_26_Betonproben_R_TIS.txt" #TIS = total integrated sphere
@@ -25,26 +15,24 @@ meas1 = os.path.join(directory, mea1)
 meas2_diff = os.path.join(directory, mea2_diff)
 meas2_tis = os.path.join(directory, mea2_tis)
 
+#spec = "ASTMG173_2.csv"
+spec = "IECNorm 60904-3/82_1071e_FDIS.xlsx"
 spectrum = os.path.join(directory, spec)
 #Spec1 = pd.read_csv(spectrum, skiprows=1,index_col=0) #delta 0.5 nm
-
 Spec2 = pd.read_excel(spectrum, sheetname="Sheet1", skiprows=2)#, header=2, skip_footer=0, index_col=None, names=None, parse_cols=None, parse_dates=False, date_parser=None, na_values=None, thousands=None, convert_float=True, has_index_names=None, converters=None, dtype=None, true_values=None, false_values=None, engine=None, squeeze=False, **kwds)[source]
 #print Spec2.ix[1] #first row
 #print Spec2.iloc[:, 0] #nanometer
 #print Spec2.iloc[:, 1] #global spectral irradiance
-
 #print 280%10
 #print 280.5%10
 #print Spec2.iloc[:,1].size #2007
 
 Spec2_10nm = pd.DataFrame(index=range(280,4010,10),columns=["Wm2"])
 Spec2_10nm = Spec2_10nm.fillna(0)
-#print Spec2_10nm
 n = Spec2.iloc[:,0].size
 m = Spec2_10nm.iloc[:,0].size
 #print n,m
 #print Spec2_10nm.iloc[:,0].head()
-
 #print 2002, Spec2.iloc[2002,0], Spec2.iloc[2002,1] #"yes"
 
 j=0
@@ -257,9 +245,6 @@ weight_tuples = [((u"Gehwege",u"Normalbeton, Besenstrich"), Meas2_tis_d10nm2['10
                 ((u"Stasse hochrangig",u"Straßenbeton , Waschbetonstruktur"), Meas2_tis_d10nm2['303_w'],Meas2_tis_d10nm2.iloc[:,4]/100),
                 ((u"Stasse hochrangig",u"Straßenbeton hell, Waschbetonstruktur"), Meas2_tis_d10nm2['403_w'],Meas2_tis_d10nm2.iloc[:,6]/100)]
 
-
-
-
 #http://www.intl-light.com/handbookthanks.html - Referenzen in "OSA Handbook of Optics"
 lambda_day = [(380,0.000039), (390, 0.000120), (400, 0.000396), (410, 0.001210),(420, 0.004000),
     (430,     0.011600),    (440,     0.023000),    (450,     0.038000),    (460,     0.060000),
@@ -314,12 +299,6 @@ for i in weight_tuples:
 
 print eye_r, total_ir
 
-import matplotlib.pyplot as plt
-import numpy as np
-
-import plotly.plotly as py
-# Learn about API authentication here: https://plot.ly/python/getting-started
-# Find your api_key here: https://plot.ly/settings/api
 
 x = eye_r
 y = range(1,len(eye_r))
@@ -334,7 +313,7 @@ plt.ylabel(u"W/m²")
 fig = plt.gcf()
 plt.show()
 
-exit()
+#exit()
 
 """
 print 'mean albedo: 102_w', np.mean(a102_1nm)
@@ -344,9 +323,6 @@ print 'integrated irradiance: 102_w', np.trapz(w102_1nm)
 print 'integrated irradiance: total', np.trapz(total_irrad)
 print 'integrated albedo?: 102,w ',  np.trapz(w102_1nm)/np.trapz(total_irrad)
 """
-
-
-exit()
 
 print "w102","w201","w301","w401","w303","w403"
 print np.sum(w102),np.sum(w201),np.sum(w301),np.sum(w401),np.sum(w303),np.sum(w403)
@@ -421,7 +397,7 @@ ax3.set_xticks(minor_ticks, minor=True)
 ax3.grid(b=True, which='major', color='black', linestyle=':')
 ax3.grid(b=True, which='minor', color='black', linestyle=':')
 ax3.get_xaxis().set_ticklabels([])
-ax3.set_ylabel(u"Reflected Spectral Irradiance[W/m²/nm]")
+ax3.set_ylabel(u"IECNorm Weighted, Spectral Reflection [0-1]")
 ax3.set_ylim(0,1)
 ax3.legend()
 

@@ -3,6 +3,9 @@ journal.idojaras@met.hu
 
 The influence of vegetation on radiation balance of urban surfaces
 
+INTRODUCTION
+(Marco Schmidt, TU Berlin?)
+
 METHODS
 site
 	
