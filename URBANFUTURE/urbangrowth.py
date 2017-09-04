@@ -16,7 +16,7 @@ MASK2a = georaster.SingleBandRaster('D:/_URBANIA/GEODATA/PGO/stadtregionp45_Stru
 
 plt.imshow(MASK1.r, extent=MASK1.extent)
 
-exit()
+#exit()
 
 
 #test = random.sample([[1,2],[3,4],[5,6]], 1)
