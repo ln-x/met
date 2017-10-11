@@ -1,0 +1,37 @@
+***
+University of Bergen
+SURFEX licence
+Geophysical institute - SMOS assimilation into SURFEX
+
+***
+NANSEN - Environmental and Remote Sensing Center
+https://www.nersc.no/about
+Bergen
+
+***
+MET-Norway
+Oslo
+SURFEX - CROCUS, SICE (simple ice scheme)
+ - Norwegian Water Ressources and Energy Directorate (NVE) Dagrun Vikhamar-Schuler and Karsten Müller1
+ - github -> SURFEX forcing
+
+***
+NILU - Norwegian Institute of Air Research (Norsk instiutt for luftforskning)
+Oslo, Tromsö
+http://www.nilu.no/OmNILU/NILUiFramsenteret/tabid/90/Default.aspx
+
+***
+norut
+Northern Research Insitute
+Tromsö
+
+
+People:
+Jostein Blyverket - Univ.Bergen/NILU, SURFEX+MEGAN
+http://smw.geo.tuwien.ac.at/fileadmin/editors/SMworkshop/presentations/Day1/Session3/03_Blyverket.pdf
+
+Marie DUMPONT - Equipe Manteau neigeux/CNRM, davor: Postdoc Norwegian Polar Institute, Tromso
+https://www.umr-cnrm.fr/spip.php?article632&lang=fr
+
+Andreas STOHL - NILU
+https://folk.nilu.no/~andreas/
