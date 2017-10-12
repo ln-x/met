@@ -205,6 +205,13 @@ def Eye_response(a):
 
 #Eye_response((u"Gehwege",u"Normalbeton, Besenstrich"), Meas2_tis_d10nm['102_w'],Meas2_tis_d10nm.iloc[:,0]/100)
 
+#TI TEST
+Ls = 63.8
+Lfx = 638.61
+TI = 95 * Ls / Lfx**1.05
+print TI
+exit()
+
 eye_r = []
 total_ir = []
 weight_i =[]
@@ -386,3 +393,5 @@ plt.show()
 #print Spec1.iloc[:,2]
 #print Spec1_d10nm.iloc[:]
 #print Spec1_d10nm.iloc[:,2]
+
+
