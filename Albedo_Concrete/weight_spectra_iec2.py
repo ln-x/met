@@ -151,6 +151,9 @@ w401 = np.array(Meas2_tis_d10nm.loc[:,'401_w'])
 w303 = np.array(Meas2_tis_d10nm.loc[:,'303_w'])
 w403 = np.array(Meas2_tis_d10nm.loc[:,'403_w'])
 
+print len(w102), (2500-300)/10
+exit()
+
 weight_tuples = [((u"Gehwege,Normalbeton, Besenstrich"), Meas2_tis_d10nm['102_w'],Meas2_tis_d10nm.iloc[:,0]/100),
                 ((u"Gehwege,Normalbeton hell, Besenstrich"), Meas2_tis_d10nm['201_w'],Meas2_tis_d10nm.iloc[:,1]/100),
                 ((u"nicht befahrbare Betonfäche,Normalbeton, glatt abgezogen"), Meas1['101_w'],Meas1.iloc[:,9]/100),
