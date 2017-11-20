@@ -1,0 +1,32 @@
+http://www.met.hu/en/ismeret-tar/kiadvanyok/idojaras/
+journal.idojaras@met.hu
+
+The influence of vegetation on radiation balance of urban surfaces
+
+INTRODUCTION
+(Marco Schmidt, TU Berlin?)
+
+METHODS
+site
+	
+measurements
+ - albedo
+ - visual photography
+ - thermal photography
+
+ simulations
+ - TEB greenroof
+ - TEB/ISBA (SURFEX)
+
+RESULTS
+
+reflective properties and shortwave radiation balance
+ - influence of grey value: substrate/plants on albedo
+ - influence of vegetation and surface roughness on albedo
+ 
+long wave radiation balance
+ - influence humidity
+ - albedo 
+ 
+ 
+
