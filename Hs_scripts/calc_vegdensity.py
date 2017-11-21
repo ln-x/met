@@ -10,22 +10,40 @@ VegCodes = Data.iloc[:,5:69] #other methods: del Data['Longitude', ..] OR #Data.
 #Replace each LC_Code (columns Veg1_NE bis Veg9_NW) in Data with "Density (0-1)" from Codes
 #print Codes.head()
 #print VegCodes.values[0,1]
-line = Codes.loc[[101]]  #also works: line2 = Codes.iloc[[101]]
+#line = Codes.loc[[101]]  #also works: line2 = Codes.iloc[[101]]
 index = int(VegCodes.values[0,1] - 99)
 vegdens1 = Codes.iloc[index,2] #also works: vegdens1 = Codes.iloc[88,2]
 #print line.head()
 
-VegDens = pd.DataFrame()
-for i in VegCodes.values[0]:
-    print i
-    lc_code = int(i)
-    index = int(VegCodes.values[0, lc_code] - 99)
-    #print index
-    #VegDens.values[0,i] = Codes.values[index,2]
+#AVERAGE VEGETATION PARAMETER AT SPECIFIC KM
+def AverageVegParamAtKM(i):
+    VegDen = 0
+    VegHei = 0
+    Counter = 0
+    for i in VegCodes.values[i]:
+        lc_code = int(i)
+        if i > 0:
+            index = lc_code -99
+            VegDen += Codes.iloc[index,2]
+            VegHei += Codes.iloc[index,1]
+            Counter +=1
+        else: pass
+    return (VegDen/Counter), (VegHei/Counter)
 
-print VegDens
-    #VegDens.values[0,i] = Codes.values[int(Data.values[0,i]),2]
+#print AverageVegParamAtKM(18)
 
-#for i in Stream_KM:
-#
-#    Data.Veg1_NE[0]
+VegDenT = 0
+VegDenTArray = []
+VegHeiT = 0
+Counter = 0
+for j in range(102):
+    if (AverageVegParamAtKM(j)[1] > 0):   #vegetation height treshold
+        #print AverageVegParamAtKM(j)[1]
+        VegDenT += AverageVegParamAtKM(j)[0]
+        VegHeiT += AverageVegParamAtKM(j)[1]
+        Counter += 1
+        VegDenTArray.append(AverageVegParamAtKM(j)[0])
+    else: pass
+
+print (VegDenT/Counter), (VegHeiT/Counter), np.std(VegDenTArray,ddof=1), np.max(VegDenTArray), np.min(VegDenTArray)
+
