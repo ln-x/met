@@ -1,0 +1,188 @@
+Land Cover Name,Code,Height (m),Density (0-1),Overhang (m)
+emergent,0,0,0,0
+agriculture_h>2_d5_OH0,100,2.5,0.9,0
+agriculture_h0-1_d5_OH0,101,0.5,0.9,0
+agriculture_h0-5_d1_OH0,102,1,0.03,0
+agriculture_h0-5_d2_OH0,103,4,0.2,0
+agriculture_h0-5_d2_OH0-0.5,104,4,0.2,0.5
+agriculture_h0-5_d3_OH0,105,4,0.5,0
+agriculture_h0-5_d3_OH0-0.5,106,4,0.5,0.5
+agriculture_h0-5_d4_OH0,107,4,0.7,0
+agriculture_h0-5_d5_OH0,108,4,0.9,0
+agriculture_h10-20_d1_OH0,109,15,0.03,0
+agriculture_h10-20_d2_OH0,110,15,0.2,0
+agriculture_h10-20_d2_OH0-0.5,111,15,0.2,0.5
+agriculture_h10-20_d2_OH1-2.5,112,15,0.2,1.8
+agriculture_h10-20_d3_OH0,113,15,0.5,0
+agriculture_h10-20_d3_OH0-0.5,114,15,0.5,0.5
+agriculture_h10-20_d3_OH1-2.5,115,15,0.5,1.8
+agriculture_h10-20_d3_OH3-5,116,15,0.5,4
+agriculture_h10-20_d3_OH6-8,117,15,0.5,7
+agriculture_h10-20_d4_OH0,118,15,0.7,0
+agriculture_h1-2_d5_OH0,119,1.5,0.9,0
+agriculture_h20-30_d2_OH0,120,25,0.2,0
+agriculture_h20-30_d3_OH0,121,25,0.5,0
+agriculture_h30-40_d1_OH0,122,35,0.03,0
+agriculture_h30-40_d2_OH0,123,35,0.2,0
+agriculture_h5-10_d1_OH0,124,8,0.03,0
+agriculture_h5-10_d2_OH0,125,8,0.2,0
+agriculture_h5-10_d2_OH0-0.5,126,8,0.2,0.5
+agriculture_h5-10_d3_OH0,127,8,0.5,0
+agriculture_h5-10_d3_OH1-2.5,128,8,0.5,1.8
+agriculture_h5-10_d3_OH3-5,129,8,0.5,4
+agriculture_h5-10_d4_OH0,130,8,0.7,0
+agriculture_h5-10_d4_OH0-0.5,131,8,0.7,0.5
+agriculture_h5-10_d5_OH0,132,8,0.9,0
+artificial cover_h1_d6_OH50,133,1,0.99,50
+buildings_h0-5_d6_OH0,134,4,0.99,0
+buildings_h10-20_d6_OH0,135,15,0.99,0
+buildings_h5-10_d6_OH0,136,8,0.99,0
+commercial forest_h0-5_d1_OH0,137,4,0.03,0
+commercial forest_h0-5_d2_OH0,138,4,0.2,0
+commercial forest_h0-5_d2_OH0-0.5,139,4,0.2,0.5
+commercial forest_h0-5_d3_OH0,140,4,0.5,0
+commercial forest_h0-5_d3_OH0-0.5,141,4,0.5,0.5
+commercial forest_h0-5_d4_OH0,142,4,0.7,0
+commercial forest_h0-5_d5_OH0,143,4,0.9,0
+commercial forest_h0-5_d5_OH0-0.5,144,4,0.9,0.5
+commercial forest_h10-20_d2_OH0,145,15,0.2,0
+commercial forest_h10-20_d2_OH1-2.5,146,15,0.2,1.8
+commercial forest_h10-20_d3_OH0,147,15,0.5,0
+commercial forest_h10-20_d3_OH1-2.5,148,15,0.5,1.8
+commercial forest_h10-20_d4_OH0,149,15,0.7,0
+commercial forest_h10-20_d4_OH1-2.5,150,15,0.7,1.8
+commercial forest_h10-20_d4_OH3-5,151,15,0.7,4
+commercial forest_h10-20_d5_OH0,152,15,0.9,0
+commercial forest_h10-20_d5_OH0-0.5,153,15,0.9,0.5
+commercial forest_h10-20_d5_OH1-2.5,154,15,0.9,1.8
+commercial forest_h10-20_d5_OH3-5,155,15,0.9,4
+commercial forest_h20-30_d1_OH0,156,25,0.03,0
+commercial forest_h20-30_d2_OH0-0.5,157,25,0.2,0.5
+commercial forest_h20-30_d3_OH0,158,25,0.5,0
+commercial forest_h20-30_d3_OH1-2.5,159,25,0.5,1.8
+commercial forest_h20-30_d4_OH0,160,25,0.7,0
+commercial forest_h20-30_d4_OH0-0.5,161,25,0.7,0.5
+commercial forest_h20-30_d4_OH1-2.5,162,25,0.7,1.8
+commercial forest_h20-30_d4_OH3-5,163,25,0.7,4
+commercial forest_h20-30_d4_OH6-8,164,25,0.7,7
+commercial forest_h20-30_d5_OH0,165,25,0.9,0
+commercial forest_h20-30_d5_OH0-0.5,166,25,0.9,0.5
+commercial forest_h20-30_d5_OH1-2.5,167,25,0.9,1.8
+commercial forest_h20-30_d5_OH3-5,168,25,0.9,4
+commercial forest_h30-40_d2_OH1-2.5,169,35,0.2,1.8
+commercial forest_h30-40_d3_OH0,170,35,0.5,0
+commercial forest_h30-40_d4_OH0,171,35,0.7,0
+commercial forest_h30-40_d4_OH0-0.5,172,35,0.7,0.5
+commercial forest_h30-40_d4_OH1-2.5,173,35,0.7,1.8
+commercial forest_h30-40_d4_OH3-5,174,35,0.7,4
+commercial forest_h30-40_d5_OH0,175,35,0.9,0
+commercial forest_h30-40_d5_OH1-2.5,176,35,0.9,1.8
+commercial forest_h30-40_d5_OH3-5,177,35,0.9,4
+commercial forest_h5-10_d2_OH0,178,8,0.2,0
+commercial forest_h5-10_d2_OH0-0.5,179,8,0.2,0.5
+commercial forest_h5-10_d3_OH0-0.5,180,8,0.5,0.5
+commercial forest_h5-10_d4_OH0,181,8,0.7,0
+commercial forest_h5-10_d4_OH0-0.5,182,8,0.7,0.5
+commercial forest_h5-10_d4_OH1-2.5,183,8,0.7,1.8
+commercial forest_h5-10_d5_OH0,184,8,0.9,0
+commercial forest_h5-10_d5_OH0-0.5,185,8,0.9,0.5
+commercial forest_h5-10_d5_OH1-2.5,186,8,0.9,1.8
+empty spaces artificial_h0_d0_OH0,187,0,0,0
+empty spaces natural_h0_d0_OH0,188,0,0,0
+garden_leisure_h0-1_d5_OH0,189,1.5,0.05,0
+garden_leisure_h0-5_d1_OH0,190,4,0.01,0
+garden_leisure_h0-5_d2_OH0,191,4,0.02,0
+garden_leisure_h0-5_d3_OH0,192,4,0.03,0
+garden_leisure_h0-5_d4_OH0,193,4,0.04,0
+garden_leisure_h0-5_d5_OH0,194,4,0.05,0
+garden_leisure_h10-20_d1_OH0,195,15,0.01,0
+garden_leisure_h10-20_d2_OH0,196,15,0.02,0
+garden_leisure_h10-20_d2_OH0-0.5,197,15,0.02,0.5
+garden_leisure_h10-20_d3_OH0,198,15,0.03,0
+garden_leisure_h10-20_d3_OH0-0.5,199,15,0.03,0.5
+garden_leisure_h10-20_d3_OH1-2.5,200,15,0.03,1.8
+garden_leisure_h10-20_d4_OH0,201,15,0.04,0
+garden_leisure_h10-20_d5_OH0,202,15,0.05,0
+garden_leisure_h1-2_d5_OH0,203,1.5,0.05,0
+garden_leisure_h20-30_d4_OH0,204,25,0.04,0
+garden_leisure_h5-10_d1_OH0,205,8,0.01,0
+garden_leisure_h5-10_d2_OH0,206,8,0.02,0
+garden_leisure_h5-10_d2_OH0-0.5,207,8,0.02,0.5
+garden_leisure_h5-10_d2_OH1-2.5,208,8,0.02,1.8
+garden_leisure_h5-10_d3_OH0,209,8,0.03,0
+garden_leisure_h5-10_d4_OH0,210,8,0.04,0
+garden_leisure_h5-10_d4_OH0-0.5,211,8,0.04,0.5
+garden_leisure_h5-10_d5_OH0,212,8,0.05,0
+riparian vegetation_h>2_d5_OH0,213,2.5,0.9,0
+riparian vegetation_h0-1_d5_OH0,214,0.5,0.9,0
+riparian vegetation_h0-5_d1_OH0,215,4,0.03,0
+riparian vegetation_h0-5_d1_OH0-0.5,216,4,0.03,0.5
+riparian vegetation_h0-5_d1_OH1-2.5,217,4,0.03,1.8
+riparian vegetation_h0-5_d2_OH0,218,4,0.2,0
+riparian vegetation_h0-5_d2_OH0-0.5,219,4,0.2,0.5
+riparian vegetation_h0-5_d2_OH1-2.5,220,4,0.2,1.8
+riparian vegetation_h0-5_d3_OH0,221,4,0.5,0
+riparian vegetation_h0-5_d3_OH0-0.5,222,4,0.5,0.5
+riparian vegetation_h0-5_d3_OH1-2.5,223,4,0.5,1.8
+riparian vegetation_h0-5_d4_OH0,224,4,0.7,0
+riparian vegetation_h0-5_d4_OH0-0.5,225,4,0.7,0.5
+riparian vegetation_h0-5_d4_OH1-2.5,226,4,0.7,1.8
+riparian vegetation_h0-5_d5_OH0,227,4,0.9,0
+riparian vegetation_h0-5_d5_OH0-0.5,228,4,0.9,0.5
+riparian vegetation_h0-5_d5_OH1-2.5,229,4,0.9,1.8
+riparian vegetation_h10-20_d1_OH0,230,15,0.03,0
+riparian vegetation_h10-20_d2_OH0,231,15,0.2,0
+riparian vegetation_h10-20_d2_OH0-0.5,232,15,0.2,0.5
+riparian vegetation_h10-20_d2_OH1-2.5,233,15,0.2,1.8
+riparian vegetation_h10-20_d3_OH0,234,15,0.5,0
+riparian vegetation_h10-20_d3_OH0-0.5,235,15,0.5,0.5
+riparian vegetation_h10-20_d3_OH1-2.5,236,15,0.5,1.8
+riparian vegetation_h10-20_d3_OH3-5,237,15,0.5,4
+riparian vegetation_h10-20_d3_OH6-8,238,15,0.5,7
+riparian vegetation_h10-20_d4_OH0,239,15,0.7,0
+riparian vegetation_h10-20_d4_OH0-0.5,240,15,0.7,0.5
+riparian vegetation_h10-20_d4_OH1-2.5,241,15,0.7,1.8
+riparian vegetation_h10-20_d4_OH3-5,242,15,0.7,4
+riparian vegetation_h10-20_d4_OH6-8,243,15,0.7,7
+riparian vegetation_h10-20_d5_OH0,244,15,0.9,0
+riparian vegetation_h10-20_d5_OH0-0.5,245,15,0.9,0.5
+riparian vegetation_h10-20_d5_OH1-2.5,246,15,0.9,1.8
+riparian vegetation_h10-20_d5_OH3-5,247,15,0.9,4
+riparian vegetation_h10-20_d5_OH6-8,248,15,0.9,7
+riparian vegetation_h1-2_d5_OH0,249,1.5,0.9,0
+riparian vegetation_h20-30_d1_OH0,250,25,0.03,0
+riparian vegetation_h20-30_d2_OH0,251,25,0.2,0
+riparian vegetation_h20-30_d2_OH1-2.5,252,25,0.2,1.8
+riparian vegetation_h20-30_d3_OH0,253,25,0.5,0
+riparian vegetation_h20-30_d3_OH0-0.5,254,25,0.5,0.5
+riparian vegetation_h20-30_d3_OH1-2.5,255,25,0.5,1.8
+riparian vegetation_h20-30_d3_OH3-5,256,25,0.5,4
+riparian vegetation_h20-30_d4_OH0,257,25,0.7,0
+riparian vegetation_h20-30_d4_OH0-0.5,258,25,0.7,0.5
+riparian vegetation_h20-30_d4_OH1-2.5,259,25,0.7,1.8
+riparian vegetation_h20-30_d4_OH3-5,260,25,0.7,4
+riparian vegetation_h20-30_d4_OH6-8,261,25,0.7,7
+riparian vegetation_h20-30_d5_OH0,262,25,0.9,0
+riparian vegetation_h20-30_d5_OH0-0.5,263,25,0.9,0.5
+riparian vegetation_h20-30_d5_OH1-2.5,264,25,0.9,1.8
+riparian vegetation_h20-30_d5_OH3-5,265,25,0.9,4
+riparian vegetation_h20-30_d5_OH6-8,266,25,0.9,7
+riparian vegetation_h5-10_d1_OH0,267,8,0.03,0
+riparian vegetation_h5-10_d1_OH0-0.5,268,8,0.03,0.5
+riparian vegetation_h5-10_d1_OH1-2.5,269,8,0.03,1.8
+riparian vegetation_h5-10_d2_OH0,270,8,0.2,0
+riparian vegetation_h5-10_d2_OH0-0.5,271,8,0.2,0.5
+riparian vegetation_h5-10_d2_OH1-2.5,272,8,0.2,1.8
+riparian vegetation_h5-10_d3_OH0,273,8,0.5,0
+riparian vegetation_h5-10_d3_OH0-0.5,274,8,0.5,0.5
+riparian vegetation_h5-10_d3_OH1-2.5,275,8,0.5,1.8
+riparian vegetation_h5-10_d3_OH3-5,276,8,0.5,4
+riparian vegetation_h5-10_d3_OH6-8,277,8,0.5,7
+riparian vegetation_h5-10_d4_OH0,278,8,0.7,0
+riparian vegetation_h5-10_d4_OH0-0.5,279,8,0.7,0.5
+riparian vegetation_h5-10_d4_OH1-2.5,280,8,0.7,1.8
+riparian vegetation_h5-10_d4_OH3-5,281,8,0.7,4
+riparian vegetation_h5-10_d5_OH0,282,8,0.9,0
+riparian vegetation_h5-10_d5_OH1-2.5,283,8,0.9,1.8
+riparian vegetation_h5-10_d5_OH3-5,284,8,0.9,4
+riparian vegetation_h5-10_d5_OH6-8,285,8,0.9,7

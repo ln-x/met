@@ -1,5 +1,5 @@
-__author__ = 'lnx'
 # -*- coding: utf-8 -*-
+__author__ = 'lnx'
 
 from pylab import *
 import matplotlib.pyplot as plt
