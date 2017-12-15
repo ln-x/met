@@ -22,7 +22,14 @@ def calc_coordinates(coord):
         coor_deg = deg + min/60 + sec/3600
         #print coor_deg
         latlon.append(coor_deg)
-    return latlon
+    #latlon = calc_coordinates([162201, 481154])
+    dxx = (latlon[0] - 16.372) / 0.00328
+    dyy = (latlon[1] - 48.2414245) / 0.00328
+    #print dxx, dyy
+    xx = 87 + dxx
+    yy = 67.5 + dyy
+    #print xx, yy
+    return round(xx,1), round(yy,1), latlon
 
 print "11034 Wien-Innere Stadt", calc_coordinates([162201,481154])
 print "11035 Wien-Hohe Warte", calc_coordinates([162123,481455])
@@ -33,21 +40,11 @@ print "11042 Wien-Stammersdorf", calc_coordinates([162420,481821])
 print "11077 Brunn am Gebirge", calc_coordinates([161612,480625])
 print "11080 Wien-Mariabrunn", calc_coordinates([161346,481225])
 print "11090 Wien-Donaufeld", calc_coordinates([162553,481526])
-
-
 """    
 xx_center = 87x = 16.372°
 yy_center = 67.5y = 48.2414245° 
 1 degree = 111.325km 
-0.00328° = 333m = 1x = 1y
+0.00328° = 333m = 1x = 1y ?
+0.002991242
+0.000008983 = 1m
 """
-latlon = calc_coordinates([162201,481154])
-dxx = (latlon[0] -16.372)/0.00328
-dyy = (latlon[1] -48.2414245)/0.00328
-
-print dxx, dyy
-
-xx = 87 + dxx
-yy = 67.5 + dyy
-
-print xx,yy

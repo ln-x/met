@@ -6,7 +6,7 @@ def loadfile2(filename):
         #print len(alldata)
         #print type(alldata)
 
-    data = alldata[:]  #Liste ab [7:]8.Zeile der alten Liste - Beginn der Rohdaten
+    data = alldata[27:-13]  #Liste ab [7:]8.Zeile der alten Liste - Beginn der Rohdaten
 
     splitdata = []       #splitlistcomp = [i.split() for i in data]
     for i in data:
@@ -18,7 +18,7 @@ def loadfile2(filename):
     for i in splitdata:
         for j in i:
             #print j
-            value = (float(j[:16]) - 273.15)
+            value = (float(j[:12]) - 273.15)
             #print value
             converted.append(value)
     #print converted
