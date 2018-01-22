@@ -14,10 +14,17 @@ TBW = 1             #Tageslichtblendungswahrscheinlichkeit
 alpha = 0           #Winkel zwischen Bildebene und Blickrichtung
 beta = 0            #Winkel zwischen Blickrichtung und Blendstrahl
 P = 1               #Positionsindex zwischen Blendquelle oberhalb der Augenebene
-
+# Ls = Schleierleuchtdichte [cd/m²]
+Lfx = 10000          #Fahrbahnleuchtdichte [cd/m²]
+# TI = Schwellwerterhöhung - soll 15% nicht übersteigen!
 Ls = EB*( (10/theta**3) + (5/theta**2)+0.1**(Pi/theta) * (1+(Alter/62.5)**4) +0.0025*Pi)
+
+Ls = 1000
 #P= np.exp[(35.2 - 0.31889*alpha - 0.0122*alpha/9)*10-3*beta +(21+0.26667*alpha - 0.002936*alpha**2)*10-5*beta**2]
-TBW1 = sum((Ls**2 *Ws)/((Ev**1.87)* P**2))
+#TBW1 = sum((Ls**2 *Ws)/((Ev**1.87)* P**2))
+TBW1 = (Ls**2 *Ws)/((Ev**1.87)* P**2)
 TBW = 5.87 * 10**-5 * Ev + 0.918 * np.log10(1+TBW1) +0.16
 
-print round(Ls,2), round(P,2), round(TBW1,2)
+TI = 95*Ls/(Lfx**1.05)
+
+print round(Ls,2), round(TBW,2), round(TBW1,2), round(TI,2)

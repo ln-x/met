@@ -90,6 +90,15 @@ WT_2085_diff_max = (WT_max_2085_V0_max - WT_max_2085_V100_max)
 Diff_2085_mean = WT_max_2085_mean - WT_mean
 Diff_2085_max = WT_max_2085_max - WT_max
 
+print mean(WT_2030_mean_max_diff)
+print mean(WT_2050_mean_max_diff)
+print mean(WT_2085_mean_max_diff)
+
+print max(WT_2030_mean_max_diff)
+print max(WT_2050_mean_max_diff)
+print max(WT_2085_mean_max_diff)
+
+exit()
 
 print WT_2030_V0_diff[19]
 print WT_2030_V100_diff[19]

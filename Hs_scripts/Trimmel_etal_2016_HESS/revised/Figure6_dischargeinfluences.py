@@ -1,5 +1,5 @@
-__author__ = 'lnx'
 # -*- coding: utf-8 -*-
+__author__ = 'lnx'
 #DFS20 - V01995 - V701995 - V1001995 - MLF
 #DFS20 - V02085 - V702085 - V1002085 - MLF
 #DFS20 - V02085 - V702085 - V1002085 - MLF*0.85
@@ -56,7 +56,7 @@ ax.plot(WT_20a_2085_Ev_V0['80.000'][-24:], linestyle='-', color = 'green', label
 ax.plot(WT_20a_2085_Cd_V0['80.000'][-24:], linestyle='-', color = 'violet', label='Cd')
 plt.setp(ax.get_xticklabels(), visible=False)
 ax.set_ylim([-750,750])
-ax.set_ylabel(u'energy flux [W/m²]', fontsize='large')
+ax.set_ylabel(u'[W/m²]', fontsize='large')
 ax2 = ax.twinx()
 ax2.plot(WT_20a_2085_V0['80.000'][-24:], linestyle='-', color = 'blue', label='WT')
 ax2.plot(WT_20a_2085_V0_085MLF['80.000'][-24:], linestyle='--', color = 'blue', label='WT')
@@ -77,7 +77,7 @@ ax2.plot(WT_20a_2085_V0['39.000'][-24:], linestyle='-', color = 'blue', label='W
 ax2.plot(WT_20a_2085_V0_085MLF['39.000'][-24:], linestyle='--', color = 'blue', label='WT')
 plt.setp(ax.get_yticklabels(), visible=False)
 ax2.set_ylim([20,30])
-ax2.set_ylabel(u'water temperature [°C]', fontsize='large')
+ax2.set_ylabel(u'Water temperature [°C]', fontsize='large')
 
 
 ax = fig.add_subplot(223)
@@ -91,8 +91,8 @@ ax.plot(WT_20a_2085_Cv_V100_085MLF['80.000'][-24:], linestyle='-', color = 'red'
 ax.plot(WT_20a_2085_Ev_V100_085MLF['80.000'][-24:], linestyle='-', color = 'green', label='Ev')
 ax.plot(WT_20a_2085_Cd_V100_085MLF['80.000'][-24:], linestyle='-', color = 'violet', label='Cd')
 #plt.setp(ax.get_xticklabels(), visible=False)
-ax.set_xlabel('time [h]', fontsize='large')
-ax.set_ylabel(u'energy flux [W/m²]', fontsize='large')
+ax.set_xlabel('Time [h]', fontsize='large')
+ax.set_ylabel(u'[W/m²]', fontsize='large')
 ax.set_ylim([-750,750])
 ax2 = ax.twinx()
 ax2.plot(WT_20a_2085_V100['80.000'][-24:], linestyle='-', color = 'blue', label='WT')
@@ -118,7 +118,7 @@ ax2.plot(WT_20a_2085_V100['38.000'][-24:], linestyle='-', color = 'blue', label=
 ax2.plot(WT_20a_2085_V100_085MLF['38.000'][-24:], linestyle='--', color = 'blue', label='WT')
 ax2.set_ylim([20,30])
 ax.set_ylim([-750,750])
-ax2.set_ylabel(u'water temperature [°C]', fontsize='large')
-ax.set_xlabel('time [h]', fontsize='large')
+ax2.set_ylabel(u'Water temperature [°C]', fontsize='large')
+ax.set_xlabel('Time [h]', fontsize='large')
 
 plt.show()

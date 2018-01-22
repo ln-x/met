@@ -6,16 +6,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 import csv
-
+file = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/S12_FORC_WRF_333_STQ_2DURBPARAM_long/SURF_ATM_DIAGNOSTICS.OUT.nc'
 #file = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/DIFF_S4_S0_SURF_ATM_D.nc'
-file = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/S0_FORC_WRF_333_STQ_long/SURF_ATM_DIAGNOSTICS.OUT.nc'
+#file = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/S0_FORC_WRF_333_STQ_long/SURF_ATM_DIAGNOSTICS.OUT.nc'
 #file = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/S3_LNX_WRF_333_nGD/SURF_ATM_DIAGNOSTICS.OUT.nc'
 #file = '/home/lnx/MODELS/SURFEX/3_input/met_forcing/FORCING_new.nc'
 fh = Dataset(file, mode='r')
 
 lons = fh.variables['xx'][:]  #lon
 lats = fh.variables['yy'][:]  #lat
-tair = fh.variables['T2M'][73]
+tair = fh.variables['T2M'][55]
 #starts at 17.7.18hUTC [0], hourly ->
 # 18.7.0h [7],6h[13], 12h [19], 14h [21], 18h [42], 6h [54]
 # 20.7.  COLDEST: 0h[55], 5h[60], 6h[61], 12h [67], 14h[69], HOTTEST 15h[70], 18h [73]
@@ -50,6 +50,15 @@ m = Basemap(width=57943,height=44955,\
             lon_0=16.37247,\
             resolution='l')
 
+# Add Grid Lines
+m.drawparallels(np.arange(44.0, 50., 0.1), labels=[1,0,0,0], fontsize=10, linewidth=0.)
+m.drawmeridians(np.arange(14.0, 17., 0.2), labels=[0,0,0,1], fontsize=10, linewidth=0.)
+
+# Add Coastlines, States, and Country Boundaries
+m.drawcoastlines()
+m.drawstates()
+m.drawcountries()
+
 # Because our lon and lat variables are 1D,
 # use meshgrid to create 2D arrays
 # Not necessary if coordinates are already in 2D arrays.
@@ -60,28 +69,24 @@ xi, yi = m(lon, lat)
 #print "lons=", lons, "lats=", lats, "tair=", tair,"lon=", lon, "lat=", lat, "xi=", xi, "yi=", yi
 #print len(lons), len(lats), len(tair[0]), len(lon[0]), len(lat[0]), len(xi[0]),len(yi[0]),
 # Plot Data
-#cs = m.pcolor(xi,yi,np.squeeze(tair))
+
+#clevs = [0,1,2.5,5,7.5,10,15,20,30,40,50,70,100,150,200,250,300,400,500,600,750]
+#cs = m.contourf(x,y,data,clevs,cmap=cm.s3pcpn)
+
 cs = m.pcolor(xi,yi,np.squeeze(tairC))
 
 
-# Add Grid Lines
-m.drawparallels(np.arange(-80., 81., 10.), labels=[1,0,0,0], fontsize=10)
-m.drawmeridians(np.arange(-180., 181., 10.), labels=[0,0,0,1], fontsize=10)
-
-# Add Coastlines, States, and Country Boundaries
-m.drawcoastlines()
-m.drawstates()
-m.drawcountries()
-
 # Add Colorbar
-cbar = m.colorbar(cs, location='bottom', pad="10%")
+cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+
+
 #cbar.set_label(tair_units)
 cbar.set_label(tairC_units)
 
 
 # Add Title
-plt.title('2m Air Temperature - 2015-07-20 18UTC')
-plt.clim(21,32)
+plt.title('2m Air Temperature - 2015-07-20 0UTC')
+plt.clim(21,35)
 
 #plt.clim(-0.7,0.7)
 
