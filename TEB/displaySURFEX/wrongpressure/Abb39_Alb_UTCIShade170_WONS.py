@@ -3,45 +3,58 @@ __author__ = 'lnx'
 
 import pandas as pd
 import matplotlib.pyplot as plt
-from CONVERTSURFEXTEXTE import loadfile
+from TEB.displaySURFEX.CONVERTSURFEXTEXTE_UTCI import loadfile
 import numpy as np
 import datetime
 import matplotlib.gridspec as gridspec
 
-S200 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/200_Kreuzung_A_N/2017_170171/TCANYON.TXT"
-S200ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/200_Kreuzung_A_N/2017_170171NS/TCANYON.TXT"
-S200wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/200_Kreuzung_A_N/2017_170171WO/TCANYON.TXT"
+#PVfile = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/TCANYON.TXT"
+#STQfile = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/TCANYON.TXT"
+#test = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/TCANYON.TXT"
+S100 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/100_Platz_A_N/2017_170/UTCI_OUTSHAD.TXT"
+S101 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/101_Platz_B_N/2017_170/UTCI_OUTSHAD.TXT"
+S102 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/102_Platz_A_A/2017_170/UTCI_OUTSHAD.TXT"
+S103 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/103_Platz_B_B/2017_170/UTCI_OUTSHAD.TXT"
 
-S201 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/201_Kreuzung_B_N/2017_170/TCANYON.TXT"
-S201ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/201_Kreuzung_B_N/2017_170NS/TCANYON.TXT"
-S201wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/201_Kreuzung_B_N/2017_170WO/TCANYON.TXT"
+S200 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/200_Kreuzung_A_N/2017_170/UTCI_OUTSHAD.TXT"
+S200ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/200_Kreuzung_A_N/2017_170NS/UTCI_OUTSHAD.TXT"
+S200wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/200_Kreuzung_A_N/2017_170WO/UTCI_OUTSHAD.TXT"
 
-S202 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/202_Kreuzung_A_A/2017_170/TCANYON.TXT"
-S202ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/202_Kreuzung_A_A/2017_170NS/TCANYON.TXT"
-S202wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/202_Kreuzung_A_A/2017_170WO/TCANYON.TXT"
+S201 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/201_Kreuzung_B_N/2017_170/UTCI_OUTSHAD.TXT"
+S201ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/201_Kreuzung_B_N/2017_170NS/UTCI_OUTSHAD.TXT"
+S201wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/201_Kreuzung_B_N/2017_170WO/UTCI_OUTSHAD.TXT"
 
-S203 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/203_Kreuzung_B_B/2017_170/TCANYON.TXT"
-S203ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/203_Kreuzung_B_B/2017_170NS/TCANYON.TXT"
-S203wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/203_Kreuzung_B_B/2017_170WO/TCANYON.TXT"
+S202 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/202_Kreuzung_A_A/2017_170/UTCI_OUTSHAD.TXT"
+S202ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/202_Kreuzung_A_A/2017_170NS/UTCI_OUTSHAD.TXT"
+S202wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/202_Kreuzung_A_A/2017_170WO/UTCI_OUTSHAD.TXT"
 
-S204 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/204_Kreuzung_B_W/2017_170/TCANYON.TXT"
-S204ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/204_Kreuzung_B_W/2017_170NS/TCANYON.TXT"#
-S204wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/204_Kreuzung_B_W/2017_170WO/TCANYON.TXT"#
+S203 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/203_Kreuzung_B_B/2017_170/UTCI_OUTSHAD.TXT"
+S203ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/203_Kreuzung_B_B/2017_170NS/UTCI_OUTSHAD.TXT"
+S203wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/203_Kreuzung_B_B/2017_170WO/UTCI_OUTSHAD.TXT"
 
-S205 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/205_Kreuzung_W_W/2017_170/TCANYON.TXT"
-S205ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/205_Kreuzung_W_W/2017_170NS/TCANYON.TXT"
-S205wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/205_Kreuzung_W_W/2017_170WO/TCANYON.TXT"
+S204 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/204_Kreuzung_B_W/2017_170/UTCI_OUTSHAD.TXT"
+S204ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/204_Kreuzung_B_W/2017_170NS/UTCI_OUTSHAD.TXT"#
+S204wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/204_Kreuzung_B_W/2017_170WO/UTCI_OUTSHAD.TXT"#
 
-S210 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/210_Kreuzung_A_PV70/2017_170/TCANYON.TXT"
-S210ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/210_Kreuzung_A_PV70/2017_170_NS/TCANYON.TXT"
-S210wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/210_Kreuzung_A_PV70/2017_170_WO/TCANYON.TXT"
+S205 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/205_Kreuzung_W_W/2017_170/UTCI_OUTSHAD.TXT"
+S205ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/205_Kreuzung_W_W/2017_170NS/UTCI_OUTSHAD.TXT"
+S205wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/205_Kreuzung_W_W/2017_170WO/UTCI_OUTSHAD.TXT"
 
-S211 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/211_Kreuzung_B_PV70/2017_170/TCANYON.TXT"
-S211ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/211_Kreuzung_B_PV70/2017_170_NS/TCANYON.TXT"
-S211wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/211_Kreuzung_B_PV70/2017_170_WO/TCANYON.TXT"
+S110 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/110_Platz_A_PV70/2017_170/UTCI_OUTSHAD.TXT"
+S111 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/111_Platz_B_PV70/2017_170/UTCI_OUTSHAD.TXT"
+S112 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/112_Platz_A_PV100/2017_170/UTCI_OUTSHAD.TXT"
+S113 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/113_Platz_B_PV100/2017_170/UTCI_OUTSHAD.TXT"
 
-S212 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/212_Kreuzung_A_PV100/2017_170/TCANYON.TXT"
-S213 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/213_Kreuzung_B_PV100/2017_170/TCANYON.TXT"
+S210 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/210_Kreuzung_A_PV70/2017_170/UTCI_OUTSHAD.TXT"
+S210ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/210_Kreuzung_A_PV70/2017_170_NS/UTCI_OUTSHAD.TXT"
+S210wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/210_Kreuzung_A_PV70/2017_170_WO/UTCI_OUTSHAD.TXT"
+
+S211 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/211_Kreuzung_B_PV70/2017_170/UTCI_OUTSHAD.TXT"
+S211ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/211_Kreuzung_B_PV70/2017_170_NS/UTCI_OUTSHAD.TXT"
+S211wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/211_Kreuzung_B_PV70/2017_170_WO/UTCI_OUTSHAD.TXT"
+
+S212 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/212_Kreuzung_A_PV100/2017_170/UTCI_OUTSHAD.TXT"
+S213 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/213_Kreuzung_B_PV100/2017_170/UTCI_OUTSHAD.TXT"
 
 #FORCfile = "/home/lnx/MODELS/SURFEX/3_input/met_forcing/201706_08_BOKU_ENGBA.txt"
 #PVvalues = loadfile(PVfile)
@@ -49,10 +62,6 @@ S213 = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/ln
 S200values = loadfile(S200)
 S200NSvalues = loadfile(S200ns)
 S200WOvalues = loadfile(S200wo)
-S200whiteroofvalues = loadfile(S200_whiteroof)
-S200NSwhiteroofvalues = loadfile(S200ns_whiteroof)
-S200WOwhiteroofvalues = loadfile(S200wo_whiteroof)
-
 S201values = loadfile(S201)
 S201NSvalues = loadfile(S201ns)
 S201WOvalues = loadfile(S201wo)
@@ -88,6 +97,7 @@ S113values = loadfile(S113)
 #FORCvalues = pd.read_csv(FORCfile, delimiter=r"\s+", skiprows=range(1,720)) #cut only last day = 30.8.2017
 #FORCvalues = FORCvalues[720:]
 #print PVvalues, STQvalues, FORCvalues['Td']
+
 diff101 = np.copy(S100values)
 diff102 = np.copy(S100values)
 diff103 = np.copy(S100values)
@@ -100,7 +110,6 @@ diff210 = np.copy(S100values)
 diff211 = np.copy(S100values)
 diff110 = np.copy(S100values)
 diff111 = np.copy(S100values)
-diff200_whiteroot = np.copy(S100values)
 
 
 for i in range(len(S100values)):
@@ -110,7 +119,6 @@ for i in range(len(S100values)):
        diff110[i] = S110values[i]-S100values[i]
        diff111[i] = S111values[i]-S100values[i]
 
-       diff200_whiteroot[i] = S200whiteroofvalues[i]-S200values[i]
        diff201[i] = S201values[i]-S200values[i]
        diff202[i] = S202values[i]-S200values[i]
        diff203[i] = S203values[i]-S200values[i]
@@ -146,8 +154,6 @@ ax1.set_title(u"Materialien,Straßenorientierung, Canyon:HW1, 19.6.2017")
 ax1.plot(timelist,S202WOvalues, label=r"$\alpha$ :0.13,0.13", color="red")#,linestyle="dashed")
 ax1.plot(timelist,S202NSvalues, color="red",linestyle=":")
 #ax1.plot(timelist,S200values, label="Asphalt,Putz", color="orange")
-ax1.plot(timelist,S200WOwhiteroofvalues, label=r"$\alpha$ :0.13,0.20,0.80", color="black")#,linestyle="dashed")
-ax1.plot(timelist,S200NSwhiteroofvalues, color="pink",linestyle=":")
 ax1.plot(timelist,S200WOvalues, label=r"$\alpha$ :0.13,0.20", color="orange")#,linestyle="dashed")
 ax1.plot(timelist,S200NSvalues, color="orange",linestyle=":")
 #ax1.plot(timelist,S201values, label="Beton,Putz", color="green")
@@ -162,7 +168,7 @@ ax1.plot(timelist,S204NSvalues, color="blue",linestyle=":")
 #ax1.plot(timelist,S205values, label=u"Weiß,Weiß", color="violet")
 ax1.plot(timelist,S205WOvalues, label=r"$\alpha$ :0.80,0.80", color="violet")#,linestyle="dashed")
 ax1.plot(timelist,S205NSvalues, color="violet",linestyle=":")
-ax1.set_ylabel(u'Lufftemperatur 2m [°C]')
+ax1.set_ylabel(u'UTCI Schatten 2m [°C]')
 ax1.legend(loc="lower center",fontsize='small')
 #ax2.plot(timelist,diff201, label="Beton,Putz", color="green")
 #ax2.plot(timelist,diff202, label="Asphalt,dunkle Fassade", color="red")

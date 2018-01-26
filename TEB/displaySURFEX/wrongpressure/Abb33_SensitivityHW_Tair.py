@@ -3,7 +3,7 @@ __author__ = 'lnx'
 
 import pandas as pd
 import matplotlib.pyplot as plt
-from CONVERTSURFEXTEXTE import loadfile
+from TEB.displaySURFEX.CONVERTSURFEXTEXTE import loadfile
 import numpy as np
 import datetime
 import matplotlib.gridspec as gridspec
@@ -166,24 +166,24 @@ gs = gridspec.GridSpec(2, 1,height_ratios=[2,1])
 ax1 = plt.subplot(gs[0])
 ax2 = plt.subplot(gs[1])
 ax1.set_title(u"Einfluss Materialien, Kreuzung - HW1, 19.6.2017")
-#ax1.plot(timelist,S202values, label=u"Asphalt,dunkle Fassade", color="red") #u"α=0.13,0.13"
-ax1.plot(timelist,S202WOvalues, label=r"$\alpha$ :0.13,0.13", color="red",linestyle="dashed")
-ax1.plot(timelist,S202NSvalues, color="red",linestyle=":")
-#ax1.plot(timelist,S200values, label="Asphalt,Putz", color="orange")
-ax1.plot(timelist,S200WOvalues, label=r"$\alpha$ :0.13,0.2", color="orange",linestyle="dashed")
-ax1.plot(timelist,S200NSvalues, color="orange",linestyle=":")
-#ax1.plot(timelist,S201values, label="Beton,Putz", color="green")
-ax1.plot(timelist,S201WOvalues, label=r"$\alpha$ :0.56,0.2", color="green",linestyle="dashed")
-ax1.plot(timelist,S201NSvalues, color="green",linestyle=":")
-#ax1.plot(timelist,S203values, label="Beton,Beton", color="turquoise")
-ax1.plot(timelist,S203WOvalues, label=r"$\alpha$ :0.56,0.56", color="turquoise",linestyle="dashed")
-ax1.plot(timelist,S203NSvalues, color="turquoise",linestyle=":")
-#ax1.plot(timelist,S204values, label=u"Beton,Weiß", color="blue")
-ax1.plot(timelist,S204WOvalues, label=r"$\alpha$ :0.56,0.8", color="blue",linestyle="dashed")
-ax1.plot(timelist,S204NSvalues, color="blue",linestyle=":")
-#ax1.plot(timelist,S205values, label=u"Weiß,Weiß", color="violet")
-ax1.plot(timelist,S205WOvalues, label=r"$\alpha$ :0.8,0.8", color="violet",linestyle=":")
-ax1.plot(timelist,S205NSvalues, color="violet",linestyle="dashed")
+ax1.plot(timelist,S202values, label=u"Asphalt,dunkle Fassade", color="red") #u"α=0.13,0.13"
+#ax1.plot(timelist,S202WOvalues, label=r"$\alpha$ :0.13,0.13", color="red",linestyle="dashed")
+#ax1.plot(timelist,S202NSvalues, color="red",linestyle=":")
+ax1.plot(timelist,S200values, label="Asphalt,Putz", color="orange")
+#ax1.plot(timelist,S200WOvalues, label=r"$\alpha$ :0.13,0.2", color="orange",linestyle="dashed")
+#ax1.plot(timelist,S200NSvalues, color="orange",linestyle=":")
+ax1.plot(timelist,S201values, label="Beton,Putz", color="green")
+#ax1.plot(timelist,S201WOvalues, label=r"$\alpha$ :0.56,0.2", color="green",linestyle="dashed")
+#ax1.plot(timelist,S201NSvalues, color="green",linestyle=":")
+ax1.plot(timelist,S203values, label="Beton,Beton", color="turquoise")
+#ax1.plot(timelist,S203WOvalues, label=r"$\alpha$ :0.56,0.56", color="turquoise",linestyle="dashed")
+#ax1.plot(timelist,S203NSvalues, color="turquoise",linestyle=":")
+ax1.plot(timelist,S204values, label=u"Beton,Weiß", color="blue")
+#ax1.plot(timelist,S204WOvalues, label=r"$\alpha$ :0.56,0.8", color="blue",linestyle="dashed")
+#ax1.plot(timelist,S204NSvalues, color="blue",linestyle=":")
+ax1.plot(timelist,S205values, label=u"Weiß,Weiß", color="violet")
+#ax1.plot(timelist,S205WOvalues, label=r"$\alpha$ :0.8,0.8", color="violet",linestyle=":")
+#ax1.plot(timelist,S205NSvalues, color="violet",linestyle="dashed")
 ax1.set_ylabel(u'Lufftemperatur 2m [°C]')
 ax1.legend(loc="lower center",fontsize='small')
 ax2.plot(timelist,diff201, label="Beton,Putz", color="green")
