@@ -77,9 +77,9 @@ plt.show()
 
 
 '''
-/home/lnx/anaconda3/envs/geoenv/bin/python /home/lnx/PycharmProjects/met/NETCDF/plot_SURFEX_nc.py
+/home/lnx/anaconda3/envs/geoenv/bin/python /home/lnx/PycharmProjects/1_GRUENSTADT/NETCDF/plot_SURFEX_nc.py
 Traceback (most recent call last):
-  File "/home/lnx/PycharmProjects/met/NETCDF/plot_SURFEX_nc.py", line 33, in <module>
+  File "/home/lnx/PycharmProjects/1_GRUENSTADT/NETCDF/plot_SURFEX_nc.py", line 33, in <module>
     xi, yi = m(lon, lat)
   File "/home/lnx/anaconda3/envs/geoenv/lib/python2.7/site-packages/mpl_toolkits/basemap/__init__.py", line 1148, in __call__
     xout,yout = self.projtran(x,y,inverse=inverse)
