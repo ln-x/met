@@ -2,26 +2,26 @@
 __author__ = 'lnx'
 
 import matplotlib.pyplot as plt
-from CONVERTSURFEXTEXTE import loadfile
+from TEB.displaySURFEX.CONVERTSURFEXTEXTE import loadfile
 import datetime
 from matplotlib.dates import DateFormatter
-S200ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N/2016_365366NS/TCANYON.TXT"
-S200wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N/2016_365366WO/TCANYON.TXT"
+S200ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N/2017_170171NS/T2M_TEB.TXT"
+S200wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N/2017_170171WO/T2M_TEB.TXT"
 
-S201ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/201_Can_B_N/2016_365366NS/TCANYON.TXT"
-S201wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/201_Can_B_N/2016_365366WO/TCANYON.TXT"
+S201ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/201_Can_B_N/2017_170171NS/T2M_TEB.TXT"
+S201wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/201_Can_B_N/2017_170171WO/T2M_TEB.TXT"
 
-S205ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/205_Can_W_W/2016_365366NS/TCANYON.TXT"
-S205wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/205_Can_W_W/2016_365366WO/TCANYON.TXT"
+S205ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/205_Can_W_W/2017_170171NS/T2M_TEB.TXT"
+S205wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/205_Can_W_W/2017_170171WO/T2M_TEB.TXT"
 
-S200ns_allwhite = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_allwhite/2016_365366NS/TCANYON.TXT"
-S200wo_allwhite = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_allwhite/2016_365366WO/TCANYON.TXT"
+S200ns_allwhite = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_allwhite/2017_170171NS/T2M_TEB.TXT"
+S200wo_allwhite = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_allwhite/2017_170171WO/T2M_TEB.TXT"
 
-S200ns_horwhite = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_horwhite/2016_365366NS/TCANYON.TXT"
-S200wo_horwhite = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_horwhite/2016_365366WO/TCANYON.TXT"
+S200ns_horwhite = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_horwhite/2017_170171NS/T2M_TEB.TXT"
+S200wo_horwhite = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_horwhite/2017_170171WO/T2M_TEB.TXT"
 
-S200ns_whiteroof = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N_whiteroof/2016_365366NS/TCANYON.TXT"
-S200wo_whiteroof = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N_whiteroof/2016_365366WO/TCANYON.TXT"
+S200ns_whiteroof = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N_whiteroof/2017_170171NS/T2M_TEB.TXT"
+S200wo_whiteroof = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N_whiteroof/2017_170171WO/T2M_TEB.TXT"
 
 S200NSvalues = loadfile(S200ns)
 S200WOvalues = loadfile(S200wo)
@@ -77,7 +77,7 @@ ax1.plot(timelist,S200WOhorwhitevalues, label=r"$\alpha_{g}$:0,56;$\alpha_{w}$:0
 ax1.plot(timelist,S200WOallwhitevalues, label=r"$\alpha_{g}$:0,80;$\alpha_{w}$:0,80;$\alpha_{r}$:0,80 'alles Weiss'", color="blue" )
 #ax1.plot(timelist,S200NSallwhitevalues, color="blue",linestyle=":")
 ax1.set_ylabel(r"$T_{a}$"u'[°C]')
-ax1.legend(loc="upper center",fontsize='small')
+ax1.legend(loc="upper left",fontsize='small')
 ax1.set_xlabel('[UTC]')
 ax1.grid(True)
 myFmt = DateFormatter("%H")

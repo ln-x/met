@@ -3,7 +3,7 @@ __author__ = 'lnx'
 
 import pandas as pd
 import matplotlib.pyplot as plt
-from CONVERTSURFEXTEXTE import loadfile
+from TEB.displaySURFEX.CONVERTSURFEXTEXTE import loadfile
 import numpy as np
 import datetime
 from matplotlib.dates import DateFormatter

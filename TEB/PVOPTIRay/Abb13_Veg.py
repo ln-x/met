@@ -3,7 +3,7 @@ __author__ = 'lnx'
 
 import pandas as pd
 import matplotlib.pyplot as plt
-from CONVERTSURFEXTEXTE_UTCI import loadfile
+from TEB.displaySURFEX.CONVERTSURFEXTEXTE_UTCI import loadfile
 import numpy as np
 import datetime
 import matplotlib.gridspec as gridspec

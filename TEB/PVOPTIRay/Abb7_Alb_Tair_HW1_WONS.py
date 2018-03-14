@@ -3,29 +3,29 @@ __author__ = 'lnx'
 
 import pandas as pd
 import matplotlib.pyplot as plt
-from CONVERTSURFEXTEXTE_UTCI import loadfile
+from TEB.displaySURFEX.CONVERTSURFEXTEXTE import loadfile
 import numpy as np
 import datetime
 import matplotlib.gridspec as gridspec
 from matplotlib.dates import DateFormatter
 
-S200ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N/2017_170171NS/UTCI_OUTSUN.TXT"
-S200wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N/2017_170171WO/UTCI_OUTSUN.TXT"
+S200ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N/2017_170171NS/TCANYON.TXT"
+S200wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N/2017_170171WO/TCANYON.TXT"
 
-S201ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/201_Can_B_N/2017_170171NS/UTCI_OUTSUN.TXT"
-S201wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/201_Can_B_N/2017_170171WO/UTCI_OUTSUN.TXT"
+S201ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/201_Can_B_N/2017_170171NS/TCANYON.TXT"
+S201wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/201_Can_B_N/2017_170171WO/TCANYON.TXT"
 
-S202ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/202_Can_A_A/2017_170171NS/UTCI_OUTSUN.TXT"
-S202wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/202_Can_A_A/2017_170171WO/UTCI_OUTSUN.TXT"
+S202ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/202_Can_A_A/2017_170171NS/TCANYON.TXT"
+S202wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/202_Can_A_A/2017_170171WO/TCANYON.TXT"
 
-S203ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/203_Can_B_B/2017_170171NS/UTCI_OUTSUN.TXT"
-S203wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/203_Can_B_B/2017_170171WO/UTCI_OUTSUN.TXT"
+S203ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/203_Can_B_B/2017_170171NS/TCANYON.TXT"
+S203wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/203_Can_B_B/2017_170171WO/TCANYON.TXT"
 
-S204ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/204_Can_B_W/2017_170171NS/UTCI_OUTSUN.TXT"#
-S204wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/204_Can_B_W/2017_170171WO/UTCI_OUTSUN.TXT"#
+S204ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/204_Can_B_W/2017_170171NS/TCANYON.TXT"#
+S204wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/204_Can_B_W/2017_170171WO/TCANYON.TXT"#
 
-S205ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/205_Can_W_W/2017_170171NS/UTCI_OUTSUN.TXT"
-S205wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/205_Can_W_W/2017_170171WO/UTCI_OUTSUN.TXT"
+S205ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/205_Can_W_W/2017_170171NS/TCANYON.TXT"
+S205wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/205_Can_W_W/2017_170171WO/TCANYON.TXT"
 
 S200NSvalues = loadfile(S200ns)
 S200WOvalues = loadfile(S200wo)
@@ -93,9 +93,9 @@ ax1.plot(timelist,S204NSvalues, color="blue",linestyle=":")
 #ax1.plot(timelist,S205values, label=u"Weiß,Weiß", color="violet")
 ax1.plot(timelist,S205WOvalues, label=r"$\alpha_{g}$:0,80;$\alpha_{w}$:0,80", color="violet")#,linestyle="dashed")
 ax1.plot(timelist,S205NSvalues, color="violet",linestyle=":")
-ax1.set_ylabel(u'UTCI [°C]')
-#ax1.set_ylim(16,37)
-ax1.legend(loc="lower right",fontsize='small',ncol=3)
+ax1.set_ylabel(r"$T_{a}$"u'[°C]')
+ax1.set_ylim(16,37)
+ax1.legend(loc="lower right",fontsize='small')
 #ax2.plot(timelist,diff201, label="Beton,Putz", color="green")
 #ax2.plot(timelist,diff202, label="Asphalt,dunkle Fassade", color="red")
 #ax2.plot(timelist,diff203, label="Beton,Beton", color="turquoise")
@@ -107,4 +107,3 @@ ax1.grid(True)
 myFmt = DateFormatter("%H")
 ax1.xaxis.set_major_formatter(myFmt)
 plt.show()
-

@@ -1,5 +1,5 @@
-from CONVERTSURFEXTEXTE import loadfile
-from CONVERTSURFEXTEXTE_UTCI import loadfile as loadfile_utci
+from TEB.displaySURFEX.CONVERTSURFEXTEXTE import loadfile
+from TEB.displaySURFEX.CONVERTSURFEXTEXTE_UTCI import loadfile as loadfile_utci
 import os
 import shutil
 import csv

@@ -2,7 +2,7 @@
 __author__ = 'lnx'
 
 import matplotlib.pyplot as plt
-from CONVERTSURFEXTEXTE_UTCI import loadfile
+from TEB.displaySURFEX.CONVERTSURFEXTEXTE_UTCI import loadfile
 import datetime
 from matplotlib.dates import DateFormatter
 

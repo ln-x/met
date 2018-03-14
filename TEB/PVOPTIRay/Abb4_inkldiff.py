@@ -2,7 +2,7 @@
 __author__ = 'lnx'
 
 import matplotlib.pyplot as plt
-from CONVERTSURFEXTEXTE import loadfile
+from TEB.displaySURFEX.CONVERTSURFEXTEXTE import loadfile
 import datetime
 from matplotlib.dates import DateFormatter
 S200ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N/2017_170171NS/T2M_TEB.TXT"

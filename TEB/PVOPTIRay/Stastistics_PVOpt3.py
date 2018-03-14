@@ -1,66 +1,50 @@
-from CONVERTSURFEXTEXTE import loadfile
-from CONVERTSURFEXTEXTE_UTCI import loadfile as loadfile_utci
+from TEB.displaySURFEX.CONVERTSURFEXTEXTE import loadfile
+from TEB.displaySURFEX.CONVERTSURFEXTEXTE_UTCI import loadfile as loadfile_utci
 import os
 import shutil
 import csv
 import numpy as np
+#100_Platz_A_N","100_Platz_A_N","101_Platz_B_N","102_Platz_A_A","103_Platz_B_B",\
+#"110_Platz_A_PV70","111_Platz_B_PV70",
 
-simnames=["100_Platz_A_N","100_Platz_A_N","101_Platz_B_N","102_Platz_A_A","103_Platz_B_B",\
-"110_Platz_A_PV70","111_Platz_B_PV70", "200_Kreuzung_A_N","200_Kreuzung_A_N_25Grass","200_Kreuzung_A_N_25Trees",\
-"200_Kreuzung_A_N_isolated","200_Kreuzung_A_N_PVroof" "200_Kreuzung_A_N_whiteroof",\
-"201_Kreuzung_B_N","202_Kreuzung_A_A","203_Kreuzung_B_B","204_Kreuzung_B_W",\
-"205_Kreuzung_W_W","210_Kreuzung_A_PV70", "211_Kreuzung_B_PV70"]
-simperiods=["2017_170171WO","2017_170171NS","2016_365366WO","2016_365366NS"]
-tempparameters= ["TCANYON","TWALLA1","TWALLB1", "TROAD1","TRAD_SHADE","TRAD_SUN"]
-utcifiles =[""]
+simnames=["200_Can_A_N","200_Can_A_N_25Grass","200_Can_A_N_25Trees",\
+"200_Can_A_N_iso","200_Can_A_N_PVroof", "200_Can_A_N_whiteroof",\
+"201_Can_B_N","202_Can_A_A","203_Can_B_B","204_Can_B_W",\
+"205_Can_W_W","210_Can_A_PV70", "211_Can_B_PV70", "200_Can_allwhite","200_Can_horwhite"]
+simperiods=["2017_170171WO"]#,"2017_170171NS","2016_365366WO","2016_365366NS"]
+temp= ["TCANYON","TWALLA1","TWALLB1","TRAD_SUN","TRAD_SHADE"] #"TROAD1",
+utci=["UTCI_OUTSUN","UTCI_OUTSHAD"]
 
 output = [[],[],[],[],[],[],[],[]]
-
 for simname in simnames:
   for s in simperiods:
-     try:
-        path = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/" + simname + "/" + s + "/"
-        for i in tempparameters:
-        #    name[i] = "P"+i
-        #    filepath = path + i + ".TXT"
-        Ta = path + "TCANYON.TXT"
-        Twa = path + "TWALLA1.TXT"
-        Twb = path + "WALLB1.TXT"
-        Tr = path + "TROAD1.TXT"
-        MRTshade = path + "TRAD_SHADE.TXT"
-        MRTsun = path + "TRAD_SUN.TXT"
-        UTCIsun = path + "UTCI_OUTSUN.TXT"
-        UTCIshade = path + "UTCI_OUTSHADE.TXT"
-        Ta_values = loadfile(Ta)
-        Twa_values = loadfile(Twa)
-        #Twb_values = loadfile(Twb)
-        #Tr_values = loadfile(Tr)
-        #MRTshade_values = loadfile(MRTshade)
-        #MRTsun_values = loadfile(MRTsun)
-        #UTCIshade_values = loadfile_utci(UTCIshade)
-        #UTCIsun_values = loadfile_utci(UTCIsun)
-        print np.max(Ta_values), np.max(Twa_values)#, np.max(MRTshade_values),np.max(UTCIshade_values)
-        #output[0].append(simname)
-        #output[1].append(s)
-        #output[2].append(np.max(Ta_values))
-        #output[3].append(np.min(Ta_values))
-        #output[4].append(np.max(Twa_values))
-        #output[5].append(np.min(Twa_values))
-        #output[6].append(np.max(Twb_values))
-        #output[7].append(np.max(Twb_values))
+        path = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/" + simname + "/" + s + "/"
+        tcounter=0
+        ucounter=0
+        print simname,s
+        for i in range(len(temp)):
+            name = "P"+temp[i]
+            filepath = path + temp[i] + ".TXT"
+            try:
+                values = loadfile(filepath)
+                print name, "max=",np.max(values[145:]),"min=",np.min(values[145:])
+                #output[i+1+tcounter].append(np.max(values))
+                #output[i+2+tcounter].append(np.min(values))
+            except Exception:
+                pass
+            tcounter+=1
+        for i in range(len(utci)):
+            name= utci[i]
+            filepath = path+utci[i]+".TXT"
+            try:
+                values = loadfile_utci(filepath)
+                print name, "max=", np.max(values), "min=", np.min(values)
+                output[i + 1 + ucounter].append(np.max(values))
+            except Exception:
+                pass
+            ucounter+=1
 
-        try:
-          print "test"
-          Ta_values = loadfile(Ta)
-
-
-          #print type(simname)
-       #except OSError: #IOError
-        except Exception:
-          pass
-     except Exception:
-         pass
-#print len(output[0]),len(output[1]),len(output[2]),len(output[3])
+exit()
 
 simnames  = np.array(output[0])
 per_ori  = np.array(output[1])
@@ -70,6 +54,9 @@ Twa_max = np.array(output[4])
 Twa_min = np.array(output[5])
 Twb_max = np.array(output[6])
 Twb_min = np.array(output[7])
+
+
+
 
 ab = np.zeros(simnames.size, dtype=[('var0', 'U32'),('var1', 'U32'), ('var2', float), ('var3', float),
               ('var4', float),('var5', float), ('var6', float),('var7', float)])
