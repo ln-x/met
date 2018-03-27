@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 __author__ = 'lnx'
 
-import pandas as pd
-import matplotlib.pyplot as plt
-from TEB.displaySURFEX.CONVERTSURFEXTEXTE_UTCI import loadfile
-import numpy as np
 import datetime
+
 import matplotlib.gridspec as gridspec
+import matplotlib.pyplot as plt
+import numpy as np
+from TEB.displaySURFEX.CONVERTSURFEXTEXTE_UTCI import loadfile
 
 #PVfile = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/TCANYON.TXT"
 #STQfile = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/TCANYON.TXT"

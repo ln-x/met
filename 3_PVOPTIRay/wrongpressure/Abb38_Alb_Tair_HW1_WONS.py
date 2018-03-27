@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 __author__ = 'lnx'
 
-import pandas as pd
+import datetime
+
+import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 from TEB.displaySURFEX.CONVERTSURFEXTEXTE import loadfile
-import numpy as np
-import datetime
-import matplotlib.gridspec as gridspec
 
 S200ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/200_Kreuzung_A_N/2017_170171NS/TCANYON.TXT"
 S200wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/200_Kreuzung_A_N/2017_170171WO/TCANYON.TXT"

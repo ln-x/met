@@ -16,11 +16,13 @@ fh = Dataset(file, mode='r')
 lons = fh.variables['xx'][:]  #lon
 lats = fh.variables['yy'][:]  #lat
 tair = fh.variables['T2M'][55]
+wind10m =fh.variables['W10M'][73]
 #starts at 17.7.18hUTC [0], hourly ->
 # 18.7.0h [7],6h[13], 12h [19], 14h [21], 18h [42], 6h [54]
 # 20.7.  COLDEST: 0h[55], 5h[60], 6h[61], 12h [67], 14h[69], HOTTEST 15h[70], 18h [73]
 
 tair_units = fh.variables['T2M'].units
+wind10m_units = fh.variables['W10M'].units
 fh.close()
 
 #CONVERSTION TO CELSIUS
@@ -73,7 +75,8 @@ xi, yi = m(lon, lat)
 #clevs = [0,1,2.5,5,7.5,10,15,20,30,40,50,70,100,150,200,250,300,400,500,600,750]
 #cs = m.contourf(x,y,data,clevs,cmap=cm.s3pcpn)
 
-cs = m.pcolor(xi,yi,np.squeeze(tairC))
+#cs = m.pcolor(xi,yi,np.squeeze(tairC))
+cs = m.pcolor(xi,yi,np.squeeze(wind10m))
 
 
 # Add Colorbar
@@ -81,12 +84,14 @@ cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
 
 
 #cbar.set_label(tair_units)
-cbar.set_label(tairC_units)
+#cbar.set_label(tairC_units)
+cbar.set_label(wind10m_units)
 
 
 # Add Title
-plt.title('2m Air Temperature - 2015-07-20 0UTC')
-plt.clim(21,35)
+#plt.title('2m Air Temperature - 2015-07-20 0UTC')
+plt.title('10m Wind Speed - 2015-07-20 18UTC')
+#plt.clim(21,35)
 
 #plt.clim(-0.7,0.7)
 

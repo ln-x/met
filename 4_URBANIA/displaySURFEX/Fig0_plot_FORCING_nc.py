@@ -6,13 +6,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 
-file = '/home/lnx/MODELS/SURFEX/3_input/met_forcing/FORCING_new.nc'
+file = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/" \
+              "hapex/FORCING.nc"
+#Qair [kg/kg]
+#PSurf [Pa]
+#Wind [m/s]
+#Wind_DIR[deg]
+#LWdown, DIR_SWdown, SCA_SWdown [W/m2]
+
 fh = Dataset(file, mode='r')
 
 lons = fh.variables['lon'][:]     #lon
 lats = fh.variables['lat'][:]  #lat
 tair = fh.variables['Tair'][:]
+wind = fh.variables['wind'][:]
 tair_units = fh.variables['Tair'].units
+wind_units = fh.variables['wind'].units
+
 
 fh.close()
 
@@ -55,6 +65,7 @@ xi, yi = m(lon, lat)
 
 # Plot Data
 cs = m.pcolor(xi,yi,np.squeeze(tair))
+#cs = m.pcolor(xi,yi,np.squeeze(wind))
 
 # Add Grid Lines
 m.drawparallels(np.arange(-80., 81., 10.), labels=[1,0,0,0], fontsize=10)
@@ -68,6 +79,7 @@ m.drawcountries()
 # Add Colorbar
 cbar = m.colorbar(cs, location='bottom', pad="10%")
 cbar.set_label(tair_units)
+#cbar.set_label(wind_units)
 
 # Add Title
 plt.title('DJF Maximum Temperature')

@@ -1,9 +1,5 @@
-from TEB.displaySURFEX.CONVERTSURFEXTEXTE import loadfile
-from TEB.displaySURFEX.CONVERTSURFEXTEXTE_UTCI import loadfile as loadfile_utci
-import os
-import shutil
-import csv
 import numpy as np
+from TEB.displaySURFEX.CONVERTSURFEXTEXTE import loadfile
 
 simnames=["100_Platz_A_N","100_Platz_A_N","101_Platz_B_N","102_Platz_A_A","103_Platz_B_B",\
 "110_Platz_A_PV70","111_Platz_B_PV70", "200_Kreuzung_A_N","200_Kreuzung_A_N_25Grass","200_Kreuzung_A_N_25Trees",\

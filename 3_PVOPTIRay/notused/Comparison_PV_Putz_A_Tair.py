@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 __author__ = 'lnx'
 
-import pandas as pd
 import matplotlib.pyplot as plt
 from TEB.displaySURFEX.CONVERTSURFEXTEXTE import loadfile
 

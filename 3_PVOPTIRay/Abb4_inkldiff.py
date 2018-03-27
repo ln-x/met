@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 __author__ = 'lnx'
 
+import datetime
+
 import matplotlib.pyplot as plt
 from TEB.displaySURFEX.CONVERTSURFEXTEXTE import loadfile
-import datetime
 from matplotlib.dates import DateFormatter
+
 S200ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N/2017_170171NS/T2M_TEB.TXT"
 S200wo = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N/2017_170171WO/T2M_TEB.TXT"
 
