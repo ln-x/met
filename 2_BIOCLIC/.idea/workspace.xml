@@ -1,0 +1,1087 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/Trimmel_etal_2016_MetZ/Figure2_MetZ.py" description="x = [1, 2, 3, 4]&#10;#ind = 1&#10;WTdiff = [0.8158, 0.1484..." line="33" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4f60bf77-dc87-40ab-a124-7bfcf81689ce" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/049_errors_dailymaxerror.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/049_errors_dailymaxerror_cloudiness.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/CalcMacCormick.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_5days_STQ_V0_V100.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_5days_STQ_V0_V100_2.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_5days_STQ_V0_V100_onlyenergyfluxes.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_new.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure4_INCA_new.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure4_INCA_new_cmpforest.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/notused/Figure4a.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/notused/Figure5_5days_veg_wt_at_correlation.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/notused/Figure5_first5days_veg_wt_at_correlation.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Table1_5day-1_means_new.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Table1_5day_dailymax_new.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/aladin_import.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure4b_diff.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old/Figure1_stats_Q95.py" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/BC_total_plottimeline.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/notused/BC_total_plottimeline.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure1_5days.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_5days.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure3_total_5daymeans.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure3_total_5daymeans.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure3_total_5daymeans_output.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure3_total_5daymeans_output_DFM61.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure3_total_5daymeans_output_DFM80.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/notused/Figure3_total_5daymeans_output_DFM80.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure3_total_5daymeans_output_DFM85.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/notused/Figure3_total_5daymeans_output_DFM85_clean.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure3_total_plottimeline.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/notused/Figure3_total_plottimeline.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Table1_5day_means_new.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/Table1_5day_means_new.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/__init__.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/__init__.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old/Figure1.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/Figure1.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old/Figure1_stats.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_stats.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old/Figure2.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/Figure2.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old/Figure2_dailymean_inklOBS.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/Figure2_dailymean_inklOBS.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old/Figure2a.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/Figure2a.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old/Figure2b.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/Figure2b.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old/Figure3_mean.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/Figure3_mean.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old/Figure3_total.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/Figure3_total.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old/Figure4.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/Figure4.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old/Figure4a.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure4_INCA.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old/Table1_5day_means.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/Table1_5day_means.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old/Trend_Hundsmuelbach_T2m.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/Trend_Hundsmuelbach_T2m.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old/__init__.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_HESS/notused/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/forGerda/Figure1_sun_shade.py" afterPath="$PROJECT_DIR$/forGerda/Figure1_sun_shade.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/forGerda/Figure3_total_heatflluxes_plottimeline.py" afterPath="$PROJECT_DIR$/forGerda/Figure3_total_heatflluxes_plottimeline.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Trimmel_etal_2016_MetZ/Figure6_MetZ.py" afterPath="$PROJECT_DIR$/Trimmel_etal_2016_MetZ/Figure6_MetZ.py" />
+    </list>
+    <ignored path="Hs_scripts.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="Hs_scripts" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="Figure4_INCA_new_cmpforest.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure4_INCA_new_cmpforest.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="716" max-vertical-offset="2865">
+              <caret line="60" column="55" selection-start-line="60" selection-start-column="55" selection-end-line="60" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Figure4_INCA_new.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure4_INCA_new.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1066" max-vertical-offset="3570">
+              <caret line="87" column="27" selection-start-line="87" selection-start-column="27" selection-end-line="87" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Figure2_5days_STQ_V0_V100_onlyenergyfluxes.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_5days_STQ_V0_V100_onlyenergyfluxes.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.1140553" vertical-offset="1356" max-vertical-offset="2700">
+              <caret line="100" column="14" selection-start-line="100" selection-start-column="14" selection-end-line="100" selection-end-column="14" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Figure2_new.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_new.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1665" max-vertical-offset="3180">
+              <caret line="123" column="0" selection-start-line="123" selection-start-column="0" selection-end-line="124" selection-end-column="18" />
+              <folding>
+                <element signature="e#20#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="wasserblum" />
+        <option value="lnx" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure1_stats_Q95.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure2.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure2_dailymean_inklOBS.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure3_total.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure3_total_plottimeline.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Table1_2_total_plottimeline.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/BC_total_plottimeline.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Trend_Hundsmuelbach_T2m.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Table1_5day_means.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure2b.py" />
+        <option value="$PROJECT_DIR$/sandkiste.py" />
+        <option value="$PROJECT_DIR$/hs_contour_WT_forgerda_2.py" />
+        <option value="$PROJECT_DIR$/hs_contour_WT_forgerda.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure4_maxtemp_20130729.py" />
+        <option value="$PROJECT_DIR$/water_parcel_tracker.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure1.py" />
+        <option value="$PROJECT_DIR$/hs_plot_validation.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure3_total_heatflluxes_plottimeline.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure1_sun_shade.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure4.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure3_total_5daymeans_output_DFM85.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure3_total_5daymeans_output_DFM80.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure3_total_5daymeans_output.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Table1_5day_max_new.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Table1_5day_dailymax_new.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Table1_5day_means_new.py" />
+        <option value="$PROJECT_DIR$/049_errors_dailymaxerror.py" />
+        <option value="$PROJECT_DIR$/049_errors_dailymaxerror_cloudiness.py" />
+        <option value="$PROJECT_DIR$/forGerda/Figure3_total_heatflluxes_plottimeline.py" />
+        <option value="$PROJECT_DIR$/CalcMacCormick.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure1_stats.py" />
+        <option value="$PROJECT_DIR$/forGerda/Figure1_sun_shade.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure3_total_5daymeans_output_DFM85_clean.py" />
+        <option value="$PROJECT_DIR$/aladin_import.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure4b_diff.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure4a.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure5_5days_veg_wt_at_correlation.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure5_first5days_veg_wt_at_correlation.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Table1_5day-1_means_new.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_MetZ/Figure6_MetZ.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure1_5days.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure3_total_5daymeans.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure2_5days.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/Figure4_INCA.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_5days_STQ_V0_V100.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure4_INCA.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_5days.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_new.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure4_INCA_new_cmpforest.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure4_INCA_new.py" />
+        <option value="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_5days_STQ_V0_V100_onlyenergyfluxes.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="width" value="1266" />
+    <option name="height" value="1024" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>Python</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>PyPep8Inspection</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Hs_scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Hs_scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Hs_scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Hs_scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Hs_scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Trimmel_etal_2016_HESS" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../ComputerScienceMIT" />
+    <property name="recentsLimit" value="5" />
+    <property name="FullScreen" value="false" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings />
+    </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Trimmel_etal_2016_HESS" />
+      <recent name="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/old" />
+      <recent name="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM/notused" />
+      <recent name="$PROJECT_DIR$/Trimmel_etal_2016_ThAppM" />
+      <recent name="$PROJECT_DIR$/forGerda" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.Figure2_5days_STQ_V0_V100_3">
+    <configuration default="false" name="Figure2_5days_STQ_V0_V100_3" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Trimmel_etal_2016_HESS" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Hs_scripts" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_5days_STQ_V0_V100_onlyenergyfluxes.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Figure2_new" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Trimmel_etal_2016_HESS" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Hs_scripts" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_new.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Figure4_INCA_new" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Trimmel_etal_2016_HESS" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Hs_scripts" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure4_INCA_new.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Figure4_INCA_new_cmpforest" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Trimmel_etal_2016_HESS" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Hs_scripts" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure4_INCA_new_cmpforest.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Figure4_INCA" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Trimmel_etal_2016_HESS" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Hs_scripts" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure4_INCA.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Hs_scripts" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Hs_scripts" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="py.test">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Hs_scripts" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="testToRun" value="" />
+      <option name="keywords" value="" />
+      <option name="params" value="" />
+      <option name="USE_PARAM" value="false" />
+      <option name="USE_KEYWORD" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Attests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Hs_scripts" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Hs_scripts" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Hs_scripts" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="hs_statistics" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Hs_scripts" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/hs_statistics.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PyDebugRunner" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PyDebugRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <list size="6">
+      <item index="0" class="java.lang.String" itemvalue="Python.hs_statistics" />
+      <item index="1" class="java.lang.String" itemvalue="Python.Figure2_5days_STQ_V0_V100_3" />
+      <item index="2" class="java.lang.String" itemvalue="Python.Figure2_new" />
+      <item index="3" class="java.lang.String" itemvalue="Python.Figure4_INCA_new" />
+      <item index="4" class="java.lang.String" itemvalue="Python.Figure4_INCA_new_cmpforest" />
+      <item index="5" class="java.lang.String" itemvalue="Python.Figure4_INCA" />
+    </list>
+    <recent_temporary>
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="Python.Figure2_5days_STQ_V0_V100_3" />
+        <item index="1" class="java.lang.String" itemvalue="Python.Figure4_INCA_new" />
+        <item index="2" class="java.lang.String" itemvalue="Python.Figure4_INCA_new_cmpforest" />
+        <item index="3" class="java.lang.String" itemvalue="Python.Figure4_INCA" />
+        <item index="4" class="java.lang.String" itemvalue="Python.Figure2_new" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4f60bf77-dc87-40ab-a124-7bfcf81689ce" name="Default" comment="" />
+      <created>1432042069406</created>
+      <option name="number" value="Default" />
+      <updated>1432042069406</updated>
+    </task>
+    <task id="LOCAL-00001" summary="lots of new scripts to plot my hs results">
+      <created>1444472278734</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1444472278734</updated>
+    </task>
+    <task id="LOCAL-00002" summary="a bar plot with error bars&#10;">
+      <created>1444482592339</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1444482592339</updated>
+    </task>
+    <task id="LOCAL-00003" summary="some changes">
+      <created>1444567910369</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1444567910369</updated>
+    </task>
+    <task id="LOCAL-00004" summary="some changes">
+      <created>1449608167465</created>
+      <option name="number" value="00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1449608167465</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Figures_Trimmeletal_2016_ThAppM">
+      <created>1451569058227</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1451569058227</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Figures_Trimmeletal_2016_ThAppM">
+      <created>1453370386695</created>
+      <option name="number" value="00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1453370386695</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Figure 3 total_5day means corr.">
+      <created>1453371501775</created>
+      <option name="number" value="00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1453371501775</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Figure 3 &#10;&#10;stats&#10;&#10;2013 V0, V100,&#10; &#10;20a + max&#10;&#10;&#10;&#10;">
+      <created>1454331309881</created>
+      <option name="number" value="00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1454331309881</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Gerda issues:&#10;&#10;x) plot heatfluxes along timeline&#10;x) calc max temp for cloudy and sunny day&#10;x) contour for gerda - wt: time/riverkm 2d&#10;&#10;Climate Change Paper&#10;&#10;x) plot all boundary water temperature along timeline&#10;x) input stats: calc. of radiation sums corrected!&#10;x) Figures changed from 14day episode to 5days event&#10;x) output script pd.to_csv:Tmax &#10;x) calculate stress hours&#10;&#10;various stubs like water parcel tracker,...&#10;&#10;&#10;&#10;">
+      <created>1456615077465</created>
+      <option name="number" value="00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1456615077465</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
+    <servers />
+  </component>
+  <component name="TodoView" selected-index="0">
+    <todo-panel id="selected-file">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+    <todo-panel id="default-changelist">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="0" width="1266" height="1024" extended-state="4" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32857144" sideWeight="0.49960285" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31023368" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32857144" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.369863" sideWeight="0.11449814" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32744783" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3264" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3258427" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32698414" sideWeight="0.49962825" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2030905" sideWeight="0.88550186" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.0" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39878234" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968238" sideWeight="0.49960285" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.49962825" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.369863" sideWeight="0.11449814" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.369863" sideWeight="0.88550186" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2401487" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="myTodoPanelSettings">
+      <TodoPanelSettings />
+    </option>
+    <MESSAGE value="lots of new scripts to plot my hs results" />
+    <MESSAGE value="a bar plot with error bars&#10;" />
+    <MESSAGE value="some changes" />
+    <MESSAGE value="Figures_Trimmeletal_2016_ThAppM" />
+    <MESSAGE value="Figure 3 total_5day means corr." />
+    <MESSAGE value="Figure 3 &#10;&#10;stats&#10;&#10;2013 V0, V100,&#10; &#10;20a + max&#10;&#10;&#10;&#10;" />
+    <MESSAGE value="Gerda issues:&#10;&#10;x) plot heatfluxes along timeline&#10;x) calc max temp for cloudy and sunny day&#10;x) contour for gerda - wt: time/riverkm 2d&#10;&#10;Climate Change Paper&#10;&#10;x) plot all boundary water temperature along timeline&#10;x) input stats: calc. of radiation sums corrected!&#10;x) Figures changed from 14day episode to 5days event&#10;x) output script pd.to_csv:Tmax &#10;x) calculate stress hours&#10;&#10;various stubs like water parcel tracker,...&#10;&#10;&#10;&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Gerda issues:&#10;&#10;x) plot heatfluxes along timeline&#10;x) calc max temp for cloudy and sunny day&#10;x) contour for gerda - wt: time/riverkm 2d&#10;&#10;Climate Change Paper&#10;&#10;x) plot all boundary water temperature along timeline&#10;x) input stats: calc. of radiation sums corrected!&#10;x) Figures changed from 14day episode to 5days event&#10;x) output script pd.to_csv:Tmax &#10;x) calculate stress hours&#10;&#10;various stubs like water parcel tracker,...&#10;&#10;&#10;&#10;" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/clement/049_errors.py</url>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="24" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/Figure2b.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="4.973881" vertical-offset="722" max-vertical-offset="2160">
+          <caret line="139" column="0" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/filesfromdir.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="574">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hs_plot_validation_RMSE_dailyvalues.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1170" max-vertical-offset="2790">
+          <caret line="93" column="0" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hs_contour_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2040">
+          <caret line="0" column="24" selection-start-line="0" selection-start-column="24" selection-end-line="0" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hs_cdataloader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="678">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CalcMacCormick.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1395">
+          <caret line="81" column="9" selection-start-line="81" selection-start-column="9" selection-end-line="81" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/clement/049_errors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.14754099" vertical-offset="45" max-vertical-offset="615">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hs_plot_minmax_fkm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="900">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/forGerda/hs_contour_WT_forgerda.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1104" max-vertical-offset="1380">
+          <caret line="0" column="7" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/forGerda/Table1_2_total_plottimeline.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="825">
+          <caret line="25" column="60" selection-start-line="25" selection-start-column="60" selection-end-line="25" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/049_errors_dailymaxerror_cloudiness.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="450">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/049_errors_dailymaxerror.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="369" max-vertical-offset="645">
+          <caret line="36" column="16" selection-start-line="36" selection-start-column="16" selection-end-line="36" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/forGerda/Figure4_maxtemp_20130729.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.31178707" vertical-offset="967" max-vertical-offset="2355">
+          <caret line="66" column="93" selection-start-line="66" selection-start-column="34" selection-end-line="66" selection-end-column="93" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/forGerda/Figure3_total_heatflluxes_plottimeline.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.4828898" vertical-offset="0" max-vertical-offset="675">
+          <caret line="30" column="15" selection-start-line="30" selection-start-column="15" selection-end-line="30" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/forGerda/Figure1_sun_shade.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2934" max-vertical-offset="4035">
+          <caret line="201" column="0" selection-start-line="201" selection-start-column="0" selection-end-line="201" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python2.7/dist-packages/numpy/lib/polynomial.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33157894" vertical-offset="5799" max-vertical-offset="19080">
+          <caret line="395" column="4" selection-start-line="395" selection-start-column="4" selection-end-line="395" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/notused/Figure3_total_plottimeline.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.10810811" vertical-offset="0" max-vertical-offset="795">
+          <caret line="8" column="21" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hs_plot_cmp_measurements.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1230">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/aladin_import.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.27684563" vertical-offset="0" max-vertical-offset="675">
+          <caret line="13" column="16" selection-start-line="13" selection-start-column="16" selection-end-line="13" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hs_plot_tagesgaenge_climateinput.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.3338926" vertical-offset="199" max-vertical-offset="795">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Episoden.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1170">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/notused/Figure5_first5days_veg_wt_at_correlation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.88164663" vertical-offset="4826" max-vertical-offset="6000">
+          <caret line="356" column="17" selection-start-line="356" selection-start-column="17" selection-end-line="356" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/notused/Figure5_5days_veg_wt_at_correlation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="5342" max-vertical-offset="5925">
+          <caret line="364" column="3" selection-start-line="364" selection-start-column="3" selection-end-line="364" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_MetZ/Figure7_MetZ.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="930">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="30" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_stats.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1170">
+          <caret line="22" column="8" selection-start-line="22" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/Figure4.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8052147" vertical-offset="0" max-vertical-offset="1320">
+          <caret line="38" column="29" selection-start-line="38" selection-start-column="29" selection-end-line="38" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/old/Table1_5day_means_new.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5981595" vertical-offset="0" max-vertical-offset="2370">
+          <caret line="28" column="51" selection-start-line="28" selection-start-column="51" selection-end-line="28" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_MetZ/Figure8_MetZ.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5121951" vertical-offset="381" max-vertical-offset="750">
+          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_MetZ/Figure9_MetZ.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.85365856" vertical-offset="315" max-vertical-offset="1335">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Table1_5day_dailymax_new.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.5979382" vertical-offset="0" max-vertical-offset="2280">
+          <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Table1_5day-1_means_new.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.91065294" vertical-offset="0" max-vertical-offset="2370">
+          <caret line="55" column="87" selection-start-line="55" selection-start-column="79" selection-end-line="55" selection-end-column="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure3_total_5daymeans_output_DFM61.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34364262" vertical-offset="0" max-vertical-offset="4485">
+          <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/notused/Figure4a.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="972" max-vertical-offset="2295">
+          <caret line="7" column="106" selection-start-line="7" selection-start-column="106" selection-end-line="7" selection-end-column="106" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_MetZ/Figure4_MetZ.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="930">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/notused/BC_total_plottimeline.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.12711865" vertical-offset="0" max-vertical-offset="825">
+          <caret line="9" column="1" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/notused/Figure3_total_5daymeans_output_DFM85_clean.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="3.279661" vertical-offset="585" max-vertical-offset="3180">
+          <caret line="173" column="51" selection-start-line="173" selection-start-column="51" selection-end-line="173" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_MetZ/Figure6_MetZ.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.16949153" vertical-offset="355" max-vertical-offset="1125">
+          <caret line="19" column="5" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hs_plot_validation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.7321016" vertical-offset="1174" max-vertical-offset="2040">
+          <caret line="36" column="40" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_5days_STQ_V0_V100_2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="632" max-vertical-offset="1860">
+          <caret line="66" column="0" selection-start-line="66" selection-start-column="0" selection-end-line="74" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure4_INCA.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2385">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hs_plot_validation_RMSE.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.040678" vertical-offset="1204" max-vertical-offset="2655">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure3_total_5daymeans.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.45017183" vertical-offset="559" max-vertical-offset="5790">
+          <caret line="50" column="44" selection-start-line="50" selection-start-column="34" selection-end-line="50" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_5days.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1098" max-vertical-offset="2175">
+          <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="110" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_MetZ/Figure5_MetZ.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.82474226" vertical-offset="360" max-vertical-offset="1215">
+          <caret line="42" column="6" selection-start-line="42" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_MetZ/Figure2_MetZ.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.6185567" vertical-offset="180" max-vertical-offset="1050">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_5days_STQ_V0_V100.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="3.7113402" vertical-offset="0" max-vertical-offset="1905">
+          <caret line="75" column="0" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_MetZ/Figure3_MetZ.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.556701" vertical-offset="183" max-vertical-offset="1245">
+          <caret line="25" column="6" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure4_INCA_new_cmpforest.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="716" max-vertical-offset="2865">
+          <caret line="60" column="55" selection-start-line="60" selection-start-column="55" selection-end-line="60" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_new.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1665" max-vertical-offset="3180">
+          <caret line="123" column="0" selection-start-line="123" selection-start-column="0" selection-end-line="124" selection-end-column="18" />
+          <folding>
+            <element signature="e#20#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure4_INCA_new.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1066" max-vertical-offset="3570">
+          <caret line="87" column="27" selection-start-line="87" selection-start-column="27" selection-end-line="87" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trimmel_etal_2016_HESS/Figure2_5days_STQ_V0_V100_onlyenergyfluxes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.1140553" vertical-offset="1356" max-vertical-offset="2700">
+          <caret line="100" column="14" selection-start-line="100" selection-start-column="14" selection-end-line="100" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

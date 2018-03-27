@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Messdatenauswertung.iml" filepath="$PROJECT_DIR$/.idea/Messdatenauswertung.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../geoenv_py2713/.idea/geoenv_py2713.iml" filepath="$PROJECT_DIR$/../geoenv_py2713/.idea/geoenv_py2713.iml" />
+    </modules>
+  </component>
+</project>
