@@ -2,7 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../HS" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../geoenv_py2713" vcs="Git" />
   </component>
 </project>

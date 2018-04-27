@@ -9,7 +9,7 @@ def loadfile1(filename):
     splitdata = []       #splitlistcomp = [i.split() for i in data]
     for i in data:
         splitdata.append(i.split())
-    #print splitdata
+    print splitdata
 
     value = 0
     converted = []

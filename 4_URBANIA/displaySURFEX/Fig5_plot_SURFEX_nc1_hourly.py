@@ -12,7 +12,7 @@ file = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/ha
 #file = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/S0_FORC_WRF_333_STQ_long/SURF_ATM_DIAGNOSTICS.OUT.nc'
 #file = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/S3_LNX_WRF_333_nGD/SURF_ATM_DIAGNOSTICS.OUT.nc'
 #file = '/home/lnx/MODELS/SURFEX/3_input/met_forcing/FORCING_new.nc'
-outputpath = '/home/lnx/Documents/_Urbania/2018_EGU/DIURNALCYCLE/S2/'
+outputpath = '/home/lnx/Documents/_Urbania/2018_EGU/DIURNALCYCLE/S4_S14/'
 fh = Dataset(file, mode='r')
 lons = fh.variables['xx'][:]  #lon
 lats = fh.variables['yy'][:]  #lat
@@ -74,7 +74,7 @@ for i in var:
     cs = m.pcolor(xi,yi,np.squeeze(i))
     cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
     cbar.set_label(tairC_units)
-    plt.title('2m Air Temperature STQ 2015-07-20 UTC %s' % str(UTC))
+    plt.title('2m Air Temperature 2015-07-20 UTC %s' % str(UTC))
     plt.clim(21,35)
     figname = outputpath + str(UTC)+ ".png"
     plt.savefig(figname)

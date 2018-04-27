@@ -127,14 +127,4 @@ plt.title('2m Air Temperature STQ 2015-07-20 18UTC')
 plt.clim(21,35)
 plt.show()
 
-exit()
 
-UTC = 1
-for i in var:
-    cs = m.pcolor(xi,yi,np.squeeze(i))
-    cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
-    cbar.set_label(tairC_units)
-    plt.title('2m Air Temperature STQ 2015-07-20 UTC %d',UTC)
-    UTC +=1
-    plt.clim(21,35)
-    plt.show()
