@@ -80,7 +80,7 @@ for i in ZAMGNo:
 
   SURFEXdataS0 = loadfile1(SURFEX_S0)
   SURFEXdataS12 = loadfile1(SURFEX_S12)
-  FORCING = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/FORCING/T2M_"+i+".txt"
+  FORCING = "/home/lnx/MODELS/SURFEX/3_input/met_forcing/Urbania/FORCING_WRF1/T2M_"+i+".txt"
   WRFdata = loadfile3(FORCING)
 
   '''convert to numpy array and bring to same filesize'''

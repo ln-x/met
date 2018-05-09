@@ -8,6 +8,7 @@ from scipy import stats
 import sys
 import matplotlib.gridspec as gridspec
 
+outpath = "/home/lnx/"
 '''
 ZAMG - groundstations 
 
@@ -35,12 +36,11 @@ so = Sonnenscheindauer [seconds]
 ts = 5cm air temperature
 '''
 
-ZAMGnames = {'11035':  "Wien-Hohe Warte"}#\
-  #{'11034': 'Wien-Innere Stadt', '11035':  "Wien-Hohe Warte", '11036': 'Schwechat',
-  #           '11037':'Gross-Enzersdorf', '11040':'Wien-Unterlaa', '11042':'Wien-Stammersdorf',
-  #           '11077':'Brunn am Gebirge', '11080':'Wien-Mariabrunn'}
-#, '11090':'Wien-Donaufeld'} #missing data at Station Donaufeld 22.7. 2:50-12:30
-ZAMGNo = ["11034","11035","11036","11037","11040","11042","11077","11080"]#,"11090"]
+ZAMGnames = {'11035': "Wien-Hohe Warte",'11034': 'Wien-Innere Stadt', '11035': "Wien-Hohe Warte", '11036': 'Schwechat',
+             '11037':'Gross-Enzersdorf', '11040':'Wien-Unterlaa', '11042':'Wien-Stammersdorf',
+             '11077':'Brunn am Gebirge', '11080':'Wien-Mariabrunn',
+             '11090':'Wien-Donaufeld'} #missing data at Station Donaufeld 22.7. 2:50-12:30
+ZAMGNo = ["11034","11035","11036","11037","11040","11042","11077","11080","11090"]
 
 for i in ZAMGNo:
   ZAMGstation = "/home/lnx/METDATA/ZAMG_filled/tawes_" + i + "_year_2015.txt"
@@ -89,8 +89,12 @@ for i in ZAMGNo:
   #SURFEXdataS7 = loadfile2(SURFEX_S7)
   SURFEXdataS12 = loadfile1(SURFEX_S12)
   SURFEXdataS18 = loadfile1(SURFEX_S18)
-  FORCING = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/FORCING/T2M_"+i+".txt"
+  FORCING = "/home/lnx/MODELS/SURFEX/3_input/met_forcing/Urbania/FORCING_WRF1/T2M_"+i+".txt"
+  FORCING2 = "/home/lnx/MODELS/WRF/3_testdata/Urbania/WRFTEB1/T2M_"+i+".txt"
   WRFdata = loadfile3(FORCING)
+  WRFTEBdata = loadfile4(FORCING2) #104
+
+
  # print SURFEXdataS12[0], WRFdata[0]
 
   '''convert to numpy array and bring to same filesize'''
@@ -101,11 +105,19 @@ for i in ZAMGNo:
   #SURFEXdataS0 = np.array(SURFEXdataS0[14:]) #[12:]
   #SURFEXdataS12 = np.array(SURFEXdataS12[14:]) #[12:]
 
-  ZAMG_heatdays = np.array(ZAMG_TA_hourly[8:176])# np.vstack((np.array(ZAMG_TA_hourly[13:109]),np.array(ZAMG_TA_hourly[133:-98])))  #[13:]
-  WRFdata_heatdays = np.array(WRFdata[8:176])# np.concatenate(np.array(WRFdata[14:110]),np.array(WRFdata[134:-97])) #[13:]
-  SURFEXdataS0_heatdays = np.array(SURFEXdataS0[8:176])# np.concatenate(np.array(SURFEXdataS0[14:110]),np.array(SURFEXdataS0[134:-97])) #[12:]
-  SURFEXdataS12_heatdays = np.array(SURFEXdataS12[8:176])# np.concatenate(np.array(SURFEXdataS12[14:110]),np.array(SURFEXdataS12[134:-97])) #[12:]
-  SURFEXdataS18_heatdays = np.array(SURFEXdataS18[8:176])# np.concatenate(np.array(SURFEXdataS12[14:110]),np.array(SURFEXdataS12[134:-97])) #[12:]
+  #ZAMG_heatdays = np.array(ZAMG_TA_hourly[8:176])# np.vstack((np.array(ZAMG_TA_hourly[13:109]),np.array(ZAMG_TA_hourly[133:-98])))  #[13:]
+  #WRFdata_heatdays = np.array(WRFdata[8:176])# np.concatenate(np.array(WRFdata[14:110]),np.array(WRFdata[134:-97])) #[13:]
+  #WRFTEBdata_heatdays = np.array(WRFTEBdata[8:176])# np.concatenate(np.array(WRFdata[14:110]),np.array(WRFdata[134:-97])) #[13:]
+  #SURFEXdataS0_heatdays = np.array(SURFEXdataS0[8:176])
+  #SURFEXdataS12_heatdays = np.array(SURFEXdataS12[8:176])
+  #SURFEXdataS18_heatdays = np.array(SURFEXdataS18[8:176])
+
+  ZAMG_heatdays = np.array(ZAMG_TA_hourly[8:103])
+  WRFdata_heatdays = np.array(WRFdata[8:103])
+  WRFTEBdata_heatdays = np.array(WRFTEBdata[8:103])
+  SURFEXdataS0_heatdays = np.array(SURFEXdataS0[8:103])# np.concatenate(np.array(SURFEXdataS0[14:110]),np.array(SURFEXdataS0[134:-97])) #[12:]
+  SURFEXdataS12_heatdays = np.array(SURFEXdataS12[8:103])# np.concatenate(np.array(SURFEXdataS12[14:110]),np.array(SURFEXdataS12[134:-97])) #[12:]
+  SURFEXdataS18_heatdays = np.array(SURFEXdataS18[8:103])# np.concatenate(np.array(SURFEXdataS12[14:110]),np.array(SURFEXdataS12[134:-97])) #[12:]
   #print len(ZAMG_TA_hourly), len(WRFdata), len(SURFEXdataS0), len(SURFEXdataS12) #256
 
   '''calculation of bias'''
@@ -117,6 +129,7 @@ for i in ZAMGNo:
   #Bias_WRF_S0_i = np.average(ZAMG_TA_hourly - SURFEXdataS0)
   #Bias_WRF_S12_i = np.average(ZAMG_TA_hourly - SURFEXdataS12)
   Bias_Forc_i = np.average(WRFdata_heatdays-ZAMG_heatdays)
+  Bias_Forc2_i = np.average(WRFTEBdata_heatdays-ZAMG_heatdays)
   Bias_WRF_S0_i = np.average(SURFEXdataS0_heatdays-ZAMG_heatdays)
   Bias_WRF_S12_i = np.average(SURFEXdataS12_heatdays-ZAMG_heatdays)
   Bias_WRF_S18_i = np.average(SURFEXdataS18_heatdays-ZAMG_heatdays)
@@ -127,15 +140,16 @@ for i in ZAMGNo:
   #print bias
   #print np.average(bias)
 
-  print i, Bias_Forc_i, Bias_WRF_S0_i, Bias_WRF_S12_i, Bias_WRF_S18_i
+  print i, Bias_Forc_i,Bias_Forc2_i, Bias_WRF_S0_i, Bias_WRF_S12_i, Bias_WRF_S18_i
 
   '''calculation of Regression coefficients'''
   try:
     R2_Forc_i = (stats.spearmanr(ZAMG_heatdays, WRFdata_heatdays))[0]**2
+    R2_Forc2_i = (stats.spearmanr(ZAMG_heatdays, WRFTEBdata_heatdays))[0]**2
     R2_WRF_S0_i = (stats.spearmanr(ZAMG_heatdays, SURFEXdataS0_heatdays))[0]**2
     R2_WRF_S12_i = (stats.spearmanr(ZAMG_heatdays, SURFEXdataS12_heatdays))[0]**2
     R2_WRF_S18_i = (stats.spearmanr(ZAMG_heatdays, SURFEXdataS18_heatdays))[0]**2
-    print i, R2_Forc_i, R2_WRF_S0_i, R2_WRF_S12_i, R2_WRF_S18_i
+    print i, R2_Forc_i,R2_Forc2_i, R2_WRF_S0_i, R2_WRF_S12_i, R2_WRF_S18_i
     #R2_WRF_S6_i = round((stats.spearmanr(np.array(ZAMG_TA_hourly), np.array(SURFEXdataS6[:31])))[0]**2,2)
     #R2_WRF_S7_i = round((stats.spearmanr(np.array(ZAMG_TA_hourly), np.array(SURFEXdataS7[:31])))[0]**2,2)
     #print R2_Forc_i
@@ -145,6 +159,7 @@ for i in ZAMGNo:
     '''
     Plotting
     '''
+    
     fig = plt.figure()
     ax1 = fig.add_subplot(121)
     #gs = gridspec.GridSpec(2, 1, height_ratios=[2, 1])
@@ -153,6 +168,7 @@ for i in ZAMGNo:
 
     ax1.plot(ZAMG_heatdays, color='black', label="OBS")
     ax1.plot(WRFdata_heatdays, color='blue', label="WRF(US)")  #31
+    ax1.plot(WRFTEBdata_heatdays, color='green', label="WRF/TEB")  #31
     #ax1.plot(SURFEXdataS0_heatdays, color='red', label="WRF/S(EC)")
     #ax1.plot(SURFEXdataS12_heatdays, color='orange', label="WRF/S(PM)")
     #ax1.plot(SURFEXdataS18_heatdays, color='pink', label="WRF/S(PM)S")
@@ -162,12 +178,15 @@ for i in ZAMGNo:
     ax1.set_xlabel("hours[UTC]")
     ax1.set_ylabel(r"$T_{air_2m}$"u'[°C]', size="large")
     ax1.legend(loc='upper right')#, size="medium")
-    ax1.set_xlim(0, 168)
+    ax1.set_xlim(0, 95)
+    #ax1.set_xlim(0, 168)
+
     ax1.set_ylim(17, 42)
 
 
     ax2 = fig.add_subplot(122)
     plt.scatter(ZAMG_heatdays, WRFdata_heatdays, color='blue', label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+    plt.scatter(ZAMG_heatdays, WRFTEBdata_heatdays, color='green', label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc2_i, Bias_Forc2_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
     #plt.scatter(ZAMG_heatdays, SURFEXdataS0_heatdays, color='red', label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_WRF_S0_i, Bias_WRF_S0_i)))
     #plt.scatter(ZAMG_heatdays, SURFEXdataS12_heatdays, color='orange', label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_WRF_S12_i, Bias_WRF_S12_i)))
     #plt.scatter(ZAMG_heatdays, SURFEXdataS18_heatdays, color='pink', label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_WRF_S18_i, Bias_WRF_S18_i)))
@@ -178,10 +197,13 @@ for i in ZAMGNo:
     ax2.set_ylabel(r"$T_{air_2m}$"u'[°C]', size="large")
     ax2.legend(loc='upper left')
 
-    plt.suptitle(ZAMGnames[i] + ", 18 - 24 July 2015", size="large")#+"2m air temperature"))
-    plt.show()
-    #figname = "/home/lnx/" + str(i)+ ".png"
-    #plt.savefig(figname,figsize=(800,1200), dpi=100, forward=True)
+    plt.suptitle(ZAMGnames[i] + ", 18 - 21 July 2015", size="large")#+"2m air temperature"))
+    #plt.show()
+    figname = outpath + ZAMGnames[i] + "WRFTEBZAMG.png"
+    plt.savefig(figname)
+    # plt.show()
+
+
 
   except:
     print("Oops!", sys.exc_info()[0], "occured.")
