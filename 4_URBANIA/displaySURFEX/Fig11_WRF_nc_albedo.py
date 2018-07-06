@@ -6,7 +6,7 @@ from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 import sys
 
-outpath ='/home/lnx'
+outpath ='/home/lnx/'
 file = '/media/lnx/98C4EEA4C4EE83BA/WRF-TEB-NC_Files/wrfout_d03_2015-07-13_12_00_00_nest_teb.nc'
 #file2 = '/media/lnx/98C4EEA4C4EE83BA/WRF-TEB-NC_Files/wrfout_d03_2015-07-13_12_00_00_no_teb_nested.nc'
 file2 = '/media/lnx/98C4EEA4C4EE83BA/WRF-TEB-NC_Files/HighAlbedo/wrfout_d03_2015-07-13_12_00_00'
@@ -24,38 +24,33 @@ tair_units = fh.variables['T2'].units
 tair2 = fh2.variables['T2'] #147x135x174
 tair3 = fh3.variables['T2'] #147x135x174
 
-m = Basemap(width=57943,height=44955,\
+timeslices = 147
+UTC=0
+for i in range(timeslices):
+  tair_diff = tair2[i]-tair[i]
+  m = Basemap(width=57943,height=44955,\
             rsphere=(6378137.00,6356752.3142),\
             projection='lcc',\
             lat_1=30.,lat_2=60.,\
             lat_0=48.24166,\
             lon_0=16.37247,\
             resolution='l')
+  xi, yi = m(lons, lats)
+  cs = m.pcolor(xi,yi,np.squeeze(tair_diff))
+  cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+  cbar.set_label(tair_units)
+  hour = UTC % 24
+  day = int(round(UTC/24, 0))
+  plt.title(r'2m Tair $\alpha_{r}:.15>.68$ day %s UTC %s' %(str(day), str(hour)))
+  UTC+=1
+  plt.clim(-2,2)
+  figname = outpath + str(i) + "WRFTEBalb.png"
+  plt.savefig(figname)
 
-# Because our lon and lat variables are 1D,
-# use meshgrid to create 2D arrays
-# Not necessary if coordinates are already in 2D arrays.
-print lons[0], lats[0]
+  #plt.show()
+
 
 exit()
-'''
-lon, lat = np.meshgrid(lons, lats)
-xi, yi = m(lon, lat)
-cs = m.pcolor(xi,yi,np.squeeze(tair[1]))
-
-# Add Colorbar
-cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
-
-#cbar.set_label(tair_units)
-cbar.set_label(tair_units)
-#cbar.set_label(wind10m_units)
-plt.title('2m Air Temperature STQ 2015-07-20 0UTC')
-#plt.title('10m Wind Speed - 2015-07-20 18UTC')
-plt.clim(21,35)
-plt.show()
-'''
-
-
 
 ZAMGnames = {'11034': ['Wien-Innere Stadt',85,53], '11035':  ["Wien-Hohe Warte",83,69],
              '11036': ['Schwechat',129,25], '11037':['Gross-Enzersdorf',127,54],
