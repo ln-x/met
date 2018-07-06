@@ -9,8 +9,11 @@ file = '/home/lnx/MODELS/WRF/3_testdata/Urbania/Tair_d03.nc'
 fh = Dataset(file, mode='r')
 
 '''2dvariables'''
-lons = fh.variables['lon'][:]  #lon
-lats = fh.variables['lat'][:]  #lat
+lons = fh.variables['lon'][:]  #lon 135x175
+lats = fh.variables['lat'][:]  #lat 135x175
+print len(lons), len(lats)
+#exit()
+
 LU =fh.variables['LU']
 terrain =fh.variables['HGT']
 '''3dvariables'''
