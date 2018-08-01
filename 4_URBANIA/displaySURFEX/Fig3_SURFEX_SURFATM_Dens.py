@@ -23,20 +23,31 @@ file2 = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/h
 #file = '/home/lnx/MODELS/SURFEX/3_input/met_forcing/FORCING_new.nc'
 fh = Dataset(file, mode='r')
 fh2 = Dataset(file2, mode='r')
-hour = 18
+hour = 12
+hour2 = 18
 
 lons = fh.variables['xx'][:]  #lon
 lats = fh.variables['yy'][:]  #lat
 
-RN = fh.variables['RN'][121]
-H = fh.variables['H'][121]
-LE = fh.variables['LE'][121]
-GFLUX = fh.variables['GFLUX'][121]
+RN = fh.variables['RN'][115]
+H = fh.variables['H'][115]
+LE = fh.variables['LE'][115]
+GFLUX = fh.variables['GFLUX'][115]
 
-RN2 = fh2.variables['RN'][121]
-H2 = fh2.variables['H'][121]
-LE2 = fh2.variables['LE'][121]
-GFLUX2 = fh2.variables['GFLUX'][121]
+RN2 = fh2.variables['RN'][115]
+H2 = fh2.variables['H'][115]
+LE2 = fh2.variables['LE'][115]
+GFLUX2 = fh2.variables['GFLUX'][115]
+
+RN_2 = fh.variables['RN'][121]
+H_2 = fh.variables['H'][121]
+LE_2 = fh.variables['LE'][121]
+GFLUX_2 = fh.variables['GFLUX'][121]
+
+RN2_2 = fh2.variables['RN'][121]
+H2_2 = fh2.variables['H'][121]
+LE2_2 = fh2.variables['LE'][121]
+GFLUX2_2 = fh2.variables['GFLUX'][121]
 
 tair0UTC = fh.variables['T2M'][55]
 tair6UTC = fh.variables['T2M'][61]
@@ -92,10 +103,15 @@ xi, yi = m(lon, lat)
 
 '''Heat fluxes'''
 
-dRN = RN2 -RN
-dH = H2-H
+dRN = RN2 - RN
+dH = H2 - H
 dLE = LE2 - LE
 dGFLUX = GFLUX2 - GFLUX
+
+dRN_2 = RN2_2 - RN_2
+dH_2 = H2_2 - H_2
+dLE_2 = LE2_2 - LE_2
+dGFLUX_2 = GFLUX2_2 - GFLUX_2
 
 cs = m.pcolor(xi,yi,np.squeeze(RN))
 cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
@@ -107,10 +123,9 @@ plt.show()
 cs = m.pcolor(xi,yi,np.squeeze(dRN))
 cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
 cbar.set_label(heatflux_units)
-plt.title('Radiation Balance S1-STQ 2015-07-22 %s UTC' %(hour))
+plt.title('Radiation Balance Ref-STQ 2015-07-22 %s UTC' %(hour))
 plt.clim(-20,20)
 plt.show()
-
 
 cs = m.pcolor(xi,yi,np.squeeze(GFLUX))
 cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
@@ -122,9 +137,9 @@ plt.show()
 cs = m.pcolor(xi,yi,np.squeeze(dGFLUX))
 cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
 cbar.set_label(heatflux_units)
-plt.title('Ground Heat Flux S1-STQ 2015-07-22 %s UTC' %(hour))
-#plt.clim(21,35)
-plt.show()
+plt.title('Ground Heat Flux Ref-STQ 2015-07-22 %s UTC' %(hour))
+plt.clim(-20,20)
+#plt.show()
 
 
 cs = m.pcolor(xi,yi,np.squeeze(H))
@@ -137,8 +152,8 @@ plt.show()
 cs = m.pcolor(xi,yi,np.squeeze(dH))
 cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
 cbar.set_label(heatflux_units)
-plt.title('Sensible Heat Flux S1-STQ 2015-07-22 %s UTC' %(hour))
-#plt.clim(21,35)
+plt.title('Sensible Heat Flux Ref-STQ 2015-07-22 %s UTC' %(hour))
+plt.clim(-20,20)
 plt.show()
 
 
@@ -152,8 +167,44 @@ plt.show()
 cs = m.pcolor(xi,yi,np.squeeze(dLE))
 cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
 cbar.set_label(heatflux_units)
-plt.title('Latent Heat Flux S1-STQ 2015-07-22 %s UTC' %(hour))
+plt.title('Latent Heat Flux Ref-STQ 2015-07-22 %s UTC' %(hour))
+plt.clim(-20,20)
+plt.show()
+
+cs = m.pcolor(xi,yi,np.squeeze(dRN_2))
+cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+cbar.set_label(heatflux_units)
+plt.title('Radiation Balance Ref-STQ 2015-07-22 %s UTC' %(hour2))
+plt.clim(-20,20)
+plt.show()
+
+
+cs = m.pcolor(xi,yi,np.squeeze(GFLUX_2))
+cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+cbar.set_label(heatflux_units)
+plt.title('Ground Heat Flux STQ 2015-07-22 %s UTC' %(hour2))
 #plt.clim(21,35)
+plt.show()
+
+cs = m.pcolor(xi,yi,np.squeeze(dGFLUX_2))
+cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+cbar.set_label(heatflux_units)
+plt.title('Ground Heat Flux Ref-STQ 2015-07-22 %s UTC' %(hour2))
+plt.clim(-20,20)
+plt.show()
+
+cs = m.pcolor(xi,yi,np.squeeze(dH_2))
+cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+cbar.set_label(heatflux_units)
+plt.title('Sensible Heat Flux Ref-STQ 2015-07-22 %s UTC' %(hour2))
+plt.clim(-20,20)
+plt.show()
+
+cs = m.pcolor(xi,yi,np.squeeze(dLE_2))
+cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+cbar.set_label(heatflux_units)
+plt.title('Latent Heat Flux Ref-STQ 2015-07-22 %s UTC' %(hour2))
+plt.clim(-20,20)
 plt.show()
 
 exit()

@@ -11,7 +11,6 @@ file = '/media/lnx/98C4EEA4C4EE83BA/WRF-TEB-NC_Files/wrfout_d03_2015-07-13_12_00
 #file2 = '/media/lnx/98C4EEA4C4EE83BA/WRF-TEB-NC_Files/wrfout_d03_2015-07-13_12_00_00_no_teb_nested.nc'
 file2 = '/media/lnx/98C4EEA4C4EE83BA/WRF-TEB-NC_Files/HighAlbedo/wrfout_d03_2015-07-13_12_00_00'
 file3 = '/media/lnx/98C4EEA4C4EE83BA/WRF-TEB-NC_Files/HighAlbedo0_68Roof/wrfout_d03_2015-07-13_12_00_00'
-
 file4 = '/media/lnx/98C4EEA4C4EE83BA/WRF-TEB-NC_Files/2017_Teb/wrfout_d03_2017-07-27_00_00_00_joined.nc'
 file5 = '/media/lnx/98C4EEA4C4EE83BA/WRF-TEB-NC_Files/HighAlbedo0_3Roof_Canyon/wrfout_d03_2017-07-27_00_00_00'
 
@@ -24,9 +23,8 @@ fh5 = Dataset(file5, mode='r')
 '''time + 2dvariables'''
 lons = fh.variables['XLONG'][1]  #lon (147x)135x174
 lats = fh.variables['XLAT'][1]  #lat (147x)135x174
-tair = fh.variables['T2'] #147x135x174
-tair2 = fh2.variables['T2'] #147x135x174
-tair3 = fh3.variables['T2'] #147x135x174
+tair = fh4.variables['T2'] #147x135x174
+tair2 = fh5.variables['T2'] #147x135x174
 
 swup1 = fh4.variables['SWUPB']
 swup2 = fh5.variables['SWUPB']
@@ -51,7 +49,6 @@ swdown_units = fh.variables['SWDOWN'].units
 timeslices = 72
 UTC=0
 for i in range(timeslices):
-  rad_diff = (swup1[i]-swdown1[i]) - (swdown2[i]-swup2[i])
   tair_diff = tair2[i]-tair[i]
   m = Basemap(width=57943,height=44955,\
             rsphere=(6378137.00,6356752.3142),\
@@ -64,16 +61,17 @@ for i in range(timeslices):
   cs = m.pcolor(xi,yi,np.squeeze(tair_diff))
   #cs = m.pcolor(xi,yi,np.squeeze(rad_diff))
   cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
-  #cbar.set_label(tair_units)
-  cbar.set_label(swfx_units)
+  cbar.set_label(tair_units)
+  #cbar.set_label(swfx_units)
   #cbar.set_label(pblh_units)
   hour = UTC % 24
   day = int(round(UTC/24, 0))
   UTC += 1
-  plt.title(r'$\delta$ sw rad balance $\alpha_{r}:0.30-0.15$ day %s UTC %s' %(str(day), str(hour)))
+  plt.title(r'$\delta$ tair $\alpha_{r}:0.30-0.15$ day %s UTC %s' %(str(day), str(hour)))
+  #plt.title(r'$\delta$ sw rad balance $\alpha_{r}:0.30-0.15$ day %s UTC %s' %(str(day), str(hour)))
   #plt.clim(-2,2)
   #plt.clim(-2,80)
-  figname = outpath + "ALB_dSWradbal/" + str(i) + "WRFTEBalb2017_swbal.png"
+  figname = outpath + "ALB_dTair/" + str(i) + "WRFTEBalb2017_dtair.png"
   plt.savefig(figname)
 
   #plt.show()
