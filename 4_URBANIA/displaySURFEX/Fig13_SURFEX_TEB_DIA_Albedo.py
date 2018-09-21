@@ -5,6 +5,7 @@ from netCDF4 import Dataset
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
+#from pylab import *
 import csv
 
 '''This file plots 2D maps of SURFEX.nc files.  
@@ -68,30 +69,32 @@ xi, yi = m(lon, lat)
 
 dUTCIsun = UTCIsun2-UTCIsun
 dUTCIshade = UTCIshade2-UTCIshade
+cmap = plt.cm.get_cmap('RdBu', 11)    # 11 discrete colors
 
 cs = m.pcolor(xi,yi,np.squeeze(UTCIsun))
+
 cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
 cbar.set_label(u"°C")
 plt.title('UTCIsun Ref 2015-07-22 12UTC')
-#plt.clim(30,50)
+plt.clim(30,50)
 plt.show()
 
 cs = m.pcolor(xi,yi,np.squeeze(UTCIshade))
 cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
 cbar.set_label(u"°C")
 plt.title('UTCIshade Ref 2015-07-22 12UTC')
-#plt.clim(30,50)
+plt.clim(30,50)
 plt.show()
 
 cs = m.pcolor(xi,yi,np.squeeze(dUTCIsun))
-cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+cbar = m.colorbar(cs, cmap=cmap, location='bottom', pad="10%", extend="both")
 cbar.set_label(u"°C")
 plt.title('UTCIsun HighAlb-Ref 2015-07-22 12UTC')
 plt.clim(-0.5,0.5)
 plt.show()
 
 cs = m.pcolor(xi,yi,np.squeeze(dUTCIshade))
-cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+cbar = m.colorbar(cs, cmap=cmap, location='bottom', pad="10%", extend="both")
 cbar.set_label(u"°C")
 plt.title('UTCIshade HighAlb-Ref 2015-07-22 12UTC')
 plt.clim(-0.5,0.5)
