@@ -7,7 +7,25 @@ import matplotlib.pyplot as plt
 import sys
 
 outpath ='/home/lnx/'
-file = '/media/lnx/98C4EEA4C4EE83BA/WRF-TEB-NC_Files/wrfout_d03_2015-07-13_12_00_00_nest_teb.nc'
+test = '/home/lnx/MODELS/WRF/3_testdata/Urbania/2017_D3_WRFTEB/XLAT.nc'
+test = Dataset(test,mode='r')
+
+#lons = test.variables['XLONG'][1]  #lon (147x)135x174
+lats = test.variables['XLAT'][1]  #lat (147x)135x174
+
+#idx_lon1 = np.where(np.logical_and(lons>=15.97012329,lons<15.973))
+idx_lat1 = np.where(np.logical_and(lats>=48.03406525,lats<48.03407))
+#idx_lon =  np.concatenate(idx_lon1).tolist()
+idx_lat = np.concatenate(idx_lat1).tolist()
+#print idx
+#idx = [x for x in np.where(np.logical_and(lons>15,lons<15.97012329))]
+#print lats
+print idx_lat
+print lats[idx_lat]
+exit()
+
+
+file = '/media/lnx/98C4EEA4C4EE83BA/WRF-TEB-NC_Files/2015_Teb_nonTeb/wrfout_d03_2015-07-13_12_00_00_nest_teb.nc'
 #file2 = '/media/lnx/98C4EEA4C4EE83BA/WRF-TEB-NC_Files/wrfout_d03_2015-07-13_12_00_00_no_teb_nested.nc'
 file2 = '/media/lnx/98C4EEA4C4EE83BA/WRF-TEB-NC_Files/HighAlbedo/wrfout_d03_2015-07-13_12_00_00'
 file3 = '/media/lnx/98C4EEA4C4EE83BA/WRF-TEB-NC_Files/HighAlbedo0_68Roof/wrfout_d03_2015-07-13_12_00_00'
@@ -24,6 +42,7 @@ fh5 = Dataset(file5, mode='r')
 '''time + 2dvariables'''
 lons = fh.variables['XLONG'][1]  #lon (147x)135x174
 lats = fh.variables['XLAT'][1]  #lat (147x)135x174
+
 tair = fh.variables['T2'] #147x135x174
 tair2 = fh2.variables['T2'] #147x135x174
 tair3 = fh3.variables['T2'] #147x135x174
@@ -61,6 +80,8 @@ for i in range(timeslices):
             lon_0=16.37247,\
             resolution='l')
   xi, yi = m(lons, lats)
+  #print yi
+  #exit()
   cs = m.pcolor(xi,yi,np.squeeze(tair_diff))
   #cs = m.pcolor(xi,yi,np.squeeze(rad_diff))
   cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
@@ -71,6 +92,8 @@ for i in range(timeslices):
   day = int(round(UTC/24, 0))
   UTC += 1
   plt.title(r'$\delta$ sw rad balance $\alpha_{r}:0.30-0.15$ day %s UTC %s' %(str(day), str(hour)))
+  plt.show()
+  exit()
   #plt.clim(-2,2)
   #plt.clim(-2,80)
   figname = outpath + "ALB_dSWradbal/" + str(i) + "WRFTEBalb2017_swbal.png"
