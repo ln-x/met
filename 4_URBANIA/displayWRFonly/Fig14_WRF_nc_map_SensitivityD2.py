@@ -6,12 +6,12 @@ from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 import sys
 
-outpath ='/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/'
-file = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/Ref-run/wrfout_d03_2017-07-31_18_00_00.nc'
-file1 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/03a-Sensitivity-run-1/wrfout_d03_2017-07-31_18_00_00.nc'
-file2 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3b-Sensitivity-run-2/wrfout_d03_2017-07-31_18_00_00.nc'
-file3 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3c-Sensitivity-run-3/wrfout_d03_2017-07-31_18_00_00.nc'
-file4 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3d-Sensitivity-run-4/wrfout_d03_2017-07-31_18_00_00.nc'
+outpath ='/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/D2/'
+file = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/Ref-run/wrfout_d02_2017-07-31_18_00_00.nc'
+file1 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/03a-Sensitivity-run-1/wrfout_d02_2017-07-31_18_00_00.nc'
+file2 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3b-Sensitivity-run-2/wrfout_d02_2017-07-31_18_00_00.nc'
+file3 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3c-Sensitivity-run-3/wrfout_d02_2017-07-31_18_00_00.nc'
+file4 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3d-Sensitivity-run-4/wrfout_d02_2017-07-31_18_00_00.nc'
 
 fh = Dataset(file, mode='r')
 fh1 = Dataset(file1, mode='r')
@@ -106,7 +106,7 @@ figname = outpath + "Tair_Ref_" + str(timestep) + "_WRFTEB_Ref_2017_tair.png"
 #exit()
 
 timeslices = 37
-
+"""
 for i in range(timeslices):
   m = Basemap(width=57943,height=44955,\
             rsphere=(6378137.00,6356752.3142),\
@@ -148,8 +148,8 @@ for i in range(timeslices):
   plt.savefig(figname)
   plt.clf()
 exit()
-
-
+"""
+"""
 for i in range(timeslices):
   SWdownT_diff = swdownT4[i]-swdownT[i]
   m = Basemap(width=57943,height=44955,\
@@ -170,7 +170,8 @@ for i in range(timeslices):
   plt.savefig(figname)
   plt.clf()
 exit()
-
+"""
+"""
 for i in range(timeslices):
   m = Basemap(width=57943,height=44955,\
             rsphere=(6378137.00,6356752.3142),\
@@ -189,7 +190,7 @@ for i in range(timeslices):
   figname = outpath + "CLDFR_" + str(i) + "_WRFTEB_Ref.png"
   plt.savefig(figname)
   plt.clf()
-exit()
+#exit()
 
 for i in range(timeslices):
   m = Basemap(width=57943,height=44955,\
@@ -211,7 +212,7 @@ for i in range(timeslices):
   plt.clf()
 
 exit()
-
+"""
 
 for i in range(timeslices):
   m = Basemap(width=57943,height=44955,\
@@ -251,7 +252,7 @@ for i in range(timeslices):
   plt.savefig(figname)
   plt.clf()
 
-exit()
+#exit()
 
 for i in range(timeslices):
   LWdown_diff = lwdown4[i]-lwdown[i]
@@ -273,7 +274,7 @@ for i in range(timeslices):
   plt.savefig(figname)
   plt.clf()
 
-exit()
+#exit()
 
 
 for i in range(timeslices):
@@ -316,7 +317,7 @@ for i in range(timeslices):
   plt.savefig(figname)
   plt.clf()
 
-exit()
+#exit()
 
 for i in range(timeslices):
   m = Basemap(width=57943,height=44955,\
@@ -358,7 +359,7 @@ for i in range(timeslices):
   plt.clf()
   #plt.show()
 
-exit()
+#exit()
 
 """
 for i in range(timeslices):
