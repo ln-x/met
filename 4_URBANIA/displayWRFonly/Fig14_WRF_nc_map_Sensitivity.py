@@ -30,6 +30,9 @@ tair3 = fh3.variables['T2'][:] #147x135x174
 tair4 = fh4.variables['T2'][:] #147x135x174
 #print tair.shape
 
+tsur = fh.variables['TSK'][:] #147x135x174
+tsur4 = fh4.variables['TSK'][:] #147x135x174
+
 cldfr = fh.variables['CLDFRA'][:] #(37, 39, 135, 174)
 cldfr4 = fh4.variables['CLDFRA'][:]
 cldfrSUM = cldfr.sum(axis=1)
@@ -106,6 +109,69 @@ figname = outpath + "Tair_Ref_" + str(timestep) + "_WRFTEB_Ref_2017_tair.png"
 #exit()
 
 timeslices = 37
+
+timeslices = 37
+
+for i in range(timeslices):
+    m = Basemap(width=57943, height=44955, \
+                rsphere=(6378137.00, 6356752.3142), \
+                projection='lcc', \
+                lat_1=30., lat_2=60., \
+                lat_0=48.24166, \
+                lon_0=16.37247, \
+                resolution='l')
+    xi, yi = m(lons, lats)
+    cmap = plt.cm.get_cmap('bwr', 11)  # RdBu: Red to Blue, bwr: blue white red
+    cs = m.pcolor(xi, yi, np.squeeze(tsur[i]), cmap=cmap)
+    cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+    cbar.set_label(tair_units)
+    plt.title((r'Tskin Ref %d') % i)
+    plt.clim(306,312)
+    figname = outpath + "TSK_WRFTEB_Ref" + str(i) + ".png"
+    plt.savefig(figname)
+    plt.clf()
+
+for i in range(timeslices):
+    m = Basemap(width=57943, height=44955, \
+                rsphere=(6378137.00, 6356752.3142), \
+                projection='lcc', \
+                lat_1=30., lat_2=60., \
+                lat_0=48.24166, \
+                lon_0=16.37247, \
+                resolution='l')
+    xi, yi = m(lons, lats)
+    cmap = plt.cm.get_cmap('bwr', 11)  # RdBu: Red to Blue, bwr: blue white red
+    cs = m.pcolor(xi, yi, np.squeeze(tsur4[i]), cmap=cmap)
+    cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+    cbar.set_label(tair_units)
+    plt.title((r'Tskin HighAlb %d') % i)
+    plt.clim(306,312)
+    figname = outpath + "TSK_WRFTEB_HighAlb" + str(i) + ".png"
+    plt.savefig(figname)
+    plt.clf()
+
+for i in range(timeslices):
+    Tsur_diff = tsur4[i] - tsur[i]
+    m = Basemap(width=57943, height=44955, \
+                rsphere=(6378137.00, 6356752.3142), \
+                projection='lcc', \
+                lat_1=30., lat_2=60., \
+                lat_0=48.24166, \
+                lon_0=16.37247, \
+                resolution='l')
+    xi, yi = m(lons, lats)
+    cmap = plt.cm.get_cmap('bwr', 11)  # RdBu: Red to Blue, bwr: blue white red
+    cs = m.pcolor(xi, yi, np.squeeze(Tsur_diff), cmap=cmap)
+    cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+    cbar.set_label(tair_units)
+    plt.title((r'$\delta$ Tskin HighAlb-Ref %d') % i)
+    plt.clim(-2,2)
+    figname = outpath + "TSK_" + str(i) + "_WRFTEB_HighAlb-Ref.png"
+    plt.savefig(figname)
+    plt.clf()
+
+exit()
+
 
 for i in range(timeslices):
   m = Basemap(width=57943,height=44955,\
