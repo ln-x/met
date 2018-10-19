@@ -6,12 +6,13 @@ from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 import sys
 
-outpath ='/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/'
-file = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/Ref-run/wrfout_d03_2017-07-31_18_00_00.nc'
-file1 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/03a-Sensitivity-run-1/wrfout_d03_2017-07-31_18_00_00.nc'
-file2 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3b-Sensitivity-run-2/wrfout_d03_2017-07-31_18_00_00.nc'
-file3 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3c-Sensitivity-run-3/wrfout_d03_2017-07-31_18_00_00.nc'
-file4 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3d-Sensitivity-run-4/wrfout_d03_2017-07-31_18_00_00.nc'
+outpath ='/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/FIG/'
+file = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/Ref-run/wrfout_d03_2017-07-31_18_00_00.nc'
+#file1 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/03a-Sensitivity-run-1/wrfout_d03_2017-07-31_18_00_00.nc'
+file1 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/03a-rerun/wrfout_d03_2017-07-31_18_00_00.nc'
+file2 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/3b-Sensitivity-run-2/wrfout_d03_2017-07-31_18_00_00.nc'
+file3 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/3c-Sensitivity-run-3/wrfout_d03_2017-07-31_18_00_00.nc'
+file4 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/3d-Sensitivity-run-4/wrfout_d03_2017-07-31_18_00_00.nc'
 
 fh = Dataset(file, mode='r')
 fh1 = Dataset(file1, mode='r')
@@ -109,9 +110,7 @@ figname = outpath + "Tair_Ref_" + str(timestep) + "_WRFTEB_Ref_2017_tair.png"
 #exit()
 
 timeslices = 37
-
-timeslices = 37
-
+"""
 for i in range(timeslices):
     m = Basemap(width=57943, height=44955, \
                 rsphere=(6378137.00, 6356752.3142), \
@@ -402,6 +401,7 @@ for i in range(timeslices):
   figname = outpath + "SWDOWN_" + str(i) + "_WRFTEB_HighAlb.png"
   plt.savefig(figname)
   plt.clf()
+"""
 
 for i in range(timeslices):
   tair_diff = tair1[i]-tair[i]
@@ -418,7 +418,7 @@ for i in range(timeslices):
   cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
   cbar.set_label(tair_units)
   plt.title((r'$\delta$ tair Dens-Ref %d') %i)
-  plt.clim(-0.5,0.5)
+  plt.clim(-2,2)
   figname = outpath + "Tair_" + str(i) + "_WRFTEB_Dens-Ref.png"
   plt.savefig(figname)
   plt.clf()

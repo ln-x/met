@@ -7,8 +7,8 @@ from netCDF4 import Dataset
 from pylab import *
 
 
-outpath ='/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/'
-file = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/Ref-run/wrfout_d03_2017-07-31_18_00_00.nc'
+outpath ='/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/'
+file = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/Ref-run/wrfout_d03_2017-07-31_18_00_00.nc'
 
 fh = Dataset(file, mode='r')
 #fh2 = Dataset(file2, mode='r')

@@ -11,12 +11,13 @@ IS_LE,IS1_LE,IS2_LE,IS3_LE,IS4_LE = [],[],[],[],[]
 IS_SW,IS1_SW,IS2_SW,IS3_SW,IS4_SW = [],[],[],[],[]
 IS_LW,IS1_LW,IS2_LW,IS3_LW,IS4_LW = [],[],[],[],[]
 
-outpath ='/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/'
-file = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/Ref-run/wrfout_d03_2017-07-31_18_00_00.nc'
-file1 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/03a-Sensitivity-run-1/wrfout_d03_2017-07-31_18_00_00.nc'
-file2 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3b-Sensitivity-run-2/wrfout_d03_2017-07-31_18_00_00.nc'
-file3 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3c-Sensitivity-run-3/wrfout_d03_2017-07-31_18_00_00.nc'
-file4 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3d-Sensitivity-run-4/wrfout_d03_2017-07-31_18_00_00.nc'
+outpath ='/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/'
+file = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/Ref-run/wrfout_d03_2017-07-31_18_00_00.nc'
+file1 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/03a-Sensitivity-run-1/wrfout_d03_2017-07-31_18_00_00.nc'
+#file1 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/03a-rerun/wrfout_d03_2017-07-31_18_00_00.nc'
+file2 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/3b-Sensitivity-run-2/wrfout_d03_2017-07-31_18_00_00.nc'
+file3 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/3c-Sensitivity-run-3/wrfout_d03_2017-07-31_18_00_00.nc'
+file4 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/3d-Sensitivity-run-4/wrfout_d03_2017-07-31_18_00_00.nc'
 
 for i in range(0,37,1):
  f = nc.Dataset(file)
@@ -291,14 +292,16 @@ LW_IS4diff = difference(IS4_LW,IS_LW)
 
 time = range(0,37,1)
 
-"""
+#"""
 fig_tair = plt.figure()
 major_ticks = np.arange(0, 37, 6)
 minor_ticks = np.arange(0, 37, 3)
 plt.xticks(major_ticks)
+
 #plt.xticks(minor_ticks)
 #plt.plot(time,ISdiff_DenseIso, color="black", label="Dense-Iso")
 plt.plot(time,IS1diff, color="black", label="Dense-Ref")
+#plt.plot(time,IS1diff, color="black", label="Dense_rerun-Ref")
 plt.plot(time,IS2diff, color="blue", label="Iso-Ref")
 plt.plot(time,IS3diff, color="green", label="Unseal-Ref")
 plt.plot(time,IS4diff, color="violet", label="HighAlb-Ref")
@@ -311,7 +314,7 @@ plt.ylabel(r"$\delta T_{air_2m}$"u'[°C]')
 plt.legend(loc='upper right')
 plt.show()
 #"""
-#exit()
+exit()
 """
 fig_LE = plt.figure()
 major_ticks = np.arange(0, 37, 6)

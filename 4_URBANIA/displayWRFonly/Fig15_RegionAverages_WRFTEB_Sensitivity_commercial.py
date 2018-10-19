@@ -11,12 +11,12 @@ IS_LE,IS1_LE,IS2_LE,IS3_LE,IS4_LE = [],[],[],[],[]
 IS_SW,IS1_SW,IS2_SW,IS3_SW,IS4_SW = [],[],[],[],[]
 IS_LW,IS1_LW,IS2_LW,IS3_LW,IS4_LW = [],[],[],[],[]
 
-outpath ='/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/'
-file = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/Ref-run/wrfout_d03_2017-07-31_18_00_00.nc'
-file1 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/03a-Sensitivity-run-1/wrfout_d03_2017-07-31_18_00_00.nc'
-file2 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3b-Sensitivity-run-2/wrfout_d03_2017-07-31_18_00_00.nc'
-file3 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3c-Sensitivity-run-3/wrfout_d03_2017-07-31_18_00_00.nc'
-file4 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201708/Sensitivity_Runs/3d-Sensitivity-run-4/wrfout_d03_2017-07-31_18_00_00.nc'
+outpath ='/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/'
+file = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/Ref-run/wrfout_d03_2017-07-31_18_00_00.nc'
+file1 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/03a-Sensitivity-run-1/wrfout_d03_2017-07-31_18_00_00.nc'
+file2 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/3b-Sensitivity-run-2/wrfout_d03_2017-07-31_18_00_00.nc'
+file3 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/3c-Sensitivity-run-3/wrfout_d03_2017-07-31_18_00_00.nc'
+file4 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/3d-Sensitivity-run-4/wrfout_d03_2017-07-31_18_00_00.nc'
 
 for i in range(0,37,1):
  f = nc.Dataset(file)
