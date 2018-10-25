@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 from netCDF4 import Dataset
 from pylab import *
 
-
 outpath ='/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/'
 file = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/Ref-run/wrfout_d03_2017-07-31_18_00_00.nc'
 
@@ -91,7 +90,7 @@ for i in range(6,37,1):
  LE_WI = LE[51:56][:,65:70]
 
  IS_mn = np.average(np.hstack(tair_IS))
- SA_mn = np.average(np.hstack(tair_SA))
+ SA_mn = np.average(np.hstack(tair_AS))
  WI_mn = np.average(np.hstack(tair_WI))
  IS_alb_mn = np.average(np.hstack(alb_IS))
  IS_H_mn = np.average(np.hstack(H_IS))
@@ -160,7 +159,7 @@ axs[1,1].set_ylabel("$Latent Heat Flux [W m-2]$")
 plt.show()
 #"""
 
-exit()
+#exit()
 #WT_2030_1a = transpose(np.array([WT_1a_2030_V0,WT_1a_2030,WT_1a_2030_V100]))
 Tair= transpose(np.array([IS,SA,WI]))
 ALB= transpose(np.array([IS_alb,SA_alb,WI_alb]))

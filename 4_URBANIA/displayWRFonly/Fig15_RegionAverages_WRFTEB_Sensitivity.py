@@ -314,7 +314,7 @@ plt.ylabel(r"$\delta T_{air_2m}$"u'[°C]')
 plt.legend(loc='upper right')
 plt.show()
 #"""
-exit()
+#exit()
 """
 fig_LE = plt.figure()
 major_ticks = np.arange(0, 37, 6)
@@ -399,7 +399,7 @@ axs[1,1].legend(loc='upper right')
 plt.show()
 #"""
 
-exit()
+#exit()
 #WT_2030_1a = transpose(np.array([WT_1a_2030_V0,WT_1a_2030,WT_1a_2030_V100]))
 Tair= transpose(np.array([IS,SA,WI]))
 ALB= transpose(np.array([IS_alb,SA_alb,WI_alb]))
