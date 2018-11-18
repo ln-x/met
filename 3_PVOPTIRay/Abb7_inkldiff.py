@@ -6,7 +6,7 @@ import datetime
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
-from TEB.displaySURFEX.CONVERTSURFEXTEXTE import loadfile
+from CONVERTSURFEXTEXTE import loadfile
 from matplotlib.dates import DateFormatter
 
 S200ns = "/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/lnx/PVFINAL/200_Can_A_N/2017_170171NS/TCANYON.TXT"

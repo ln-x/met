@@ -5,41 +5,50 @@ from netCDF4 import Dataset
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
-#from pylab import *
 import csv
 
 '''This file plots 2D maps of SURFEX.nc files.  
 This is the cleaned version of the script, for all comments see Fig4_plotSURFFEXDIFF_nc1.py
 For hourly loop look at Fig5_plotSURFEX_nc1_hourly.py'''
 
-file = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/_S13/TEB_DIAGNOSTICS.OUT.nc'
-file = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/_S13/TEB_DIAGNOSTICS.OUT.nc'
+file = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/S12/TEB_DIAGNOSTICS.OUT.nc'
+file2 = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/S13/TEB_DIAGNOSTICS.OUT.nc'
+fileREF = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/S15_XUNIF/TEB_DIAGNOSTICS.OUT.nc'
+fileS2 = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/S16_XUNIF/TEB_DIAGNOSTICS.OUT.nc'
+fileS3 = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/S17_XUNIF/TEB_DIAGNOSTICS.OUT.nc'
 
-file = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/_S13/TEB_DIAGNOSTICS.OUT.nc'
-file2 = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/_S20_ALB/TEB_DIAGNOSTICS.OUT.nc'
+#file = '/home/lnx/MODELS/SURFEX/3_input/met_forcing/FORCING_new.nc'
 fh = Dataset(file, mode='r')
 fh2 = Dataset(file2, mode='r')
-hour = 12
-index = 103+hour
-#print index
+fhref= Dataset(fileREF, mode='r')
+fhs2 = Dataset(fileS2, mode='r')
+fhs3 = Dataset(fileS3, mode='r')
 
 lons = fh.variables['xx'][:]  #lon
 lats = fh.variables['yy'][:]  #lat
+RN = fh.variables['RN_TEB'][73]
+H = fh.variables['H_TEB'][73]
+LE = fh.variables['LE_TEB'][73]
+GFLUX = fh.variables['GFLUX_TEB'][73]
+UTCIsun = fh.variables['UTCI_OUTSUN'][121]
+UTCIshade = fh.variables['UTCI_OUTSHAD'][121]
+UTCIsun2 = fh2.variables['UTCI_OUTSUN'][121]
+UTCIshade2 = fh2.variables['UTCI_OUTSHAD'][121]
 
-#print lons, lats
-#exit()
+UTCIsunREF = fhref.variables['UTCI_OUTSUN'][115]
+UTCIsunS2 = fhs2.variables['UTCI_OUTSUN'][115]
+UTCIsunS3 = fhs3.variables['UTCI_OUTSUN'][115]
+UTCIshadeREF = fhref.variables['UTCI_OUTSHAD'][121]
+UTCIshadeS2 = fhs2.variables['UTCI_OUTSHAD'][121]
+UTCIshadeS3 = fhs3.variables['UTCI_OUTSHAD'][121]
+#starts at 17.7.18hUTC [0], hourly ->
+# 18.7.0h [7],6h[13], 12h [19], 14h [21], 18h [42], 6h [54]
+# 20.7.  0h[55], 5h[60], 6h[61], 12h [67], 14h[69], HOTTEST 15h[70], 18h [73]
+# 22.7.  0h[103], 6h[109], 12h [115], 18h [121]
+heatflux_units = fh.variables['RN_TEB'].units
 
-UTCIsun = fh.variables['UTCI_OUTSUN'][index]
-UTCIshade = fh.variables['UTCI_OUTSHAD'][index]
-UTCIsun2 = fh2.variables['UTCI_OUTSUN'][index]
-UTCIshade2 = fh2.variables['UTCI_OUTSHAD'][index]
-HVAC = fh.variables['HVAC_CL'][index]
-HVAC2 = fh2.variables['HVAC_CL'][index]
-UTCI_units = fh.variables['UTCI_OUTSUN'].units
-HVAC_units = fh.variables['HVAC_CL'].units
 
 fh.close()
-fh2.close()
 
 '''CONVERSION TO LATLON'''
 lons2,lats2 =[],[]
@@ -64,36 +73,81 @@ xi, yi = m(lon, lat)
 
 '''UTCI'''
 
-dUTCIsun = UTCIsun2-UTCIsun
-dUTCIshade = UTCIshade2-UTCIshade
-cmap = plt.cm.get_cmap('RdBu', 11)    # 11 discrete colors
-
-cs = m.pcolor(xi,yi,np.squeeze(UTCIsun))
-
+cs = m.pcolor(xi,yi,np.squeeze(UTCIsunREF))
 cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
 cbar.set_label(u"°C")
-plt.title('UTCIsun Ref 2015-07-22 12UTC')
-plt.clim(30,50)
+plt.title('UTCIsun STQ 2015-07-22 12UTC')
+plt.clim(40,50)
+plt.show()
+
+cs = m.pcolor(xi,yi,np.squeeze(UTCIsunS2))
+cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+cbar.set_label(u"°C")
+plt.title('UTCIsun S2 2015-07-22 12UTC')
+plt.clim(40,50)
+plt.show()
+
+cs = m.pcolor(xi,yi,np.squeeze(UTCIsunS3))
+cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+cbar.set_label(u"°C")
+plt.title('UTCIsun S3 2015-07-22 12UTC')
+plt.clim(40,50)
+plt.show()
+
+exit()
+
+cs = m.pcolor(xi,yi,np.squeeze(UTCIshadeREF))
+cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+cbar.set_label(u"°C")
+plt.title('UTCIshade STQ 2015-07-22 18UTC')
+plt.clim(20,35)
+plt.show()
+
+cs = m.pcolor(xi,yi,np.squeeze(UTCIshadeS2))
+cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+cbar.set_label(u"°C")
+plt.title('UTCIshade S2 2015-07-22 18UTC')
+plt.clim(20,35)
+plt.show()
+
+cs = m.pcolor(xi,yi,np.squeeze(UTCIshadeS3))
+cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+cbar.set_label(u"°C")
+plt.title('UTCIshade S3 2015-07-22 18UTC')
+plt.clim(20,35)
+plt.show()
+
+exit()
+
+
+dUTCIsun = UTCIsun2-UTCIsun
+dUTCIshade = UTCIshade2-UTCIshade
+
+cs = m.pcolor(xi,yi,np.squeeze(UTCIsun))#,cmap=cmap)
+cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
+cbar.set_label(u"°C")
+plt.title('UTCIsun STQ 2015-07-22 18UTC')
+plt.clim(20,35)
 plt.show()
 
 cs = m.pcolor(xi,yi,np.squeeze(UTCIshade))
 cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
 cbar.set_label(u"°C")
-plt.title('UTCIshade Ref 2015-07-22 12UTC')
-plt.clim(30,50)
+plt.title('UTCIshade STQ 2015-07-22 18UTC')
+plt.clim(20,35)
 plt.show()
 
 cs = m.pcolor(xi,yi,np.squeeze(dUTCIsun))
-cbar = m.colorbar(cs, cmap=cmap, location='bottom', pad="10%", extend="both")
+cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
 cbar.set_label(u"°C")
-plt.title('UTCIsun HighAlb-Ref 2015-07-22 12UTC')
+plt.title('UTCIsun S1-STQ 2015-07-22 18UTC')
 plt.clim(-0.5,0.5)
 plt.show()
 
 cs = m.pcolor(xi,yi,np.squeeze(dUTCIshade))
-cbar = m.colorbar(cs, cmap=cmap, location='bottom', pad="10%", extend="both")
+cbar = m.colorbar(cs, location='bottom', pad="10%", extend="both")
 cbar.set_label(u"°C")
-plt.title('UTCIshade HighAlb-Ref 2015-07-22 12UTC')
+plt.title('UTCIshade S1-STQ 2015-07-22 18UTC')
 plt.clim(-0.5,0.5)
 plt.show()
 
