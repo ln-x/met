@@ -12,10 +12,12 @@ import csv
 This is the cleaned version of the script, for all comments see Fig4_plotSURFFEXDIFF_nc1.py
 For hourly loop look at Fig5_plotSURFEX_nc1_hourly.py'''
 
+forc = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201508/Ref_Heidi_Lu_2015_1stRun/wrfout_d03_2015-08-05_18_00_00.nc'
 file = '/media/lnx/Norskehavet/OFFLINE/20150804_FR_Ref/SURF_ATM_DIAGNOSTICS.OUT.nc'
 file1 = '/media/lnx/Norskehavet/OFFLINE/20150804_FR_Ref/TEB_DIAGNOSTICS.OUT.nc'
 file2 = '/media/lnx/Norskehavet/OFFLINE/20150804_FR_Spr/TEB_DIAGNOSTICS.OUT.nc'
 
+#f = Dataset(forc, mode='r')
 fh = Dataset(file, mode='r')
 fh1 = Dataset(file1, mode='r')
 fh2 = Dataset(file2, mode='r')
@@ -23,11 +25,8 @@ hour = 12
 index = 6+(3*24)+hour
 #print index
 
-lons = fh.variables['xx'][:]  #lon
-lats = fh.variables['yy'][:]  #lat
-
-#print lons, lats
-#exit()
+lons = fh.variables['xx'][:]  #shape: (174,)
+lats = fh.variables['yy'][:]  #shape: (135,)
 
 Tair = fh.variables['T2M'][index]
 
@@ -77,7 +76,7 @@ plt.title('Tair Ref 2015-08-09 12UTC')
 #plt.clim(30,50)
 plt.show()
 
-exit()
+#exit()
 
 
 cs = m.pcolor(xi,yi,np.squeeze(UTCIsun))

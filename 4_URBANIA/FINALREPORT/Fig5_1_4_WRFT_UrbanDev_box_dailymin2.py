@@ -32,17 +32,22 @@ tair2 = f2.variables['T2'][:]
 # or last 5 days: [:-120]
 #2) remove days with clouds:
 #10:4UTC, 18:12UTC, 30:24UTC, 34:4UTC
+print "tair.shape=", tair.shape
+
+print len(tair[174:198])
+exit()
+
 tair_max1 = tair[78:102].min(axis=0)
 tair_max2 = tair[102:126].min(axis=0)
 tair_max3 = tair[150:174].min(axis=0)
 tair_max4 = tair[174:198].min(axis=0)
 tair_max = np.array([tair_max1,tair_max2,tair_max3,tair_max4])
-tair_max = tair_max.mean(axis=0)
-
 print "tair_max1.shape=", tair_max1.shape
-print "tair_max2.shape=", tair_max2.shape
-print "tair_max3.shape=", tair_max3.shape
-print tair_max.shape
+print "tair_max.shape=", tair_max.shape
+tair_max = tair_max.mean(axis=0)
+print "tair_max.mean.shape=", tair_max.shape
+
+#exit()
 
 tair1_max1 = tair1[78:102].min(axis=0)  #9.8.2015
 tair1_max2 = tair1[102:126].min(axis=0) #10.8.2015
@@ -98,7 +103,6 @@ SI2 = tair2_max[31:40][:,68:77]
 VW2 = tair2_max[47:56][:,64:73]
 WE2 = tair2_max[62:71][:,73:82]
 
-
 print "CE.shape=", CE.shape, CE1.shape, CE2.shape
 print "RU.shape=", RU.shape, RU1.shape, RU2.shape
 print "SA.shape=", SA.shape, SA1.shape, SA2.shape
@@ -108,6 +112,7 @@ print "SI.shape=", SI.shape, SI1.shape, SI2.shape
 print "VW.shape=", VW.shape, VW1.shape, VW2.shape
 print "WE.shape=", WE.shape, WE1.shape, WE2.shape
 print "NO.shape=", NO.shape, NO1.shape, NO2.shape
+#print CE, CE1
 #exit()
 
 #Tair= transpose(np.array([CE,SA,RU,SE,SX,SI,VW,WE,NO]))
@@ -132,7 +137,7 @@ labels = ["REF","SPR","OPT"]
 #whis=[5,95]  Set whiskers to percentiles
 
 
-fig2, axs = plt.subplots(nrows=1, ncols=9)#, figsize=(9, 4))
+fig2, axs = plt.subplots(nrows=1, ncols=10)#, figsize=(9, 4))
 fig2.suptitle("mean daily minima, averaged over regions for 9,10,12,13 Aug 2015")
 axs[0].boxplot(TairCE, notch=True, labels=labels, showfliers=True, whis=[5,95])
 axs[0].set_ylabel(r"$T_{air_2m}$"u'[°C]')
@@ -178,6 +183,11 @@ axs[8].boxplot(TairNO,  notch=True, labels=labels, showfliers=True,  whis=[5,95]
 axs[8].set_ylim([294,299.5])
 axs[8].set_xlabel("NorthRim")
 axs[8].set_yticklabels([])
+
+axs[9].boxplot(TairNO,  notch=True, labels=labels, showfliers=True,  whis=[5,95], bootstrap=100000, autorange=False)
+axs[9].set_ylim([294,299.5])
+axs[9].set_xlabel("NorthRim")
+axs[9].set_yticklabels([])
 
 plt.show()
 
