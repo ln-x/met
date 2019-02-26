@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 import csv
 file = '/home/lnx/MODELS/SURFEX/2_source/SURFEX_TRUNK_4818/trunk/MY_RUN/KTEST/hapex/PGD.nc'
+#file = '/media/lnx/Norskehavet/OFFLINE/NEW_2069OPT/PGD.nc'
 fh = Dataset(file, mode='r')
 
 lons = fh.variables['xx'][:]  #lon

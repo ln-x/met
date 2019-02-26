@@ -6,6 +6,13 @@ import matplotlib.pyplot as plt
 from netCDF4 import Dataset
 from pylab import *
 
+"""
+Creates MIN MAX Boxplots from all chosen Areas and runs
+
+***********       WHISKERS show the whole RANGE      ***********
+
+"""
+
 outpath_sens ='/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/'
 ref = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201707/Sensitivity_Runs/Ref-run/wrfout_d03_2017-07-31_18_00_00.nc'
 
@@ -13,6 +20,8 @@ outpath ='/media/lnx/Norskehavet/WRF-TEB-NC_Files/201508/'
 file = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201508/Ref_Heidi_Lu_2015_1stRun/wrfout_d03_2015-08-05_18_00_00.nc'
 file1 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201508/Sprawl_2050_2ndRun/wrfout_d03_2015-08-05_18_00_00.nc'
 file2 = '/media/lnx/Norskehavet/WRF-TEB-NC_Files/201508/Dense_2050_3rdRun_Optimized_city/wrfout_d03_2015-08-05_18_00_00.nc'
+
+
 
 f = Dataset(file, mode='r')
 f1 = Dataset(file1, mode='r')

@@ -4,20 +4,34 @@ import matplotlib.pyplot as plt
 import numpy as np
 import datetime
 import csv
+from matplotlib.offsetbox import AnchoredOffsetbox, AuxTransformBox, VPacker,\
+    TextArea, DrawingArea
+import matplotlib.ticker as ticker
+
+
+class AnchoredText(AnchoredOffsetbox):
+    def __init__(self, s, loc, pad=0.4, borderpad=0.5, prop=None, frameon=True):
+        self.txt = TextArea(s,
+                            minimumdescent=False)
+        super(AnchoredText, self).__init__(loc, pad=pad, borderpad=borderpad,
+                                           child=self.txt,
+                                           prop=prop,
+                                           frameon=frameon)
+
 
 # ---READING DATA---
 #path = "/home/lnx/0_TEB/TEB/TEB_v1_1550/output/"
-directory = "/home/lnx/MODELS/TEB/3_testdata/REALtest/"
+directory = "/home/lnx/MODELS/TEB/3_testdata/LCZtest/"
 driver = "src_driver/driver.f90"
-scenario1 = "R01"
-scenario2 = "R02"
-scenario3 = "R03"
-scenario4 = "R04"
-scenario5 = "R05"
-scenario6 = "R06"
-scenario7 = "R07"
-scenario8 = "R08"
-scenario9 = "R09"
+scenario1 = "LCZ9"
+scenario2 = "LCZ6"
+scenario3 = "LCZ2"
+scenario4 = "LCZ5"
+scenario5 = "LCZ2" #dummy
+scenario6 = "LCZ2" #dummy
+scenario7 = "LCZ4"
+scenario8 = "LCZ2" #dummy
+scenario9 = "LCZ8"
 
 path = directory+"output_"+scenario1+"/"
 path2 = directory+"output_"+scenario2+"/"
@@ -258,10 +272,16 @@ t2 = n - 71 + 18 + 3  #midnight - 5:50min + 3h + 0.5h = 15h
 t3 = n - 71 - 54 - 12 #midnight - 5:50min - 9h = 3h
 t4 = n - 71 - 18 + 3 -12 #midnight - 5:50min - 3h + 0.5h = 9h
 
+def my_formatter(x,p):
+    #return "%1.2f" %x
+    return time.strftime("%H:%M") %x
+#time.strftime("%Y-%m-%d %H:%M")
+
 fig = plt.figure()#sharex= True, sharey= True)
 
-ax1 = fig.add_subplot(221)
-#plt.setp(ax.get_xticklabels(), visible=False)
+ax1 = fig.add_subplot(421)
+at = AnchoredText("a",loc=2, frameon=True)
+ax1.add_artist(at)
 ax1.plot(x[:120], tempcanyon_3[:120], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
 ax1.plot(x[:120], tempcanyon_7[:120], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
 ax1.plot(x[:120], tempcanyon_4[:120], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
@@ -270,144 +290,25 @@ ax1.plot(x[:120], tempcanyon_9[:120], linestyle='-', color = 'blue', label='LCZ8
 ax1.plot(x[:120], tempcanyon[:120], linestyle='-', color = 'green', label='LCZ9 sparsely built') #1 locker bebautes Wohn(misch)gebiet
 for label in ax1.get_xticklabels()[::2]:
     label.set_visible(False)
+#ax1.get_xaxis().set_major_formatter(ticker.FuncFormatter(my_formatter))
 #plt.gcf().autofmt_xdate()
 ax1.grid(b=True, which='major', color='grey', linestyle=':')
-ax1.set_ylabel(u'air temperature [°C]', fontsize='large')
-#ax.set_xlim([0.0,23.0])
+ax1.set_ylabel(u'T_air[°C]', fontsize='large')
 
-ax2 = fig.add_subplot(222)
-ax2.plot(x[:120], data3[1][:120], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
-ax2.plot(x[:120],data7[1][:120], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
-ax2.plot(x[:120],data4[1][:120], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
-ax2.plot(x[:120],data2[1][:120], linestyle='-', color = 'yellow', label='LCZ6 open low-rise')#2 Gartenstadt
-ax2.plot(x[:120],data9[1][:120], linestyle='-', color = 'blue', label='LCZ8 large low-rise')#9Industrie prod Gewerbe, Grosshandel inkl. Lager
-ax2.plot(x[:120],data[1][:120], linestyle='-', color = 'green', label='LCZ9 sparsely built') #1 locker bebautes Wohn(misch)gebiet
-#plt.setp(ax.get_xticklabels(), visible=False)
-for label in ax2.get_xticklabels()[::2]:
-    label.set_visible(False)
-ax2.grid(b=True, which='major', color='grey', linestyle=':')
-ax2.set_ylabel(u'latent heat flux [W/m²]', fontsize='large')
-#ax.set_ylim([-100,0])
-#ax.set_xlim([0.0,23.0])
-
-ax3 = fig.add_subplot(223)
-ax3.plot(x[:120],data3[2][:120], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
-ax3.plot(x[:120],data7[2][:120], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
-ax3.plot(x[:120],data4[2][:120], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
-ax3.plot(x[:120],data2[2][:120], linestyle='-', color = 'yellow', label='LCZ6 open low-rise')#2 Gartenstadt
-ax3.plot(x[:120],data9[2][:120], linestyle='-', color = 'blue', label='LCZ8 large low-rise')#9Industrie prod Gewerbe, Grosshandel inkl. Lager
-ax3.plot(x[:120],data[2][:120], linestyle='-', color = 'green', label='LCZ9 sparsely built') #1 locker bebautes Wohn(misch)gebiet
-#ax.set_ylim([-50,50])
-#ax.set_xlim([0.0,23.0])
-for label in ax3.get_xticklabels()[::2]:
-    label.set_visible(False)
-ax3.grid(b=True, which='major', color='grey', linestyle=':')
-ax3.set_ylabel(u'radiation balance [W/m²]', fontsize='large')
-ax3.set_xlabel('time [UTC]', fontsize='large')
-
-ax4 = fig.add_subplot(224)
-ax4.plot(x[:120],data3[0][:120], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
-ax4.plot(x[:120],data7[0][:120], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
-ax4.plot(x[:120],data4[0][:120], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
-ax4.plot(x[:120],data2[0][:120], linestyle='-', color = 'yellow', label='LCZ6 open low-rise')#2 Gartenstadt
-ax4.plot(x[:120],data9[0][:120], linestyle='-', color = 'blue', label='LCZ8 large low-rise')#9Industrie prod Gewerbe, Grosshandel inkl. Lager
-ax4.plot(x[:120],data[0][:120], linestyle='-', color = 'green', label='LCZ9 sparsely built') #1 locker bebautes Wohn(misch)gebiet
-#ax.set_ylim([-50,50])
-#ax.set_xlim([0.0,23.0])
-for label in ax4.get_xticklabels()[::2]:
-    label.set_visible(False)
-ax4.grid(b=True, which='major', color='grey', linestyle=':')
-ax4.set_ylabel(u'sensible heat flux [W/m²]', fontsize='large')
-ax4.set_xlabel('time [UTC]', fontsize='large')
-
-#plt.legend()
-
-plt.show()
-
-
-print x
-
-fig = plt.figure()#sharex= True, sharey= True)
-
-ax1 = fig.add_subplot(221)
+ax1 = fig.add_subplot(422)
 ax1.plot(x[t1:t2], tempcanyon_3[t1:t2], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
 ax1.plot(x[t1:t2],tempcanyon_7[t1:t2], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
 ax1.plot(x[t1:t2],tempcanyon_4[t1:t2], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
 ax1.plot(x[t1:t2],tempcanyon_2[t1:t2], linestyle='-', color = 'yellow', label='LCZ6 open low-rise')#2 Gartenstadt
 ax1.plot(x[t1:t2],tempcanyon_9[t1:t2], linestyle='-', color = 'blue', label='LCZ8 large low-rise')#9Industrie prod Gewerbe, Grosshandel inkl. Lager
 ax1.plot(x[t1:t2],tempcanyon[t1:t2], linestyle='-', color = 'green', label='LCZ9 sparsely built') #1 locker bebautes Wohn(misch)gebiet
-#plt.setp(ax1.get_xticklabels(), visible=False)
 for label in ax1.get_xticklabels()[::2]:
     label.set_visible(False)
 ax1.grid(b=True, which='major', color='grey', linestyle=':')
-ax1.set_ylabel(u'air temperature [°C]', fontsize='large')
-#plt.setp(ax3.get_xticklabels(), visible=False)
-#ax.set_xlim([0.0,23.0])
+#ax1.set_ylabel(u'air temperature [°C]', fontsize='large')
 
-ax2 = fig.add_subplot(222)
-ax2.plot(x[t1:t2],data3[1][t1:t2], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
-ax2.plot(x[t1:t2],data7[1][t1:t2], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
-ax2.plot(x[t1:t2],data4[1][t1:t2], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
-ax2.plot(x[t1:t2],data2[1][t1:t2], linestyle='-', color = 'yellow', label='LCZ6 open low-rise')#2 Gartenstadt
-ax2.plot(x[t1:t2],data9[1][t1:t2], linestyle='-', color = 'blue', label='LCZ8 large low-rise')#9Industrie prod Gewerbe, Grosshandel inkl. Lager
-ax2.plot(x[t1:t2],data[1][t1:t2], linestyle='-', color = 'green', label='LCZ9 sparsely built') #1 locker bebautes Wohn(misch)gebiet
-#plt.setp(ax2.get_xticklabels(), visible=False)
-for label in ax2.get_xticklabels()[::2]:
-    label.set_visible(False)
-ax2.grid(b=True, which='major', color='grey', linestyle=':')
-ax2.set_ylabel(u'latent heat flux [W/m²]', fontsize='large')
-#plt.setp(ax3.get_xticklabels(), visible=False)
-ax2.set_ylim([0,550])
-#ax.set_xlim([0.0,23.0])
-
-ax3 = fig.add_subplot(223)
-ax3.plot(x[t1:t2],data3[2][t1:t2], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
-ax3.plot(x[t1:t2],data7[2][t1:t2], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
-ax3.plot(x[t1:t2],data4[2][t1:t2], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
-ax3.plot(x[t1:t2],data2[2][t1:t2], linestyle='-', color = 'yellow', label='LCZ6 open low-rise')#2 Gartenstadt
-ax3.plot(x[t1:t2],data9[2][t1:t2], linestyle='-', color = 'blue', label='LCZ8 large low-rise')#9Industrie prod Gewerbe, Grosshandel inkl. Lager
-ax3.plot(x[t1:t2],data[2][t1:t2], linestyle='-', color = 'green', label='LCZ9 sparsely built') #1 locker bebautes Wohn(misch)gebiet
-#plt.setp(ax3.get_xticklabels(), visible=False)
-ax3.set_ylim([0,550])
-#ax3.set_xlim([0.0,23.0])
-for label in ax3.get_xticklabels()[::2]:
-    label.set_visible(False)
-ax3.grid(b=True, which='major', color='grey', linestyle=':')
-ax3.set_ylabel(u'radiation balance [W/m²]', fontsize='large')
-ax3.set_xlabel('time [UTC]', fontsize='large')
-
-ax4 = fig.add_subplot(224)
-ax4.plot(x[t1:t2],data3[0][t1:t2], linestyle='-', color = 'red', label='LCZ2 - compact mid-rise')#3dichtes Wohn(misch)gebiet
-ax4.plot(x[t1:t2],data7[0][t1:t2], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
-ax4.plot(x[t1:t2],data4[0][t1:t2], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
-ax4.plot(x[t1:t2],data2[0][t1:t2], linestyle='-', color = 'yellow', label='LCZ6 - open low-rise')#2 Gartenstadt
-ax4.plot(x[t1:t2],data9[0][t1:t2], linestyle='-', color = 'blue', label='LCZ8 - large low-rise')#9Industrie prod Gewerbe, Grosshandel inkl. Lager
-ax4.plot(x[t1:t2],data[0][t1:t2], linestyle='-', color = 'green', label='LCZ9 - sparsely built') #1 locker bebautes Wohn(misch)gebiet
-#plt.setp(ax3.get_xticklabels(), visible=False)
-ax4.set_ylim([0,550])
-#ax4.set_xlim([0.0,23.0])
-for label in ax4.get_xticklabels()[::2]:
-    label.set_visible(False)
-ax4.grid(b=True, which='major', color='grey', linestyle=':')
-ax4.set_ylabel(u'sensible heat flux [W/m²]', fontsize='large')
-ax4.set_xlabel('time [UTC]', fontsize='large')
-#ax3.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower center',
-
-#plt.legend(bbox_to_anchor=(0., 1.01, 1., .102), loc='lower center',
-#           ncol=4, mode="expand", borderaxespad=0.)
-
-
-#plt.legend()
-
-plt.show()
-
-
-
-
-fig = plt.figure()#sharex= True, sharey= True)
-
-ax1 = fig.add_subplot(221)
-#plt.setp(ax.get_xticklabels(), visible=False)
+"""
+ax1 = fig.add_subplot(333)
 ax1.plot(x[t3:t4],tempcanyon_3[t3:t4], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
 ax1.plot(x[t3:t4],tempcanyon_7[t3:t4], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
 ax1.plot(x[t3:t4],tempcanyon_4[t3:t4], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
@@ -418,10 +319,35 @@ for label in ax1.get_xticklabels()[::2]:
     label.set_visible(False)
 ax1.grid(b=True, which='major', color='grey', linestyle=':')
 ax1.set_ylabel(u'air temperature [°C]', fontsize='large')
-#plt.setp(ax3.get_xticklabels(), visible=False)
-#ax.set_xlim([0.0,23.0])
+"""
+ax2 = fig.add_subplot(425)
+at = AnchoredText("c",loc=2, frameon=True)
+ax2.add_artist(at)
+ax2.plot(x[:120], data3[1][:120], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
+ax2.plot(x[:120],data7[1][:120], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
+ax2.plot(x[:120],data4[1][:120], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
+ax2.plot(x[:120],data2[1][:120], linestyle='-', color = 'yellow', label='LCZ6 open low-rise')#2 Gartenstadt
+ax2.plot(x[:120],data9[1][:120], linestyle='-', color = 'blue', label='LCZ8 large low-rise')#9Industrie prod Gewerbe, Grosshandel inkl. Lager
+ax2.plot(x[:120],data[1][:120], linestyle='-', color = 'green', label='LCZ9 sparsely built') #1 locker bebautes Wohn(misch)gebiet
+for label in ax2.get_xticklabels()[::2]:
+    label.set_visible(False)
+ax2.grid(b=True, which='major', color='grey', linestyle=':')
+ax2.set_ylabel(u'L.E.[W/m²]', fontsize='large')
 
-ax2 = fig.add_subplot(222)
+ax2 = fig.add_subplot(426)
+ax2.plot(x[t1:t2],data3[1][t1:t2], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
+ax2.plot(x[t1:t2],data7[1][t1:t2], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
+ax2.plot(x[t1:t2],data4[1][t1:t2], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
+ax2.plot(x[t1:t2],data2[1][t1:t2], linestyle='-', color = 'yellow', label='LCZ6 open low-rise')#2 Gartenstadt
+ax2.plot(x[t1:t2],data9[1][t1:t2], linestyle='-', color = 'blue', label='LCZ8 large low-rise')#9Industrie prod Gewerbe, Grosshandel inkl. Lager
+ax2.plot(x[t1:t2],data[1][t1:t2], linestyle='-', color = 'green', label='LCZ9 sparsely built') #1 locker bebautes Wohn(misch)gebiet
+for label in ax2.get_xticklabels()[::2]:
+    label.set_visible(False)
+ax2.grid(b=True, which='major', color='grey', linestyle=':')
+#ax2.set_ylabel(u'latent heat flux [W/m²]', fontsize='large')
+ax2.set_ylim([0,610])
+"""
+ax2 = fig.add_subplot(339)
 ax2.plot(x[t3:t4],data3[1][t3:t4], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
 ax2.plot(x[t3:t4],data7[1][t3:t4], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
 ax2.plot(x[t3:t4],data4[1][t3:t4], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
@@ -434,9 +360,41 @@ ax2.grid(b=True, which='major', color='grey', linestyle=':')
 ax2.set_ylabel(u'latent heat flux [W/m²]', fontsize='large')
 #plt.setp(ax3.get_xticklabels(), visible=False)
 ax2.set_ylim([-200,350])
+"""
+ax3 = fig.add_subplot(423)
+at = AnchoredText("b",loc=2, frameon=True)
+ax3.add_artist(at)
+ax3.plot(x[:120],data3[2][:120], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
+ax3.plot(x[:120],data7[2][:120], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
+ax3.plot(x[:120],data4[2][:120], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
+ax3.plot(x[:120],data2[2][:120], linestyle='-', color = 'yellow', label='LCZ6 open low-rise')#2 Gartenstadt
+ax3.plot(x[:120],data9[2][:120], linestyle='-', color = 'blue', label='LCZ8 large low-rise')#9Industrie prod Gewerbe, Grosshandel inkl. Lager
+ax3.plot(x[:120],data[2][:120], linestyle='-', color = 'green', label='LCZ9 sparsely built') #1 locker bebautes Wohn(misch)gebiet
+#ax.set_ylim([-50,50])
 #ax.set_xlim([0.0,23.0])
+for label in ax3.get_xticklabels()[::2]:
+    label.set_visible(False)
+ax3.grid(b=True, which='major', color='grey', linestyle=':')
+ax3.set_ylabel(u'Q* [W/m²]', fontsize='large')
+#ax3.set_xlabel('time [UTC]', fontsize='large')
 
-ax3 = fig.add_subplot(223)
+ax3 = fig.add_subplot(424)
+ax3.plot(x[t1:t2],data3[2][t1:t2], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
+ax3.plot(x[t1:t2],data7[2][t1:t2], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
+ax3.plot(x[t1:t2],data4[2][t1:t2], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
+ax3.plot(x[t1:t2],data2[2][t1:t2], linestyle='-', color = 'yellow', label='LCZ6 open low-rise')#2 Gartenstadt
+ax3.plot(x[t1:t2],data9[2][t1:t2], linestyle='-', color = 'blue', label='LCZ8 large low-rise')#9Industrie prod Gewerbe, Grosshandel inkl. Lager
+ax3.plot(x[t1:t2],data[2][t1:t2], linestyle='-', color = 'green', label='LCZ9 sparsely built') #1 locker bebautes Wohn(misch)gebiet
+#plt.setp(ax3.get_xticklabels(), visible=False)
+ax3.set_ylim([0,610])
+#ax3.set_xlim([0.0,23.0])
+for label in ax3.get_xticklabels()[::2]:
+    label.set_visible(False)
+ax3.grid(b=True, which='major', color='grey', linestyle=':')
+#ax3.set_ylabel(u'radiation balance [W/m²]', fontsize='large')
+#ax3.set_xlabel('time [UTC]', fontsize='large')
+"""
+ax3 = fig.add_subplot(336)
 ax3.plot(x[t3:t4],data3[2][t3:t4], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
 ax3.plot(x[t3:t4],data7[2][t3:t4], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
 ax3.plot(x[t3:t4],data4[2][t3:t4], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
@@ -451,8 +409,41 @@ for label in ax3.get_xticklabels()[::2]:
 ax3.grid(b=True, which='major', color='grey', linestyle=':')
 ax3.set_ylabel(u'radiation balance [W/m²]', fontsize='large')
 ax3.set_xlabel('time [UTC]', fontsize='large')
+"""
+ax4 = fig.add_subplot(427)
+at = AnchoredText("d",loc=2, frameon=True)
+ax4.add_artist(at)
+ax4.plot(x[:120],data3[0][:120], linestyle='-', color = 'red', label='LCZ2 compact mid-rise')#3dichtes Wohn(misch)gebiet
+ax4.plot(x[:120],data7[0][:120], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
+ax4.plot(x[:120],data4[0][:120], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
+ax4.plot(x[:120],data2[0][:120], linestyle='-', color = 'yellow', label='LCZ6 open low-rise')#2 Gartenstadt
+ax4.plot(x[:120],data9[0][:120], linestyle='-', color = 'blue', label='LCZ8 large low-rise')#9Industrie prod Gewerbe, Grosshandel inkl. Lager
+ax4.plot(x[:120],data[0][:120], linestyle='-', color = 'green', label='LCZ9 sparsely built') #1 locker bebautes Wohn(misch)gebiet
+#ax.set_ylim([-50,50])
+#ax.set_xlim([0.0,23.0])
+for label in ax4.get_xticklabels()[::2]:
+    label.set_visible(False)
+ax4.grid(b=True, which='major', color='grey', linestyle=':')
+ax4.set_ylabel(u'H [W/m²]', fontsize='large')
+ax4.set_xlabel('time [UTC]', fontsize='large')
 
-ax4 = fig.add_subplot(224)
+ax4 = fig.add_subplot(428)
+ax4.plot(x[t1:t2],data3[0][t1:t2], linestyle='-', color = 'red', label='LCZ2 - compact mid-rise')#3dichtes Wohn(misch)gebiet
+ax4.plot(x[t1:t2],data7[0][t1:t2], linestyle='-', color = 'brown', label='LCZ4 - open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
+ax4.plot(x[t1:t2],data4[0][t1:t2], linestyle='-', color = 'orange', label='LCZ5 - open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
+ax4.plot(x[t1:t2],data2[0][t1:t2], linestyle='-', color = 'yellow', label='LCZ6 - open low-rise')#2 Gartenstadt
+ax4.plot(x[t1:t2],data9[0][t1:t2], linestyle='-', color = 'blue', label='LCZ8 - large low-rise')#9Industrie prod Gewerbe, Grosshandel inkl. Lager
+ax4.plot(x[t1:t2],data[0][t1:t2], linestyle='-', color = 'green', label='LCZ9 - sparsely built') #1 locker bebautes Wohn(misch)gebiet
+#plt.setp(ax3.get_xticklabels(), visible=False)
+ax4.set_ylim([0,610])
+#ax4.set_xlim([0.0,23.0])
+for label in ax4.get_xticklabels()[::2]:
+    label.set_visible(False)
+ax4.grid(b=True, which='major', color='grey', linestyle=':')
+#ax4.set_ylabel(u'sensible heat flux [W/m²]', fontsize='large')
+ax4.set_xlabel('time [UTC]', fontsize='large')
+"""
+ax4 = fig.add_subplot()
 ax4.plot(x[t3:t4],data3[0][t3:t4], linestyle='-', color = 'red', label='LCZ2 - compact mid-rise')#3dichtes Wohn(misch)gebiet
 ax4.plot(x[t3:t4],data7[0][t3:t4], linestyle='-', color = 'brown', label='LCZ4 open high-rise')#7 Geschaefts-Kern-u.Mischgebiet
 ax4.plot(x[t3:t4],data4[0][t3:t4], linestyle='-', color = 'orange', label='LCZ5 open mid-rise')#4großvolumiger solitaerer Wohn(misch)bau
@@ -467,10 +458,13 @@ for label in ax4.get_xticklabels()[::2]:
 ax4.grid(b=True, which='major', color='grey', linestyle=':')
 ax4.set_ylabel(u'sensible heat flux [W/m²]', fontsize='large')
 ax4.set_xlabel('time [UTC]', fontsize='large')
+"""
 
+# Shrink current axis by 20%
 #plt.legend()
-
 plt.show()
+
+#exit()
 
 fig = plt.figure()
 plt.plot(x[t1:t2],data3[0][t1:t2], linestyle='-', color = 'red', label='compact mid-rise')#3dichtes Wohn(misch)gebiet

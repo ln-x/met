@@ -21,7 +21,7 @@ class AnchoredText(AnchoredOffsetbox):
 
 # ---READING DATA---
 #path = "/home/lnx/0_TEB/TEB/TEB_v1_1550/output/"
-directory = "/home/lnx/0_TEB/TEB/3_testdata/REALtest/"
+directory = "/home/lnx/MODELS/TEB/3_testdata/REALtest/"
 driver = "src_driver/driver.f90"
 scenario1 = "R01"
 scenario2 = "R02"

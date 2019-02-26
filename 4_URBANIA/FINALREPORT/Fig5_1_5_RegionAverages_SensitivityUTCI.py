@@ -31,6 +31,11 @@ for i in range(0,36,1):
  var1 = f1.variables['UTCI_OUTSHAD'][i]
  var2 = f2.variables['UTCI_OUTSHAD'][i]
  var3 = f3.variables['UTCI_OUTSHAD'][i]
+ print np.average(var[50:58][:, 80:85].flatten())
+ print np.hstack(var2[50:58][:, 80:85])
+ print np.average(np.hstack(var[50:58][:, 80:85]))
+ print np.average(np.hstack(var2[50:58][:, 80:85]))
+ exit()
  
  f.close()
  f1.close()
@@ -71,7 +76,7 @@ SAdiff_1 = difference(SA1,SA)
 SAdiff_2 = difference(SA2,SA)
 SAdiff_3 = difference(SA3,SA)
 
-print CE, CE2
+print len(CE), len(CE2)
 exit()
 
 time = range(0,36,1)
