@@ -30,15 +30,26 @@ var_units = f_ref.variables['UTCI_OUTSHAD'].units
 '''cut for subregions'''
 var_ref = f_ref.variables['UTCI_OUTSHAD']
 
-var_ref_ce = f_ref.variables['UTCI_OUTSUN'][:,50:59,80:89]
-var_alb_ce = f_alb.variables['UTCI_OUTSUN'][:,50:59,80:89]
-var_iso_ce = f_iso.variables['UTCI_OUTSUN'][:,50:59,80:89]
-var_den_ce = f_den.variables['UTCI_OUTSUN'][:,50:59,80:89]
-var_grr_ce = f_grr.variables['UTCI_OUTSUN'][:,50:59,80:89]
-var_pvr_ce = f_pvr.variables['UTCI_OUTSUN'][:,50:59,80:89]
-var_spr_ce = f_spr.variables['UTCI_OUTSUN'][:,50:59,80:89]
-var_opt_ce = f_opt.variables['UTCI_OUTSUN'][:,50:59,80:89]
+var_ref_ce = f_ref.variables['UTCI_OUTSHAD'][:,50:59,80:89] #[:,50:59,80:89]
+var_alb_ce = f_alb.variables['UTCI_OUTSHAD'][:,50:59,80:89] #[:,50:59,80:89]
+var_iso_ce = f_iso.variables['UTCI_OUTSHAD'][:,50:59,80:89] #[:,50:59,80:89]
+var_den_ce = f_den.variables['UTCI_OUTSHAD'][:,50:59,80:89] #[:,50:59,80:89]
+var_grr_ce = f_grr.variables['UTCI_OUTSHAD'][:,50:59,80:89] #[:,50:59,80:89]
+var_pvr_ce = f_pvr.variables['UTCI_OUTSHAD'][:,50:59,80:89] #[:,50:59,80:89]
+var_spr_ce = f_spr.variables['UTCI_OUTSHAD'][:,50:59,80:89] #[:,50:59,80:89]
+var_opt_ce = f_opt.variables['UTCI_OUTSHAD'][:,50:59,80:89] #[:,50:59,80:89]
 print var_ref_ce.shape
+
+#NO = [:,73:82,89:98]
+#CE = [:,50:59,80:89]
+#RU = [:,57:66,128:137]
+#SA = [:,58:67,109:118]
+#SE = [:,37:46,99:108]
+#SX = [:,24:33,75:84]
+#SI = [:,31:40,68:77]
+#VW = [:,47:56,64:73]
+#WE = [:,62:71,73:82]
+
 
 utci_ref_ce_max=[]
 utci_ref_ce_min=[]
@@ -119,7 +130,7 @@ utci_pvr_ce_max=[]
 utci_pvr_ce_min=[]
 for i in range(9):
     for j in range(9):
-        add = (var_iso_ce[150:174,i,j].max())
+        add = (var_pvr_ce[150:174,i,j].max())
         if add!=nan:
           utci_pvr_ce_max.append(add)
         else:
@@ -130,6 +141,36 @@ for i in range(9):
         else:
           utci_pvr_ce_min.append(0)
 
+utci_spr_ce_max=[]
+utci_spr_ce_min=[]
+for i in range(9):
+    for j in range(9):
+        add = (var_spr_ce[150:174,i,j].max())
+        if add!=nan:
+          utci_spr_ce_max.append(add)
+        else:
+          utci_spr_ce_max.append(0)
+        add2 = var_spr_ce[150:174, i, j].min()
+        if add2 != nan:
+          utci_spr_ce_min.append(add2)
+        else:
+          utci_spr_ce_min.append(0)
+
+utci_opt_ce_max=[]
+utci_opt_ce_min=[]
+for i in range(9):
+    for j in range(9):
+        add = (var_opt_ce[150:174,i,j].max())
+        if add!=nan:
+          utci_opt_ce_max.append(add)
+        else:
+          utci_opt_ce_max.append(0)
+        add2 = var_opt_ce[150:174, i, j].min()
+        if add2 != nan:
+          utci_opt_ce_min.append(add2)
+        else:
+          utci_opt_ce_min.append(0)
+
 f_ref.close()
 f_alb.close()
 f_iso.close()
@@ -138,6 +179,28 @@ f_grr.close()
 f_pvr.close()
 f_spr.close()
 f_opt.close()
+
+ref_max = list(filter(lambda x: x!=0, utci_ref_ce_max))
+print "REF=", np.mean(ref_max)
+print "ALBdiff=", np.mean(list(filter(lambda x: x!=0, utci_alb_ce_max)))-np.mean(ref_max)
+print "ISOdiff=", np.mean(list(filter(lambda x: x!=0, utci_iso_ce_max)))-np.mean(ref_max)
+print "DENdiff=", np.mean(list(filter(lambda x: x!=0, utci_den_ce_max)))-np.mean(ref_max)
+print "GRRdiff=", np.mean(list(filter(lambda x: x!=0, utci_grr_ce_max)))-np.mean(ref_max)
+print "PVRdiff=", np.mean(list(filter(lambda x: x!=0, utci_pvr_ce_max)))-np.mean(ref_max)
+print "SPRdiff=", np.mean(list(filter(lambda x: x!=0, utci_spr_ce_max)))-np.mean(ref_max)
+print "OPTdiff=", np.mean(list(filter(lambda x: x!=0, utci_opt_ce_max)))-np.mean(ref_max)
+
+ref_min = list(filter(lambda x: x!=0, utci_ref_ce_min))
+print "REF=", np.mean(ref_min)
+print "ALBdiff=", np.mean(list(filter(lambda x: x!=0, utci_alb_ce_min)))-np.mean(ref_min)
+print "ISOdiff=", np.mean(list(filter(lambda x: x!=0, utci_iso_ce_min)))-np.mean(ref_min)
+print "DENdiff=", np.mean(list(filter(lambda x: x!=0, utci_den_ce_min)))-np.mean(ref_min)
+print "GRRdiff=", np.mean(list(filter(lambda x: x!=0, utci_grr_ce_min)))-np.mean(ref_min)
+print "PVRdiff=", np.mean(list(filter(lambda x: x!=0, utci_pvr_ce_min)))-np.mean(ref_min)
+print "SPRdiff=", np.mean(list(filter(lambda x: x!=0, utci_spr_ce_min)))-np.mean(ref_min)
+print "OPTdiff=", np.mean(list(filter(lambda x: x!=0, utci_opt_ce_min)))-np.mean(ref_min)
+
+exit()
 
 UTCI_CE_max= transpose([utci_ref_ce_max,utci_alb_ce_max,
 utci_iso_ce_max,utci_den_ce_max,utci_grr_ce_max, utci_pvr_ce_max])
@@ -155,14 +218,16 @@ labels = ["REF","ALB","ISO","DEN","GRR","PVR"]
 fig2, axs = plt.subplots(nrows=1, ncols=2)#, figsize=(9, 4))
 #fig2.suptitle("daily maxima and minima, averaged over center for 8 Jul 2069")
 axs[0].boxplot(UTCI_CE_max, notch=True, labels=labels, showfliers=False)#, whis=[5,95])
-axs[0].set_ylabel(r"$UTCI Sun$"u'[°C]')
+axs[0].set_ylabel(r"$UTCI Shade$"u'[°C]')
 axs[0].set_xlabel("MAX")
-axs[0].set_ylim([42,55])
+#axs[0].set_ylim([42,55])
+axs[0].set_ylim([43,47])
 
 #axs[1].boxplot(UTCI_CE_min,  notch=True, labels=labels, showfliers=True,  whis=[5,95])
 axs[1].boxplot(UTCI_CE_min,  notch=True, labels=labels, showfliers=False)#True,  whis=[5,95])
 axs[1].set_xlabel("MIN")
-axs[1].set_ylim([25,37])
+#axs[1].set_ylim([25,37])
+axs[1].set_ylim([27,31])
 #axs[1].set_yticklabels([])
 
 plt.show()
