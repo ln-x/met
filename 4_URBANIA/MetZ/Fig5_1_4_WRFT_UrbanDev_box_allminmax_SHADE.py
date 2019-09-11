@@ -17,6 +17,7 @@ file_spr = '/media/lnx/Norskehavet/OFFLINE/2069SPR/TEB_DIAGNOSTICS.OUT.nc'
 file_opt = '/media/lnx/Norskehavet/OFFLINE/2069OPT/dx345corr/TEB_DIAGNOSTICS.OUT.nc'
 #dimensions(sizes): xx(174), yy(135), time(174) 1.7.2069 18h - 8.7.23h
 
+f_ref2015 = Dataset(file_ref2015, mode='r')
 f_ref = Dataset(file_ref, mode='r')
 f_alb = Dataset(file_alb, mode='r')
 f_iso = Dataset(file_iso, mode='r')
@@ -30,7 +31,8 @@ var_units = f_ref.variables['UTCI_OUTSHAD'].units
 '''cut for subregions'''
 var_ref = f_ref.variables['UTCI_OUTSHAD']
 
-var_ref_ce = f_ref.variables['UTCI_OUTSHAD'][:,50:59,80:89] #[:,50:59,80:89]
+var_ref2015_ce = f_ref2015.variables['UTCI_OUTSHAD'][:,57:66,128:137] #[:,50:59,80:89]
+var_ref_ce = f_ref.variables['UTCI_OUTSHAD'][:,57:66,128:137] #[:,50:59,80:89]
 var_alb_ce = f_alb.variables['UTCI_OUTSHAD'][:,50:59,80:89] #[:,50:59,80:89]
 var_iso_ce = f_iso.variables['UTCI_OUTSHAD'][:,50:59,80:89] #[:,50:59,80:89]
 var_den_ce = f_den.variables['UTCI_OUTSHAD'][:,50:59,80:89] #[:,50:59,80:89]
@@ -49,7 +51,6 @@ print var_ref_ce.shape
 #SI = [:,31:40,68:77]
 #VW = [:,47:56,64:73]
 #WE = [:,62:71,73:82]
-
 
 utci_ref_ce_max=[]
 utci_ref_ce_min=[]
@@ -171,6 +172,7 @@ for i in range(9):
         else:
           utci_opt_ce_min.append(0)
 
+f_ref2015.close()
 f_ref.close()
 f_alb.close()
 f_iso.close()
@@ -180,8 +182,12 @@ f_pvr.close()
 f_spr.close()
 f_opt.close()
 
+print "MAX"
 ref_max = list(filter(lambda x: x!=0, utci_ref_ce_max))
-print "REF=", np.mean(ref_max)
+#print "REF=", np.mean(ref_max)
+
+print "REF2069_md=", np.median(utci_ref_ce_max)
+print "REF2069_mn=", np.mean(ref_max)
 print "ALBdiff=", np.mean(list(filter(lambda x: x!=0, utci_alb_ce_max)))-np.mean(ref_max)
 print "ISOdiff=", np.mean(list(filter(lambda x: x!=0, utci_iso_ce_max)))-np.mean(ref_max)
 print "DENdiff=", np.mean(list(filter(lambda x: x!=0, utci_den_ce_max)))-np.mean(ref_max)
@@ -190,8 +196,10 @@ print "PVRdiff=", np.mean(list(filter(lambda x: x!=0, utci_pvr_ce_max)))-np.mean
 print "SPRdiff=", np.mean(list(filter(lambda x: x!=0, utci_spr_ce_max)))-np.mean(ref_max)
 print "OPTdiff=", np.mean(list(filter(lambda x: x!=0, utci_opt_ce_max)))-np.mean(ref_max)
 
+print "\nMIN"
 ref_min = list(filter(lambda x: x!=0, utci_ref_ce_min))
-print "REF=", np.mean(ref_min)
+print "REF_md=", np.median(ref_min)
+print "REF_mn=", np.mean(ref_min)
 print "ALBdiff=", np.mean(list(filter(lambda x: x!=0, utci_alb_ce_min)))-np.mean(ref_min)
 print "ISOdiff=", np.mean(list(filter(lambda x: x!=0, utci_iso_ce_min)))-np.mean(ref_min)
 print "DENdiff=", np.mean(list(filter(lambda x: x!=0, utci_den_ce_min)))-np.mean(ref_min)
