@@ -37,9 +37,11 @@ a1,a2,b1,b2=62,71,73,82   #WE
 def collectMAX(relSIMPATH):
     out1=[]   #max
     out2=[]   #min
-    file = '/media/lnx/Norskehavet/OFFLINE/'+relSIMPATH+'/TEB_PROGNOSTIC.OUT.nc'
+    out3=[]   #max
+    out4=[]   #min
+    file = '/media/lnx/Norskehavet/OFFLINE/'+relSIMPATH+'/TEB_DIAGNOSTICS.OUT.nc'
     f = Dataset(file, mode='r')
-    var_reg = f.variables['TCANYON'][126:174, a1:a2, b1:b2]
+    var_reg = f.variables['TRAD_SHADE'][126:174, a1:a2, b1:b2]
     for i in range(9):
         for j in range(9):
            add = (var_reg[:,i,j].max())
@@ -52,44 +54,84 @@ def collectMAX(relSIMPATH):
              out2.append(add2)
            else:
              out2.append(0)
+    var_regSUN = f.variables['TRAD_SUN'][126:174, a1:a2, b1:b2]
+    for i in range(9):
+        for j in range(9):
+           add = (var_regSUN[:,i,j].max())
+           if add!=nan:
+             out3.append(add)
+           else:
+             out3.append(0)
+           add2 = var_regSUN[:, i, j].min()
+           if add2 != nan:
+             out4.append(add2)
+           else:
+             out4.append(0)
     f.close()
-    #print "\n", np.mean(list(filter(lambda x: x != 0, out1)))
-    #print np.mean(list(filter(lambda x: x != 0, out2)))
+    print "\n", np.mean(list(filter(lambda x: x != 0, out1))) -273.15
+    print np.mean(list(filter(lambda x: x != 0, out2))) -273.15
+    print np.mean(list(filter(lambda x: x != 0, out3))) -273.15
+    print np.mean(list(filter(lambda x: x != 0, out4))) -273.15
     #print "\n",relSIMPATH, "max_diff ", np.mean(list(filter(lambda x: x != 0, out1))) - 316.979321713 #NO: 315.698654144
     #print relSIMPATH, "min_diff ", np.mean(list(filter(lambda x: x != 0, out2))) -303.09471181 #NO: -300.521421144
-    print np.mean(list(filter(lambda x: x != 0, out1))) - 315.25217052
-    print np.mean(list(filter(lambda x: x != 0, out2))) - 301.33431289
+    #print np.mean(list(filter(lambda x: x != 0, out1))) - 328.568820869
+    #print np.mean(list(filter(lambda x: x != 0, out2))) - 298.993857664
+    #print np.mean(list(filter(lambda x: x != 0, out3))) - 354.88244882
+    #print np.mean(list(filter(lambda x: x != 0, out4))) - 304.066382408
 
     return out1,out2
 
 """
-CE: 316.979321713 
-CE: -303.09471181
-NO: 315.698654144
-NO: -300.521421144
-RU:  315.319743096
-RU:  297.338552968
-SA: 315.471252648
-SA: 299.001217067
-SE: 315.459012572
-SE: 299.693239641
-SX: 315.309965916
-SX: 300.65394799
-SI: 315.228671502
-SI: 301.461455391
-VW: 315.445583858
-VW: 302.411160108
-WE: 315.25217052
-WE: 301.33431289
+CE: 327.549008568
+CE: 304.066382408
+CE: 353.916730274
+
+NO: 329.793281233
+NO: 299.031403442
+NO: 355.507313789
+
+RU: 327.29513726
+RU: 294.294684728
+RU: 353.711671846 
+
+SA:
+330.219940816
+298.313922866
+355.877615999 
+
+SE: 
+329.178492267
+297.365672546
+354.99890576
+
+SX: 
+328.217894746
+297.791312533
+354.542310259
+
+SI: 
+328.568820869
+298.993857664
+354.88244882
+
+VW: 
+328.941890918
+300.45128785
+355.084371173
+
+WE: 
+329.239776258
+300.581189454
+355.20443619
 """
-utci_ref2069_ce_max, utci_ref2069_ce_min = collectMAX("2069REF/dx345corr")
-utci_alb2069_ce_max, utci_alb2069_ce_min = collectMAX("2069ALB")
-utci_iso2069_ce_max, utci_iso2069_ce_min = collectMAX("2069ISO")
-utci_den2069_ce_max, utci_den2069_ce_min = collectMAX("2069DEN")
-utci_grr2069_ce_max, utci_grr2069_ce_min = collectMAX("2069GRR")
-utci_pvr2069_ce_max, utci_pvr2069_ce_min = collectMAX("2069PVR")
-utci_spr2069_ce_max, utci_spr2069_ce_min = collectMAX("2069SPR")
-utci_opt2069_ce_max, utci_opt2069_ce_min = collectMAX("2069OPT/dx345corr")
+utci_ref2069_ce_max, utci_ref2069_ce_min = collectMAX("2015REF/dx345corr")
+#utci_alb2069_ce_max, utci_alb2069_ce_min = collectMAX("2069ALB")
+#utci_iso2069_ce_max, utci_iso2069_ce_min = collectMAX("2069ISO")
+#utci_den2069_ce_max, utci_den2069_ce_min = collectMAX("2069DEN")
+#utci_grr2069_ce_max, utci_grr2069_ce_min = collectMAX("2069GRR")
+#utci_pvr2069_ce_max, utci_pvr2069_ce_min = collectMAX("2069PVR")
+#utci_spr2069_ce_max, utci_spr2069_ce_min = collectMAX("2069SPR")
+#utci_opt2069_ce_max, utci_opt2069_ce_min = collectMAX("2069OPT/dx345corr")
 
 exit()
 tstatistics_alb, pvalue_alb = stats.ttest_rel(utci_ref2069_ce_min,utci_alb2069_ce_min)

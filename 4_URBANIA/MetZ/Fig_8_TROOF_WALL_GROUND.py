@@ -70,9 +70,6 @@ f_pvr.close()
 #f_spr.close()
 #f_opt.close()
 
-start = 1
-end = 174
-
 TROOF1_ref_ce = TROOF1_ref_ce.reshape(174,81)
 TROOF1_ref_ce_ts = TROOF1_ref_ce.mean(axis=1) - 273.15
 TWALL1_ref_ce = TWALL1_ref_ce.reshape(174,81)
@@ -112,97 +109,83 @@ TROOF1_grr_ce_ts = TROOF1_grr_ce.mean(axis=1) - 273.15
 TROOF1_pvr_ce = TROOF1_pvr_ce.reshape(174,81)
 TROOF1_pvr_ce_ts = TROOF1_pvr_ce.mean(axis=1) - 273.15
 
-"""
-dTRADSH_alb_ce = TRADSH_alb_ce_ts - TRADSH_ref_ce_ts
-dU10M_alb_ce = U10M_alb_ce_ts - U10M_ref_ce_ts
-dQCANYON_alb_ce = QCANYON_alb_ce_ts - QCANYON_ref_ce_ts
-dTCANYON_alb_ce = TCANYONalb_ce_ts - TCANYON_ref_ce_ts
-
-dTRADSH_iso_ce = TRADSH_iso_ce_ts - TRADSH_ref_ce_ts
-dU10M_iso_ce = U10M_iso_ce_ts - U10M_ref_ce_ts
-dQCANYON_iso_ce = QCANYON_iso_ce_ts - QCANYON_ref_ce_ts
-dTCANYON_iso_ce = TCANYONiso_ce_ts - TCANYON_ref_ce_ts
-
-dTRADSH_grr_ce = TRADSH_grr_ce_ts - TRADSH_ref_ce_ts
-dU10M_grr_ce = U10M_grr_ce_ts - U10M_ref_ce_ts
-dQCANYON_grr_ce = QCANYON_grr_ce_ts - QCANYON_ref_ce_ts
-dTCANYON_grr_ce = TCANYONgrr_ce_ts - TCANYON_ref_ce_ts
-
-dTRADSH_den_ce = TRADSH_den_ce_ts - TRADSH_ref_ce_ts
-dU10M_den_ce = U10M_den_ce_ts - U10M_ref_ce_ts
-dQCANYON_den_ce = QCANYON_den_ce_ts - QCANYON_ref_ce_ts
-dTCANYON_den_ce = TCANYONden_ce_ts - TCANYON_ref_ce_ts
-
-dTRADSH_pvr_ce = TRADSH_pvr_ce_ts - TRADSH_ref_ce_ts
-dU10M_pvr_ce = U10M_pvr_ce_ts - U10M_ref_ce_ts
-dQCANYON_pvr_ce = QCANYON_pvr_ce_ts - QCANYON_ref_ce_ts
-dTCANYON_pvr_ce = TCANYON_pvr_ce_ts - TCANYON_ref_ce_ts
-
-bal = TRADSH_ref_ce_ts+U10M_ref_ce_ts+QCANYON_ref_ce_ts+TCANYON_ref_ce_ts
-dbal_alb = dTRADSH_alb_ce+dU10M_alb_ce+dQCANYON_alb_ce+dTCANYON_alb_ce
-dbal_iso = dTRADSH_iso_ce+dU10M_iso_ce+dQCANYON_iso_ce+dTCANYON_iso_ce
-dbal_grr = dTRADSH_grr_ce+dU10M_grr_ce+dQCANYON_grr_ce+dTCANYON_grr_ce
-dbal_den = dTRADSH_den_ce+dU10M_den_ce+dQCANYON_den_ce+dTCANYON_den_ce
-dbal_pvr = dTRADSH_pvr_ce+dU10M_pvr_ce+dQCANYON_pvr_ce+dTCANYON_pvr_ce
-"""
-start = datetime.datetime(2069,7,1,20,0)  #1...174
-stop = datetime.datetime(2069,7,9,2,0)
+start = datetime.datetime(2069,7,1,19,0)  #1...174
+stop = datetime.datetime(2069,7,9,0,0)
 delta = datetime.timedelta(hours=1)
 dates = mpl.dates.drange(start,stop,delta)
+#print dates.shape
+#exit()
+#date_format = mpl.dates.DateFormatter('%d %B %Y')
+date_format = mpl.dates.DateFormatter('      %H') #Meteorol. Z. Format:  %H%M UTC %d %B %Y
 
 fig = plt.figure()
 plt.title("ROOF")
 plt.plot(dates, TROOF1_ref_ce_ts, color='black', label=u"REF")
 #plt.plot(TROOF1_opt_ce_ts, color='green', label=u"OPT")
-plt.plot(TROOF1_alb_ce_ts, color='violet', label=u"ALB")#, linestyle=":")
-plt.plot(TROOF1_iso_ce_ts, color='red', label=u"INS")#, linestyle=":")
-plt.plot(TROOF1_grr_ce_ts, color='darkgreen', label=u"GRR")#, linestyle=":")
-plt.plot(TROOF1_pvr_ce_ts, color='blue', label=u"PVR")#, linestyle=":")
-plt.xlabel("hours[UTC]")
-plt.ylabel(u"surface temperature [°C]", size="large")
+plt.plot(dates, TROOF1_alb_ce_ts, color='violet', label=u"ALB")#, linestyle=":")
+plt.plot(dates, TROOF1_iso_ce_ts, color='red', label=u"INS")#, linestyle=":")
+plt.plot(dates, TROOF1_grr_ce_ts, color='darkgreen', label=u"GRR")#, linestyle=":")
+plt.plot(dates, TROOF1_pvr_ce_ts, color='blue', label=u"PVR")#, linestyle=":")
+plt.xlabel("Time [UTC]")
+plt.ylabel(u"Surface temperature [°C]", size="large")
 plt.legend(loc='lower right', ncol=3)
 plt.ylim(0, 100)
 #plt.ylim(-5, 10)
 
-date_format = mpl.dates.DateFormatter('%d %B %Y')
-ax = gca()
-
+ax1 = gca()
 days = DayLocator(range(2, 9), interval=1)
-ax.xaxis.set_major_locator(days)
-ax.xaxis.set_major_formatter(date_format)
-
+hours = HourLocator(range(0, 23), interval=6)
+ax1.xaxis.set_major_locator(hours)
+ax1.xaxis.set_major_formatter(date_format)
+ax1.grid(linestyle=":")
 plt.xticks(rotation='vertical', fontsize='small')
 plt.subplots_adjust(bottom=.3)
 
 plt.show()
+#exit()
 
 fig = plt.figure()
 plt.title("WALL")
-plt.plot(TWALL1_ref_ce_ts, color='black', label=u"REF")
+plt.plot(dates, TWALL1_ref_ce_ts, color='black', label=u"REF")
 #plt.plot(TWALL1_opt_ce_ts, color='green', label=u"OPT")
-plt.plot(TWALL1_alb_ce_ts, color='violet', label=u"ALB")#, linestyle=":")
-plt.plot(TWALL1_iso_ce_ts, color='red', label=u"INS")#, linestyle=":")
+plt.plot(dates, TWALL1_alb_ce_ts, color='violet', label=u"ALB")#, linestyle=":")
+plt.plot(dates, TWALL1_iso_ce_ts, color='red', label=u"INS")#, linestyle=":")
 #plt.plot(TWALL1_grr_ce_ts, color='darkgreen', label=u"GRR", linestyle=":")
 #plt.plot(TWALL1_pvr_ce_ts, color='blue', label=u"PVR", linestyle=":")
-plt.xlabel("hours[UTC]")
-plt.ylabel(u"surface temperature [°C]", size="large")
+plt.xlabel("Time [UTC]", size="large")
+plt.ylabel(u"Surface temperature [°C]", size="large")
 plt.legend(loc='lower right', ncol=3)
 plt.ylim(0, 100)
 #plt.ylim(-5, 10)
+ax2 = gca()
+hours = HourLocator(range(0, 23), interval=6)
+ax2.xaxis.set_major_locator(hours)
+ax2.xaxis.set_major_formatter(date_format)
+ax2.grid(linestyle=":")
+plt.xticks(rotation='vertical', fontsize='small')
+plt.subplots_adjust(bottom=.3)
 plt.show()
 
 fig = plt.figure()
 plt.title("ROAD")
-plt.plot(TGROUND_ref_ce_ts, color='black', label=u"REF")
+plt.plot(dates, TGROUND_ref_ce_ts, color='black', label=u"REF")
 #plt.plot(TGROUND_opt_ce_ts, color='green', label=u"OPT")
-plt.plot(TGROUND_alb_ce_ts, color='violet', label=u"ALB")#, linestyle=":")
-plt.plot(TGROUND_iso_ce_ts, color='red', label=u"INS")#, linestyle=":")
+plt.plot(dates, TGROUND_alb_ce_ts, color='violet', label=u"ALB")#, linestyle=":")
+plt.plot(dates, TGROUND_iso_ce_ts, color='red', label=u"INS")#, linestyle=":")
 #plt.plot(TWALL1_grr_ce_ts, color='darkgreen', label=u"GRR", linestyle=":")
 #plt.plot(TWALL1_pvr_ce_ts, color='blue', label=u"PVR", linestyle=":")
-plt.xlabel("hours[UTC]")
-plt.ylabel(u"surface temperature [°C]", size="large")
+plt.xlabel("Time [UTC]", size="large")
+plt.ylabel(u"Surface temperature [°C]", size="large")
 plt.legend(loc='lower right', ncol=3)
 plt.ylim(0, 100)
 #plt.ylim(-5, 10)
+ax3 = gca()
+days = DayLocator(range(2, 9), interval=1)
+hours = HourLocator(range(0, 23), interval=6)
+ax3.xaxis.set_major_locator(hours)
+ax3.xaxis.set_major_formatter(date_format)
+ax3.grid(linestyle=":")
+plt.xticks(rotation='vertical', fontsize='small')
+plt.subplots_adjust(bottom=.3)
 plt.show()
 

@@ -8,6 +8,7 @@ from pylab import *
 from scipy import stats
 
 outpath ='/media/lnx/Norskehavet/OFFLINE/plots'
+"""
 file_ref2015 = '/media/lnx/Norskehavet/OFFLINE/2015REF/dx345corr/TEB_DIAGNOSTICS.OUT.nc'
 #dimensions(sizes): xx(174), yy(135), time(174) 1.7.2069 18h - 8.7.23h
 
@@ -15,6 +16,7 @@ f_ref2015 = Dataset(file_ref2015, mode='r')
 
 var_units = f_ref2015.variables['UTCI_OUTSHAD'].units
 
+"""
 """
 timeslices:
 present 1988-2017, 15yr 5day maxima temperature extreme:
@@ -26,9 +28,10 @@ start 1.7.2069 18h
 end 8.7.2069
 
 subregions:
-
 """
-#a1,a2,b1,b2= 51,60,81,90#50,59,80,89   #CE
+
+a1,a2,b1,b2= 51,60,81,90#
+#a1,a2,b1,b2=50,59,80,89   #CE
 #a1,a2,b1,b2=73,82,89,98   #NO
 #a1,a2,b1,b2=57,66,128,137 #RU
 #a1,a2,b1,b2=58,67,109,118 #SA
@@ -36,8 +39,8 @@ subregions:
 #a1,a2,b1,b2=24,33,75,84   #SX
 #a1,a2,b1,b2=31,40,68,77   #SI
 #a1,a2,b1,b2=47,56,64,73   #VW
-a1,a2,b1,b2=62,71,73,82   #WE
-
+#a1,a2,b1,b2=62,71,73,82   #WE
+"""
 '''cut for subregions'''
 var_ref = f_ref2015.variables['UTCI_OUTSHAD']
 #print len(f_ref2015.variables['UTCI_OUTSHAD'])
@@ -63,13 +66,13 @@ for i in range(9):
             utci_ref2015_ce_min.append(add2)
         else:
             utci_ref2015_ce_min.append(0)
-
+"""
 def collectMAX(relSIMPATH):
     out1=[]   #max
     out2=[]   #min
     file = '/media/lnx/Norskehavet/OFFLINE/'+relSIMPATH+'/TEB_DIAGNOSTICS.OUT.nc'
     f = Dataset(file, mode='r')
-    var_reg = f.variables['UTCI_OUTSHAD'][126:174, a1:a2, b1:b2]
+    var_reg = f.variables['UTCI_OUTSHAD'][126:174, a1:a2, b1:b2]  #126:174
     for i in range(9):
         for j in range(9):
            add = (var_reg[:,i,j].max())
@@ -83,10 +86,10 @@ def collectMAX(relSIMPATH):
            else:
              out2.append(0)
     f.close()
-    #print "\n",relSIMPATH, "max ", np.mean(list(filter(lambda x: x != 0, out1)))
-    #print relSIMPATH, "min ", np.mean(list(filter(lambda x: x != 0, out2)))
-    print "\n",relSIMPATH, "max_diff ", np.mean(list(filter(lambda x: x != 0, out1))) -  43.9708595711
-    print relSIMPATH, "min_diff ", np.mean(list(filter(lambda x: x != 0, out2))) -  26.9300127078
+    print "\n",relSIMPATH, "max ", np.mean(list(filter(lambda x: x != 0, out1)))
+    print relSIMPATH, "min ", np.mean(list(filter(lambda x: x != 0, out2)))
+    #print "\n",relSIMPATH, "max_diff ", np.mean(list(filter(lambda x: x != 0, out1))) -  43.9708595711
+    #print relSIMPATH, "min_diff ", np.mean(list(filter(lambda x: x != 0, out2))) -  26.9300127078
 
 #REF/CE:  45.2181257379, 28.7547362824
 #REF/NO:  44.414887728, 25.8023229079
@@ -108,6 +111,8 @@ utci_grr2069_ce_max, utci_grr2069_ce_min = collectMAX("2069GRR")
 utci_pvr2069_ce_max, utci_pvr2069_ce_min = collectMAX("2069PVR")
 utci_spr2069_ce_max, utci_spr2069_ce_min = collectMAX("2069SPR")
 utci_opt2069_ce_max, utci_opt2069_ce_min = collectMAX("2069OPT/dx345corr")
+
+exit()
 
 tstatistics_alb, pvalue_alb = stats.ttest_rel(utci_ref2069_ce_min,utci_alb2069_ce_min)
 tstatistics_iso, pvalue_iso = stats.ttest_rel(utci_ref2069_ce_min,utci_iso2069_ce_min)
