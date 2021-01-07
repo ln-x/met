@@ -54,4 +54,4 @@ if __name__ == '__main__':
         thedata = loadfile(foldername=foldername, filename=i, julianday=julianday)
         #print 'loaded: '
         for d in thedata:
-            print d
+            print(d)
