@@ -11,7 +11,7 @@ from scipy import stats
 import sys
 import os
 import ReadinVINDOBONA
-
+"""
 '''read in air pollution csv data'''
 pathbase = "/home/lnx/DATACHEM/Luftmessnetz/" #Thinkpad Lenovo
 pathbase = "/windata/GOOGLEDrive/DATA/obs_point/chem/Luftmessnetz/" #imph
@@ -61,11 +61,14 @@ o3_meas3b = o3_meas3[0::2]
 
 #list(o3_meas.columns.values)
 
-exit()
 print("pass")
+
+"""
 "read in VINDOBONA"
 
-foldername = "/home/lnx/DATACHEM/StefanSchreier/2001_2004_DQ_91_HCHO_mixing_ratio/"
+#foldername = "/home/lnx/DATACHEM/StefanSchreier/2001_2004_DQ_91_HCHO_mixing_ratio/"
+foldername = "/windata/GOOGLEDrive/DATA/remote/ground/maxdoas/2001_2004_DQ_91_HCHO_mixing_ratio/"  # in DSCD
+
 files = os.listdir(foldername)
 # print files
 julianday = 0
@@ -89,8 +92,6 @@ time_df.set_index('UTC')
 hcho_df = pd.DataFrame(hcho).set_index('hcho')
 converteddata_df = pd.concat([time_df, hcho_df], axis=1)
 #print converteddata_df
-
-
 
 #print np.ix(thedata[1])
 
