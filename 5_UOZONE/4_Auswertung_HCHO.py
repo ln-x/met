@@ -192,7 +192,7 @@ try:
     plt.legend(loc='upper left')
     plt.show()
 except:
-    print("Oops!", sys.exc_info()[0], "occured.")
+    print("Oops!", sys.exc_info()[0], "occurred.")
     pass
 """
 """FIG 2 END"""

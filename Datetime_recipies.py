@@ -46,3 +46,10 @@ print(type(NO2_HMW))
 #    timeaxis_hours.append(datetime.strptime(NO2_HMW['time(MEZ)'][i], '%H:%M'))
 #print(timeaxis_hours)
 
+
+#BEST SOLUTION!:
+File_dt = File.set_index(pd.to_datetime(File[["year","month","day"]]))
+File_dtd = File_dt.drop(columns=[['year','month','day']])
+
+#df[["col1", "col2", "col3"]].apply(pd.to_datetime)
+
