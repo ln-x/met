@@ -11,45 +11,80 @@ from matplotlib import dates as d
 import datetime as dt
 import BOKUMet_Data
 
+def datestdtojd (stddate):
+    fmt='%Y-%m-%d'
+    sdtdate = datetime.strptime(stddate, fmt)
+    sdtdate = sdtdate.timetuple()
+    jdate = sdtdate.tm_yday
+    return(jdate)
+
+def jdtodatestd (jdate):
+    fmt = '%Y%j'
+    datestd = datetime.strptime(jdate, fmt).date()
+    return(datestd)
+
+#print(jdtodatestd('20181'))
+#print(datestdtojd('2018-01-01'))
+
 BOKUMetData = BOKUMet_Data.BOKUMet()
+# DT = 'dewpoint temperature (degree C)'
+# AT = 'air temperature (degree C)'
+# RH = 'relative humidity (%)'
+# GR = 'global radiation (W m^(-2))'
+# WS = 'wind speed (km/h)'
+# WD = 'wind direction (degree)'
+# WS = 'wind speed - gust (km/h)'
+# PS = 'precipitation (10^(-1) mm)'
+# AP = 'air pressure (hPa)'
+
 #print(BOKUMetData["AT"])
+BOKUMetData_dailysum = BOKUMetData.resample('D').sum()
+#print(BOKUMetData_dailysum["GR"])
+
+BOKUMetData_dailysum['JD'] = (BOKUMetData_dailysum.index)
+#print(BOKUMetData_dailysum)
+f = lambda x: datestdtojd(str(x)[:-9])
+BOKUMetData_dailysum['JD'] = BOKUMetData_dailysum['JD'].apply(f)
+#print(BOKUMetData_dailysum)
 
 isLowWS = BOKUMetData["WS"] < 0.3  #m/s
 LowWSdays = BOKUMetData[isLowWS]
-print(LowWSdays.shape)
-print(LowWSdays)
+#print(LowWSdays.shape)
+#print(LowWSdays)
 
 juliandays = range(365)
-thres_glob = []
 
-#APOLIS in kWh/m2 (Tagessumme Globalstrahlung) !!
-#x = 1
-#thres_glob = ((1.25e-12)*(x**5)+ (7.38e-9)*(x**4) - (5.365e-6)*(x**3) + 0.000926*(x**2) - 0.00036*x + 1.08)*0.9
+thres_glob = []
+#APOLIS in kWh/m2 (Tagessumme Globalstrahlung) ! thres_glob = ((1.25e-12)*(x**5)+ (7.38e-9)*(x**4) - (5.365e-6)*(x**3) + 0.000926*(x**2) - 0.00036*x + 1.08)*0.9
+for x in juliandays:
+    thres_glob.append(((1.25e-12)*(x**5)+ (7.38e-9)*(x**4) - (5.365e-6)*(x**3) + 0.000926*(x**2) - 0.00036*x + 1.08)*0.9*1000)  #in Wh/m2 Tagessumme
+    #min 90% der max. Strahlung (von Monika, Quelle? Für welchen Punkt?)
 #print(thres_glob)
 
-for x in juliandays:
-    thres_glob.append(((1.25e-12)*(x**5)+ (7.38e-9)*(x**4) - (5.365e-6)*(x**3) + 0.000926*(x**2) - 0.00036*x + 1.08)*0.9)
-    #min 90% der max. Strahlung (von Monika, Quelle? Für welchen Punkt?)
-print(thres_glob)
+f2 = lambda x: (((1.25e-12)*(x**5)+ (7.38e-9)*(x**4) - (5.365e-6)*(x**3) + 0.000926*(x**2) - 0.00036*x + 1.08)*0.9*1000)
+BOKUMetData_dailysum["GRthres"] = BOKUMetData_dailysum['JD'].apply(f2)
 
-#isLowWS_Sun
+print(BOKUMetData_dailysum)
+
+isHighGR = BOKUMetData_dailysum["GR"] > BOKUMetData_dailysum["GRthres"]
+HighGRdays = BOKUMetData_dailysum[isHighGR]
+print(HighGRdays.shape)
+print(HighGRdays)
 
 
-
-exit()
-
-"""
-Liebe Heidi,
-In der BOKUbox sind die pm, NO, NO2, O3, HCHO (in DSCD) und met Daten 1.1.2017 – 04/2020-  zusätzlich Tmin in °C (Spartacus) und APOLIS in kWh/m2 (Tagessumme Globalstrahlung) für die O3-Stationen, denn die ZAMG hat nur Jan – April hergegeben. Wenn du komplette*.nc files Spartacus oder Apolis brauchst, dann  bitte einfach melden habe Daten von 1990 – 2019.
-
-"""
-
-Vindobona = "/windata/GOOGLEDrive/DATA/remote/ground/maxdoas/Monika/"  # in DSCD
+Vindobona = "/windata/Google Drive/DATA/remote/ground/maxdoas/Monika/"  # in DSCD
 tframe = '60T'
 AxisD = pd.read_csv(Vindobona + "hcho_D_1.6.2017-31.5.2020.csv")
 AxisD = AxisD.set_index(pd.to_datetime(AxisD['date']))
 AxisD_drop = AxisD.drop(columns=['date'])
 AxisD_hr_mean = AxisD_drop.resample(tframe).mean()
+
+AxisD_d_mean = AxisD_hr_mean.resample('D').mean()
+print(AxisD_d_mean)
+
+###TODO...TOBE CONTINUED...
+AxisD_highGR = AxisD_d_mean[HighGRdays.index]
+
 #df.groupby('a').resample('3T').sum()
 #print(AxisG_hr_mean.dt.dayofweek)
 
@@ -59,12 +94,7 @@ AxisK_drop = AxisK.drop(columns=['date'])
 AxisK_hr_mean = AxisK_drop.resample(tframe).mean()
 
 
-
-
-
-
 """FIG1 monthly mean diurnal cycles"""
-"""
 fig, ax = plt.subplots(1, figsize=(12,6))
 
 #dataframe['Month'] = dataframe.index.map(lambda x: x.strftime("%m"))
@@ -93,7 +123,7 @@ ticks = ax.get_xticks()
 ax.set_xticks(np.linspace(ticks[0], d.date2num(d.num2date(ticks[-1]) + dt.timedelta(hours=1)), 5))
 ax.set_xticks(np.linspace(ticks[0], d.date2num(d.num2date(ticks[-1]) + dt.timedelta(hours=1)), 25), minor=True)
 #plt.show()
-"""
+
 """FIG 1 END"""
 
 
