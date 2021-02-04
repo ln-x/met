@@ -42,7 +42,7 @@ def BOKUMet():
                 sep="\s+",
                 skiprows=1)
 
-            File.columns = ["year", "month", "day", "hourMEZ", "min", "DT", "AT", "RH", "GR", "WS", "WD", "WDG", "PC", "AP"]
+            File.columns = ["year", "month", "day", "hourMEZ", "min", "DT", "AT", "RH", "GR", "WS", "WD", "WSG", "PC", "AP"]
             File.insert(1, "DATE", pd.to_datetime(File[["year", "month", "day"]]) + pd.to_timedelta(File["hourMEZ"],unit='H') +
                     pd.to_timedelta(File["min"], unit='m'))
             File_dt = File.set_index(pd.to_datetime(File["DATE"]))

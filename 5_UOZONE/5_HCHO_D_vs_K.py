@@ -33,99 +33,167 @@ BOKUMetData = BOKUMet_Data.BOKUMet()
 # GR = 'global radiation (W m^(-2))'
 # WS = 'wind speed (km/h)'
 # WD = 'wind direction (degree)'
-# WS = 'wind speed - gust (km/h)'
-# PS = 'precipitation (10^(-1) mm)'
+# WSG = 'wind speed - gust (km/h)'
+# PC = 'precipitation (10^(-1) mm)'
 # AP = 'air pressure (hPa)'
 
-#print(BOKUMetData["AT"])
-BOKUMetData_dailysum = BOKUMetData.resample('D').sum()
-#print(BOKUMetData_dailysum["GR"])
+#DAILY MEANS
+BOKUMetData_dailysum = BOKUMetData.resample('D').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.sum, 'WS': np.mean,
+                                                      'WD': np.mean, 'WSG': np.mean, 'PC': np.sum, 'AP': np.mean})
 
+#JULIAN DAY
 BOKUMetData_dailysum['JD'] = (BOKUMetData_dailysum.index)
-#print(BOKUMetData_dailysum)
 f = lambda x: datestdtojd(str(x)[:-9])
 BOKUMetData_dailysum['JD'] = BOKUMetData_dailysum['JD'].apply(f)
-#print(BOKUMetData_dailysum)
 
+#FILTER - WIND
 isLowWS = BOKUMetData["WS"] < 0.3  #m/s
 LowWSdays = BOKUMetData[isLowWS]
 #print(LowWSdays.shape)
 #print(LowWSdays)
 
+#FILTER - GLOBAL RADIATION
 juliandays = range(365)
-
 thres_glob = []
 #APOLIS in kWh/m2 (Tagessumme Globalstrahlung) ! thres_glob = ((1.25e-12)*(x**5)+ (7.38e-9)*(x**4) - (5.365e-6)*(x**3) + 0.000926*(x**2) - 0.00036*x + 1.08)*0.9
 for x in juliandays:
     thres_glob.append(((1.25e-12)*(x**5)+ (7.38e-9)*(x**4) - (5.365e-6)*(x**3) + 0.000926*(x**2) - 0.00036*x + 1.08)*0.9*1000)  #in Wh/m2 Tagessumme
-    #min 90% der max. Strahlung (von Monika, Quelle? Für welchen Punkt?)
-#print(thres_glob)
 
 f2 = lambda x: (((1.25e-12)*(x**5)+ (7.38e-9)*(x**4) - (5.365e-6)*(x**3) + 0.000926*(x**2) - 0.00036*x + 1.08)*0.9*1000)
 BOKUMetData_dailysum["GRthres"] = BOKUMetData_dailysum['JD'].apply(f2)
-
-print(BOKUMetData_dailysum)
+#print(BOKUMetData_dailysum.shape)
 
 isHighGR = BOKUMetData_dailysum["GR"] > BOKUMetData_dailysum["GRthres"]
 HighGRdays = BOKUMetData_dailysum[isHighGR]
-print(HighGRdays.shape)
-print(HighGRdays)
+#print(HighGRdays.shape)
+#print(HighGRdays)
 
-
+#HCHO DATA
 Vindobona = "/windata/Google Drive/DATA/remote/ground/maxdoas/Monika/"  # in DSCD
 tframe = '60T'
 AxisD = pd.read_csv(Vindobona + "hcho_D_1.6.2017-31.5.2020.csv")
 AxisD = AxisD.set_index(pd.to_datetime(AxisD['date']))
+AxisD = AxisD.rename(columns={'HCHO': 'HCHO_D'})
 AxisD_drop = AxisD.drop(columns=['date'])
 AxisD_hr_mean = AxisD_drop.resample(tframe).mean()
-
 AxisD_d_mean = AxisD_hr_mean.resample('D').mean()
-print(AxisD_d_mean)
+#print(AxisD_d_mean)
 
-###TODO...TOBE CONTINUED...
-AxisD_highGR = AxisD_d_mean[HighGRdays.index]
+AxisK = pd.read_csv(Vindobona + "hcho_K_13.3.2019-31.5.2020.csv")#, parse_dates=["date"])
+AxisK = AxisK.set_index(pd.to_datetime(AxisK['date']))
+AxisK = AxisK.rename(columns={'HCHO': 'HCHO_K'})
+AxisK_drop = AxisK.drop(columns=['date'])
+AxisK_hr_mean = AxisK_drop.resample(tframe).mean()
+AxisK_d_mean = AxisK_hr_mean.resample('D').mean()
+#print(AxisK_d_mean)
+HCHO_met = pd.concat([BOKUMetData_dailysum, AxisD_d_mean, AxisK_d_mean], axis=1)
+HCHO_met_hr = pd.concat([BOKUMetData, AxisD_hr_mean, AxisK_hr_mean], axis=1)
 
+HCHO_met_hr['Month'] = HCHO_met_hr.index.month
+HCHO_met_hr['Time'] = HCHO_met_hr.index.time
+#print(HCHO_met_hr)
+
+isHighGRall = HCHO_met["GR"] > HCHO_met["GRthres"]
+HCHO_HighGRdays = HCHO_met[isHighGRall]
+#print(HighGRdays.shape)
+#print(HighGRdays)
 #df.groupby('a').resample('3T').sum()
 #print(AxisG_hr_mean.dt.dayofweek)
 
-AxisK = pd.read_csv(Vindobona + "hcho_K_1.6.2017-31.5.2020.csv")#, parse_dates=["date"])
-AxisK = AxisK.set_index(pd.to_datetime(AxisK['date']))
-AxisK_drop = AxisK.drop(columns=['date'])
-AxisK_hr_mean = AxisK_drop.resample(tframe).mean()
+print(HCHO_met_hr.shape)
+isLowWSall = HCHO_met_hr["WS"] < 10.0  #m/s
+HCHO_LowWS_hr = HCHO_met_hr[isLowWSall]
+print(HCHO_LowWS_hr)
+"""
+fig = plt.figure()
+ax1 = plt.gca()
+ax2 = ax1.twinx()
+ax1.plot(HCHO_HighGRdays['HCHO_K'], color='orange', label="hcho_obs_K_sun")
+ax1.plot(HCHO_HighGRdays['HCHO_D'], color='orange', linestyle='dotted', label="hcho_obs_D_sun")
+ax1.plot(HCHO_HighGRdays['HCHO_K'], color='red', label="hcho_obs_K_calm")
+ax1.plot(HCHO_HighGRdays['HCHO_D'], color='red', linestyle='dotted', label="hcho_obs_D_calm")
+ax1.plot(HCHO_met['HCHO_K'], color='navy', label="hcho_obs_K")
+ax1.plot(HCHO_met['HCHO_D'], color='navy', linestyle='dotted', label="hcho_obs_D")
+ax1.legend(loc='upper left')
+ax1.set_ylabel("ug m3", size="medium")
+ax1.legend()
+#plt.show()
+"""
+
+"""FIG 0 - only sunny days"""
+fig, ax = plt.subplots(1, figsize=(12,6))
+pd.plotting.register_matplotlib_converters()
+colors = ["k","gray","silver","greenyellow","chartreuse","green","yellow","orange","red","sandybrown","goldenrod","saddlebrown", "grey"]
+#HCHO_HighGRdays_monthly_mean = []
+for month in HCHO_LowWS_hr['Month'].unique():
+    df = HCHO_LowWS_hr.loc[HCHO_LowWS_hr['Month'] == month]
+    df = df.groupby('Time').describe() #mean()
+    ax.plot(df['HCHO_K']['mean'], linewidth=2.0, linestyle='dotted', color=colors[month], label = month)
+    #print(df['HCHO_K'])
+    #ax.plot(df['HCHO_D']['mean'], linewidth=2.0, linestyle='dotted', color=colors[month], label = month)
+    #ax.plot(df['HCHO_K']['mean'], linewidth=2.0, linestyle='solid', color=colors[month], label = month)
+    #HCHO_HighGRdays_monthly_mean.append(df['HCHO_D']['mean'])
+    #HCHO_HighGRdays_monthly_mean.append(df['HCHO_K']['mean'])
+ax.legend()
+ax.set_xlabel("time[hours]", size="medium")
+ax.set_ylabel("HCHO[DSCD]", size="medium")
+plt.title("WS < 1.0 m s-1")
+myFmt = matplotlib.dates.DateFormatter("%m")
+ax.xaxis.set_major_formatter(myFmt)
+plt.show()
+
+exit()
+"""FIG 0 END """
 
 
 """FIG1 monthly mean diurnal cycles"""
 fig, ax = plt.subplots(1, figsize=(12,6))
-
 #dataframe['Month'] = dataframe.index.map(lambda x: x.strftime("%m"))
 #dataframe['Time'] = dataframe.index.map(lambda x: x.strftime("%H:%M"))
-AxisA_hr_mean['Month'] = AxisA_hr_mean.index.month
-AxisA_hr_mean['Time'] = AxisA_hr_mean.index.time
+AxisD_hr_mean['Month'] = AxisD_hr_mean.index.month
+AxisD_hr_mean['Time'] = AxisD_hr_mean.index.time
+AxisK_hr_mean['Month'] = AxisK_hr_mean.index.month
+AxisK_hr_mean['Time'] = AxisK_hr_mean.index.time
 
 pd.plotting.register_matplotlib_converters()
-
 colors = ["k","gray","silver","greenyellow","chartreuse","green","yellow","orange","red","sandybrown","goldenrod","saddlebrown", "grey"]
-
-AxisA_monthly_mean = []
-for month in AxisA_hr_mean['Month'].unique():
-    df = AxisA_hr_mean.loc[AxisA_hr_mean['Month'] == month]
+AxisD_monthly_mean = []
+AxisK_monthly_mean = []
+for month in AxisD_hr_mean['Month'].unique():
+    df = AxisD_hr_mean.loc[AxisD_hr_mean['Month'] == month]
     df = df.groupby('Time').describe() #.mean()
     #print(df['HCHO']['mean'])       #12x24h ok!
     #print(df.index) #12x24h ok!
-    ax.plot(df['HCHO']['mean'], linewidth=2.0, color=colors[month], label = month)
-    AxisA_monthly_mean.append(df['HCHO']['mean'])
+    ax.plot(df['HCHO_D']['mean'], linewidth=2.0, linestyle='dotted', color=colors[month], label = month)
+    AxisD_monthly_mean.append(df['HCHO_D']['mean'])
 ax.legend()
 
-#print(AxisA_monthly_mean)
+for month in AxisK_hr_mean['Month'].unique():
+    df = AxisK_hr_mean.loc[AxisK_hr_mean['Month'] == month]
+    df = df.groupby('Time').describe() #.mean()
+    ax.plot(df['HCHO_K']['mean'], linewidth=2.0, color=colors[month])#, label = month)
+    AxisK_monthly_mean.append(df['HCHO_K']['mean'])
+#ax.legend()
 
+ax.set_xlabel("time[hours]", size="medium")
+ax.set_ylabel("HCHO[DSCD]", size="medium")
+plt.title("ALL")
 
-ticks = ax.get_xticks()
-ax.set_xticks(np.linspace(ticks[0], d.date2num(d.num2date(ticks[-1]) + dt.timedelta(hours=1)), 5))
-ax.set_xticks(np.linspace(ticks[0], d.date2num(d.num2date(ticks[-1]) + dt.timedelta(hours=1)), 25), minor=True)
-#plt.show()
+#ax1.set_xlim(0, 240)
+   #ax1.set_ylim(0, 50)
+   #plt.title("NO2,Stefansplatz")#, Vienna region", size="large")#+"2m air temperature"))
+myFmt = matplotlib.dates.DateFormatter("%h")  #d
+ax.xaxis.set_major_formatter(myFmt)
+    #fig1.autofmt_xdate()
 
+#ticks = ax.get_xticks()
+#ax.set_xticks(np.linspace(ticks[0], d.date2num(d.num2date(ticks[-1]) + dt.timedelta(hours=1)), 5))
+#ax.set_xticks(np.linspace(ticks[0], d.date2num(d.num2date(ticks[-1]) + dt.timedelta(hours=1)), 25), minor=True)
+#fig.autofmt_xdate()
+plt.show()
 """FIG 1 END"""
 
+exit()
 
 """FIG 2 scatter plot """
 """
