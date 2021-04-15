@@ -101,7 +101,7 @@ HCHO_HighGRdays = HCHO_met[isHighGRall]
 #print(AxisG_hr_mean.dt.dayofweek)
 
 print(HCHO_met_hr.shape)
-isLowWSall = HCHO_met_hr["WS"] < 10.0  #m/s
+isLowWSall = HCHO_met_hr["WS"] < 3.0  #m/s
 HCHO_LowWS_hr = HCHO_met_hr[isLowWSall]
 print(HCHO_LowWS_hr)
 """
@@ -120,7 +120,7 @@ ax1.legend()
 #plt.show()
 """
 
-"""FIG 0 - only sunny days"""
+"""FIG 0 - only sunny days
 fig, ax = plt.subplots(1, figsize=(12,6))
 pd.plotting.register_matplotlib_converters()
 colors = ["k","gray","silver","greenyellow","chartreuse","green","yellow","orange","red","sandybrown","goldenrod","saddlebrown", "grey"]
@@ -137,13 +137,13 @@ for month in HCHO_LowWS_hr['Month'].unique():
 ax.legend()
 ax.set_xlabel("time[hours]", size="medium")
 ax.set_ylabel("HCHO[DSCD]", size="medium")
-plt.title("WS < 1.0 m s-1")
+plt.title("WS < 3.0 m s-1")
 myFmt = matplotlib.dates.DateFormatter("%m")
 ax.xaxis.set_major_formatter(myFmt)
 plt.show()
 
 exit()
-"""FIG 0 END """
+FIG 0 END """
 
 
 """FIG1 monthly mean diurnal cycles"""
@@ -164,20 +164,20 @@ for month in AxisD_hr_mean['Month'].unique():
     df = df.groupby('Time').describe() #.mean()
     #print(df['HCHO']['mean'])       #12x24h ok!
     #print(df.index) #12x24h ok!
-    ax.plot(df['HCHO_D']['mean'], linewidth=2.0, linestyle='dotted', color=colors[month], label = month)
+    ax.plot(df['HCHO_D']['mean'], linewidth=2.0, color=colors[month], label = month)
     AxisD_monthly_mean.append(df['HCHO_D']['mean'])
 ax.legend()
 
 for month in AxisK_hr_mean['Month'].unique():
     df = AxisK_hr_mean.loc[AxisK_hr_mean['Month'] == month]
     df = df.groupby('Time').describe() #.mean()
-    ax.plot(df['HCHO_K']['mean'], linewidth=2.0, color=colors[month])#, label = month)
+    ax.plot(df['HCHO_K']['mean'], linewidth=2.0, linestyle='dotted', color=colors[month])#, label = month)
     AxisK_monthly_mean.append(df['HCHO_K']['mean'])
 #ax.legend()
 
-ax.set_xlabel("time[hours]", size="medium")
-ax.set_ylabel("HCHO[DSCD]", size="medium")
-plt.title("ALL")
+ax.set_xlabel("time [Month]", size="medium")
+ax.set_ylabel("HCHO DSCD [molec cm-2]", size="medium")
+plt.title("all weather conditions: D (city) - solid, K (vineyard, forest) - dotted ")
 
 #ax1.set_xlim(0, 240)
    #ax1.set_ylim(0, 50)

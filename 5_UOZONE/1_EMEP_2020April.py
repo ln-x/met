@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from scipy import stats
 import sys
 
-path = '/home/heidit/'  # '/media/lnx'
+path = '/media/heidit/'  # '/media/lnx'
 outpath = path + 'Norskehavet/EMEPData/OUTPUT/2020_4'
 file = path + 'Norskehavet/EMEPData/OUTPUT/2020_4/JanBASESIM_4b_day.nc'
 file2 = path + 'Norskehavet/EMEPData/OUTPUT/2020_4/wrfout_d01_2020-03-31_01:00:00'

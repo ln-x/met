@@ -67,7 +67,7 @@ print("pass")
 "read in VINDOBONA"
 
 #foldername = "/home/lnx/DATACHEM/StefanSchreier/2001_2004_DQ_91_HCHO_mixing_ratio/"
-foldername = "/windata/GOOGLEDrive/DATA/remote/ground/maxdoas/2001_2004_DQ_91_HCHO_mixing_ratio/"  # in DSCD
+foldername = "/windata/Google Drive/DATA/remote/ground/maxdoas/2001_2004_DQ_91_HCHO_mixing_ratio/"  # in DSCD
 
 files = os.listdir(foldername)
 # print files

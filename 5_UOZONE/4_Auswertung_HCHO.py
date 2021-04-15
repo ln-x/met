@@ -19,7 +19,7 @@ thres.glob <- (1.25e-12*x^5+ 7.38E-09*x^4 - 5.365E-06*x^3 + 0.000926*x^2 - 0.000
 LG Monika
 """
 
-Vindobona = "/windata/GOOGLEDrive/DATA/remote/ground/maxdoas/Monika/"  # in DSCD
+Vindobona = "/windata/Google Drive/DATA/remote/ground/maxdoas/Monika/"  # in DSCD
 tframe = '60T'
 AxisA = pd.read_csv(Vindobona + "hcho_A_1.6.2017-31.5.2020.csv")#, parse_dates=["date"])
 #print(AxisA.date)  #0        2017-06-01 04:39:34
@@ -58,8 +58,15 @@ AxisG_hr_mean = AxisG_drop.resample(tframe).mean()
 #df.groupby('a').resample('3T').sum()
 #print(AxisG_hr_mean.dt.dayofweek)
 
+fig = plt.figure(figsize=(12,4))
+ax = fig.add_subplot(111)
+AxisD_hr_mean.plot(ax=ax)#,title='%s at %s' % (wrfc_hcho.long_name,nc.id))
+ax.set_ylabel("AxisD_hr_mean[DSCD]")
+plt.show()
 
-Luftmessnetz = "/windata/GOOGLEDrive/DATA/obs_point/chem/Luftmessnetz/"
+exit()
+
+Luftmessnetz = "/windata/Google Drive/DATA/obs_point/chem/Luftmessnetz/"
 """
 LUFTMESSNETZ DATASET 2 - ONLY JAN-APRIL:
 
@@ -140,8 +147,8 @@ timeaxis_NO2 = pd.to_datetime(NO2_HMW["timestamp.MEZ"])
 timeaxis_NO = pd.to_datetime(NO_HMW["timestamp.MEZ"])
 timeaxis_O3 = pd.to_datetime(O3_HMW["Timestamp..MEZ."])
 
-Spartacus_Tmin = "/windata/GOOGLEDrive/DATA/obs_point/met/Spartacus/tmin1990.2019_o3_stat.txt" # in degC
-Apolis_GS = "/windata/GOOGLEDrive/DATA/obs_point/met/Apolis/apolis1990.2019_o3_stat.txt" # kWh/m2 (Tagessumme Globalstrahlung)
+Spartacus_Tmin = "/windata/Google Drive/DATA/obs_point/met/Spartacus/tmin1990.2019_o3_stat.txt" # in degC
+Apolis_GS = "/windata/Google Drive/DATA/obs_point/met/Apolis/apolis1990.2019_o3_stat.txt" # kWh/m2 (Tagessumme Globalstrahlung)
 #Und hier der poly-fit für die Strahlungsdaten –„x“ ist Tag im Jahr (von 1 -> 365 (366)) clear sky , wenn mind 90% der max. Strahlung
 ## calculate 90% of max globrad -> threshold
 #thres.glob <- (1.25e-12*x^5+ 7.38E-09*x^4 - 5.365E-06*x^3 + 0.000926*x^2 - 0.00036*x + 1.08)*0.9

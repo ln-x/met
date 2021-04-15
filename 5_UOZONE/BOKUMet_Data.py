@@ -23,7 +23,7 @@ import datetime as dt
 
 def BOKUMet():
     BOKUDachBASE = "/windata/Google Drive/DATA/obs_point/met/BOKU_Met_Dachstation/bokumet_"
-    years = ['2017','2018','2019','2020']
+    years = ['2015','2017','2018','2019','2020']
     months = ['01','02','03','04','05','06','07','08','09','10','11','12']
     BOKUMetName = []
     BOKUMetpName = []
