@@ -11,10 +11,10 @@ from scipy import stats
 import sys
 import os
 import ReadinVINDOBONA
-"""
+
 '''read in air pollution csv data'''
-pathbase = "/home/lnx/DATACHEM/Luftmessnetz/" #Thinkpad Lenovo
-pathbase = "/windata/GOOGLEDrive/DATA/obs_point/chem/Luftmessnetz/" #imph
+#pathbase = "/home/lnx/DATACHEM/Luftmessnetz/" #Thinkpad Lenovo
+pathbase = "/windata/Google Drive/DATA/obs_point/chem/Luftmessnetz/" #imph
 
 no2_meas = pd.read_csv(pathbase + 'NO2_HMW_2017-19.4.2020.csv')
 print(no2_meas)
@@ -44,7 +44,6 @@ no_meas3b = no_meas3[0::2]
 
 no_meas4 = no_meas_ppb[56928:]
 no_meas4b = no_meas4[0::2]
-
 
 o3_meas = pd.read_csv(pathbase + 'O3_HMW_1.1.2015_19.4.2020.csv')
 o3_meas_ppb = o3_meas * 2.0
@@ -101,7 +100,7 @@ plt.show()
 
 #print hcho
 #exit()
-
+"""
 '''calculation of Regression coefficients'''
 # print stats.spearmanr(ZAMG_heatdays, WRFdata_heatdays, axis=0)
 #R2_Forc_emission = (stats.spearmanr(EBIO_ISO, T2))[0] ** 2
