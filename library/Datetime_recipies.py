@@ -6,6 +6,19 @@ from datetime import datetime
 from datetime import timedelta
 import numpy as np
 
+def datestdtojd (stddate):
+    fmt='%Y-%m-%d'
+    sdtdate = datetime.strptime(stddate, fmt)
+    sdtdate = sdtdate.timetuple()
+    jdate = sdtdate.tm_yday
+    return(jdate)
+
+def jdtodatestd (jdate):
+    fmt = '%Y%j'
+    datestd = datetime.strptime(jdate, fmt).date()
+    return(datestd)
+
+"""
 #1) TRY TO PARSE DIRECTLY
 
 custom_date_parser = lambda x: datetime.strptime(x, "%Y-%d-%m %H:%M:%S")
@@ -53,3 +66,4 @@ File_dtd = File_dt.drop(columns=[['year','month','day']])
 
 #df[["col1", "col2", "col3"]].apply(pd.to_datetime)
 
+"""

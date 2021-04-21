@@ -55,7 +55,7 @@ ax1 = plt.gca()
 ax2 = ax1.twinx()
 #it is i,j = 110, 59, but in script I use vals[:,j-1,i-1] - because python computes from 0.
 ax1.plot(EBIO_ISO[931:1130,109,58], color='violet', label="wrfchem_iso") #[mol h-1 km-2] 9 km
-#ax1.plot((mg_iso[:,MEGANyindex,MEGANxindex]*1000000*3600), color='blue', label="megan_iso") #[mol h-1?? m-2]  0.33ff m
+ax1.plot((mg_iso[:,MEGANyindex,MEGANxindex]*1000000*3600), color='blue', label="megan_iso") #[mol h-1?? m-2]  0.33ff m
 #ax1.plot((mg_iso[:,60,60]*1000000*3600), color='blue', label="megan_iso_2") #[mol h-1 m-2]  0.33ff m
 #ax2.plot((mg_sunleaf[:,MEGANyindex,MEGANxindex])-273.15, color="red", linestyle="dashed", linewidth="0.5", label="megan_sunleafT")
 #ax2.plot((mg_sunleaf[:,MEGANxindex,MEGANyindex])-273.15, color="blue", linestyle="dashed", linewidth="0.5", label="megan_shadeleafT")# SAME AS SUNLEAF

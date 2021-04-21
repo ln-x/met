@@ -10,7 +10,7 @@ from datetime import timedelta
 import numpy as np
 from matplotlib import dates as d
 import datetime as dt
-import BOKUMet_Data
+import met.library.BOKUMet_Data
 from scipy import stats
 
 
