@@ -13,22 +13,29 @@ import sys
 import os
 import met.library.BOKUMet_Data
 from met.library.Datetime_recipies import datestdtojd
+from met.library.conversions import *
 
 
 '''READ IN BOKU Metdata'''
 BOKUMetData = met.library.BOKUMet_Data.BOKUMet()
+
+
 #DAILY MEANS
-BOKUMetData_dailysum = BOKUMetData.resample('D').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.sum, 'WS': np.mean,
+BOKUMetData_dailysum = BOKUMetData.resample('D').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.mean, 'WS': np.mean,
                                                       'WD': np.mean, 'WSG': np.mean, 'PC': np.sum, 'AP': np.mean})
 #JULIAN DAY
 BOKUMetData_dailysum['JD'] = (BOKUMetData_dailysum.index)
 f = lambda x: datestdtojd(str(x)[:-9])
 BOKUMetData_dailysum['JD'] = BOKUMetData_dailysum['JD'].apply(f)
 
-#print(BOKUMetData_dailysum["AT"])
+#MONTHLEY MEANS
+BOKUMetData_monthly = BOKUMetData.resample('M').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.mean, 'WS': np.mean,
+                                                      'WD': np.mean, 'WSG': np.mean, 'PC': np.sum, 'AP': np.mean})
+
+#print(BOKUMetData_dailysum["GR"])
 #exit()
 
-'''READ IN UBA air pollution data (HMW)'''
+'''READ IN UBA air pollution data (HMW)''' #TODO: UBA data in MEZ!
 #pathbase = "/home/lnx/DATACHEM/Luftmessnetz/" #Thinkpad Lenovo
 pathbase = "/windata/Google Drive/DATA/obs_point/chem/UBA/" #imph
 #no2_meas = pd.read_csv(pathbase + 'NO2 NO HMW 2009.dat')
@@ -45,7 +52,6 @@ no2_Apr =no2_meas[56927::2]  #1.4. 0h - 19.4. 23h 2020
 #no_meas = pd.read_csv(pathbase + 'NO_HMW_2015-2016.csv')
 no_meas = pd.read_csv(pathbase + 'NO_HMW_2017-19.4.2020.csv') #ppb= *1.25
 no_Apr = no_meas[56928::2]  #1.4. 0h - 19.4. 23h 2020
-
 #o3_meas = pd.read_csv(pathbase + 'O3 HMW 2009.dat')
 #o3_meas = pd.read_csv(pathbase + 'O3 HMW 2010.dat')
 #o3_meas = pd.read_csv(pathbase + 'O3 HMW 2011.dat')
@@ -91,6 +97,7 @@ o3_2020_mda1 = o3_2020_mda1.set_index(pd.to_datetime(o3_2020_mda1['date']))
 o3_2020_mda1 = o3_2020_mda1.drop(columns=['date'])
 o3_1990_2020_mda1 = pd.concat([o3_1990_2019_mda1, o3_2020_mda1], axis=0)
 o3_1990_2020_da = o3_1990_2020_mda1.resample('D').mean()
+o3_1990_2020_m = o3_1990_2020_mda1.resample('M').mean()
 #print(o3_1990_2020_da["AT90LOB"])
 #o3_1990_2020_da["AT90LOB"].plot()
 #plt.show()
@@ -188,17 +195,94 @@ wrfc_swd = pd.Series(SWDOWN[:],index=wrfc_time_construct)
 wrfc_swd_d =wrfc_swd.resample('D').mean()
 
 V10 = fh3.variables["V10"][:,0,0]
-"""
-'''calculation of Regression coefficients'''
-# print stats.spearmanr(ZAMG_heatdays, WRFdata_heatdays, axis=0)
-#R2_Forc_emission = (stats.spearmanr(EBIO_ISO, T2))[0] ** 2
-#R2_Forc_NO2concentr = (stats.spearmanr(o3, no2))[0] ** 2
-#R2_Forc_c5h8concentr = (stats.spearmanr(o3, c5h8))[0] ** 2
-# print i, R2_Forc_i
-"""
+
+
+"READ in WRF-Chem2"
+starttime = datetime(2007, 1, 1, 0, 00)
+wrfc_time_construct = np.array([starttime + timedelta(hours=i) for i in range(87673)])
+
+path1 = '/windata/Google Drive/DATA/models/boku/wrf_chem/reanalysis/era-interim/HCera_9km_2007-16_ATTR/model_base_results/'
+f_o3 = Dataset(path1 + 'HC2007t16-W-E-Cam-TNO3ATTR_O3.nc', mode='r')
+O3 = f_o3.variables['O3'][:,wrf_vie_j,wrf_vie_i]
+o3 = pd.Series(O3[:],index=wrfc_time_construct) #wrfc_o3_d =wrfc_o3.resample('D').mean() #TODO Only valid with DatetimeIndex, TimedeltaIndex or PeriodINdex, but got instance of 'Index'
+o3_d =o3.resample('D').mean()
+o3_m =o3.resample('M').mean()
+f_swdown = Dataset(path1 + 'HC2007t16-W-E-Cam-TNO3ATTR_swdown.nc', mode='r')
+SWDOWN = f_swdown.variables['swdown'][:,wrf_vie_j,wrf_vie_i]
+swdown = pd.Series(SWDOWN[:],index=wrfc_time_construct) #wrfc_o3_d =wrfc_o3.resample('D').mean() #TODO Only valid with DatetimeIndex, TimedeltaIndex or PeriodINdex, but got instance of 'Index'
+swdown_d =swdown.resample('D').mean()
+swdown_m =swdown.resample('M').mean()
+f_tas = Dataset(path1 + 'HC2007t16-W-E-Cam-TNO3ATTR_tas.nc', mode='r')
+TAS = f_tas.variables['tas'][:,wrf_vie_j,wrf_vie_i]
+tas = pd.Series(TAS[:],index=wrfc_time_construct) #wrfc_o3_d =wrfc_o3.resample('D').mean() #TODO Only valid with DatetimeIndex, TimedeltaIndex or PeriodINdex, but got instance of 'Index'
+tas_d =tas.resample('D').mean()
+tas_m =tas.resample('M').mean()
+
 '''
 Plotting
 '''
+fig = plt.figure()
+start = datetime(2009, 7, 1, 00, 00)
+end = datetime(2016, 12, 31, 00, 00)
+plt.suptitle(f"OBS/MOD {start} - {end}")
+ax1 = fig.add_subplot(411)
+ax1 = plt.gca()
+ax1.plot(nox_1990_2020_da['AT9JAEG'][start:end], color='violet',  linewidth="0.1", label = "nox_obs_d_jaeg" )
+ax1.plot(nox_1990_2020_da['AT900ZA'][start:end], color='blue',  linewidth="0.1", label = "nox_obs_d_za" )
+ax1.plot(nox_1990_2020_da['AT90LOB'][start:end], color='green',  linewidth="0.1", label = "nox_obs_d_lob" )
+ax1.plot(nox_1990_2020_da['AT9STEF'][start:end], color='grey',  linewidth="0.1", label = "nox_obs_d_stef" )
+ax1.plot(wrfc_nox_d*1000, color='blue', label="nox_wrfc_d", linestyle="dashed")
+#ax1.plot(emep_nox_d, color='green', label="nox_emep_d", linestyle="dashed")
+ax1.set_xlabel("days")
+ax1.set_ylabel("ppb", size="medium")
+#ax1.set_ylabel("mg m-2 h-1", size="medium")
+#ax2.set_ylabel("degC", size="medium")
+ax1.legend(loc='upper left')
+#ax2.legend(loc='upper right')
+#ax1.set_ylim(0, 5)
+#ax2.set_ylim(10, 50)
+
+ax1 = fig.add_subplot(412)
+ax1.plot((o3_1990_2020_da['AT9JAEG'][start:end])*ugm3toppb_o3, color='violet', linewidth="0.1", label="o3_obs_da_JAEG")
+ax1.plot((o3_1990_2020_m['AT9JAEG'][start:end])*ugm3toppb_o3, color='violet',linewidth="1", label="o3_obs_m_JAEG")
+#ax1.plot((o3_1990_2020_da['AT900ZA'][start:end])*ugm3toppb_o3, color='blue',linewidth="1", label="o3_obs_da_00ZA")
+#ax1.plot((o3_1990_2020_da['AT90LOB'][start:end])*ugm3toppb_o3, color='green', linewidth="0.5", label="o3_obs_da_0LOB")
+ax1.plot((o3_1990_2020_da['AT9STEF'][start:end])*ugm3toppb_o3, color='darkgrey', linewidth="0.1", label="o3_obs_da_STEF")
+ax1.plot((o3_1990_2020_m['AT9STEF'][start:end])*ugm3toppb_o3, color='darkgrey',linewidth="1", label="o3_obs_m_STEF")
+ax1.plot(o3_d[start:end]*1000,color='darkblue', label="o3_wrfc_d", linewidth="0.5", linestyle="dashed")
+ax1.plot(o3_m[start:end]*1000,color='darkblue', label="o3_wrfc_m", linewidth="1", linestyle="dashed")
+#ax1.plot((emep_no[:,109,58]) + (emep_no2[:,109,58]), color='green', label="nox_emep_d", linestyle="dashed")
+#EMEP
+ax1.set_xlabel("days")
+ax1.set_ylabel("ground level ozone [ppb]", size="medium")
+ax1.legend(loc='upper right')
+
+ax1 = fig.add_subplot(413)
+#ax1.plot((o3_1990_2020_da['AT9STEF'][start:end])*2, color='darkgrey', label="o3_obs_da_STEF")
+ax1.plot(BOKUMetData_dailysum["GR"][start:end], color='yellow', linewidth="0.1", label="swdown_obs_BOKUR_d")
+ax1.plot(BOKUMetData_monthly["GR"][start:end], color='yellow', linewidth="1", label="swdown_obs_BOKUR_m")
+ax1.plot(swdown_d[start:end], color='darkorange', label="swdown_wrfc_d", linestyle="dashed", linewidth="0.1")
+ax1.plot(swdown_m[start:end], color='darkorange', label="swdown_wrfc_m", linestyle="dashed", linewidth="1")
+ax1.set_xlabel("days")
+ax1.set_ylabel("global radiation means [W m-2]", size="medium")
+ax1.legend(loc='upper left')
+
+ax1 = fig.add_subplot(414)
+#ax1.plot((o3_1990_2020_da['AT9STEF'][start:end])*2, color='darkgrey', label="o3_obs_da_STEF")
+ax1.plot(BOKUMetData_dailysum["AT"][start:end], linewidth="0.3", color='lightsalmon', label="t2_obs_BOKUR")
+ax1.plot(BOKUMetData_monthly["AT"][start:end], linewidth="1", color='lightsalmon', label="t2_obs_BOKUR_m")
+ax1.plot(tas_d[start:end]-273.15,linewidth="0.5", color='darkred', label="t2_wrfc", linestyle="dashed")
+ax1.plot(tas_m[start:end]-273.15,linewidth="1", color='darkred', label="t2_wrfc_m", linestyle="dashed")
+ax1.set_ylim(-5, 35)
+ax1.set_xlabel("days")
+ax1.set_ylabel("2 m T [degC]", size="medium")
+ax1.legend(loc='upper left')
+plt.show()
+
+
+
+exit()
+
 fig = plt.figure()
 plt.suptitle("1990-2020, OBS/MOD")
 start = datetime(2013, 1, 1, 00, 00)
@@ -220,10 +304,26 @@ ax1.legend(loc='upper right')
 ax1 = fig.add_subplot(312)
 ax1 = plt.gca()
 #ax2 = ax1.twinx()
-ax1.plot((o3_1990_2020_da['AT9JAEG'][start:end])*2, color='violet', label="o3_obs_da_JAEG") #TODO: Umrechnen korrekt ug/m³ -> ppb! (anstelle *2)
-ax1.plot((o3_1990_2020_da['AT900ZA'][start:end])*2, color='blue', label="o3_obs_da_00ZA")
-ax1.plot((o3_1990_2020_da['AT90LOB'][start:end])*2, color='green', label="o3_obs_da_0LOB")
-ax1.plot((o3_1990_2020_da['AT9STEF'][start:end])*2, color='darkgrey', label="o3_obs_da_STEF")
+ax1 = fig.add_subplot(312)
+ax1 = plt.gca()
+ax1.plot(nox_1990_2020_da['AT9JAEG'][start:end], color='violet', label = "nox_obs_d_jaeg" )
+ax1.plot(nox_1990_2020_da['AT900ZA'][start:end], color='blue', label = "nox_obs_d_za" )
+ax1.plot(nox_1990_2020_da['AT90LOB'][start:end], color='green', label = "nox_obs_d_lob" )
+ax1.plot(nox_1990_2020_da['AT9STEF'][start:end], color='grey', label = "nox_obs_d_stef" )
+ax1.plot(emep_nox_d, color='green', label="nox_emep_d", linestyle="dashed")
+ax1.set_xlabel("days")
+ax1.set_ylabel("ppb", size="medium")
+#ax1.set_ylabel("mg m-2 h-1", size="medium")
+#ax2.set_ylabel("degC", size="medium")
+ax1.legend(loc='upper left')
+#ax2.legend(loc='upper right')
+#ax1.set_ylim(0, 5)
+#ax2.set_ylim(10, 50)
+
+ax1.plot((o3_1990_2020_da['AT9JAEG'][start:end])*ugm3toppb_o3, color='violet', label="o3_obs_da_JAEG") #TODO: Umrechnen korrekt ug/m³ -> ppb! (anstelle *2)
+ax1.plot((o3_1990_2020_da['AT900ZA'][start:end])*ugm3toppb_o3, color='blue', label="o3_obs_da_00ZA")
+ax1.plot((o3_1990_2020_da['AT90LOB'][start:end])*ugm3toppb_o3, color='green', label="o3_obs_da_0LOB")
+ax1.plot((o3_1990_2020_da['AT9STEF'][start:end])*ugm3toppb_o3, color='darkgrey', label="o3_obs_da_STEF")
 ax1.plot(wrfc_o3_d*1000,color='blue', label="o3_wrfc_d", linestyle="dashed")
 #ax1.plot((emep_no[:,109,58]) + (emep_no2[:,109,58]), color='green', label="nox_emep_d", linestyle="dashed")
 #EMEP
@@ -235,8 +335,11 @@ ax1 = fig.add_subplot(313)
 ax1 = plt.gca()
 ax2 = ax1.twinx()
 #ax1.plot((o3_1990_2020_da['AT9STEF'][start:end])*2, color='darkgrey', label="o3_obs_da_STEF")
-ax1.plot(wrfc_swd_d, color='yellow', label="sw_down_wrfc", linestyle="dashed")
-ax2.plot(wrfc_T2_d-273.15, color='red', label="T2_wrfc", linestyle="dashed")
+ax1.plot(BOKUMetData_dailysum["GR"][start:end], color='orange', linewidth="0.5", label="swdown_obs_BOKUR")
+ax1.plot(wrfc_swd_d[start:end], color='orange', linewidth="0.5", label="swdown_wrfc", linestyle="dashed")
+ax2.plot(BOKUMetData_dailysum["AT"][start:end], color='red', linewidth="0.5",label="t2_obs_BOKUR")
+ax2.plot(wrfc_T2_d[start:end]-273.15, color='red',linewidth="0.5", label="t2_wrfc", linestyle="dashed")
+ax2.set_ylim(-10, 35)
 ax1.set_xlabel("days")
 ax1.set_ylabel("W m-2", size="medium")
 ax2.set_ylabel("degC", size="medium")
@@ -252,10 +355,10 @@ end = datetime(2020, 4, 30, 00, 00)
 plt.suptitle("2020 - OBS, daily value")
 ax1 = fig.add_subplot(311)
 ax1 = plt.gca()
-ax1.plot((o3_1990_2020_da["AT9JAEG"][start:end])*2, color='violet', label="O3_obs_d_jaeg")
-ax1.plot((o3_1990_2020_da["AT900ZA"][start:end])*2, color='blue', label="O3_obs_d_za")
-ax1.plot((o3_1990_2020_da["AT90LOB"][start:end])*2, color='green', label="O3_obs_d_lob") #TODO: Umrechnen korrekt ug/m³ -> ppb! (anstelle *2)
-ax1.plot((o3_1990_2020_da["AT9STEF"][start:end])*2, color='grey', label="O3_obs_d_stef")
+ax1.plot((o3_1990_2020_da["AT9JAEG"][start:end])*0.5094042909, color='violet', label="O3_obs_d_jaeg")
+ax1.plot((o3_1990_2020_da["AT900ZA"][start:end])*0.5094042909, color='blue', label="O3_obs_d_za")
+ax1.plot((o3_1990_2020_da["AT90LOB"][start:end])*0.5094042909, color='green', label="O3_obs_d_lob") #TODO: Umrechnen korrekt ug/m³ -> ppb! (anstelle *2)
+ax1.plot((o3_1990_2020_da["AT9STEF"][start:end])*0.5094042909, color='grey', label="O3_obs_d_stef")
 ax1.plot(wrfc_o32020*1000, color='blue', label="O3_wrfc_h", linestyle="dashed")
 ax1.plot(emep_o3_d, color='green', label="O3_emep_d", linestyle=":")
 #ax1.plot(emep_o3[:,109,58], color='green', label="O3_emep_d", linestyle="dashed")
@@ -283,8 +386,10 @@ ax1.legend(loc='upper left')
 ax1 = fig.add_subplot(313)
 ax1 = plt.gca()
 ax2 = ax1.twinx()
-ax1.plot(wrfc_ho, color='blue', label="wrfc_oh, hydroxide", linestyle="dotted")
-ax2.plot(wrfc_ho2, color='green', label="wrfc_ho2, hydroperoxyl", linestyle="dashed")
+
+ax1.plot(wrfc_hcho, color='blue', label="wrfc_hcho", linestyle="dotted")
+#ax1.plot(wrfc_ho, color='blue', label="wrfc_oh, hydroxide", linestyle="dotted")
+#ax2.plot(wrfc_ho2, color='green', label="wrfc_ho2, hydroperoxyl", linestyle="dashed")
 ax1.set_xlabel("days")
 ax1.set_ylabel("ppmv", size="medium")
 ax2.set_ylabel("ppmv", size="medium")

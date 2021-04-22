@@ -10,6 +10,8 @@ from datetime import timedelta
 import numpy as np
 from matplotlib import dates as d
 import datetime as dt
+import pytz
+from pytz import timezone
 
 # DT = 'dewpoint temperature (degree C)'
 # AT = 'air temperature (degree C)'
@@ -40,11 +42,21 @@ def BOKUMet():
             #print(i)
             File = pd.read_csv(i,
                 sep="\s+",
-                skiprows=1)
+                skiprows=1,
+                na_values="-6999")
 
             File.columns = ["year", "month", "day", "hourMEZ", "min", "DT", "AT", "RH", "GR", "WS", "WD", "WSG", "PC", "AP"]
-            File.insert(1, "DATE", pd.to_datetime(File[["year", "month", "day"]]) + pd.to_timedelta(File["hourMEZ"],unit='H') +
+            File.insert(1, "DATE", pd.to_datetime(File[["year", "month", "day"]]) + pd.to_timedelta(File["hourMEZ"], unit='H') +
                     pd.to_timedelta(File["min"], unit='m'))
+
+            #print(File['DATE'])
+            # print(pytz.all_timezones)  #CET or Europe/Vienna or Etc/GMT+1
+            #local = timezone('CET')
+            #local_dt = local.localize(File['DATE'], is_dst=None)
+            #utc_dt = local_dt.astimezone(pytz.utc)
+            ## BOKUMetData.index = BOKUMetData.index.tz_localize(pytz.cet).tz_convert(utc)
+            #print(local_dt['DATE'])
+            #exit()
             File_dt = File.set_index(pd.to_datetime(File["DATE"]))
             File_dtd = File_dt.drop(columns=["year"])
             File_dtd1 = File_dtd.drop(columns=["month"])
@@ -62,6 +74,7 @@ def BOKUMet():
             pass
 
     result = pd.concat(frames)
+    #result.replace('-6999', np.NaN)
 
     #print(result)
 

@@ -9,6 +9,7 @@ from scipy import stats
 import sys
 import met.library.BOKUMet_Data
 from datetime import datetime, timedelta
+from met.library.conversions import molhkm2mghm2
 
 #Vielsalm indices: [south_north: 89, west_east: 27]
 #reading in WRF-CHEM: 9km!
@@ -30,19 +31,22 @@ EBIO_ISO_bf = f_eiso.variables['EBISO'][:,23,62]
 #print(len(EBIO_ISO))
 starttime = datetime(2007, 1, 1, 1, 00)
 wrfc_time_construct = np.array([starttime + timedelta(hours=i) for i in range(87673)])
-ebioiso = pd.Series(EBIO_ISO_vs[:],index=wrfc_time_construct) #wrfc_o3_d =wrfc_o3.resample('D').mean() #TODO Only valid with DatetimeIndex, TimedeltaIndex or PeriodINdex, but got instance of 'Index'
+ebioiso = pd.Series(EBIO_ISO_vs[:],index=wrfc_time_construct)
 ebioiso_vs_d =ebioiso.resample('D').mean()
 ebioiso_vs_dmax =ebioiso.resample('D').max()
+ebioiso_vs_mmax =ebioiso_vs_dmax.resample('M').mean()
 
-ebioiso = pd.Series(EBIO_ISO_hp[:],index=wrfc_time_construct) #wrfc_o3_d =wrfc_o3.resample('D').mean() #TODO Only valid with DatetimeIndex, TimedeltaIndex or PeriodINdex, but got instance of 'Index'
+ebioiso = pd.Series(EBIO_ISO_hp[:],index=wrfc_time_construct)
 ebioiso_hp_d =ebioiso.resample('D').mean()
 ebioiso_hp_dmax =ebioiso.resample('D').max()
+ebioiso_hp_mmax =ebioiso_hp_dmax.resample('M').mean()
 
-ebioiso = pd.Series(EBIO_ISO_bf[:],index=wrfc_time_construct) #wrfc_o3_d =wrfc_o3.resample('D').mean() #TODO Only valid with DatetimeIndex, TimedeltaIndex or PeriodINdex, but got instance of 'Index'
+ebioiso = pd.Series(EBIO_ISO_bf[:],index=wrfc_time_construct)
 ebioiso_bf_d =ebioiso.resample('D').mean()
 ebioiso_bf_dmax =ebioiso.resample('D').max()
+ebioiso_bf_mmax =ebioiso_bf_dmax.resample('M').mean()
 
-molhkm2mghm2 = 1/1000000*68.11622*1000  #mol h-1 km-2 > mg h-1 m-2
+#molhkm2mghm2 = 1/1000000*68.11622*1000  #mol h-1 km-2 > mg h-1 m-2
 
 start = datetime(2009, 7, 1, 1, 00)
 end = datetime(2012, 12, 31, 1, 00)
@@ -50,19 +54,28 @@ end = datetime(2012, 12, 31, 1, 00)
 fig = plt.figure()
 ax1 = fig.add_subplot(111)
 ax1 = plt.gca()
-ax1.plot((ebioiso_vs_d[start:end])*molhkm2mghm2, color='blue', linestyle=":", label="wrfchem_iso_da @Vielsalm") #[mol h-1 km-2] 9 km
-ax1.plot((ebioiso_vs_dmax[start:end])*molhkm2mghm2, color='blue', label="wrfchem_iso_dmax @Vielsalm") #[mol h-1 km-2] 9 km
-ax1.plot((ebioiso_hp_d[start:end])*molhkm2mghm2, color='green', linestyle=":", label="wrfchem_iso_da @HauteProvence") #[mol h-1 km-2] 9 km
-ax1.plot((ebioiso_hp_dmax[start:end])*molhkm2mghm2, color='green', label="wrfchem_iso_dmax @HauteProvence") #[mol h-1 km-2] 9 km
-ax1.plot((ebioiso_bf_d[start:end])*molhkm2mghm2, color='orange', linestyle=":", label="wrfchem_iso_da @BoscoFontana") #[mol h-1 km-2] 9 km
-ax1.plot((ebioiso_bf_dmax[start:end])*molhkm2mghm2, color='orange', label="wrfchem_iso_dmax @BoscoFontana") #[mol h-1 km-2] 9 km
+#ax1.plot((ebioiso_vs_d[start:end])*molhkm2mghm2, color='blue', linestyle=":", label="wrfchem_iso_da @Vielsalm") #[mol h-1 km-2] 9 km
+ax1.plot((ebioiso_vs_dmax[start:end])*molhkm2mghm2, color='blue', linewidth="0.1", label="wrfchem_iso_dmax @Vielsalm") #[mol h-1 km-2] 9 km
+ax1.plot((ebioiso_vs_mmax[start:end])*molhkm2mghm2, color='blue', label="wrfchem_iso_mmax @Vielsalm") #[mol h-1 km-2] 9 km
+#ax1.plot((ebioiso_hp_d[start:end])*molhkm2mghm2, color='green', linestyle=":", label="wrfchem_iso_da @HauteProvence") #[mol h-1 km-2] 9 km
+ax1.plot((ebioiso_hp_dmax[start:end])*molhkm2mghm2, color='green',linewidth="0.1", label="wrfchem_iso_dmax @HauteProvence") #[mol h-1 km-2] 9 km
+ax1.plot((ebioiso_hp_mmax[start:end])*molhkm2mghm2, color='green', label="wrfchem_iso_mmax @HauteProvence") #[mol h-1 km-2] 9 km
+#ax1.plot((ebioiso_bf_d[start:end])*molhkm2mghm2, color='orange', linestyle=":", label="wrfchem_iso_da @BoscoFontana") #[mol h-1 km-2] 9 km
+ax1.plot((ebioiso_bf_dmax[start:end])*molhkm2mghm2, color='orange',linewidth="0.1", label="wrfchem_iso_dmax @BoscoFontana") #[mol h-1 km-2] 9 km
+ax1.plot((ebioiso_bf_mmax[start:end])*molhkm2mghm2, color='orange', label="wrfchem_iso_mmax @BoscoFontana") #[mol h-1 km-2] 9 km
+plt.axhspan(2.1, 10, color='green', alpha=0.1)
+plt.axhline(0.5, color='green')
+plt.axhline(0.9, color='green')
+plt.axhspan(0, 4, color='blue', alpha=0.1)
+plt.axhline(0.6, color='blue')
+plt.axhline(0.25, color='blue')
 #ax2.plot((BOKUMetAT_hourly.values[116:315]), color='black', linestyle="dotted", linewidth="0.5", label="obs_T2")
 ax1.set_xlabel("days")
 ax1.set_ylabel("mg m-2 h-1", size="medium")
 #ax2.set_ylabel("degC", size="medium")
 ax1.legend(loc='upper center')
 #ax2.legend(loc='upper right')
-ax1.set_ylim(0, 5)
+ax1.set_ylim(0, 11)
 #ax2.set_ylim(10, 50)
 plt.suptitle(f"WRFChem@Vielsalm {start} - {end}")
 
