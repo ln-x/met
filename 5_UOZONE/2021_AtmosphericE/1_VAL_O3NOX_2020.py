@@ -6,6 +6,7 @@ import numpy as np
 import csv
 import pandas as pd
 from datetime import datetime, timedelta
+import monthdelta
 import matplotlib.dates
 import matplotlib.pyplot as plt
 from scipy import stats
@@ -134,8 +135,8 @@ wrfc2020_dv = fh2020B.variables["DRY_DEP_LEN"][:,0,0,0]
 wrfc2020_dv = pd.Series(wrfc2020_dv[:],index=wrfc_time_construct)
 wrfc2020_dv_d =wrfc2020_dv.resample('D').mean()
 
-wrfc2020_lai = fh2020B.variables["LAI"][:,0,0]
-wrfc2020_lai = pd.Series(wrfc2020_lai[:],index=wrfc_time_construct)
+#wrfc2020_lai = fh2020B.variables["LAI"][:,0,0]
+#wrfc2020_lai = pd.Series(wrfc2020_lai[:],index=wrfc_time_construct)
 #wrfc2020_lai =wrfc2020_dv.resample('D').mean()
 
 wrfc2020_hcho = fh2020.variables["hcho"][:,0,0,0]
@@ -146,6 +147,12 @@ wrfc2020_c5h8 = fh2020.variables["iso"][:,0,0,0]
 wrfc2020_c5h8 = pd.Series(wrfc2020_c5h8[:],index=wrfc_time_construct)
 wrfc2020_c5h8_d =wrfc2020_c5h8.resample('D').mean()
 
+starttime = datetime(2020, 1, 1, 0, 00)
+wrfc_time_construct_months = np.array([starttime + monthdelta.monthdelta(i) for i in range(12)])
+wrflai_megan = [471,540,562,1278,2367,2456,2047,1718,1685,1335,807,1003]
+wrflai_megan = pd.Series(wrflai_megan[:],index=wrfc_time_construct_months)
+#print(wrflai_megan)
+#exit()
 
 '''
 Plotting
@@ -153,6 +160,7 @@ Plotting
 fig = plt.figure()
 start = datetime(2020, 1, 1, 00, 00)
 end = datetime(2020, 9, 30, 00, 00)
+end2 = datetime(2020, 10, 30, 00, 00)
 plt.suptitle(f"OBS/MOD {start} - {end}")
 #ax1 = fig.add_subplot(511)
 #ax1 = plt.gca()
@@ -223,12 +231,14 @@ ax2.legend(loc='upper right')
 ax1 = fig.add_subplot(413)
 ax1 = plt.gca()
 ax2 = ax1.twinx()
-ax1.plot(wrfc2020_lai[start:end],linewidth="0.5", color='blue', label="lai_wrfc", linestyle="dashed")
-ax2.plot(wrfc2020_dv_d[start:end],linewidth="0.5", color='darkred', label="dv_wrfc", linestyle="dashed")
+#ax1.plot(wrfc2020_lai[start:end],linewidth="0.5", color='blue', label="lai_wrfc", linestyle="dashed")
+ax1.plot(wrflai_megan[start:end2], linewidth="0.5", color='blue', label="lai_wrf_megan", linestyle="dashed")
+#ax2.plot(wrfc2020_dv_d[start:end],linewidth="0.5", color='darkred', label="dv_wrfc", linestyle="dashed") #TODO layer 6 not 1!!
 #ax1.set_ylim(-5, 35)
 ax1.set_xlabel("days")
-ax1.set_ylabel("LAI [m2 m-2]", size="medium")
-ax2.set_ylabel("dry deposition velocity [cm s-1]", size="medium")
+ax1.set_ylabel("LAI [degree]", size="medium")
+#ax1.set_ylabel("LAI [m2 m-2]", size="medium") #TODO convert degree to m2 m-2
+#ax2.set_ylabel("dry deposition velocity [cm s-1]", size="medium")
 ax1.legend(loc='upper left')
 ax2.legend(loc='upper right')
 

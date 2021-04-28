@@ -204,17 +204,16 @@ V10 = fh3.variables["V10"][:,0,0]
 starttime = datetime(2007, 1, 1, 0, 00)
 wrfc_time_construct = np.array([starttime + timedelta(hours=i) for i in range(87673)])
 path1 = '/windata/Google Drive/DATA/models/boku/wrf_chem/reanalysis/era-interim/HCera_9km_2007-16_ATTR/model_base_results/'
-f_pblh = Dataset(path1 + 'HC2007t16-W-E-Cam-TNO3ATTR_zmla.nc', mode='r') #DRY_DEP_LEN (bio_emissions_dimensions_stag: ozone = 6)
+"""
+f_pblh = Dataset(path1 + 'HC2007t16-W-E-Cam-TNO3ATTR_zmla.nc', mode='r') 
 PBLH = f_pblh.variables['zmla'][:,wrf_vie_j,wrf_vie_i]
 pblh = pd.Series(PBLH[:],index=wrfc_time_construct)
 pblh_d = pblh.resample('D').mean()
 pblh_m = pblh.resample('M').mean()
-
 start = datetime(2013, 1, 1, 0, 00)
 end = datetime(2013, 12, 1, 0, 00)
 print(pblh_m[start:end])
-exit()
-
+"""
 f_o3 = Dataset(path1 + 'HC2007t16-W-E-Cam-TNO3ATTR_O3.nc', mode='r')
 O3 = f_o3.variables['O3'][:,wrf_vie_j,wrf_vie_i]
 o3 = pd.Series(O3[:],index=wrfc_time_construct) #wrfc_o3_d =wrfc_o3.resample('D').mean() #TODO Only valid with DatetimeIndex, TimedeltaIndex or PeriodINdex, but got instance of 'Index'
@@ -354,7 +353,7 @@ fig = plt.figure()
 start = datetime(2009, 7, 1, 00, 00)
 end = datetime(2016, 12, 31, 00, 00)
 plt.suptitle(f"OBS/MOD {start} - {end}")
-ax1 = fig.add_subplot(411)
+ax1 = fig.add_subplot(511)
 ax1 = plt.gca()
 ax1.plot(nox_1990_2020_da['AT9JAEG'][start:end], color='violet',  linewidth="0.1", label = "nox_obs_d_jaeg" )
 ax1.plot(nox_1990_2020_da['AT900ZA'][start:end], color='blue',  linewidth="0.1", label = "nox_obs_d_za" )
@@ -371,7 +370,7 @@ ax1.legend(loc='upper left')
 #ax1.set_ylim(0, 5)
 #ax2.set_ylim(10, 50)
 
-ax1 = fig.add_subplot(412)
+ax1 = fig.add_subplot(512)
 ax1.plot((o3_1990_2020_da['AT9JAEG'][start:end])*ugm3toppb_o3, color='violet', linewidth="0.1", label="o3_obs_da_JAEG")
 ax1.plot((o3_1990_2020_m['AT9JAEG'][start:end])*ugm3toppb_o3, color='violet',linewidth="1", label="o3_obs_m_JAEG")
 #ax1.plot((o3_1990_2020_da['AT900ZA'][start:end])*ugm3toppb_o3, color='blue',linewidth="1", label="o3_obs_da_00ZA")
@@ -396,7 +395,7 @@ ax1.set_ylabel("hcho [ppb]", size="medium")
 ax2.set_ylabel("ddep [cm -2]", size="medium")
 ax1.legend(loc='upper right')
 
-ax1 = fig.add_subplot(413)
+ax1 = fig.add_subplot(514)
 #ax1.plot((o3_1990_2020_da['AT9STEF'][start:end])*2, color='darkgrey', label="o3_obs_da_STEF")
 ax1.plot(BOKUMetData_dailysum["GR"][start:end], color='yellow', linewidth="0.1", label="swdown_obs_BOKUR_d")
 ax1.plot(BOKUMetData_monthly["GR"][start:end], color='yellow', linewidth="1", label="swdown_obs_BOKUR_m")
@@ -406,7 +405,7 @@ ax1.set_xlabel("days")
 ax1.set_ylabel("global radiation means [W m-2]", size="medium")
 ax1.legend(loc='upper left')
 
-ax1 = fig.add_subplot(414)
+ax1 = fig.add_subplot(515)
 #ax1.plot((o3_1990_2020_da['AT9STEF'][start:end])*2, color='darkgrey', label="o3_obs_da_STEF")
 ax1.plot(BOKUMetData_dailysum["AT"][start:end], linewidth="0.3", color='lightsalmon', label="t2_obs_BOKUR")
 ax1.plot(BOKUMetData_monthly["AT"][start:end], linewidth="1", color='lightsalmon', label="t2_obs_BOKUR_m")
