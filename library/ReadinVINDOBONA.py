@@ -4,12 +4,13 @@ import datetime
 import numpy as np
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
 
-# 1.Spalte: Zeit(UTC)
-# 2.Spalte: solar zenith angle[°]
-# 3.Spalte: horizontal optical path length[km]
-# 4.Spalte: effective height[km]
-# 5.Spalte: averaged volume mixing ratios HCHO[ppb]
+# 1.Spalte: UTC  - Zeit(UTC)
+# 2.Spalte: SZA  - solar zenith angle[°]
+# 3.Spalte: hOPL - horizontal optical path length[km]
+# 4.Spalte: h_eff - effective height[km]
+# 5.Spalte: HCHO  - averaged volume mixing ratios HCHO[ppb]
 
 def loadfile(foldername, filename, julianday):
     timeaxis = []
@@ -39,12 +40,13 @@ def loadfile(foldername, filename, julianday):
     timeaxis_df = pd.DataFrame(timeaxis)
     hcho_df = pd.DataFrame(hcho)
     converteddata_df = pd.concat([timeaxis_df, hcho_df], axis=1)
-    #print converteddata_df.head()
+    #print(converteddata_df.head())
 
-    return converteddata_df.values
+    return converteddata_df#.values
 
 if __name__ == '__main__':
-    foldername = "/home/lnx/DATACHEM/StefanSchreier/2001_2004_DQ_91_HCHO_mixing_ratio/"
+    #foldername = "/home/lnx/DATACHEM/StefanSchreier/2001_2004_DQ_91_HCHO_mixing_ratio/"
+    foldername = "/windata/Google Drive/DATA/remote/ground/maxdoas/MAXDOAS2020/DQ/"
     files = os.listdir(foldername)
     #print files
     julianday = 0
@@ -53,5 +55,7 @@ if __name__ == '__main__':
         #filename = "200101DQ_91_HCHO_mixing_ratio.asc"
         thedata = loadfile(foldername=foldername, filename=i, julianday=julianday)
         #print 'loaded: '
+
         for d in thedata:
             print(d)
+

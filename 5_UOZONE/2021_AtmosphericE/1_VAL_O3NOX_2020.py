@@ -15,7 +15,30 @@ import os
 import met.library.BOKUMet_Data
 from met.library.Datetime_recipies import datestdtojd
 from met.library.conversions import *
+from met.library import ReadinVINDOBONA
+from met.library import ReadinVindobona_DA
+from functools import reduce
 
+"read in VINDOBONA"
+
+foldername = "/windata/Google Drive/DATA/remote/ground/maxdoas/MAXDOAS2020/DQ/"
+files = os.listdir(foldername)
+#print(files)
+julianday = 0
+appended_data=[]
+appended_data2=[]
+#print(type(hcho))
+for i in files:
+    julianday += 1
+    # filename = "200101DQ_91_HCHO_mixing_ratio.asc"
+    #thedata = ReadinVINDOBONA.loadfile(foldername=foldername, filename=i, julianday=julianday)
+    data_hcho_dmax, data_hcho_d = ReadinVindobona_DA.loadfile(foldername=foldername, filename=i, julianday=julianday)
+    appended_data.append(data_hcho_dmax)
+    appended_data2.append(data_hcho_d)
+    # see pd.concat documentation for more info
+hcho_dmax = pd.concat(appended_data)
+hcho_d = pd.concat(appended_data2)
+hcho_m = hcho_dmax.resample('M').mean()
 
 '''READ IN BOKU Metdata'''
 BOKUMetData = met.library.BOKUMet_Data.BOKUMet()
@@ -33,7 +56,6 @@ BOKUMetData_dailysum['JD'] = BOKUMetData_dailysum['JD'].apply(f)
 #MONTHLY MEANS
 BOKUMetData_monthly = BOKUMetData.resample('M').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.mean, 'WS': np.mean,
                                                       'WD': np.mean, 'WSG': np.mean, 'PC': np.sum, 'AP': np.mean})
-
 
 '''READ IN EEA air pollution data'''
 pathbase2 = "/windata/Google Drive/DATA/obs_point/chem/EEA/"
@@ -127,6 +149,11 @@ wrfc2020_tas = fh2020.variables["T2"][:,0,0]
 wrfc2020_tas = pd.Series(wrfc2020_tas[:],index=wrfc_time_construct)
 wrfc2020_tas_dmax =wrfc2020_tas.resample('D').max()
 
+wrfc2020_sw = fh2020.variables["SWDOWN"][:,0,0]
+wrfc2020_sw = pd.Series(wrfc2020_sw[:],index=wrfc_time_construct)
+wrfc2020_sw_d =wrfc2020_sw.resample('D').mean()
+wrfc2020_sw_m =wrfc2020_sw_d.resample('M').mean()
+
 wrfc2020_sm = fh2020.variables["SMOIS"][:,0,0,0]
 wrfc2020_sm = pd.Series(wrfc2020_sm[:],index=wrfc_time_construct)
 wrfc2020_sm_d =wrfc2020_sm.resample('D').mean()
@@ -142,10 +169,14 @@ wrfc2020_dv_d =wrfc2020_dv.resample('D').mean()
 wrfc2020_hcho = fh2020.variables["hcho"][:,0,0,0]
 wrfc2020_hcho = pd.Series(wrfc2020_hcho[:],index=wrfc_time_construct)
 wrfc2020_hcho_d =wrfc2020_hcho.resample('D').mean()
+wrfc2020_hcho_dmax =wrfc2020_hcho.resample('D').max()
+wrfc2020_hcho_mmax =wrfc2020_hcho_dmax.resample('M').mean()
+
 
 wrfc2020_c5h8 = fh2020.variables["iso"][:,0,0,0]
 wrfc2020_c5h8 = pd.Series(wrfc2020_c5h8[:],index=wrfc_time_construct)
 wrfc2020_c5h8_d =wrfc2020_c5h8.resample('D').mean()
+wrfc2020_c5h8_dmax =wrfc2020_c5h8.resample('D').max()
 
 starttime = datetime(2020, 1, 1, 0, 00)
 wrfc_time_construct_months = np.array([starttime + monthdelta.monthdelta(i) for i in range(12)])
@@ -153,6 +184,8 @@ wrflai_megan = [471,540,562,1278,2367,2456,2047,1718,1685,1335,807,1003]
 wrflai_megan = pd.Series(wrflai_megan[:],index=wrfc_time_construct_months)
 #print(wrflai_megan)
 #exit()
+
+#print(hcho.index[starttime])
 
 '''
 Plotting
@@ -180,7 +213,7 @@ plt.suptitle(f"OBS/MOD {start} - {end}")
 #ax1.set_ylim(0, 5)
 #ax2.set_ylim(10, 50)
 
-ax1 = fig.add_subplot(411)
+ax1 = fig.add_subplot(511)
 #ax1 = fig.add_subplot(512)
 ax1.plot((o3_1990_2020_da['AT9JAEG'][start:end])*ugm3toppb_o3, color='violet', linewidth="0.1", label="o3_obs_da_JAEG")
 ax1.plot((o3_1990_2020_m['AT9JAEG'][start:end])*ugm3toppb_o3, color='violet',linewidth="1", label="o3_obs_m_JAEG")
@@ -194,41 +227,37 @@ ax1.set_xlabel("days")
 ax1.set_ylabel("ground level ozone [ppb]", size="medium")
 ax1.legend(loc='upper right')
 
-#ax1 = fig.add_subplot(513)
-#ax1.plot(hcho_d[start:end]*1000,color='darkblue', label="o3_wrfc_d", linewidth="0.5", linestyle="dashed")
-#ax1.plot(o3_m[start:end]*1000,color='darkblue', label="o3_wrfc_m", linewidth="1", linestyle="dashed")
-#ax1.plot((emep_no[:,109,58]) + (emep_no2[:,109,58]), color='green', label="nox_emep_d", linestyle="dashed")
-#EMEP
-#ax1.set_xlabel("days")
-#ax1.set_ylabel("hcho [ppb]", size="medium")
-#ax1.legend(loc='upper right')
-
-#ax1 = fig.add_subplot(514)
-#ax1.plot((o3_1990_2020_da['AT9STEF'][start:end])*2, color='darkgrey', label="o3_obs_da_STEF")
-#ax1.plot(BOKUMetData_dailysum["GR"][start:end], color='yellow', linewidth="0.1", label="swdown_obs_BOKUR_d")
-#ax1.plot(BOKUMetData_monthly["GR"][start:end], color='yellow', linewidth="1", label="swdown_obs_BOKUR_m")
-#ax1.plot(swdown_d[start:end], color='darkorange', label="swdown_wrfc_d", linestyle="dashed", linewidth="0.1")
-#ax1.plot(swdown_m[start:end], color='darkorange', label="swdown_wrfc_m", linestyle="dashed", linewidth="1")
-#ax1.set_xlabel("days")
-#ax1.set_ylabel("global radiation means [W m-2]", size="medium")
-#ax1.legend(loc='upper left')
+ax1 = fig.add_subplot(512)
+ax1.plot(BOKUMetData_dailysum["GR"][start:end], color='orange', linewidth="0.1", label="swdown_obs_BOKUR_d")
+ax1.plot(BOKUMetData_monthly["GR"][start:end], color='orange', linewidth="1", label="swdown_obs_BOKUR_m")
+ax1.plot(wrfc2020_sw_d[start:end], color='darkorange', label="swdown_wrfc_d", linewidth="0.1")
+ax1.plot(wrfc2020_sw_m[start:end], color='darkorange', label="swdown_wrfc_m", linewidth="1")
+ax1.set_xlabel("days")
+ax1.set_ylabel("global radiation means [W m-2]", size="medium")
+ax1.legend(loc='upper left')
 
 
-ax1 = fig.add_subplot(412)
+ax1 = fig.add_subplot(513)
 ax1 = plt.gca()
 ax2 = ax1.twinx()
-ax1.plot(wrfc2020_hcho_d[start:end]*1000,linewidth="1", color='green', label="hcho_wrfc", linestyle="solid")
-ax2.plot(wrfc2020_c5h8_d[start:end]*1000,linewidth="1", color='red', label="c5h8_wrfc", linestyle="solid")
+ax1.plot(wrfc2020_hcho_d[start:end]*1000,linewidth="0.5", color='green', label="hcho wrfc d", linestyle=":")
+ax1.plot(wrfc2020_hcho_dmax[start:end]*1000,linewidth="1", color='green', label="hcho wrfc dmax", linestyle="solid")
+ax1.plot(wrfc2020_hcho_mmax[start:end]*1000,linewidth="0.5", color='green', label="hcho wrfc mmax", linestyle="-")
+ax2.plot(wrfc2020_c5h8_dmax[start:end]*1000,linewidth="0.5", color='red', label="c5h8 wrfc dmax", linestyle="dashed")
+ax1.plot(hcho_d[start:end], linewidth="0.5", color='black', label="hcho OBS d", linestyle=":") #274 = Julian Day 30.Sept2020
+ax1.plot(hcho_dmax[start:end], linewidth="1", color='black', label="hcho OBS dmax", linestyle="solid") #274 = Julian Day 30.Sept2020
+ax1.plot(hcho_m[start:end], linewidth="0.5", color='black', label="hcho OBS mmax", linestyle="-") #274 = Julian Day 30.Sept2020
+
 #ax1.plot(emep_hcho_d[start:end],linewidth="1", color='darkgreen', label="hcho_emep", linestyle=":")
 #ax2.plot(emep_c5h8_d[start:end],linewidth="1", color='darkred', label="c5h8_emep", linestyle=":")
-#ax1.set_ylim(-5, 35)
+ax1.set_ylim(0, 8)
 ax1.set_xlabel("days")
 ax1.set_ylabel("hcho [ppb]", size="medium")
 ax2.set_ylabel("c5h8 [ppb]", size="medium")
 ax1.legend(loc='upper left')
 ax2.legend(loc='upper right')
 
-ax1 = fig.add_subplot(413)
+ax1 = fig.add_subplot(514)
 ax1 = plt.gca()
 ax2 = ax1.twinx()
 #ax1.plot(wrfc2020_lai[start:end],linewidth="0.5", color='blue', label="lai_wrfc", linestyle="dashed")
@@ -243,10 +272,10 @@ ax1.legend(loc='upper left')
 ax2.legend(loc='upper right')
 
 
-ax1 = fig.add_subplot(414)
+ax1 = fig.add_subplot(515)
 ax1 = plt.gca()
 ax2 = ax1.twinx()
-ax1.plot(wrfc2020_sm_d[start:end],linewidth="0.5", color='blue', label="sm_wrfc", linestyle="dashed")
+ax2.plot(wrfc2020_sm_d[start:end],linewidth="0.5", color='blue', label="sm_wrfc", linestyle="dashed")
 ax1.plot(BOKUMetData_dailymax["AT"][start:end], linewidth="0.3", color='lightsalmon', label="t2_obs_BOKUR")
 ax1.plot(BOKUMetData_monthly["AT"][start:end], linewidth="1", color='lightsalmon', label="t2_obs_BOKUR_m")
 ax1.plot(wrfc2020_tas_dmax[start:end]-273.15,linewidth="0.5", color='darkred', label="t2_wrfc", linestyle="dashed")
