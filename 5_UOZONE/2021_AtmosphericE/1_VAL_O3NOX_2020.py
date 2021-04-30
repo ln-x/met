@@ -66,14 +66,10 @@ nox_1990_2019_da = nox_1990_2019_da.drop(columns=['date'])
 no2_2020_mda1 = pd.read_csv(pathbase2 + "AT_NO2_2020.csv")
 no2_2020_mda1 = no2_2020_mda1.set_index(pd.to_datetime(no2_2020_mda1['date']))
 no2_2020_da = no2_2020_mda1.resample('D').mean()
-
 no_2020_mda1 = pd.read_csv(pathbase2 + "AT_NO_2020.csv")
 no_2020_mda1 = no_2020_mda1.set_index(pd.to_datetime(no_2020_mda1['date']))
 no_2020_da = no_2020_mda1.resample('D').mean()
-
 nox_2020_da = no_2020_da.add(no2_2020_da)
-#print(nox_2020_da)
-#nox_2020_da = nox_2020_mda1.resample('D').mean()
 nox_1990_2020_da = pd.concat([nox_1990_2019_da, nox_2020_da], axis=0)
 #print(nox_1990_2020_da['AT900ZA'])
 #print(nox_1990_2020_da.columns)
@@ -135,11 +131,38 @@ LAT = fh2.variables['XLAT'][1]
 '''READ IN WRFChem data 2020'''
 file2020 = '/windata/Google Drive/DATA/models/boku/wrf_chem/reanalysis/era5/wrfout_d01_2020Jan_Sep.nc'
 file2020B = '/windata/Google Drive/DATA/models/boku/wrf_chem/reanalysis/era5/wrfout_d01_2020Jan_Sep_LAI_DDEP.nc'
+file2020tas = '/windata/Google Drive/DATA/models/boku/wrf_chem/reanalysis/era5/zprac_wrfout/BOKU2020_BASE_WRFchem9_202001-09_tas.nc'
+file2020o3 = '/windata/Google Drive/DATA/models/boku/wrf_chem/reanalysis/era5/zprac_wrfout/BOKU2020_BASE_WRFchem9_202001-09_=3.nc'
+#file2020hcho = '/windata/Google Drive/DATA/models/boku/wrf_chem/reanalysis/era5/wrfout_d01_2020-03-31_01_hcho.nc'
+#starttime = datetime(2020, 3, 31, 1, 00)
+#wrfc_time_construct_april = np.array([starttime + timedelta(hours=i) for i in range(720)])
+file2020hcho = '/windata/Google Drive/DATA/models/boku/wrf_chem/reanalysis/era5/wrfout_d01_2020Jan_Sep_HCHO.nc'
 
 fh2020 = Dataset(file2020, mode='r')
 fh2020B = Dataset(file2020B, mode='r')
+fh2020hcho = Dataset(file2020hcho, mode='r')
 starttime = datetime(2020, 1, 1, 0, 00)
 wrfc_time_construct = np.array([starttime + timedelta(hours=i) for i in range(6481)])
+wrfc2020_hchov = fh2020hcho.variables["hcho"][:,:,:,:]  #print(type(wrfc_jd)) #<class 'numpy.ma.core.MaskedArray'>
+wrfc2020_hchov0 = pd.DataFrame(wrfc2020_hchov[:,0,1,1],index=wrfc_time_construct)
+wrfc2020_hcho0_d =wrfc2020_hchov0.resample('D').mean()
+wrfc2020_hcho0_dmax =wrfc2020_hchov0.resample('D').max()
+wrfc2020_hchov1 = pd.DataFrame(wrfc2020_hchov[:,1,2,2],index=wrfc_time_construct)
+wrfc2020_hcho1_d =wrfc2020_hchov1.resample('D').mean()
+wrfc2020_hcho1_dmax =wrfc2020_hchov1.resample('D').max()
+wrfc2020_hchov2 = pd.DataFrame(wrfc2020_hchov[:,2,1,1],index=wrfc_time_construct)
+wrfc2020_hcho2_d =wrfc2020_hchov2.resample('D').mean()
+wrfc2020_hcho2_dmax =wrfc2020_hchov2.resample('D').max()
+wrfc2020_hchov3 = pd.DataFrame(wrfc2020_hchov[:,3,1,1],index=wrfc_time_construct)
+wrfc2020_hcho3_d =wrfc2020_hchov3.resample('D').mean()
+wrfc2020_hcho3_dmax =wrfc2020_hchov3.resample('D').max()
+wrfc2020_hchov4 = pd.DataFrame(wrfc2020_hchov[:,4,1,1],index=wrfc_time_construct)
+wrfc2020_hcho4_d =wrfc2020_hchov4.resample('D').mean()
+wrfc2020_hcho4_dmax =wrfc2020_hchov4.resample('D').max()
+
+
+
+
 wrfc2020_o3 = fh2020.variables["o3"][:,0,0,0]  #print(type(wrfc_jd)) #<class 'numpy.ma.core.MaskedArray'>
 
 wrfc2020_o3 = pd.Series(wrfc2020_o3[:],index=wrfc_time_construct)
@@ -190,6 +213,47 @@ wrflai_megan = pd.Series(wrflai_megan[:],index=wrfc_time_construct_months)
 '''
 Plotting
 '''
+
+fig = plt.figure()
+start = datetime(2020, 1, 1, 00, 00)
+end = datetime(2020, 9, 30, 00, 00)
+end2 = datetime(2020, 10, 30, 00, 00)
+plt.suptitle(f"OBS/MOD {start} - {end}")
+ax1 = fig.add_subplot(111)
+ax1 = plt.gca()
+ax2 = ax1.twinx()
+ax1.plot(wrfc2020_hcho_d[start:end]*1000,linewidth="0.5", color='green', label="hcho wrfc d", linestyle=":")
+ax1.plot(wrfc2020_hcho_dmax[start:end]*1000,linewidth="1", color='green', label="hcho wrfc dmax", linestyle="solid")
+ax1.plot(wrfc2020_hcho_mmax[start:end]*1000,linewidth="0.5", color='green', label="hcho wrfc mmax", linestyle="-")
+ax2.plot(wrfc2020_c5h8_dmax[start:end]*1000,linewidth="0.5", color='red', label="c5h8 wrfc dmax", linestyle="dashed")
+
+ax1.plot(wrfc2020_hcho0_d[start:end]*1000, linewidth="0.5", color='darkblue', label="hcho wrfc d lev0", linestyle=":") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho1_d[start:end]*1000, linewidth="0.5", color='slateblue', label="hcho wrfc d lev1", linestyle=":") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho2_d[start:end]*1000, linewidth="0.5", color='rebeccapurple', label="hcho wrfc d lev2", linestyle=":") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho3_d[start:end]*1000, linewidth="0.5", color='darkviolet', label="hcho wrfc d lev3", linestyle=":") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho4_d[start:end]*1000, linewidth="0.5", color='fuchsia', label="hcho wrfc d lev4", linestyle=":") #274 = Julian Day 30.Sept2020
+
+ax1.plot(wrfc2020_hcho0_dmax[start:end]*1000, linewidth="0.5", color='darkblue', label="hcho wrfc dmax lev0", linestyle="solid") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho1_dmax[start:end]*1000, linewidth="0.5", color='slateblue', label="hcho wrfc dmax lev1", linestyle="solid") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho2_dmax[start:end]*1000, linewidth="0.5", color='rebeccapurple', label="hcho wrfc dmax lev2", linestyle="solid") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho3_dmax[start:end]*1000, linewidth="0.5", color='darkviolet', label="hcho wrfc dmax lev3", linestyle="solid") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho4_dmax[start:end]*1000, linewidth="0.5", color='fuchsia', label="hcho wrfc dmax lev4", linestyle="solid") #274 = Julian Day 30.Sept2020
+
+ax1.plot(hcho_d[start:end], linewidth="0.5", color='black', label="hcho OBS d", linestyle=":") #274 = Julian Day 30.Sept2020
+ax1.plot(hcho_dmax[start:end], linewidth="1", color='black', label="hcho OBS dmax", linestyle="solid") #274 = Julian Day 30.Sept2020
+ax1.plot(hcho_m[start:end], linewidth="0.5", color='black', label="hcho OBS mmax", linestyle="-") #274 = Julian Day 30.Sept2020
+
+#ax1.plot(emep_hcho_d[start:end],linewidth="1", color='darkgreen', label="hcho_emep", linestyle=":")
+#ax2.plot(emep_c5h8_d[start:end],linewidth="1", color='darkred', label="c5h8_emep", linestyle=":")
+ax1.set_ylim(0, 8)
+ax1.set_xlabel("days")
+ax1.set_ylabel("hcho [ppb]", size="medium")
+ax2.set_ylabel("c5h8 [ppb]", size="medium")
+ax1.legend(loc='upper left')
+ax2.legend(loc='upper right')
+plt.show()
+
+exit()
 fig = plt.figure()
 start = datetime(2020, 1, 1, 00, 00)
 end = datetime(2020, 9, 30, 00, 00)
@@ -244,6 +308,19 @@ ax1.plot(wrfc2020_hcho_d[start:end]*1000,linewidth="0.5", color='green', label="
 ax1.plot(wrfc2020_hcho_dmax[start:end]*1000,linewidth="1", color='green', label="hcho wrfc dmax", linestyle="solid")
 ax1.plot(wrfc2020_hcho_mmax[start:end]*1000,linewidth="0.5", color='green', label="hcho wrfc mmax", linestyle="-")
 ax2.plot(wrfc2020_c5h8_dmax[start:end]*1000,linewidth="0.5", color='red', label="c5h8 wrfc dmax", linestyle="dashed")
+
+ax1.plot(wrfc2020_hcho0_d[start:end]*1000, linewidth="0.5", color='darkblue', label="hcho wrfc d lev0", linestyle=":") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho1_d[start:end]*1000, linewidth="0.5", color='slateblue', label="hcho wrfc d lev1", linestyle=":") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho2_d[start:end]*1000, linewidth="0.5", color='rebeccapurple', label="hcho wrfc d lev2", linestyle=":") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho3_d[start:end]*1000, linewidth="0.5", color='darkviolet', label="hcho wrfc d lev3", linestyle=":") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho4_d[start:end]*1000, linewidth="0.5", color='fuchsia', label="hcho wrfc d lev4", linestyle=":") #274 = Julian Day 30.Sept2020
+
+ax1.plot(wrfc2020_hcho0_dmax[start:end]*1000, linewidth="0.5", color='darkblue', label="hcho wrfc dmax lev0", linestyle="solid") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho1_dmax[start:end]*1000, linewidth="0.5", color='slateblue', label="hcho wrfc dmax lev1", linestyle="solid") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho2_dmax[start:end]*1000, linewidth="0.5", color='rebeccapurple', label="hcho wrfc dmax lev2", linestyle="solid") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho3_dmax[start:end]*1000, linewidth="0.5", color='darkviolet', label="hcho wrfc dmax lev3", linestyle="solid") #274 = Julian Day 30.Sept2020
+ax1.plot(wrfc2020_hcho4_dmax[start:end]*1000, linewidth="0.5", color='fuchsia', label="hcho wrfc dmax lev4", linestyle="solid") #274 = Julian Day 30.Sept2020
+
 ax1.plot(hcho_d[start:end], linewidth="0.5", color='black', label="hcho OBS d", linestyle=":") #274 = Julian Day 30.Sept2020
 ax1.plot(hcho_dmax[start:end], linewidth="1", color='black', label="hcho OBS dmax", linestyle="solid") #274 = Julian Day 30.Sept2020
 ax1.plot(hcho_m[start:end], linewidth="0.5", color='black', label="hcho OBS mmax", linestyle="-") #274 = Julian Day 30.Sept2020
