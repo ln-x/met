@@ -1,0 +1,36 @@
+
+cd $DATA/src/EMEP
+git clone --branch development https://github.com/pacedproton/WRF_environment_installation.git #for metHPC:
+git clone --branch master https://github.com/pacedproton/WRF_environment_installation.git #for VSC:
+cd
+#change worf.sh:
+export PREFIX=/gpfs/data/fs71449/htrimmel3/src/EMEP_WRF_libs20210520/build
+
+bash worf.sh |& tee build.log
+#rm -rf wrfbuild
+#/wrf
+#ldd binls
+
+cd to /gpfs/data/fs71449/htrimmel3/src/EMEP/WRF/wrfbuild/1002/pkg-src/wrf
+
+    source the generated WRF_ENVIRONMENT file: source /gpfs/data/fs71449/htrimmel3/src/EMEP/WRF/wrfbuild/1002/wrf_environment.sh
+
+    ./configure
+
+    select DMPAR - Intel (15)
+
+    edit configure.wrf, e.g. with
+        DM_FC=mpiifort
+        DM_CC=mpiicc
+
+    compile model with e.g. ./compile <model name>
+        for WRF-chem: additionally issue ./compile emi_conv
+
+    issue ./clean before making changes to recompile or clean -a which also overwrites configure.wrf
+
+
+
+#https://emep-ctm.readthedocs.io/en/latest/Intro.html#getting-started
+wget https://raw.githubusercontent.com/metno/emep-ctm/tools/catalog.py
+chmod +x catalog.py
+./catalog.py -R rv4_36 --source

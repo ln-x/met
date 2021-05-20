@@ -25,7 +25,6 @@ o3_units = fh.variables['SURF_ppb_O3'].units
 no2 = fh.variables['SURF_ppb_NO2']
 no2_units = fh.variables['SURF_ppb_NO2'].units
 
-
 LON = fh2.variables['XLONG'][1]
 LAT = fh2.variables['XLAT'][1]
 T2 = fh2.variables['T2']
@@ -34,6 +33,11 @@ SM_units = fh2.variables['SMOIS'].units
 EBIO_ISO = fh2.variables['EBIO_ISO']
 EBIO_ISO_units = fh2.variables['EBIO_ISO'].units
 EBIO_API = fh2.variables['EBIO_API']
+
+print(LON[59,110]) #TODO Double check! i=x=long
+print(LAT[59,110])
+
+exit()
 
 '''calculation of Regression coefficients'''
 # print stats.spearmanr(ZAMG_heatdays, WRFdata_heatdays, axis=0)

@@ -14,6 +14,9 @@ import matplotlib.pyplot as plt
 
 def loadfile(foldername, filename, julianday):
     timeaxis = []
+    sza = []
+    hOPL = []
+    h_eff = []
     hcho = []
     converteddata = []
     converteddata_df = pd.DataFrame(converteddata)
@@ -23,31 +26,33 @@ def loadfile(foldername, filename, julianday):
         #months = s[2:4]
         #days = s[4:6]
         alldata = f.readlines()
-        #print(alldata)
 
         splitdata = []  # splitlistcomp = [i.split() for i in data]
         for i in alldata:
             splitdata.append([float(x) for x in i.split()])
             #splitdata.append(i.split())  # Splitten der Listenelemente   split(":")  Seperator ":"
-        #print(splitdata)
 
         begin = datetime.datetime(2020, 1, 1, 0, 0, 0)
         for j in splitdata:
            # TODO if j[2]  horizontal optical path length <25 or >75 percentil
            if j[1] < 75:  #FILTER: only take values where Solar zenith is above 75°
-                hour = round(float(j[0]))
-                #print(hour)
-                #hour, frac = float(j[0]).split('.')  # split bei '.' #TODO make preciser
-                #minute = round((float(frac)*60/100))
+                hour, frac = str(j[0]).split('.')  # split bei '.' #TODO make preciser
+                minute = (int(frac[:2])/100)*60
+                second = (int(frac[2:4])/100)*60
+                #print(hour, frac, minute, second)
                 date_time = begin + datetime.timedelta(days=julianday - 1) \
-                       + datetime.timedelta(hours=int(hour)) #+ datetime.timedelta(minutes=minute)
+                       + datetime.timedelta(hours=int(hour)) + datetime.timedelta(minutes=minute) + datetime.timedelta(seconds=second)
+                #print(date_time)
                 timeaxis.append(date_time)
+                sza.append(j[1])
+                hOPL.append(j[2])
+                h_eff.append(j[3])
                 hcho.append(j[4])
                 #print(j[0],j[1],j[2],j[3],j[4])
-                #exit()
+
            else:
                pass
-
+           #print(hour, frac)
     hcho_dft = pd.DataFrame({'datetime': timeaxis, 'hcho': hcho})
     hcho_dft['datetime'] = pd.to_datetime(hcho_dft['datetime'])
     hcho_dft = hcho_dft.set_index(['datetime'])

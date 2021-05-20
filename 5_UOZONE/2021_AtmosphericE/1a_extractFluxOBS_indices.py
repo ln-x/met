@@ -12,11 +12,52 @@ def geo_idx(dd, dd_array):
    geo_idx = (np.abs(dd_array - dd)).argmin()
    return geo_idx
 
-#Jans data
+def find_nearest(array, value):
+   array = np.asarray(array)
+   idx = (np.abs(array - value)).argmin()
+   return array[idx], idx
+
+def find_nearest_xy(array1, value1, array2, value2):
+   array1 = np.asarray(array1)
+   array2 = np.asarray(array2)
+   idx = (np.abs(array1 - value1)+np.abs(array2 - value2)).argmin()
+   return array1[idx], array2[idx], idx
+
+#TROPOMI SIF 1D
+infile1 = netCDF4.Dataset('/windata/DATA/remote/satellite/TROPOMI/2020/06/TROPOSIF_L2B_2020-06-01.nc')
+infile2 = netCDF4.Dataset('/windata/DATA/remote/satellite/TROPOMI/2020/06/TROPOSIF_L2B_2020-06-02.nc')
+infile1_data = infile1['/PRODUCT']
+infile2_data = infile2['/PRODUCT']
+n_elem = 2421884
+#print(infile1_data.variables['longitude'][1021884])  #48.192i142
+#print(infile2_data.variables['longitude'][1021884])  #48.192142
+
+#print(find_nearest(infile1_data.variables['longitude'], 16)
+#print(find_nearest(infile1_data.variables['latitude'], 48))
+print("CE", find_nearest_xy(infile1_data.variables['latitude'], 48.196613, infile1_data.variables['longitude'], 16.382294))
+print("CE", find_nearest_xy(infile2_data.variables['latitude'], 48.196613, infile2_data.variables['longitude'], 16.382294))
+
+print("RU", find_nearest_xy(infile1_data.variables['latitude'], 48.192142, infile1_data.variables['longitude'], 16.624939))
+print("RU", find_nearest_xy(infile2_data.variables['latitude'], 48.192142, infile2_data.variables['longitude'], 16.624939))
+
+exit()
+
+#Jans data 3km VIE center
+infile = '/media/heidit/Norskehavet/EMEPData/OUTPUT/wrfout_d02_2020-01-01_00:00:00'
+nci = netCDF4.Dataset(infile)
+#print(nci.variables['XLAT'][1,76,181])  #48.19662
+#print(nci.variables['XLONG'][1,76,181])  #16.382263
+
+#Jans data 9km VIE center
 infile = '/media/heidit/Norskehavet/EMEPData/OUTPUT/2020_4/wrfout_d01_2020-03-31_01:00:00'
 west_east = 189
 south_north = 165
 nci = netCDF4.Dataset(infile)
+print(nci.variables['XLAT'][1,59,110]) #48.196613
+print(nci.variables['XLONG'][1,59,110]) #16.382294
+#Jans data 9km Rutzendorf
+print(nci.variables['XLAT'][1,59,112])  #48.192142
+print(nci.variables['XLONG'][1,59,112])  #16.624939
 
 #find Bosco Fontana, IT
 in_lat = 45.199292
