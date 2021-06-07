@@ -6,7 +6,7 @@ git clone --branch master https://github.com/pacedproton/WRF_environment_install
 export PREFIX=/gpfs/data/fs71449/htrimmel3/src/EMEP_WRF_libs20210520/build
 
 bash worf.sh |& tee build.log
-cd /gpfs/data/fs71449/htrimmel3/src/EMEP_WRF_libs20210520/build/0520/pkg-src/wrf
+cd /gpfs/data/fs71449/htrimmel3/src/EMEP_WRF_libs20210520/build/0520/
 source /gpfs/data/fs71449/htrimmel3/src/EMEP_WRF_libs20210520/build/0520/wrf_environment.sh
 #./configure
 #select DMPAR - Intel (15)

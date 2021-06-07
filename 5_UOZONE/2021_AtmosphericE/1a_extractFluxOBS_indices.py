@@ -23,6 +23,20 @@ def find_nearest_xy(array1, value1, array2, value2):
    idx = (np.abs(array1 - value1)+np.abs(array2 - value2)).argmin()
    return array1[idx], array2[idx], idx
 
+
+#Christians data 9km VIE center (exact: 48.196613 16.382294)
+infile = '/windata/DATA/models/boku/wrf/120521/9km_3km_2domain/wrfout_d01_2019-07-01_00:00:00'
+west_east = 198
+south_north = 135
+nci = netCDF4.Dataset(infile)
+print(nci.variables['XLAT'][1,69,99]) #48.200005
+print(nci.variables['XLONG'][1,69,99]) #16.400024
+#Christians data 9km Rutzendorf  (exact: 48.206673 16.623864)
+print(nci.variables['XLAT'][1,69,101])  #48.199753
+print(nci.variables['XLONG'][1,69,101])  #16.642914
+
+exit()
+
 #TROPOMI SIF 1D
 infile1 = netCDF4.Dataset('/windata/DATA/remote/satellite/TROPOMI/2020/06/TROPOSIF_L2B_2020-06-01.nc')
 infile2 = netCDF4.Dataset('/windata/DATA/remote/satellite/TROPOMI/2020/06/TROPOSIF_L2B_2020-06-02.nc')
