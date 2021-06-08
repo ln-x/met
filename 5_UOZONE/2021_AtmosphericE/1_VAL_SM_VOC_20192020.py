@@ -201,7 +201,13 @@ wrf2019_sm = fh2019.variables["SMOIS"][:,1,69,101]
 wrf2019_sm = pd.Series(wrf2019_sm[:],index=wrf_time_construct)
 wrf2019_sm_d =wrf2019_sm.resample('D').mean()
 
-wrf2019_tas = fh2019.variables["T2"][:,69,101]
+wrf2019_rain = fh2019.variables["RAINC"][:,69,101]
+#print(len(wrfc2019_sm))
+wrf2019_rain = pd.Series(wrf2019_rain[:],index=wrf_time_construct)
+wrf2019_rain_d =wrf2019_rain.resample('D').sum()
+
+wrf2019_tas = fh2019.variables["T2"][:,69,99]
+#wrf2019_tas = fh2019.variables["T2"][:,69,101]
 wrf2019_tas = pd.Series(wrf2019_tas[:],index=wrf_time_construct)
 wrf2019_tas_dmax =wrf2019_tas.resample('D').max()
 
@@ -231,6 +237,22 @@ tsif = tsif.drop(columns=['time'])
 #metclass_x = metclass_r.set_index(pd.to_datetime(metclass_r['time']))
 #metclass = metclass_x.drop(columns=['time'])
 #print(metclass_x)
+
+'''TIMESLICES'''
+March = datetime(2020, 3, 1, 00, 00) #JD 2020=92
+April = datetime(2020, 4, 1, 00, 00) #JD 2020=92
+June = datetime(2020, 6, 1, 00, 00)  #JD 2020=183
+July = datetime(2020, 7, 1, 00, 00)  #JD 2020=183
+Sept = datetime(2020, 9, 1, 00, 00)  #JD 2020=183
+DP1_s = datetime(2019, 3, 17, 00, 00) #drought period1 start
+DP1_e = datetime(2019, 4, 29, 00, 00) #drought period1 end
+DP2_s = datetime(2019, 6, 8, 00, 00) #drought period2 start
+DP2_e = datetime(2019, 6, 30, 00, 00) #drought period2 end
+DP3_s = datetime(2019, 8, 13, 00, 00) #drought period3 start
+DP3_e = datetime(2019, 8, 31, 00, 00) #drought period3 end
+DP4_s = datetime(2020, 3, 22, 00, 00) #drought period4 start
+DP4_e = datetime(2020, 4, 11, 00, 00) #drought period4 end
+
 
 '''
 Plotting
@@ -265,6 +287,10 @@ ax1.plot(hcho19_d[start:end], linewidth="1", color='black', label="hcho D OBS d"
 #ax1.plot(emep_hcho_d[start:end],linewidth="1", color='darkgreen', label="hcho_emep", linestyle=":")
 #ax2.plot(emep_c5h8_d[start:end],linewidth="1", color='darkred', label="c5h8_emep", linestyle=":")
 #ax1.set_ylim(0, 8)
+ax1.axvspan(DP1_s, DP1_e, color='red', alpha=0.2)
+ax1.axvspan(DP2_s, DP2_e, color='red', alpha=0.2)
+ax1.axvspan(DP3_s, DP3_e, color='red', alpha=0.2)
+ax1.axvspan(DP4_s, DP4_e, color='red', alpha=0.2)
 ax1.set_xlabel("days")
 ax1.set_ylabel("[ppb]", size="medium")
 ax1.legend(loc='upper left')
@@ -276,10 +302,14 @@ ax2 = ax1.twinx()
 ax2.plot(tsif[start:end], color='violet', label="Tropomi SIF 743nm", linewidth="1", linestyle="solid")
 ax2.set_ylabel("[mW/m2/sr/nm]", size="medium")
 #ax1.plot(wrfc2020_lai[start:end],linewidth="0.5", color='blue', label="lai_wrfc", linestyle="dashed")
-ax1.plot(wrflai_megan[start:end2], linewidth="0.5", color='blue', label="lai_wrf_megan", linestyle="solid")
+ax1.plot(wrflai_megan[start:end], linewidth="0.5", color='blue', label="lai_wrf_megan", linestyle="solid")
 #ax2.plot(wrfc2020_dv_d[start:end],linewidth="0.5", color='darkred', label="dv_wrfc", linestyle="dashed") #TODO layer 6 not 1!!
 #ax2.plot(wrfc2020_c5h8_dmax[start:end]*1000,linewidth="0.5", color='red', label="c5h8 wrfc dmax", linestyle="dashed")
 #ax1.set_ylim(-5, 35)
+ax1.axvspan(DP1_s, DP1_e, color='red', alpha=0.2)
+ax1.axvspan(DP2_s, DP2_e, color='red', alpha=0.2)
+ax1.axvspan(DP3_s, DP3_e, color='red', alpha=0.2)
+ax1.axvspan(DP4_s, DP4_e, color='red', alpha=0.2)
 ax1.set_xlabel("days")
 ax1.set_ylabel("[degree]", size="medium")
 ax1.set_ylim(0, 3500)
@@ -298,21 +328,26 @@ ax1.plot(sm['VWC3 min[%]'],linewidth="1", color='lightgrey', label="sm_rutz3 min
 ax1.plot(sm['VWC1 max[%]'],linewidth="0.5", color='black', label="sm_rutz1 max 0-30 cm OBS ", linestyle="solid")
 ax1.plot(sm['VWC2 max[%]'],linewidth="0.5", color='darkgrey', label="sm_rutz2 max 0-30 cm OBS ", linestyle="solid")
 ax1.plot(sm['VWC3 max[%]'],linewidth="0.5", color='lightgrey', label="sm_rutz3 max 0-30 cm OBS ", linestyle="solid")
-ax1.plot(wrf2019_sm_d[start:end], linewidth="0.5", color='blue', label="sm_wrfc 1st layer, RUT", linestyle="dashed")
-ax1.plot(wrfc2020_sm_d[start:end],linewidth="0.5", color='darkblue', label="sm_wrfc 1st layer, CEN", linestyle="dashed")
+ax1.plot(wrf2019_sm_d[start:end], linewidth="0.5", color='green', label="sm_wrfc 1st layer, RUT", linestyle="dashed")
+ax1.plot(wrfc2020_sm_d[start:end],linewidth="0.5", color='darkgreen', label="sm_wrfc 1st layer, CEN", linestyle="dashed")
 ax2.plot((BOKUMetData_dailysum["PC"]*0.1)[start:end], linewidth="1", color='turquoise', label="prec BOKUR OBS")
+#ax2.plot(wrf2019_rain_d, linewidth="0.5", color='blue', label="wrf precip, RUT", linestyle="dashed")
+ax1.axvspan(DP1_s, DP1_e, color='red', alpha=0.2)
+ax1.axvspan(DP2_s, DP2_e, color='red', alpha=0.2)
+ax1.axvspan(DP3_s, DP3_e, color='red', alpha=0.2)
+ax1.axvspan(DP4_s, DP4_e, color='red', alpha=0.2)
 ax2.axhline(0, color='grey',linestyle="dashed",linewidth="0.3")
 ax1.set_xlabel("days")
 ax2.set_ylabel("[mm]", size="medium")
 ax1.set_ylabel("[m3 m-3]", size="medium")
-ax1.legend(loc='upper left')
-ax2.legend(loc='upper right')
+ax1.legend(loc='upper left',fontsize="small")
+ax2.legend(loc='upper right',fontsize="small")
 
 
 ax1 = fig.add_subplot(414)
 ax1 = plt.gca()
 ax2 = ax1.twinx()
-ax1.plot(wrf2019_tas_dmax[start:end]-273.15,linewidth="0.5", color='red', label="t2dmax_wrf  RUT", linestyle="dashed")
+ax1.plot(wrf2019_tas_dmax[start:end]-273.15,linewidth="0.5", color='red', label="t2dmax_wrf  CEN", linestyle="dashed")
 ax1.plot(wrfc2020_tas_dmax[start:end]-273.15,linewidth="0.5", color='darkred', label="t2dmax_wrfc CEN", linestyle="dashed")
 ax1.plot(BOKUMetData_dailymax["AT"][start:end], linewidth="1", color='lightsalmon', label="t2dmax BOKUR OBS")
 #ax1.plot(wrfc2020_tas_dmax[start:end]-273.15-(BOKUMetData_dailymax["AT"][start:end]) ,linewidth="0.5", color='darkred', label="t2 dmax wrfc - obs_boku", linestyle="dashed")
@@ -320,29 +355,18 @@ ax1.axhline(0, color='grey',linestyle="dashed",linewidth="0.3")
 #ax1.plot(BOKUMetData_monthly["AT"][start:end], linewidth="1", color='lightsalmon', label="t2_obs_BOKUR_m")
 #ax1.plot(tas_m[start:end]-273.15,linewidth="1", color='darkred', label="t2_wrfc_m", linestyle="dashed")
 #ax1.set_ylim(-5, 35)
+ax1.axvspan(DP1_s, DP1_e, color='red', alpha=0.2)
+ax1.axvspan(DP2_s, DP2_e, color='red', alpha=0.2)
+ax1.axvspan(DP3_s, DP3_e, color='red', alpha=0.2)
+ax1.axvspan(DP4_s, DP4_e, color='red', alpha=0.2)
 ax1.set_xlabel("days")
 ax1.set_ylabel("[degC]", size="medium")
 ax1.legend(loc='upper left')
 ax2.legend(loc='upper right')
 plt.show()
 
-plt.show()
-
 #metclass['WLK]'
 
-March = datetime(2020, 3, 1, 00, 00) #JD 2020=92
-April = datetime(2020, 4, 1, 00, 00) #JD 2020=92
-June = datetime(2020, 6, 1, 00, 00)  #JD 2020=183
-July = datetime(2020, 7, 1, 00, 00)  #JD 2020=183
-Sept = datetime(2020, 9, 1, 00, 00)  #JD 2020=183
-DP1_s = datetime(2019, 3, 16, 00, 00) #drought period1 start
-DP1_e = datetime(2019, 4, 30, 00, 00) #drought period1 end
-DP2_s = datetime(2019, 6, 7, 00, 00) #drought period2 start
-DP2_e = datetime(2019, 7, 1, 00, 00) #drought period2 end
-DP3_s = datetime(2019, 8, 1, 00, 00) #drought period3 start
-DP3_e = datetime(2019, 8, 31, 00, 00) #drought period3 end
-DP4_s = datetime(2020, 3, 22, 00, 00) #drought period4 start
-DP4_e = datetime(2020, 4, 12, 00, 00) #drought period4 end
 
 pff = pd.concat([hcho19_dmax,tsif,BOKUMetData_dailysum["GR"]],axis=1, keys=['1','4','GR'])
 pff1 = pff[DP1_s:DP1_e].dropna()
@@ -353,7 +377,7 @@ x_i = pff1['4'].values.flatten()
 x1= x_i       #FOR SIF
 y1 = pff1['1'].values.flatten()
 a=0#92*24
-#m1, b1 = np.polyfit(x1[a:], y1[a:], 1)
+m1, b1 = np.polyfit(x1[a:], y1[a:], 1)
 
 pff2 = pff[DP2_s:DP2_e].dropna()
 pff2.columns = pff2.columns.droplevel(-1)
@@ -363,7 +387,7 @@ x_i = pff2['4'].values.flatten()
 x2= x_i       #FOR SIF
 y2 = pff2['1'].values.flatten()
 a=0#92*24
-#m2, b2 = np.polyfit(x2[a:], y2[a:], 1)
+m2, b2 = np.polyfit(x2[a:], y2[a:], 1)
 
 pff3 = pff[DP3_s:DP3_e].dropna()
 pff3.columns = pff3.columns.droplevel(-1)
@@ -373,9 +397,9 @@ x_i = pff3['4'].values.flatten()
 x3= x_i       #FOR SIF
 y3 = pff3['1'].values.flatten()
 a=0#92*24
-#m3, b3 = np.polyfit(x3[a:], y3[a:], 1)
+m3, b3 = np.polyfit(x3[a:], y3[a:], 1)
 
-pff = pd.concat([hcho_dmax,hcho_dmax_A,hcho_dmax_K,tsif,BOKUMetData_dailysum["GR"]],axis=1, keys=['1','2','3','4','GR'])
+pff = pd.concat([hcho_d,hcho_dmax_A,hcho_dmax_K,tsif,BOKUMetData_dailysum["GR"]],axis=1, keys=['1','2','3','4','GR'])
 pff4 = pff[DP4_s:DP4_e].dropna()
 pff4.columns = pff4.columns.droplevel(-1)
 #isHighGRall = pff4["GR"] > 15000 #15 KWh (per day) Globalstrahlung
@@ -386,41 +410,110 @@ y4 = pff4['1'].values.flatten()
 yA4 = pff4['2'].values.flatten()
 yK4 = pff4['3'].values.flatten()
 a=0#92*24
-#m4, b4 = np.polyfit(x4[a:], y4[a:], 1)
+m4, b4 = np.polyfit(x4[a:], y4[a:], 1)
 #mA4, bA4 = np.polyfit(x4[a:], yA4[a:], 1)
 #mK4, bK4 = np.polyfit(x4[a:], yK4[a:], 1)
 
 fig, axes = plt.subplots(nrows=2, ncols=2)
 ax0, ax1, ax2, ax3 = axes.flatten()
-#ax1 = fig2.add_subplot(221)
-ax0.set_title(f"{DP1_e} - {DP1_e}")
+ax0.set_title(f"{DP1_s} - {DP1_e}")
 ax0.scatter(x1[a:], y1[a:], color='red',label='Axis D (Stephansdom)') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
-#plt.plot(x1, m1*x1+b1, color='red')
-#m, b = np.polyfit(x, y, 1)
-#plt.plot(x, m * x + b)
+ax0.plot(x1, m1*x1+b1, color='red')
 ax0.legend(loc='upper right')
-#plt.xlabel("WRF [ppb]", size="medium")
-#plt.xlabel("CAMX [ppb]", size="medium")
 ax0.set_ylabel("MAXDOAS [ppb]", size="medium")
-#plt.suptitle("HCHO dmax 2020 summer (JJA)")
 
-ax1.set_title(f"{DP2_e} - {DP2_e}")
+ax1.set_title(f"{DP2_s} - {DP2_e}")
 ax1.scatter(x2[a:], y2[a:], color='red',label='Axis D (Stephansdom)') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
-#plt.plot(x2, m2*x2+b2, color='red')
+ax1.plot(x2, m2*x2+b2, color='red')
 
-ax2.set_title(f"{DP3_e} - {DP3_e}")
+ax2.set_title(f"{DP3_s} - {DP3_e}")
 ax2.scatter(x3[a:], y3[a:], color='red',label='Axis D (Stephansdom)') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
 ax2.set_ylabel("MAXDOAS [ppb]", size="medium")
 ax2.set_xlabel("TROPOMI SIF [mW m-2 sr-1 nm-1]", size="medium")
-#plt.plot(x3, m3*x3+b3, color='red')
+ax2.plot(x3, m3*x3+b3, color='red')
 
-ax3.set_title(f"{DP4_e} - {DP4_e}")
+ax3.set_title(f"{DP4_s} - {DP4_e}")
 ax3.scatter(x4[a:], y4[a:], color='red',label='Axis D (Stephansdom)') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
 ax3.set_xlabel("TROPOMI SIF [mW m-2 sr-1 nm-1]", size="medium")
-#plt.plot(x4, m4*x4+b4, color='red')
+ax3.plot(x4, m4*x4+b4, color='red')
 
 fig.tight_layout()
 plt.show()
+
+pff = pd.concat([hcho19_dmax,sm['VWC1 max[%]'],BOKUMetData_dailysum["GR"]],axis=1, keys=['1','4','GR'])
+pff1 = pff[DP1_s:DP1_e].dropna()
+#pff1.columns = pff1.columns.droplevel(-1)
+#isHighGRall = pff1["GR"] > 15000 #15 KWh (per day) Globalstrahlung
+#pff_HighGRdays = pff1[isHighGRall]
+x_i = pff1['4'].values.flatten()
+x1= x_i       #FOR SIF
+y1 = pff1['1'].values.flatten()
+a=0#92*24
+m1, b1 = np.polyfit(x1[a:], y1[a:], 1)
+
+pff2 = pff[DP2_s:DP2_e].dropna()
+#pff2.columns = pff2.columns.droplevel(-1)
+#isHighGRall = pff2["GR"] > 15000 #15 KWh (per day) Globalstrahlung
+#pff_HighGRdays = pff2[isHighGRall]
+x_i = pff2['4'].values.flatten()
+x2= x_i       #FOR SIF
+y2 = pff2['1'].values.flatten()
+a=0#92*24
+m2, b2 = np.polyfit(x2[a:], y2[a:], 1)
+
+pff3 = pff[DP3_s:DP3_e].dropna()
+#pff3.columns = pff3.columns.droplevel(-1)
+#isHighGRall = pff3["GR"] > 15000 #15 KWh (per day) Globalstrahlung
+#pff_HighGRdays = pff3[isHighGRall]
+x_i = pff3['4'].values.flatten()
+x3= x_i       #FOR SIF
+y3 = pff3['1'].values.flatten()
+a=0#92*24
+m3, b3 = np.polyfit(x3[a:], y3[a:], 1)
+
+pff = pd.concat([hcho_dmax,hcho_dmax_A,hcho_dmax_K,tsif,BOKUMetData_dailysum["GR"]],axis=1, keys=['1','2','3','4','GR'])
+pff4 = pff[DP4_s:DP4_e].dropna()
+#pff4.columns = pff4.columns.droplevel(-1)
+#isHighGRall = pff4["GR"] > 15000 #15 KWh (per day) Globalstrahlung
+#pff_HighGRdays = pff4[isHighGRall]
+x_i = pff4['4'].values.flatten()
+x4= x_i       #FOR SIF
+y4 = pff4['1'].values.flatten()
+yA4 = pff4['2'].values.flatten()
+yK4 = pff4['3'].values.flatten()
+a=0#92*24
+m4, b4 = np.polyfit(x4[a:], y4[a:], 1)
+#mA4, bA4 = np.polyfit(x4[a:], yA4[a:], 1)
+#mK4, bK4 = np.polyfit(x4[a:], yK4[a:], 1)
+
+fig, axes = plt.subplots(nrows=2, ncols=2)
+ax0, ax1, ax2, ax3 = axes.flatten()
+ax0.set_title(f"SPRING 1{DP1_s} - {DP1_e}")
+ax0.scatter(x1[a:], y1[a:], color='red',label='Axis D (Stephansdom)') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax0.plot(x1, m1*x1+b1, color='red')
+ax0.legend(loc='upper right')
+ax0.set_ylabel("HCHO [ppb]", size="medium")
+
+ax1.set_title(f"SUMMER 1{DP2_s} - {DP2_e}")
+ax1.scatter(x2[a:], y2[a:], color='red',label='Axis D (Stephansdom)') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax1.plot(x2, m2*x2+b2, color='red')
+
+ax2.set_title(f"SPRING 2 {DP4_s} - {DP4_e}")
+ax2.scatter(x4[a:], y4[a:], color='red',label='Axis D (Stephansdom)') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax2.set_ylabel("HCHO [ppb]", size="medium")
+ax2.set_xlabel("VWC [%]", size="medium")
+ax2.plot(x4, m4*x4+b4, color='red')
+
+ax3.set_title(f"SUMMER 2{DP3_s} - {DP3_e}")
+ax3.scatter(x3[a:], y3[a:], color='red',label='Axis D (Stephansdom)') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax3.set_xlabel("VWC [%]", size="medium")
+ax3.plot(x3, m3*x3+b3, color='red')
+
+
+
+fig.tight_layout()
+plt.show()
+
 
 
 """"

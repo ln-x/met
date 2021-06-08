@@ -32,13 +32,18 @@ def TROPOMI_SIF():
                 except:
                     pass
     frames = []
+    RUT_LAT =48.192142
+    RUT_LON =16.624939
+    CEN_LAT =48.196613
+    CEN_LON =16.382294
+
     for i in TROPOMI_SIF_Name:
         try:
             #print(i)
             infile1 = netCDF4.Dataset(i)
             infile1_data = infile1['/PRODUCT']
-            TSIF_743 = find_nearest_xy(infile1_data.variables['latitude'], 48.192142, infile1_data.variables['longitude'],
-                                  16.624939, infile1_data.variables['SIF_743'])
+            TSIF_743 = find_nearest_xy(infile1_data.variables['latitude'], CEN_LAT, infile1_data.variables['longitude'],
+                                  CEN_LON, infile1_data.variables['SIF_743'])
             frames.append(TSIF_743)
         except:
             pass
