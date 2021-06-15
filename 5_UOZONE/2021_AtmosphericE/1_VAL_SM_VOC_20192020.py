@@ -64,7 +64,6 @@ BOKUMetData_monthly = BOKUMetData.resample('M').agg({'DT': np.mean, 'AT': np.mea
 file_sm_2019_rutz = "/windata/DATA/obs_point/land/Bodenfeuchte_Rutzendorf/RUT_10_min.xls"
 sm = pd.read_excel(file_sm_2019_rutz, sheet_name="RUT_d", usecols="D,K,L,M,N,O,P", skiprows=11)#, converters={'A': pd.to_datetime})
 sm.columns = ['datetime', 'VWC1 min[%]', 'VWC2 min[%]','VWC3 min[%]','VWC1 max[%]', 'VWC2 max[%]','VWC3 max[%]']  #TODO: local time!
-sm = sm.set_index(pd.to_datetime(sm['datetime']))
 sm = sm.drop(columns=['datetime'])
 
 file_rss_rutz = "/windata/DATA/obs_point/land/Bodenfeuchte_Rutzendorf/2008_2020_Rutzendorf_ARIS_results_sepp.xlsx"
@@ -72,7 +71,27 @@ rss = pd.read_excel(file_rss_rutz, sheet_name="RSS_top", usecols="A,B,C,D,E,F", 
 rss.columns = ['datetime', 'RSS_top_maize', 'RSS_top_sBarley','RSS_top_sugBeet','RSS_top_wWheat', 'RSS_top_grass']  #TODO: local time!
 rss = rss.set_index(pd.to_datetime(rss['datetime']))
 rss = rss.drop(columns=['datetime'])
+#vwc = rss['RSS_top_maize', 'RSS_top_sBarley','RSS_top_sugBeet','RSS_top_wWheat', 'RSS_top_grass']
 
+#Grünland bei Gänserndorf (war das nächstliegende Grünland Pixel zu Rutzendorf)
+#LON 652.750 LAT 494.250
+grass_fc_top_Layer= 0.402768
+grass_fc_sub_Layer= 0.287642
+grass_afc_top_Layer= 0.218952
+grass_afc_sub_Layer= 0.162540
+
+#Acker bei Rutzendorf
+#LON 644.250 LAT 484.250
+rutz_fc_top_Layer= 0.380875
+rutz_fc_sub_Layer= 0.268583
+rutz_afc_top_Layer= 0.222250
+rutz_afc_sub_Layer= 0.154833
+
+#rss=0.5
+#vwc=rss*rutz_fc_top_Layer
+delta = rutz_fc_top_Layer-rutz_afc_top_Layer
+vwc = (rss*delta) + rutz_afc_top_Layer
+#print(vwc)
 
 '''READ IN EMEP data'''
 #Jans indexes for Vienna gridpoint:
@@ -270,7 +289,6 @@ Plotting
 start = datetime(2019, 1, 1, 00, 00)
 end = datetime(2020, 9, 27, 00, 00)
 end2 = datetime(2020, 10, 30, 00, 00)
-plt.suptitle(f"OBS/MOD {start} - {end}")
 
 """
 fig = plt.figure()
@@ -331,15 +349,20 @@ ax2.legend(loc='upper right')
 ax1 = fig.add_subplot(413)
 ax1 = plt.gca()
 ax2 = ax1.twinx()
-ax1.plot(sm['VWC1 min[%]'],linewidth="1", color='black', label="sm_rutz1 min 0-30 cm OBS ", linestyle="solid")
-ax1.plot(sm['VWC2 min[%]'],linewidth="1", color='darkgrey', label="sm_rutz2 min 0-30 cm  OBS ", linestyle="solid")
-ax1.plot(sm['VWC3 min[%]'],linewidth="1", color='lightgrey', label="sm_rutz3 min 0-30 cm OBS ", linestyle="solid")
-ax1.plot(sm['VWC1 max[%]'],linewidth="0.5", color='black', label="sm_rutz1 max 0-30 cm OBS ", linestyle="solid")
-ax1.plot(sm['VWC2 max[%]'],linewidth="0.5", color='darkgrey', label="sm_rutz2 max 0-30 cm OBS ", linestyle="solid")
-ax1.plot(sm['VWC3 max[%]'],linewidth="0.5", color='lightgrey', label="sm_rutz3 max 0-30 cm OBS ", linestyle="solid")
+#ax1.plot(sm['VWC1 min[%]'],linewidth="1", color='black', label="sm_rutz1 min 0-30 cm OBS ", linestyle="solid")
+#ax1.plot(sm['VWC2 min[%]'],linewidth="1", color='darkgrey', label="sm_rutz2 min 0-30 cm  OBS ", linestyle="solid")
+#ax1.plot(sm['VWC3 min[%]'],linewidth="1", color='lightgrey', label="sm_rutz3 min 0-30 cm OBS ", linestyle="solid")
+#ax1.plot(sm['VWC1 max[%]'],linewidth="0.5", color='black', label="sm_rutz1 max 0-30 cm OBS ", linestyle="solid")
+#ax1.plot(sm['VWC2 max[%]'],linewidth="0.5", color='darkgrey', label="sm_rutz2 max 0-30 cm OBS ", linestyle="solid")
+#ax1.plot(sm['VWC3 max[%]'],linewidth="0.5", color='lightgrey', label="sm_rutz3 max 0-30 cm OBS ", linestyle="solid")
 ax1.plot(wrf2019_sm_d[start:end], linewidth="0.5", color='green', label="sm_wrfc 1st layer, RUT", linestyle="dashed")
 ax1.plot(wrfc2020_sm_d[start:end],linewidth="0.5", color='darkgreen', label="sm_wrfc 1st layer, CEN", linestyle="dashed")
-ax1.plot(rss['RSS_top_wWheat'][start:end],linewidth="1", color='darkred', label="rss rutz2 0-40 cm ARIS", linestyle="solid")
+#ax1.plot(rss['RSS_top_wWheat'][start:end],linewidth="1", color='darkred', label="rss rutz2 0-40 cm ARIS", linestyle="solid")
+ax1.plot(vwc['RSS_top_wWheat'][start:end],linewidth="1", color='red', label="sm rutz2 0-40 cm ARIS wWheat", linestyle="solid")
+ax1.plot(vwc['RSS_top_maize'][start:end],linewidth="1", color='orange', label="sm rutz2 0-40 cm ARIS maize", linestyle="solid")
+ax1.plot(vwc['RSS_top_sBarley'][start:end],linewidth="1", color='brown', label="sm rutz2 0-40 cm ARIS sBarley", linestyle="solid")
+ax1.plot(vwc['RSS_top_sugBeet'][start:end],linewidth="1", color='purple', label="sm rutz2 0-40 cm ARIS sugBeet", linestyle="solid")
+
 ax2.plot((BOKUMetData_dailysum["PC"]*0.1)[start:end], linewidth="1", color='turquoise', label="prec BOKUR OBS")
 #ax2.plot(wrf2019_rain_d, linewidth="0.5", color='blue', label="wrf precip, RUT", linestyle="dashed")
 ax1.axvspan(DP1_s, DP1_e, color='red', alpha=0.2)
@@ -352,7 +375,6 @@ ax2.set_ylabel("[mm]", size="medium")
 ax1.set_ylabel("[m3 m-3]", size="medium")
 ax1.legend(loc='upper left',fontsize="small")
 ax2.legend(loc='upper right',fontsize="small")
-
 
 ax1 = fig.add_subplot(414)
 ax1 = plt.gca()
@@ -376,7 +398,6 @@ ax2.legend(loc='upper right')
 plt.show()
 
 #metclass['WLK]'
-
 
 pff = pd.concat([hcho19_dmax,tsif,BOKUMetData_dailysum["GR"]],axis=1, keys=['1','4','GR'])
 pff1 = pff[DP1_s:DP1_e].dropna()
@@ -449,9 +470,8 @@ ax3.plot(x4, m4*x4+b4, color='red')
 
 fig.tight_layout()
 plt.show()
-
-"""#HCHO - VWC/SM
 """
+"""#HCHO - VWC/SM
 pff = pd.concat([hcho19_dmax,sm['VWC1 max[%]'],BOKUMetData_dailysum["GR"]],axis=1, keys=['1','4','GR'])
 pff1 = pff[DP1_s:DP1_e].dropna()
 #pff1.columns = pff1.columns.droplevel(-1)
@@ -599,8 +619,8 @@ ax3.plot(x3, m3*x3+b3, color='red')
 fig.tight_layout()
 plt.show()
 """
-
 """HCHO - TMAX"""
+"""
 pff = pd.concat([hcho19_dmax,BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"]],axis=1, keys=['1','4','GR'])
 pff1 = pff[DP1_s:DP1_e].dropna()
 #pff1.columns = pff1.columns.droplevel(-1)
@@ -672,8 +692,9 @@ ax3.plot(x3, m3*x3+b3, color='red')
 
 fig.tight_layout()
 plt.show()
-
+"""
 """HCHO - GLOBAL RADIATION"""
+"""
 pff = pd.concat([hcho19_dmax,BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"]],axis=1, keys=['1','4','GR'])
 pff1 = pff[DP1_s:DP1_e].dropna()
 x_i = pff1['GR'].values.flatten()
@@ -742,6 +763,94 @@ ax3.plot(x3, m3*x3+b3, color='red')
 
 fig.tight_layout()
 plt.show()
+"""
+"""FULL SEASON"""
+
+pff = pd.concat([hcho_dmax,hcho_dmax_A,hcho_dmax_K,BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"]],axis=1, keys=['1','2','3','4','GR'])
+print(pff[March:])
+pff5 = pff[:].dropna()
+#pff4.columns = pff4.columns.droplevel(-1)
+#isHighGRall = pff4["GR"] > 15000 #15 KWh (per day) Globalstrahlung
+#pff_HighGRdays = pff4[isHighGRall]
+x5 = pff5['4'].values.flatten() #AT!
+x5_GR = pff5['GR'].values.flatten()
+y5 = pff5['1'].values.flatten()
+yA5 = pff5['2'].values.flatten()
+yK5 = pff5['3'].values.flatten()
+a=0#92*24
+m5, b5 = np.polyfit(x5[a:], y5[a:], 1)
+mA5, bA5 = np.polyfit(x5[a:], yA5[a:], 1)
+mK5, bK5 = np.polyfit(x5[a:], yK5[a:], 1)
+
+m5GR, b5GR = np.polyfit(x5_GR[a:], y5[a:], 1)
+mA5GR, bA5GR = np.polyfit(x5_GR[a:], yA5[a:], 1)
+mK5GR, bK5GR = np.polyfit(x5_GR[a:], yK5[a:], 1)
+
+
+fig, axes = plt.subplots(nrows=1, ncols=2)
+#plt.set_title(f"full period")
+ax0, ax1 = axes.flatten()
+#ax0.set_title(f"SPRING 1: {DP1_s.date()} - {DP1_e.date()}")
+
+ax0.scatter(x5[a:], y5[a:], color='red',label='Axis D (Stephansdom)') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax0.scatter(x5[a:], yA5[a:], color='violet',label='Axis A ') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax0.scatter(x5[a:], yK5[a:], color='green',label='Axis K ') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax0.plot(x5, m5*x5+b5, color='red')
+ax0.plot(x5, mA5*x5+bA5, color='violet')
+ax0.plot(x5, mK5*x5+bK5, color='green')
+
+#ax0.legend(loc='upper right')
+ax0.set_ylabel("HCHO [ppb]", size="medium")
+ax0.set_xlabel("air temp [degC]", size="medium")
+
+#ax1.set_title(f"SUMMER 1: {DP2_s.date()} - {DP2_e.date()}")
+ax1.scatter(x5_GR[a:], y5[a:], color='red',label='Axis D (Stephansdom)') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax1.scatter(x5_GR[a:], yA5[a:], color='violet',label='Axis D (Stephansdom)') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax1.scatter(x5_GR[a:], yK5[a:], color='green',label='Axis D (Stephansdom)') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax1.plot(x5_GR, m5GR*x5_GR + b5GR, color='red')
+ax1.plot(x5_GR, mA5GR*x5_GR + bA5GR, color='violet')
+ax1.plot(x5_GR, mK5GR*x5_GR + bK5GR, color='green')
+ax1.set_ylabel("HCHO [ppb]", size="medium")
+ax1.set_xlabel("GR [degC]", size="medium")
+
+
+fig.tight_layout()
+plt.show()
+
+
+pff = pd.concat([hcho_dmax,BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"]],axis=1, keys=['1','4','GR'])
+print(pff[:])
+pff5 = pff[:].dropna()
+#pff4.columns = pff4.columns.droplevel(-1)
+#isHighGRall = pff4["GR"] > 15000 #15 KWh (per day) Globalstrahlung
+#pff_HighGRdays = pff4[isHighGRall]
+x5 = pff5['4'].values.flatten() #AT!
+x5_GR = pff5['GR'].values.flatten()
+y5 = pff5['1'].values.flatten()
+a=0#92*24
+m5, b5 = np.polyfit(x5[a:], y5[a:], 1)
+m5GR, b5GR = np.polyfit(x5_GR[a:], y5[a:], 1)
+
+fig, axes = plt.subplots(nrows=1, ncols=2)
+#plt.set_title(f"full period")
+ax0, ax1 = axes.flatten()
+#ax0.set_title(f"SPRING 1: {DP1_s.date()} - {DP1_e.date()}")
+ax0.scatter(x5[a:], y5[a:], color='red',label='Axis D (Stephansdom)') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax0.plot(x5, m5*x5+b5, color='red')
+#ax0.legend(loc='upper right')
+ax0.set_ylabel("HCHO [ppb]", size="medium")
+ax0.set_xlabel("air temp [degC]", size="medium")
+#ax1.set_title(f"SUMMER 1: {DP2_s.date()} - {DP2_e.date()}")
+ax1.scatter(x5_GR[a:], y5[a:], color='red',label='Axis D (Stephansdom)') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax1.plot(x5_GR, m5GR*x5_GR + b5GR, color='red')
+ax1.set_ylabel("HCHO [ppb]", size="medium")
+ax1.set_xlabel("GR [degC]", size="medium")
+
+
+fig.tight_layout()
+plt.show()
+
+
 """"
 #BACKUP
 
