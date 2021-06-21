@@ -14,7 +14,78 @@ M_GE = "/windata/DATA/obs_point/met/ZAMG/Jahrbuch/ZAMG_Jahrbuch2020_Monatsauswer
 M_IS = "/windata/DATA/obs_point/met/ZAMG/Jahrbuch/ZAMG_Jahrbuch2020_Monatsauswertung_InnereStadt.csv"
 M_HW = "/windata/DATA/obs_point/met/ZAMG/Jahrbuch/ZAMG_Jahrbuch2019_Monatsauswertung_HoheWarte.csv"
 T_HW = "/windata/DATA/obs_point/met/ZAMG/Jahrbuch/ZAMG_Jahrbuch2019_Tagesauswertung_HW.csv"
+synop = "/windata/DATA/obs_point/met/ZAMG/DataHub/synop_UOZONE.csv"
 
+"""Hourly Values from ZAMG Data Hub - synop
+dd   Windrichtung
+ff   Windgeschwindigkeit
+Tmax Maximum der Lufttemperatur
+T    Lufttemperatur
+N    Gesamtbedeckung des Himmels mit Wolken
+Ir   Niederschlagsindikator
+Pg   Luftdruck
+RRR  Niederschlagsmenge im Beobachtungszeitraum tr
+VV   Sichtweite
+h    Höhe der tiefsten Wolken
+tr   Beobachtungszeitrum für Niederschlag
+"""
+stations = {"11037":"Großenzersdorf", "11090":"Donaufeld", "11034":"Innere Stadt", "11035":"Hohe Warte", "11040":"Unterlaa" }
+parameter = {"dd":"wind dir", "ff":"wind speed","Tmax":"tmax","T":"T","N":"cloud cover","Ir":"precipitation indic.",
+             "Pg":"air pressure","RRR":"precip", "VV":"view", "h":"height of lowerst clouds","tr":"observe time for precip." }
+
+df = pd.read_csv(synop, sep=",", skiprows=1) #47
+df.columns = ['station', 'time', 'dd','ff','Tmax','T','N','Ir','Pg','RRR','VV','h','tr']
+GE = df.loc[df['station'] == 11037]
+DF = df.loc[df['station'] == 11090]
+IS = df.loc[df['station'] == 11034]
+HW = df.loc[df['station'] == 11035]
+UL = df.loc[df['station'] == 11040]
+
+data = HW[['dd','ff']]
+data = df.loc[df['dd'] != 90]
+
+#remove_calm = lambda x: x if x == 90 else x
+#data['dd'] = remove_calm(data['dd'])
+
+#print(data)
+#exit()
+
+
+data['dd'] = (data['dd']/10)*45
+#print(data)
+#exit()
+
+windrosechart = data
+
+ax = WindroseAxes.from_ax()
+ax.bar(windrosechart.dd, windrosechart.ff, normed=True, opening=0.8, edgecolor='white')
+#ax.contourf(windrosechart.dd, windrosechart.ff, bins=np.arange(0, 8, 1), cmap=cm.hot)
+ax.set_legend()
+#ax.title(df['station'][0])
+plt.show()
+
+exit()
+for (index_label, row_series) in wind[:-1].iterrows(): #all months of a year
+    print(row_series.values)
+    monthly = []
+    for i in range(8): #8 wind directions
+       for k in range(int(row_series.values[i])):
+            monthly.append([float(row_series.values[-1].replace(',', '.')),int(wind.columns[i])])
+    windrosechart = pd.DataFrame(monthly, columns=['VELOCIDAD', 'DIRECCION'])
+    ax = WindroseAxes.from_ax()
+    #ax.bar(windrosechart.DIRECCION, windrosechart.VELOCIDAD, normed=True, opening=0.8, edgecolor='white')
+    ax.contourf(windrosechart.DIRECCION, windrosechart.VELOCIDAD, bins=np.arange(0, 8, 1), cmap=cm.hot)
+    ax.set_legend()
+ #  ax.title(df['station'][0], index_label)
+    #plt.show()
+    plt.savefig("IS2020" + index_label + ".jpg")
+
+exit()
+
+
+
+"""Monthly values from Jahrbuch"""
+"""
 df = pd.read_csv(M_IS, sep=";", skiprows=5) #47
 df.columns = ['station', 'LAT', 'LON','masl','position', 'position2','chapter','Parameter', 'JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','year']  #TODO: local time!
 wind = df.drop(columns=['station', 'LAT', 'LON','masl','position', 'position2'])
@@ -63,7 +134,7 @@ for (index_label, row_series) in wind[:-1].iterrows(): #all months of a year
  #  ax.title(df['station'][0], index_label)
     #plt.show()
     plt.savefig("IS2020" + index_label + ".jpg")
-
+"""
 exit()
 
 wind['velocidad_x'] = wind['VELOCIDAD'] * np.sin(df['DIRECCION'] * pi / 180.0)

@@ -64,7 +64,10 @@ BOKUMetData_monthly = BOKUMetData.resample('M').agg({'DT': np.mean, 'AT': np.mea
 file_sm_2019_rutz = "/windata/DATA/obs_point/land/Bodenfeuchte_Rutzendorf/RUT_10_min.xls"
 sm = pd.read_excel(file_sm_2019_rutz, sheet_name="RUT_d", usecols="D,K,L,M,N,O,P", skiprows=11)#, converters={'A': pd.to_datetime})
 sm.columns = ['datetime', 'VWC1 min[%]', 'VWC2 min[%]','VWC3 min[%]','VWC1 max[%]', 'VWC2 max[%]','VWC3 max[%]']  #TODO: local time!
+sm = sm.set_index(pd.to_datetime(sm['datetime']))
 sm = sm.drop(columns=['datetime'])
+#print(sm)
+#exit()
 
 file_rss_rutz = "/windata/DATA/obs_point/land/Bodenfeuchte_Rutzendorf/2008_2020_Rutzendorf_ARIS_results_sepp.xlsx"
 rss = pd.read_excel(file_rss_rutz, sheet_name="RSS_top", usecols="A,B,C,D,E,F", skiprows=11)#, converters={'A': pd.to_datetime})
@@ -87,11 +90,12 @@ rutz_fc_sub_Layer= 0.268583
 rutz_afc_top_Layer= 0.222250
 rutz_afc_sub_Layer= 0.154833
 
-#rss=0.5
-#vwc=rss*rutz_fc_top_Layer
-delta = rutz_fc_top_Layer-rutz_afc_top_Layer
-vwc = (rss*delta) + rutz_afc_top_Layer
-#print(vwc)
+#test1 = rutz_fc_top_Layer - (1-1)*rutz_afc_top_Layer
+#test2 = rutz_fc_top_Layer - (1-0.5)*rutz_afc_top_Layer
+#test3 = rutz_fc_top_Layer - (1-0)*rutz_afc_top_Layer
+#print(test1,test2,test3)
+vwc = rutz_fc_top_Layer - (1-rss)*rutz_afc_top_Layer
+vwc_grass = grass_fc_top_Layer - (1-rss)*grass_afc_top_Layer
 
 '''READ IN EMEP data'''
 #Jans indexes for Vienna gridpoint:
@@ -187,8 +191,12 @@ wrfc2020_sw = pd.Series(wrfc2020_sw[:],index=wrfc_time_construct)
 wrfc2020_sw_d =wrfc2020_sw.resample('D').mean()
 wrfc2020_sw_m =wrfc2020_sw_d.resample('M').mean()
 
-wrfc2020_sm = fh2020.variables["SMOIS"][:,0,0,0]
-wrfc2020_sm = pd.Series(wrfc2020_sm[:],index=wrfc_time_construct)
+wrfc2020_sm1 = fh2020.variables["SMOIS"][:,0,0,0]
+wrfc2020_sm2 = fh2020.variables["SMOIS"][:,1,0,0]
+#WRFsoil moisture in 4 layers: 0 - 10 cm, 10 - 40 cm, 40 - 100 cm and 100 - 200cm.
+wrfc2020_sm1 = pd.Series(wrfc2020_sm1[:],index=wrfc_time_construct)
+wrfc2020_sm2 = pd.Series(wrfc2020_sm2[:],index=wrfc_time_construct)
+wrfc2020_sm = wrfc2020_sm1.add(wrfc2020_sm2)
 wrfc2020_sm_d =wrfc2020_sm.resample('D').mean()
 
 wrfc2020_dv = fh2020B.variables["DRY_DEP_LEN"][:,0,0,0]
@@ -222,6 +230,7 @@ file2019 = '/windata/DATA/models/boku/wrf/120521/9km_3km_2domain/wrfout_d01_2019
 fh2019 = Dataset(file2019, mode='r')
 starttime = datetime(2019, 7, 1, 0, 00)
 wrf_time_construct = np.array([starttime + timedelta(hours=i) for i in range(248)])
+#WRFsoil moisture in 4 layers: 0 - 10 cm, 10 - 40 cm, 40 - 100 cm and 100 - 200cm.
 wrf2019_sm = fh2019.variables["SMOIS"][:,1,69,101]
 #print(len(wrfc2019_sm))
 wrf2019_sm = pd.Series(wrf2019_sm[:],index=wrf_time_construct)
@@ -286,18 +295,21 @@ Plotting
 
 #fig = plt.figure()
 #start = datetime(2020, 1, 1, 00, 00)
-start = datetime(2019, 1, 1, 00, 00)
+#start = datetime(2019, 1, 1, 00, 00)
+start = datetime(2017, 1, 1, 00, 00)
+#end = datetime(2020, 1, 1, 00, 00)
 end = datetime(2020, 9, 27, 00, 00)
 end2 = datetime(2020, 10, 30, 00, 00)
 
-"""
+#"""
 fig = plt.figure()
 plt.suptitle(f"OBS/MOD {start} - {end}")
 
-ax1 = fig.add_subplot(411)
+#ax1 = fig.add_subplot(411)
+ax1 = fig.add_subplot(211)
 ax1 = plt.gca()
 ax2 = ax1.twinx()
-
+"""
 ax1.plot(wrfc2020_hcho0_d[start:end]*1000, linewidth="0.5", color='darkblue', label="hcho wrfc d lev0", linestyle=":") #274 = Julian Day 30.Sept2020
 #ax1.plot(wrfc2020_hcho0_dmax[start:end]*1000, linewidth="0.5", color='darkblue', label="hcho wrfc dmax lev0", linestyle="solid") #274 = Julian Day 30.Sept2020
 #ax1.plot(wrfc2020_hcho1_dmax[start:end]*1000, linewidth="0.5", color='violet', label="hcho wrfc dmax lev1", linestyle="solid") #274 = Julian Day 30.Sept2020
@@ -345,30 +357,32 @@ ax1.set_ylim(0, 3500)
 #ax2.set_ylabel("dry deposition velocity [cm s-1]", size="medium")
 ax1.legend(loc='upper left')
 ax2.legend(loc='upper right')
-
-ax1 = fig.add_subplot(413)
+"""
+#ax1 = fig.add_subplot(413)
+ax1 = fig.add_subplot(211)
 ax1 = plt.gca()
 ax2 = ax1.twinx()
-#ax1.plot(sm['VWC1 min[%]'],linewidth="1", color='black', label="sm_rutz1 min 0-30 cm OBS ", linestyle="solid")
-#ax1.plot(sm['VWC2 min[%]'],linewidth="1", color='darkgrey', label="sm_rutz2 min 0-30 cm  OBS ", linestyle="solid")
-#ax1.plot(sm['VWC3 min[%]'],linewidth="1", color='lightgrey', label="sm_rutz3 min 0-30 cm OBS ", linestyle="solid")
-#ax1.plot(sm['VWC1 max[%]'],linewidth="0.5", color='black', label="sm_rutz1 max 0-30 cm OBS ", linestyle="solid")
-#ax1.plot(sm['VWC2 max[%]'],linewidth="0.5", color='darkgrey', label="sm_rutz2 max 0-30 cm OBS ", linestyle="solid")
-#ax1.plot(sm['VWC3 max[%]'],linewidth="0.5", color='lightgrey', label="sm_rutz3 max 0-30 cm OBS ", linestyle="solid")
-ax1.plot(wrf2019_sm_d[start:end], linewidth="0.5", color='green', label="sm_wrfc 1st layer, RUT", linestyle="dashed")
-ax1.plot(wrfc2020_sm_d[start:end],linewidth="0.5", color='darkgreen', label="sm_wrfc 1st layer, CEN", linestyle="dashed")
+ax1.plot(sm['VWC1 min[%]'][start:end],linewidth="1", color='black', label="sm_rutz1 min 0-30 cm OBS ", linestyle="solid")
+ax1.plot(sm['VWC2 min[%]'][start:end],linewidth="1", color='darkgrey', label="sm_rutz2 min 0-30 cm  OBS ", linestyle="solid")
+ax1.plot(sm['VWC3 min[%]'][start:end],linewidth="1", color='lightgrey', label="sm_rutz3 min 0-30 cm OBS ", linestyle="solid")
+ax1.plot(sm['VWC1 max[%]'][start:end],linewidth="0.5", color='black', label="sm_rutz1 max 0-30 cm OBS ", linestyle="solid")
+ax1.plot(sm['VWC2 max[%]'][start:end],linewidth="0.5", color='darkgrey', label="sm_rutz2 max 0-30 cm OBS ", linestyle="solid")
+ax1.plot(sm['VWC3 max[%]'][start:end],linewidth="0.5", color='lightgrey', label="sm_rutz3 max 0-30 cm OBS ", linestyle="solid")
+#ax1.plot(wrf2019_sm_d[start:end], linewidth="0.5", color='green', label="sm_wrfc 1st layer, RUT", linestyle="dashed")
+#ax1.plot(wrfc2020_sm_d[start:end],linewidth="0.5", color='darkgreen', label="sm_wrfc layer 1+2, CEN", linestyle="dashed")
 #ax1.plot(rss['RSS_top_wWheat'][start:end],linewidth="1", color='darkred', label="rss rutz2 0-40 cm ARIS", linestyle="solid")
 ax1.plot(vwc['RSS_top_wWheat'][start:end],linewidth="1", color='red', label="sm rutz2 0-40 cm ARIS wWheat", linestyle="solid")
 ax1.plot(vwc['RSS_top_maize'][start:end],linewidth="1", color='orange', label="sm rutz2 0-40 cm ARIS maize", linestyle="solid")
 ax1.plot(vwc['RSS_top_sBarley'][start:end],linewidth="1", color='brown', label="sm rutz2 0-40 cm ARIS sBarley", linestyle="solid")
 ax1.plot(vwc['RSS_top_sugBeet'][start:end],linewidth="1", color='purple', label="sm rutz2 0-40 cm ARIS sugBeet", linestyle="solid")
+ax1.plot(vwc_grass['RSS_top_grass'][start:end],linewidth="1", color='green', label="sm rutz2 0-40 cm ARIS grass", linestyle="solid")
 
 ax2.plot((BOKUMetData_dailysum["PC"]*0.1)[start:end], linewidth="1", color='turquoise', label="prec BOKUR OBS")
 #ax2.plot(wrf2019_rain_d, linewidth="0.5", color='blue', label="wrf precip, RUT", linestyle="dashed")
 ax1.axvspan(DP1_s, DP1_e, color='red', alpha=0.2)
 ax1.axvspan(DP2_s, DP2_e, color='red', alpha=0.2)
 ax1.axvspan(DP3_s, DP3_e, color='red', alpha=0.2)
-ax1.axvspan(DP4_s, DP4_e, color='red', alpha=0.2)
+#ax1.axvspan(DP4_s, DP4_e, color='red', alpha=0.2)
 ax2.axhline(0, color='grey',linestyle="dashed",linewidth="0.3")
 ax1.set_xlabel("days")
 ax2.set_ylabel("[mm]", size="medium")
@@ -376,7 +390,8 @@ ax1.set_ylabel("[m3 m-3]", size="medium")
 ax1.legend(loc='upper left',fontsize="small")
 ax2.legend(loc='upper right',fontsize="small")
 
-ax1 = fig.add_subplot(414)
+#ax1 = fig.add_subplot(414)
+ax1 = fig.add_subplot(212)
 ax1 = plt.gca()
 ax2 = ax1.twinx()
 ax1.plot(wrf2019_tas_dmax[start:end]-273.15,linewidth="0.5", color='red', label="t2dmax_wrf  CEN", linestyle="dashed")
@@ -390,13 +405,14 @@ ax1.axhline(0, color='grey',linestyle="dashed",linewidth="0.3")
 ax1.axvspan(DP1_s, DP1_e, color='red', alpha=0.2)
 ax1.axvspan(DP2_s, DP2_e, color='red', alpha=0.2)
 ax1.axvspan(DP3_s, DP3_e, color='red', alpha=0.2)
-ax1.axvspan(DP4_s, DP4_e, color='red', alpha=0.2)
+#ax1.axvspan(DP4_s, DP4_e, color='red', alpha=0.2)
 ax1.set_xlabel("days")
 ax1.set_ylabel("[degC]", size="medium")
 ax1.legend(loc='upper left')
 ax2.legend(loc='upper right')
 plt.show()
 
+exit()
 #metclass['WLK]'
 
 pff = pd.concat([hcho19_dmax,tsif,BOKUMetData_dailysum["GR"]],axis=1, keys=['1','4','GR'])
@@ -618,7 +634,7 @@ ax3.plot(x3, m3*x3+b3, color='red')
 
 fig.tight_layout()
 plt.show()
-"""
+#"""
 """HCHO - TMAX"""
 """
 pff = pd.concat([hcho19_dmax,BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"]],axis=1, keys=['1','4','GR'])
