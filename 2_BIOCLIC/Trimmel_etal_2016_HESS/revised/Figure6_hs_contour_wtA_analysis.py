@@ -51,7 +51,7 @@ Y = WT_20a_2085_V100.index.values
 Z = WT_20a_2085_V100.values
 Xi,Yi = np.meshgrid(X, Y)
 CS = plt.contourf(Yi, Xi, Z, contour_levels,
-                  alpha=0.7, cmap=plt.cm.jet,extend='both');
+                  alpha=0.7, cmap=plt.cm.jet, extend='both');
 #plt.clabel(CS, inline=True, fmt='%1.1f', fontsize=10)
 plt.colorbar(CS)
 plt.title(u'Water temperature [° C] 2085/20a, V100, MLF')
