@@ -22,8 +22,10 @@ hcho19_d, hcho19_dmax, hcho19_m = ReadinVindobona_Filter2019.loadfileALL(foldern
 
 #SM
 file_rss_rutz = "/windata/DATA/obs_point/land/Bodenfeuchte_Rutzendorf/2008_2020_Rutzendorf_ARIS_results_sepp.xlsx"
-rss = pd.read_excel(file_rss_rutz, sheet_name="RSS_top", usecols="A,B,C,D,E,F", skiprows=11)#, converters={'A': pd.to_datetime})
-rss.columns = ['datetime', 'RSS_top_maize', 'RSS_top_sBarley','RSS_top_sugBeet','RSS_top_wWheat', 'RSS_top_grass']  #TODO: local time!
+rss = pd.read_excel(file_rss_rutz, sheet_name="RSS_sub", usecols="A,B,C,D,E,F", skiprows=11)#, converters={'A': pd.to_datetime})
+rss.columns = ['datetime', 'RSS_sub_maize', 'RSS_sub_sBarley','RSS_sub_sugBeet','RSS_sub_wWheat', 'RSS_sub_grass']  #TODO: local time!
+#rss = pd.read_excel(file_rss_rutz, sheet_name="RSS_top", usecols="A,B,C,D,E,F", skiprows=11)#, converters={'A': pd.to_datetime})
+#rss.columns = ['datetime', 'RSS_top_maize', 'RSS_top_sBarley','RSS_top_sugBeet','RSS_top_wWheat', 'RSS_top_grass']  #TODO: local time!
 rss = rss.set_index(pd.to_datetime(rss['datetime']))
 rss = rss.drop(columns=['datetime'])
 
@@ -34,6 +36,12 @@ BOKUMetData_hourlymean = BOKUMetData.resample('H').agg({'DT': np.mean, 'AT': np.
 #DAILY MAX
 BOKUMetData_dailymax = BOKUMetData_hourlymean.resample('D').agg({'DT': np.max, 'AT': np.max, 'RH': np.max, 'GR': np.max, 'WS': np.max,
                                                       'WD': np.max, 'WSG': np.max, 'PC': np.sum, 'AP': np.max})
+
+#DAILY SUM
+BOKUMetData_dailysum = BOKUMetData_hourlymean.resample('D').agg({'DT': np.max, 'AT': np.mean, 'RH': np.max, 'GR': np.sum, 'WS': np.max,
+                                                      'WD': np.max, 'WSG': np.max, 'PC': np.sum, 'AP': np.max})
+
+
 '''TIMESLICES'''
 March19 = datetime(2019, 3, 1, 00, 00) #JD 2020=92
 April19 = datetime(2019, 4, 1, 00, 00) #JD 2020=92
@@ -49,27 +57,53 @@ June20 = datetime(2020, 6, 1, 00, 00)  #JD 2020=183
 Aug20 = datetime(2020, 8, 1, 00, 00)  #JD 2020=183
 Sept20 = datetime(2020, 9, 1, 00, 00)  #JD 2020=183
 #contour_levels = arange(1, 2, 5)
-X = BOKUMetData_dailymax['AT'][March19:Nov19]
-Y = rss['RSS_top_maize'][March19:Nov19]
+
+##start insert 20200820
+#f2 = lambda x: (((1.25e-12)*(x**5)+ (7.38e-9)*(x**4) - (5.365e-6)*(x**3) + 0.000926*(x**2) - 0.00036*x + 1.08)*0.9*1000)
+#BOKUMetData_dailysum["GRthres"] = BOKUMetData_dailysum['JD'].apply(f2)
+#print(BOKUMetData_dailysum.shape)
+#isHighGR = BOKUMetData_dailysum["GR"] > BOKUMetData_dailysum["GRthres"]
+#X_filter = BOKUMetData_dailymax[isHighGR]
+##end insert 20200820
+
+'''READ IN Vinzenz's classification'''
+metclass_r = pd.read_csv("/windata/DATA/metclass_vienna.csv", sep=";")
+metclass_x = metclass_r.set_index(pd.to_datetime(metclass_r['time']))
+metclass = metclass_x.drop(columns=['time'])
+#pff = pd.concat([hcho_dmax,hcho_dmax_A,hcho_dmax_K,wrfc2020_hcho1_dmax,metclass],axis=1, keys=['1','2','3','4','WLK'])
+#pff = pff[June:Sept].dropna()
+#pff.columns = pff.columns.droplevel(-1)
+#pff = pff.drop(pff[pff.WLK == "C"].index)
+#print(pff)
+
+metclass_cut = metclass[March19:Nov19]
+X = BOKUMetData_dailysum['AT'][March19:Nov19]
+Y = rss['RSS_sub_wWheat'][March19:Nov19]
 Z = hcho19_dmax.append(hcho_dmax)
 Z = Z[March19:Nov19]
+#Z = Z.fillna(Z.mean())
+Z = Z.fillna(value=0)
+df = pd.concat([X,Y,Z,metclass_cut], axis=1, keys=["1","2","3","metclass"])
+df.columns = df.columns.droplevel(-1)
+#print(df)
+df = df.drop(df[df.metclass == "C"].index)
+#print(df)
 
-
-Z = Z.fillna(Z.mean())
-#Z = Z.fillna(value=0)
+X = df["1"]
+Y = df["2"]
+Z = df["3"]
 
 s0 = [2., 2.]
 distance_matrix = pdist([s0] + list(zip(X,Y)))
 #print(squareform(distance_matrix))
 # range= 7. sill = 2. nugget = 0.
 model = lambda h: spherical(h, 7.0, 2.0, 0.0)
-variances = model(distance_matrix[:246]) #MAM: 93, 1MAR - 1Nov: 246
-assert len(variances) == 246 #5
+variances = model(distance_matrix[:54]) #MAM: 93, MAM only A days: 18, 1MAR - 1Nov: 246, only A days: 54
+assert len(variances) == 54 #5
 #print(variances)
 dists = pdist(list(zip(X,Y)))
 M = squareform(model(dists))
 #print(len(M))
-#print(len(variances))
 #exit()
 
 # solve for a
@@ -102,10 +136,10 @@ cpl = plt.contourf(xi,yi,z_grid,len(levels),cmap=cm.Reds)
 cbar = fig.colorbar(cpl)
 cbar.ax.set_ylabel('hcho [ppb]')
 plt.scatter(X,Y,marker='o',c='b',s=5)
-plt.xlabel('daily max air temperature [degC]')
-plt.ylabel('rss [-]')
+plt.xlabel('daily mean air temperature [degC]')
+plt.ylabel('rss sub wWheat [-]')
 #plt.title('March19:Nov19, linear interpolation')
-plt.title('1Mar19:1Nov19, kriging interpolation')
+plt.title('1Mar19:1Nov19, kriging interpolation, only Vincents "A" days')
 plt.show()
 
 #cpf = ax.contourf(X,Y,Z, len(levels), cmap=cm.Reds)
