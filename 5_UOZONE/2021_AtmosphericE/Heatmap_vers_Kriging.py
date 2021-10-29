@@ -29,6 +29,10 @@ rss.columns = ['datetime', 'RSS_sub_maize', 'RSS_sub_sBarley','RSS_sub_sugBeet',
 rss = rss.set_index(pd.to_datetime(rss['datetime']))
 rss = rss.drop(columns=['datetime'])
 
+rss_ARIS = pd.read_csv("/windata/DATA/models/boku/ARIS/ARIS_x1230-40y530-40mean_wWheat.csv", sep=",")
+rss_ARIS_x = rss_ARIS.set_index(pd.to_datetime(rss_ARIS['date']))
+rss_ARIS = rss_ARIS_x.drop(columns=['date'])
+
 #AT
 BOKUMetData = BOKUMet_Data.BOKUMet()
 BOKUMetData_hourlymean = BOKUMetData.resample('H').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.mean, 'WS': np.mean,
@@ -66,26 +70,29 @@ Sept20 = datetime(2020, 9, 1, 00, 00)  #JD 2020=183
 #X_filter = BOKUMetData_dailymax[isHighGR]
 ##end insert 20200820
 
+start = March19
+end = Sept20
+
 '''READ IN Vinzenz's classification'''
 metclass_r = pd.read_csv("/windata/DATA/metclass_vienna.csv", sep=";")
 metclass_x = metclass_r.set_index(pd.to_datetime(metclass_r['time']))
 metclass = metclass_x.drop(columns=['time'])
-#pff = pd.concat([hcho_dmax,hcho_dmax_A,hcho_dmax_K,wrfc2020_hcho1_dmax,metclass],axis=1, keys=['1','2','3','4','WLK'])
-#pff = pff[June:Sept].dropna()
-#pff.columns = pff.columns.droplevel(-1)
-#pff = pff.drop(pff[pff.WLK == "C"].index)
-#print(pff)
 
-metclass_cut = metclass[March19:Nov19]
-X = BOKUMetData_dailysum['AT'][March19:Nov19]
-Y = rss['RSS_sub_wWheat'][March19:Nov19]
+metclass_cut = metclass[start:end]
+X = BOKUMetData_dailysum['AT'][start:end]
+#Y = rss['RSS_sub_wWheat'][March19:Nov19]
+Y = rss_ARIS['RSS'][start:end]
+#Y = Y.fillna(value=0)
 Z = hcho19_dmax.append(hcho_dmax)
-Z = Z[March19:Nov19]
-#Z = Z.fillna(Z.mean())
-Z = Z.fillna(value=0)
+
+Z = Z[start:end]
+
+Z = Z.fillna(Z.mean())
+#Z = Z.fillna(value=0)
 df = pd.concat([X,Y,Z,metclass_cut], axis=1, keys=["1","2","3","metclass"])
-df.columns = df.columns.droplevel(-1)
 #print(df)
+#df = df.dropna()
+df.columns = df.columns.droplevel(-1)
 df = df.drop(df[df.metclass == "C"].index)
 #print(df)
 
@@ -93,53 +100,57 @@ X = df["1"]
 Y = df["2"]
 Z = df["3"]
 
+#"""
 s0 = [2., 2.]
 distance_matrix = pdist([s0] + list(zip(X,Y)))
 #print(squareform(distance_matrix))
 # range= 7. sill = 2. nugget = 0.
-model = lambda h: spherical(h, 7.0, 2.0, 0.0)
-variances = model(distance_matrix[:54]) #MAM: 93, MAM only A days: 18, 1MAR - 1Nov: 246, only A days: 54
-assert len(variances) == 54 #5
+#model = lambda h: spherical(h, 7.0, 2.0, 0.0)
+model = lambda h: spherical(h, 5.0, 3., 0.0)
+
+##!!!CHECK len(M) below first! Then adapt distance_matrix and variances!!!!###
+variances = model(distance_matrix[:123]) #MAM: 93, MAM only A days: 18, 1MAR - 1Nov: 246, only A days: 54
+assert len(variances) == 123 #5
 #print(variances)
 dists = pdist(list(zip(X,Y)))
 M = squareform(model(dists))
-#print(len(M))
-#exit()
+print(len(M))  #<<<<<<---- CHECK here!!!!###
 
 # solve for a
 a = solve(M, variances)
-print(a)
+#print(a)
 
 # calculate estimation
-print(Z.dot(a))
-print(np.sum(a))
+#print(Z.dot(a))
+#print(np.sum(a))
 
 #print(Z)
 Z = Z * a
 #print(Z)
-
+#"""
 
 # define grid.
 #xi = np.linspace(X.min(), X.max(), 10)
 #yi = np.linspace(Y.min(), Y.max(), 10)
 xi = np.linspace(5,38,30)
-yi = np.linspace(0.05,1,18)
-
+yi = np.linspace(0,1,18)
 
 # grid the data.
-z_grid = griddata((X,Y),Z,(xi[None,:],yi[:,None]),method='cubic',fill_value=0)
+z_grid = griddata((X,Y),Z,(xi[None,:],yi[:,None]),method='linear',fill_value=0)
 
 #contourplot
 fig = plt.figure()
-levels = np.array([0,1,2,3,4,5,6,7,8,10,11,12])
-cpl = plt.contourf(xi,yi,z_grid,len(levels),cmap=cm.Reds)
-cbar = fig.colorbar(cpl)
-cbar.ax.set_ylabel('hcho [ppb]')
-plt.scatter(X,Y,marker='o',c='b',s=5)
+#levels = np.array([0,1,2,3,4,5,6,7,8,10,11,12,13,14,15])
+#cpl = plt.contourf(xi,yi,z_grid,len(levels),cmap=cm.Reds)
+#cbar = fig.colorbar(cpl)
+#cbar.ax.set_ylabel('hcho [ppb]')
+#plt.scatter(X,Y,marker='o',c='b',s=5)
+plt.scatter(X,Y,marker='o',c=Z,cmap=cm.coolwarm,s=25)
 plt.xlabel('daily mean air temperature [degC]')
-plt.ylabel('rss sub wWheat [-]')
-#plt.title('March19:Nov19, linear interpolation')
-plt.title('1Mar19:1Nov19, kriging interpolation, only Vincents "A" days')
+plt.ylabel('rss wWheat ARIS [-]')
+plt.legend()
+#plt.title(f'{start} -{end}, kriging , "A" days')
+plt.title(f'{start} -{end}, "A" days')
 plt.show()
 
 #cpf = ax.contourf(X,Y,Z, len(levels), cmap=cm.Reds)

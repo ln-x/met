@@ -22,42 +22,64 @@ AFCTOP = ARISfolder + "BMon_netCDF_Basisdata/AFCTOP.nc"  #accessible or availabl
 AFCSUB = ARISfolder + "BMon_netCDF_Basisdata/AFCSUB.nc"
 ##  VWC = FCTOP - (1-RSS)*AFCTOP
 
-years = ['BMon_RSS_2019', 'BMon_RSS_2020','BMon_RSS_2021']
+folders = ['BMon_RSS_2019', 'BMon_RSS_2020','BMon_RSS_2021']
 cultivars = ['grass', 'maize', 'wWheat']
 #filebase = 'BMON_MO_AGROGL--:500m_' + year ...
 
+#def find_nearest_xy(array1, value1, array2, value2, array3):
+#   array1 = np.asarray(array1)
+#   array2 = np.asarray(array2)
+#   idx = (np.abs(array1 - value1)+np.abs(array2 - value2)).argmin()
+#   return array3[idx], array1[idx], array2[idx], idx
 
 def ARIS():
     frames = []
-    frames2 = []
+    timeaxis = []
     RUT_LAT = 48.192142
     RUT_LON = 16.624939
-    CEN_LAT = 48.196613
-    CEN_LON = 16.382294
-    timeaxis = []
-    for year in years:
-        for cultivar in cultivars:
-              directory = ARISfolder + year + "/" + cultivar + "/"
-              for filename in os.listdir(directory):
-                  if filename.endswith("nc"):
-                      year= filename[22:26]
-                      month = filename[26:28]
-                      day = filename[28:30]
-                      time = datetime.datetime(int(year), int(month), int(day), hour=12)
-                      timeaxis.append(time)
-                      print(time)
-                      try:
+    #CEN_LAT = 48.196613
+    #CEN_LON = 16.382294
+    CEN_LAT = 539
+    CEN_LON = 1242
+    for folder in folders:
+        #for cultivar in cultivars:
+              directory = ARISfolder + folder + "/" + "wWheat" + "/"
+              #lst = os.listdir(directory)
+              #lst = lst.sort()
+              #print(lst)
+              for filename in sorted(os.listdir(directory)):
+                  #if filename.endswith("nc"):
+                      #print(filename)
+                      #timeaxis.append(time)
+                      #try:
                           infile1 = netCDF4.Dataset(directory+"/"+filename)
-                          #OSIF_8100 = infile1.variables['SIF_757nm'][1]
-                          #ARIS = find_nearest_xy(infile1.variables['latitude'], CEN_LAT,
-                          #                           infile1.variables['longitude'],
-                          #                           CEN_LON, infile1.variables['SIF_757nm'])
-                          frames.append(ARIS)
-                      except:
-                           pass
+                          #print(infile1.__dict__['product_spatial_sampling'])
+                          #for dim in infile1.dimensions.values():
+                          #    print(dim) #x=1402, y=802
+                          #for var in infile1.variables.values():
+                          #    print(var)
+                          #print(infile1['RSS_SUB'][CEN_LAT,CEN_LON])
+                          a = infile1['RSS_SUB'][520:540,1230:1250].mean()  #530:540,1230:1240
 
-    frames = pd.DataFrame(frames, columns=["SIF_757nm"])
-    return timeaxis
+                          #a,b,c,d = find_nearest_xy(infile1.variables['y'], CEN_LAT,
+                          #                           infile1.variables['x'],
+                          #                           CEN_LON, infile1.variables['RSS_TOP'])
+                          #print(a,b,c,d)
+                          frames.append(a)
+                          year = filename[22:26]
+                          month = filename[26:28]
+                          day = filename[28:30]
+                          time = datetime.datetime(int(year), int(month), int(day), hour=00)
+                          timeaxis.append(time)
+                      #except:
+                      #     pass
+
+    frames = pd.DataFrame(frames, columns=["RSS"])
+    frames = frames.set_index(pd.to_datetime(timeaxis))
+    frames.index.name = "date"
+    #return timeaxis
+    return frames
 if __name__ == '__main__':
-    time = ARIS()
-    print(time)
+    frames = ARIS()
+    #print(frames)
+    frames.to_csv("/windata/DATA/models/boku/ARIS/ARIS_x1230-40y530-40mean_wWheat.csv")
