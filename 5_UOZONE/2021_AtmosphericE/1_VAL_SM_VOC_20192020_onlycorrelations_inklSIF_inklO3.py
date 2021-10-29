@@ -274,10 +274,17 @@ m5, b5 = np.polyfit(x5[idx], y5[idx], 1)
 idx = np.isfinite(x5_GR) & np.isfinite(y5)
 m5GR, b5GR = np.polyfit(x5_GR[idx], y5[idx], 1)
 
-m5SM, b5SM = np.polyfit(x5_SM[a:], y5[a:], 1)
-m5SIF, b5SIF = np.polyfit(x5_SIF[a:], y5[a:], 1)
-m5NOx, b5NOx = np.polyfit(x5_NOx[a:], y5[a:], 1)
-m5O3, b5O3 = np.polyfit(x5_O3[a:], y5[a:], 1)
+idx = np.isfinite(x5_SM) & np.isfinite(y5)
+m5SM, b5SM = np.polyfit(x5_SM[idx], y5[idx], 1)
+
+idx = np.isfinite(x5_SIF) & np.isfinite(y5)
+m5SIF, b5SIF = np.polyfit(x5_SIF[idx], y5[idx], 1)
+
+idx = np.isfinite(x5_NOx) & np.isfinite(y5)
+m5NOx, b5NOx = np.polyfit(x5_NOx[idx], y5[idx], 1)
+
+idx = np.isfinite(x5_O3) & np.isfinite(y5)
+m5O3, b5O3 = np.polyfit(x5_O3[idx], y5[idx], 1)
 
 fig, axes = plt.subplots(nrows=1, ncols=6)
 plt.title(f"NW DPs")
@@ -337,12 +344,24 @@ x5_NOx = pff5['NOx'].values.flatten()
 x5_O3 = pff5['O3'].values.flatten()
 y5 = pff5['hcho'].values.flatten()
 a=0
-m5, b5 = np.polyfit(x5[a:], y5[a:], 1)
-m5GR, b5GR = np.polyfit(x5_GR[a:], y5[a:], 1)
-m5SM, b5SM = np.polyfit(x5_SM[a:], y5[a:], 1)
-m5SIF, b5SIF = np.polyfit(x5_SIF[a:], y5[a:], 1)
-#m5NOx, b5NOx = np.polyfit(x5_NOx[a:], y5[a:], 1)
-m5O3, b5O3 = np.polyfit(x5_O3[a:], y5[a:], 1)
+
+idx = np.isfinite(x5) & np.isfinite(y5)
+m5, b5 = np.polyfit(x5[idx], y5[idx], 1)
+
+idx = np.isfinite(x5_GR) & np.isfinite(y5)
+m5GR, b5GR = np.polyfit(x5_GR[idx], y5[idx], 1)
+
+idx = np.isfinite(x5_SM) & np.isfinite(y5)
+m5SM, b5SM = np.polyfit(x5_SM[idx], y5[idx], 1)
+
+idx = np.isfinite(x5_SIF) & np.isfinite(y5)
+m5SIF, b5SIF = np.polyfit(x5_SIF[idx], y5[idx], 1)
+
+idx = np.isfinite(x5_NOx) & np.isfinite(y5)
+m5NOx, b5NOx = np.polyfit(x5_NOx[idx], y5[idx], 1)
+
+idx = np.isfinite(x5_O3) & np.isfinite(y5)
+m5O3, b5O3 = np.polyfit(x5_O3[idx], y5[idx], 1)
 
 fig, axes = plt.subplots(nrows=1, ncols=6)
 plt.title(f"SE DPs")
