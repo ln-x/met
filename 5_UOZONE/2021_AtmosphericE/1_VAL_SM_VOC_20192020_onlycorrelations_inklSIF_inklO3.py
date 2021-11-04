@@ -118,6 +118,12 @@ rss = pd.read_excel(file_rss_rutz, sheet_name="RSS_top", usecols="A,B,C,D,E,F", 
 rss.columns = ['datetime', 'RSS_top_maize', 'RSS_top_sBarley','RSS_top_sugBeet','RSS_top_wWheat', 'RSS_top_grass']  #TODO: local time!
 rss = rss.set_index(pd.to_datetime(rss['datetime']))
 rss = rss.drop(columns=['datetime'])
+
+rss_sub = pd.read_excel(file_rss_rutz, sheet_name="RSS_sub", usecols="A,B,C,D,E,F", skiprows=11)#, converters={'A': pd.to_datetime})
+rss_sub.columns = ['datetime', 'RSS_sub_maize', 'RSS_sub_sBarley','RSS_sub_sugBeet','RSS_sub_wWheat', 'RSS_sub_grass']  #TODO: local time!
+rss_sub = rss_sub.set_index(pd.to_datetime(rss_sub['datetime']))
+rss_sub = rss_sub.drop(columns=['datetime'])
+
 #print(rss)
 isWSD = (rss["RSS_top_wWheat"] < 0.5)
 #vwc = rss['RSS_top_maize', 'RSS_top_sBarley','RSS_top_sugBeet','RSS_top_wWheat', 'RSS_top_grass']
@@ -142,6 +148,8 @@ rutz_afc_sub_Layer= 0.154833
 #print(test1,test2,test3)
 vwc = rutz_fc_top_Layer - (1-rss)*rutz_afc_top_Layer
 vwc_grass = grass_fc_top_Layer - (1-rss)*grass_afc_top_Layer
+vwc_sub = rutz_fc_sub_Layer - (1-rss)*rutz_afc_sub_Layer
+vwc_sub_grass = grass_fc_sub_Layer - (1-rss)*grass_afc_sub_Layer
 
 #TSIF_743
 tsif_r = pd.read_csv("/windata/DATA/remote/satellite/TROPOMI/TSIF_743.csv", sep=",")
@@ -214,14 +222,15 @@ Plotting
 
 nox_1990_2020_da = nox_1990_2020_da.resample('D').mean()
 o3_1990_2020_da = o3_1990_2020_da.resample('D').mean()
-print(nox_1990_2020_da["AT9STEF"])
-print(o3_1990_2020_da["AT9STEF"])
+#print(nox_1990_2020_da["AT9STEF"])
+#print(o3_1990_2020_da["AT9STEF"])
 
-pff = pd.concat([hcho_dmax,vwc["RSS_top_wWheat"],BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],tsif,
+#ff = pd.concat([hcho_dmax,vwc["RSS_top_wWheat"],BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],tsif,
+#                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"]],axis=1)
+
+pff = pd.concat([hcho_dmax,rss_sub["RSS_sub_wWheat"],BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],tsif,
                 o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"]],axis=1)
 
-#pff = pd.concat([hcho_dmax,vwc["RSS_top_wWheat"],BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],tsif,
-#                o3_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"]],axis=1)
 #pff.rename({'hcho': 'hcho', 'RSS_top_wWheat': 'SM', 'AT':'AT', 'GR':'GR', 'tsif':'SIF', 'AT9STEF':'O3','AT9STEF':'NOx','WD':'WD','PC':'PC' }, axis=1, inplace=True)
 #pff2 = pff.set_axis(['hcho', 'SM', 'AT', 'GR', 'SIF', 'O3','NOx','WD','PC'], axis=1, inplace=True)
 pff.columns =['hcho', 'SM', 'AT', 'GR', 'SIF', 'O3','NOx','WD','PC']
@@ -230,23 +239,24 @@ pff.columns =['hcho', 'SM', 'AT', 'GR', 'SIF', 'O3','NOx','WD','PC']
 pff5 = pff[start:end]
 #pff5 = pff[Nov19:March]
 #exit()
-print(pff5)
+#print(pff5)
 pffPC = pff5.loc[pff5['PC'] == 0]
+print(len(pffPC))
 pffGR = pffPC.loc[pffPC['GR'] > 4000] #4kWh m-² d-1 (~March -> September)
-pffAT = pffGR.loc[pffGR['AT'] > 10] #15
-#print(pffPC)
+print(len(pffGR))
+pffAT = pffGR.loc[pffGR['AT'] > 35] #15
+print(len(pffAT))
+pffRSS = pffAT.loc[pffAT['SM'] < 0.1] #relative soil moisture RSS sub wWheat (40-100cm)
+print(len(pffRSS))
 #pffGR = pff5.loc[pff5['GR'] == ]  #TODO global radiation threshold
-figure = plt.figure()
-plt.plot(pffPC['WD'],marker="x",linestyle=" ")
+#figure = plt.figure()
+#plt.plot(pffPC['WD'],marker="x",linestyle=" ")
 #plt.show()
-figure = plt.figure()
-plt.plot(pffPC['GR'],marker="x",linestyle=" ")
+#figure = plt.figure()
+#plt.plot(pffPC['GR'],marker="x",linestyle=" ")
 #plt.show()
-#exit()
-pffNW = pffAT.loc[(pffAT['WD'] >=90) & (pffAT['WD'] <=180)]
-#print(len(pffNW))
-pffSE = pffAT.loc[(pffAT['WD'] >=270) & (pffAT['WD'] <=359)]
-#print(len(pffSE))
+pffNW = pffRSS.loc[(pffAT['WD'] >=90) & (pffRSS['WD'] <=180)]
+pffSE = pffRSS.loc[(pffAT['WD'] >=270) & (pffRSS['WD'] <=359)]
 """
 pff5 = pff[NW2_s:NW2_e]
 pff5 = pff5.resample('D').mean()
@@ -266,56 +276,73 @@ x5_SIF = pff5['SIF'].values.flatten()
 x5_NOx = pff5['NOx'].values.flatten()
 x5_O3 = pff5['O3'].values.flatten()
 y5 = pff5['hcho'].values.flatten()
-a=0  #92*24
 
 idx = np.isfinite(x5) & np.isfinite(y5)
 m5, b5 = np.polyfit(x5[idx], y5[idx], 1)
-
+R_AT = (stats.spearmanr(x5[idx], y5[idx]))[0]
+#Bias_Forc_i = np.average(WRFdata_heatdays - ZAMG_heatdays)
 idx = np.isfinite(x5_GR) & np.isfinite(y5)
 m5GR, b5GR = np.polyfit(x5_GR[idx], y5[idx], 1)
-
+R_GR = (stats.spearmanr(x5_GR[idx], y5[idx]))[0]
 idx = np.isfinite(x5_SM) & np.isfinite(y5)
 m5SM, b5SM = np.polyfit(x5_SM[idx], y5[idx], 1)
-
+R_SM = (stats.spearmanr(x5_SM[idx], y5[idx]))[0]
 idx = np.isfinite(x5_SIF) & np.isfinite(y5)
 m5SIF, b5SIF = np.polyfit(x5_SIF[idx], y5[idx], 1)
-
+R_SIF = (stats.spearmanr(x5_SIF[idx], y5[idx]))[0]
 idx = np.isfinite(x5_NOx) & np.isfinite(y5)
 m5NOx, b5NOx = np.polyfit(x5_NOx[idx], y5[idx], 1)
-
+R_NOX = (stats.spearmanr(x5_NOx[idx], y5[idx]))[0]
 idx = np.isfinite(x5_O3) & np.isfinite(y5)
 m5O3, b5O3 = np.polyfit(x5_O3[idx], y5[idx], 1)
-
-fig, axes = plt.subplots(nrows=1, ncols=6)
-plt.title(f"NW DPs")
+R_O3 = (stats.spearmanr(x5_O3[idx], y5[idx]))[0]
+print(R_AT,R_GR,R_SM, R_SIF, R_NOX, R_O3)
+R2_AT,R2_GR,R2_SM, R2_SIF, R2_NOX, R2_O3 = R_AT**2,R_GR**2,R_SM**2, R_SIF**2, R_NOX**2, R_O3**2
+print(R2_AT,R2_GR,R2_SM, R2_SIF, R2_NOX, R2_O3)
+#-0.11468772201686629 0.12327935222672066 0.26591170630878136 0.04979757085020243 -0.21842105263157893 0.12834008097165991
+#0.013153273581417997 0.015197798685439858 0.07070903555204759 0.0024797980625809305 0.04770775623268697 0.016471176383812222
+n=len(x5)
+print(n)
+a=0
+fig, axes = plt.subplots(nrows=1, ncols=6, figsize=(8, 6), dpi=100)
+fig.suptitle("WD=90°-180°,PC=0,GR>4 kWh$m⁻²$$d⁻¹$,ATmax>30 C°,RSS<0.1,n={}".format(n), fontsize="small")
 ax0, ax1, ax2, ax3, ax4, ax5 = axes.flatten()
-ax0.scatter(x5[a:], y5[a:], color='violet') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax0.scatter(x5[a:], y5[a:], color='violet')
 ax0.plot(x5, m5*x5+b5, color='red')
-ax0.set_ylabel("HCHO [ppb]", size="medium")
-ax0.set_xlabel("air temp [degC]", size="medium")
-ax1.scatter(x5_GR[a:], y5[a:], color='violet') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+#ax0.text(20.5,0.5,'f(x)= {:.2f}x - {:.2f}'.format(m5,b5), fontsize='small') #first coordinate: xaxis, second: yaxis
+#ax0.text(20.5,0.5, '$R^2={:.2f}'.format(R2_AT), fontsize='small')
+ax0.set_ylabel("HCHO [ppb]", size="small")
+ax0.set_xlabel("air temp [C°]", size="small")
+ax0.set_title('$R={:.2f}$'.format(R_AT), fontsize='small')
+#ax0.text(20.5,0.5, '$R^2={:.2f}'.format(R2_AT), fontsize='small')
+ax1.scatter(x5_GR[a:], y5[a:], color='violet')
 ax1.plot(x5_GR, m5GR*x5_GR + b5GR, color='red')
-ax1.set_xlabel("GR [degC]", size="medium")
-ax2.scatter(x5_SM[a:], y5[a:], color='violet') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax1.set_xlabel(r"GR [$Wm⁻²$]", size="medium")
+ax1.set_title('$R={:.2f}$'.format(R_GR), fontsize='small')
+ax2.scatter(x5_SM[a:], y5[a:], color='violet')
 ax2.plot(x5_SM, m5SM*x5_SM + b5SM, color='red')
-ax2.set_xlabel("SM [m3 m-3]", size="medium")
-ax3.scatter(x5_SIF[a:], y5[a:], color='violet') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+#ax2.set_xlabel("SM [$m^3$$m^(-3)$]", size="medium")
+ax2.set_xlabel("RSS [0-1]", size="medium")
+ax2.set_title('$R={:.2f}$'.format(R_SM), fontsize='small')
+ax3.scatter(x5_SIF[a:], y5[a:], color='violet')
 ax3.plot(x5_SIF, m5SIF*x5_SIF + b5SIF, color='red')
-ax3.set_xlabel("SIF [mW m-2 sr-1 nm-1]", size="medium")
-ax4.scatter(x5_NOx[a:], y5[a:], color='violet') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax3.set_xlabel(r"SIF [mWm⁻²sr⁻¹nm⁻¹]", size="medium")
+ax3.set_title('$R={:.2f}$'.format(R_SIF), fontsize='small')
+ax4.scatter(x5_NOx[a:], y5[a:], color='violet')
 ax4.plot(x5_NOx, m5NOx*x5_NOx + b5NOx, color='red')
 ax4.set_xlabel("NOx [ppb]", size="medium")
-ax5.scatter(x5_O3[a:], y5[a:], color='violet') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax4.set_title('$R={:.2f}$'.format(R_NOX), fontsize='small')
+ax5.scatter(x5_O3[a:], y5[a:], color='violet')
 ax5.plot(x5_O3, m5O3*x5_O3 + b5O3, color='red')
 ax5.set_xlabel("O3 [ppb]", size="medium")
+ax5.set_title('$R={:.2f}$'.format(R_O3), fontsize='small')
 #ax2.set_ylabel("HCHO [ppb]", size="medium")
 fig.tight_layout()
-plt.savefig("/home/heidit/Downloads/NW_gt10Tmax_gt4kWh.jpg")
+plt.savefig("/home/heidit/Downloads/NW_gt30Tmax_gt4kWh_lt01rss.jpg")
 plt.show()
 
 #SW DP
 pff5 = pffSE
-
 #mean daily winddirection between 90 and 180 deg
 #pff5 = pff[isnoPR]   #no precipitaition
 #pff5 = pff[isHighT]  #more than 15 deg
@@ -337,6 +364,7 @@ pff5 = pff5.append(pff5_6)
 pff5 = pff5.dropna()
 """
 x5 = pff5['AT'].values.flatten() #AT!
+n=len(x5)
 x5_GR = pff5['GR'].values.flatten()
 x5_SM = pff5['SM'].values.flatten()
 x5_SIF = pff5['SIF'].values.flatten()
@@ -347,47 +375,54 @@ a=0
 
 idx = np.isfinite(x5) & np.isfinite(y5)
 m5, b5 = np.polyfit(x5[idx], y5[idx], 1)
-
+R_AT = (stats.spearmanr(x5[idx], y5[idx]))[0]
 idx = np.isfinite(x5_GR) & np.isfinite(y5)
 m5GR, b5GR = np.polyfit(x5_GR[idx], y5[idx], 1)
-
+R_GR = (stats.spearmanr(x5[idx], y5[idx]))[0]
 idx = np.isfinite(x5_SM) & np.isfinite(y5)
 m5SM, b5SM = np.polyfit(x5_SM[idx], y5[idx], 1)
-
+R_SM = (stats.spearmanr(x5_SM[idx], y5[idx]))[0]
 idx = np.isfinite(x5_SIF) & np.isfinite(y5)
 m5SIF, b5SIF = np.polyfit(x5_SIF[idx], y5[idx], 1)
-
+R_SIF = (stats.spearmanr(x5_SIF[idx], y5[idx]))[0]
 idx = np.isfinite(x5_NOx) & np.isfinite(y5)
 m5NOx, b5NOx = np.polyfit(x5_NOx[idx], y5[idx], 1)
-
+R_NOx = (stats.spearmanr(x5_NOx[idx], y5[idx]))[0]
 idx = np.isfinite(x5_O3) & np.isfinite(y5)
 m5O3, b5O3 = np.polyfit(x5_O3[idx], y5[idx], 1)
+R_O3 = (stats.spearmanr(x5_O3[idx], y5[idx]))[0]
 
-fig, axes = plt.subplots(nrows=1, ncols=6)
-plt.title(f"SE DPs")
+fig, axes = plt.subplots(nrows=1, ncols=6, figsize=(8, 6), dpi=100)
+fig.suptitle("WD=270°-360°,PC=0,GR>4 kWh$m⁻²$$d⁻¹$,ATmax>30 C°,RSS<0.1,n={}".format(n), fontsize="small")
 ax0, ax1, ax2, ax3, ax4, ax5 = axes.flatten()
-ax0.scatter(x5[a:], y5[a:], color='red') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax0.scatter(x5[a:], y5[a:], color='violet') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
 ax0.plot(x5, m5*x5+b5, color='red')
 ax0.set_ylabel("HCHO [ppb]", size="medium")
-ax0.set_xlabel("air temp [degC]", size="medium")
-ax1.scatter(x5_GR[a:], y5[a:], color='red') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
-ax1.plot(x5_GR, m5GR*x5_GR + b5GR, color='red')
-ax1.set_xlabel("GR [degC]", size="medium")
-ax2.scatter(x5_SM[a:], y5[a:], color='red') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax0.set_xlabel("air temp [C°]", size="medium")
+ax0.set_title('$R={:.2f}$'.format(R_AT), fontsize='small')
+ax1.scatter(x5_GR[a:], y5[a:], color='violet') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax1.plot(x5_GR, m5GR*x5_GR + b5GR + a, color='red')
+ax1.set_xlabel(r"GR [$Wm⁻²$]", size="medium")
+ax1.set_title('$R={:.2f}$'.format(R_GR), fontsize='small')
+ax2.scatter(x5_SM[a:], y5[a:], color='violet') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
 ax2.plot(x5_SM, m5SM*x5_SM + b5SM, color='red')
-ax2.set_xlabel("SM [m3 m-3]", size="medium")
-ax3.scatter(x5_SIF[a:], y5[a:], color='red') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax2.set_xlabel("RSS [0-1]", size="medium")
+ax2.set_title('$R={:.2f}$'.format(R_SM), fontsize='small')
+ax3.scatter(x5_SIF[a:], y5[a:], color='violet') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
 ax3.plot(x5_SIF, m5SIF*x5_SIF + b5SIF, color='red')
-ax3.set_xlabel("SIF [mW m-2 sr-1 nm-1]", size="medium")
-ax4.scatter(x5_NOx[a:], y5[a:], color='red') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
-#ax4.plot(x5_NOx, m5NOx*x5_NOx + b5NOx, color='red')
+ax3.set_xlabel(r"SIF [mWm⁻²sr⁻¹nm⁻¹]", size="medium")
+ax3.set_title('$R={:.2f}$'.format(R_SIF), fontsize='small')
+ax4.scatter(x5_NOx[a:], y5[a:], color='violet') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax4.plot(x5_NOx, m5NOx*x5_NOx + b5NOx, color='red')
 ax4.set_xlabel("NOx [ppb]", size="medium")
-ax5.scatter(x5_O3[a:], y5[a:], color='red') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
+ax4.set_title('$R={:.2f}$'.format(R_NOX), fontsize='small')
+ax5.scatter(x5_O3[a:], y5[a:], color='violet') # , label=(r"$R^2$=%.2f, Bias=%.2f" % (R2_Forc_i, Bias_Forc_i)))#, s=3, label=u"STQ,  R²=0.92")  #squared= u"\u00B2"?
 ax5.plot(x5_O3, m5O3*x5_O3 + b5O3, color='red')
 ax5.set_xlabel("O3 [ppb]", size="medium")
+ax5.set_title('$R={:.2f}$'.format(R_O3), fontsize='small')
 fig.tight_layout()
 #plt.savefig("/home/heidit/Downloads/DP_SE1.jpg")
-plt.savefig("/home/heidit/Downloads/SE_gt10Tmax_gt4kWh.jpg")
+plt.savefig("/home/heidit/Downloads/SE_gt30Tmax_gt4kWh_lt01rss.jpg")
 plt.show()
 exit()
 #SPRING: MAM
