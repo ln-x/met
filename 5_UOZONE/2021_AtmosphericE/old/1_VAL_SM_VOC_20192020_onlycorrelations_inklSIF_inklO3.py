@@ -76,6 +76,26 @@ BOKUMetData_dailysum = BOKUMetData_hourlymean.resample('D').agg({'DT': np.mean, 
 #DAILY MAX
 BOKUMetData_dailymax = BOKUMetData_hourlymean.resample('D').agg({'DT': np.max, 'AT': np.max, 'RH': np.max, 'GR': np.max, 'WS': np.max,'WD': np.max, 'WSG': np.max, 'PC': np.sum, 'AP': np.max})
 
+
+BOKUMetData_dailysum['JD'] = (BOKUMetData_dailysum.index) #JULIAN DAY
+f = lambda x: datestdtojd(str(x)[:-9])
+BOKUMetData_dailysum['JD'] = BOKUMetData_dailysum['JD'].apply(f)
+
+#FILTER - GLOBAL RADIATION
+juliandays = range(365)
+thres_glob = []
+#APOLIS in kWh/m2 (Tagessumme Globalstrahlung) ! thres_glob = ((1.25e-12)*(x**5)+ (7.38e-9)*(x**4) - (5.365e-6)*(x**3) + 0.000926*(x**2) - 0.00036*x + 1.08)*0.9
+for x in juliandays:
+    thres_glob.append(((1.25e-12)*(x**5)+ (7.38e-9)*(x**4) - (5.365e-6)*(x**3) + 0.000926*(x**2) - 0.00036*x + 1.08)*0.9*1000)  #in Wh/m2 Tagessumme
+
+f2 = lambda x: (((1.25e-12)*(x**5)+ (7.38e-9)*(x**4) - (5.365e-6)*(x**3) + 0.000926*(x**2) - 0.00036*x + 1.08)*0.9*1000)
+BOKUMetData_dailysum["GRthres"] = BOKUMetData_dailysum['JD'].apply(f2)
+#print(BOKUMetData_dailysum.shape)
+
+isHighGR = BOKUMetData_dailysum["GR"] > BOKUMetData_dailysum["GRthres"]
+HighGRdays = BOKUMetData_dailysum[isHighGR]
+print(HighGRdays)
+
 #figure = plt.figure()
 #plt.plot(BOKUMetData_hourlymean['WD'])
 #plt.plot(BOKUMetData_dailysum['WD'])
@@ -89,10 +109,6 @@ BOKUMetData_dailymax = BOKUMetData_hourlymean.resample('D').agg({'DT': np.max, '
 #isSE = (BOKUMetData_dailysum['WD'] < 180) & (BOKUMetData_dailysum['WD'] > 90)
 #isHighT = (BOKUMetData_dailysum['AT'] > 15)
 #isnoPR = (BOKUMetData_dailysum['PC'] == 0)
-
-BOKUMetData_dailysum['JD'] = (BOKUMetData_dailysum.index) #JULIAN DAY
-f = lambda x: datestdtojd(str(x)[:-9])
-BOKUMetData_dailysum['JD'] = BOKUMetData_dailysum['JD'].apply(f)
 
 #MONTHLY MEANS
 BOKUMetData_monthly = BOKUMetData.resample('M').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.mean, 'WS': np.mean,
@@ -228,8 +244,8 @@ o3_1990_2020_da = o3_1990_2020_da.resample('D').mean()
 #ff = pd.concat([hcho_dmax,vwc["RSS_top_wWheat"],BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],tsif,
 #                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"]],axis=1)
 
-pff = pd.concat([hcho_dmax,rss_sub["RSS_sub_wWheat"],BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],tsif,
-                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"]],axis=1)
+pff = pd.concat([hcho_dmax,rss_sub["RSS_sub_wWheat"],BOKUMetData_dailymax["AT"],HighGRdays["GR"],tsif,
+                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"]],axis=1)
 
 #pff.rename({'hcho': 'hcho', 'RSS_top_wWheat': 'SM', 'AT':'AT', 'GR':'GR', 'tsif':'SIF', 'AT9STEF':'O3','AT9STEF':'NOx','WD':'WD','PC':'PC' }, axis=1, inplace=True)
 #pff2 = pff.set_axis(['hcho', 'SM', 'AT', 'GR', 'SIF', 'O3','NOx','WD','PC'], axis=1, inplace=True)
@@ -242,9 +258,9 @@ pff5 = pff[start:end]
 #print(pff5)
 pffPC = pff5.loc[pff5['PC'] == 0]
 print(len(pffPC))
-pffGR = pffPC.loc[pffPC['GR'] > 4000] #4kWh m-² d-1 (~March -> September)
-print(len(pffGR))
-pffAT = pffGR.loc[pffGR['AT'] > 35] #15
+#pffGR = pffPC.loc[pffPC['GR'] > 4000] #4kWh m-² d-1 (~March -> September)
+#print(len(pffGR))
+pffAT = pffPC.loc[pffPC['AT'] > 10] #15
 print(len(pffAT))
 pffRSS = pffAT.loc[pffAT['SM'] < 0.1] #relative soil moisture RSS sub wWheat (40-100cm)
 print(len(pffRSS))
@@ -424,7 +440,7 @@ fig.tight_layout()
 #plt.savefig("/home/heidit/Downloads/DP_SE1.jpg")
 plt.savefig("/home/heidit/Downloads/SE_gt30Tmax_gt4kWh_lt01rss.jpg")
 plt.show()
-exit()
+
 #SPRING: MAM
 pff5 = pff[March19:June19].resample('D').mean()
 pff5_1 = pff[March:June].resample('D').mean()
@@ -559,6 +575,49 @@ ax5.plot(x5_O3, m5O3*x5_O3 + b5O3, color='red')
 ax5.set_xlabel("O3 [ppb]", size="medium")
 fig.tight_layout()
 plt.savefig("/home/heidit/Downloads/fullperiod1.jpg")
+plt.show()
+
+
+# Fixing random state for reproducibility
+x = x5[a:]
+y = y5[a:]
+
+def scatter_hist(x, y, ax, ax_histx, ax_histy):
+    # no labels
+    ax_histx.tick_params(axis="x", labelbottom=False)
+    ax_histy.tick_params(axis="y", labelleft=False)
+
+    # the scatter plot:
+    ax.scatter(x, y)
+
+    # now determine nice limits by hand:
+    binwidth = 0.25
+    xymax = max(np.max(np.abs(x)), np.max(np.abs(y)))
+    lim = (int(xymax/binwidth) + 1) * binwidth
+
+    bins = np.arange(-lim, lim + binwidth, binwidth)
+    ax_histx.hist(x, bins=bins)
+    ax_histy.hist(y, bins=bins, orientation='horizontal')
+
+# definitions for the axes
+left, width = 0.1, 0.65
+bottom, height = 0.1, 0.65
+spacing = 0.005
+
+rect_scatter = [left, bottom, width, height]
+rect_histx = [left, bottom + height + spacing, width, 0.2]
+rect_histy = [left + width + spacing, bottom, 0.2, height]
+
+# start with a square Figure
+fig = plt.figure(figsize=(8, 8))
+
+ax = fig.add_axes(rect_scatter)
+ax_histx = fig.add_axes(rect_histx, sharex=ax)
+ax_histy = fig.add_axes(rect_histy, sharey=ax)
+
+# use the previously defined function
+scatter_hist(x, y, ax, ax_histx, ax_histy)
+
 plt.show()
 
 exit()
