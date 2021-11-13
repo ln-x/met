@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
-from pylab import *
 __author__ = 'lnx'
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm # matplotlib's color map library
 import seaborn as sns
 import pandas as pd
 import numpy as np
-from scipy.interpolate import griddata
-import numpy.ma as ma
 from met.library import ReadinVindobona_Filter
 from met.library import ReadinVindobona_Filter2019
 from met.library import BOKUMet_Data
-from datetime import datetime, timedelta
+from datetime import datetime
+
 #WT_20a_2085_V100 = pd.read_csv('/home/lnx/PycharmProjects/HS/S264_P_V100_2085_20a_MLF/outputfiles/Temp_H2O.txt', skiprows=6, sep='\s+', index_col='Datetime')
 #contour_levels = arange(10, 30, 0.5)
 #X = WT_20a_2085_V100.columns.values

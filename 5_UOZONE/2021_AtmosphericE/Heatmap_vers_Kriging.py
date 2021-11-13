@@ -12,7 +12,7 @@ from scipy.linalg import solve
 from met.library import ReadinVindobona_Filter
 from met.library import ReadinVindobona_Filter2019
 from met.library import BOKUMet_Data
-from datetime import datetime, timedelta
+from datetime import datetime
 
 #HCHO
 foldername = "/windata/DATA/remote/ground/maxdoas/MAXDOAS2020/DQ/"

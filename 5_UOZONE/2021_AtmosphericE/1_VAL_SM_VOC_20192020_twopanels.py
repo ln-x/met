@@ -3,24 +3,14 @@ __author__ = 'lnx'
 from netCDF4 import Dataset
 import netCDF4
 import numpy as np
-import csv
 import pandas as pd
 from datetime import datetime, timedelta
 import monthdelta
-import matplotlib.dates
 import matplotlib.pyplot as plt
-from scipy import stats
-import sys
-import os
 import met.library.BOKUMet_Data
 from met.library.Datetime_recipies import datestdtojd
-from met.library.conversions import *
-from met.library import ReadinVINDOBONA
-from met.library import ReadinVindobona_DA
 from met.library import ReadinVindobona_Filter
 from met.library import ReadinVindobona_Filter2019
-
-from functools import reduce
 
 "read in VINDOBONA"
 
