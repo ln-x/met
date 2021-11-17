@@ -56,9 +56,9 @@ def loadfileALL(foldername,axis,begin):
         day = str(files[i][4:6])# splitlistcomp[3:4]
         month = str(files[i][2:4])#splitlistcomp[2:3]
         year = "20"+ str(files[i][0:2]) #splitlistcomp[:2]
-        print(day,month,year)
+        #print(day,month,year)
         hcho_date = datetime.datetime(year=int(year),month=int(month), day=int(day))
-        print(hcho_date)
+        #print(hcho_date)
         #exit()
         dayofmeas = totalmeasdays[i]
         #data_hcho = loadfile(foldername=foldername, filename=files[i], begin=begin,dayofmeas=dayofmeas)

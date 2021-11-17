@@ -3,7 +3,7 @@ __author__ = 'lnx'
 #version history: cleaned version 20211105 building on:
 # 1_VAL_SM_VOC_20192020
 # 1_VAL_SM_VOC_20192020_onlycorrelations_inklSIF_inklO3.py
-
+from sklearn import linear_model
 import numpy as np
 import pandas as pd
 from datetime import datetime
@@ -47,10 +47,18 @@ o3_1990_2019_mda8 = o3_1990_2019_mda8.drop(columns=['date'])
 o3_2020_mda1 = pd.read_csv(pathbase2 + "AT_O3_2020.csv")                        #TODO! replace mda1 with mda8!
 o3_2020_mda1 = o3_2020_mda1.set_index(pd.to_datetime(o3_2020_mda1['date']))
 o3_2020_mda1 = o3_2020_mda1.drop(columns=['date'])
-o3_1990_2020_mda1 = pd.concat([o3_1990_2019_mda1, o3_2020_mda1], axis=0)
-o3_1990_2019_mda1 = o3_1990_2019_mda1**ugm3toppb_o3 #MUG->PPB
-o3_1990_2020_da = o3_1990_2020_mda1.resample('D').mean()
-o3_1990_2020_m = o3_1990_2020_mda1.resample('M').mean()
+#print(o3_1990_2019_mda1)
+o3_2020_mda8 = o3_2020_mda1.resample('8H', label='right').mean()
+o3_2020_mda8 = o3_2020_mda8.resample('D').mean()
+
+#o3_1990_2020_mda1 = pd.concat([o3_1990_2019_mda1, o3_2020_mda1], axis=0)
+#o3_1990_2019_mda1 = o3_1990_2019_mda1**ugm3toppb_o3 #MUG->PPB
+#o3_1990_2020_da = o3_1990_2020_mda8.resample('D').mean()
+#o3_1990_2020_m = o3_1990_2020_mda8.resample('M').mean()
+o3_1990_2020_mda8 = pd.concat([o3_1990_2019_mda8, o3_2020_mda8], axis=0)
+o3_1990_2020_mda8 = o3_1990_2020_mda8**ugm3toppb_o3 #MUG->PPB
+o3_1990_2020_da = o3_1990_2020_mda8.resample('D').mean()
+o3_1990_2020_m = o3_1990_2020_mda8.resample('M').mean()
 
 '''READ IN BOKU Metdata'''
 BOKUMetData = met.library.BOKUMet_Data.BOKUMet() #10min values
@@ -123,10 +131,10 @@ rss_sub_5daymean = np.convolve(rss_sub['RSS_sub_wWheat'], np.ones(N)/N, mode='va
 atmax_5daymean = np.convolve(BOKUMetData_dailymax['AT'], np.ones(N)/N, mode='valid')
 
 Runningmean_5d = BOKUMetData_dailysum[4:]
-Runningmean_5d['GR5d'] = grsum_5daymean.tolist()
+Runningmean_5d['GR5d'] = grsum_5daymean.tolist() #TODO A value is trying to be set on a copy of a slice from a DataFrame. Try using .loc[row_indexer,col_indexer] = value instead
 #Runningmean_5d['RSS5d'] = rss_sub_5daymean.tolist()
 Runningmean_5d['AT5d'] = atmax_5daymean.tolist()
-print(Runningmean_5d['GR5d'])
+#print(Runningmean_5d['GR5d'])
 #exit()
 
 #print(len(grsum_sub_5daymean))
@@ -240,7 +248,7 @@ print(pff)
 #start_ph = datetime(2020, 1, 1, 00, 00)
 #end_ph = datetime(2020, 8, 31, 00, 00)
 """LINEAR MODEL"""
-"""
+#"""
 pffPC = pff.loc[pff['PC'] == 0]
 pffNW = pffPC.loc[(pffPC['WD'] >=270) & (pffPC['WD'] <=360)]
 pffNW = pffNW.dropna()
@@ -256,7 +264,7 @@ pffSEJJA = pffSEJJA19.append(pffSEMAM20)
 pffSEJJA = pffSEJJA.dropna()
 pff5 = pffSEJJA #[start:end]
 
-X = pff5.drop(['hcho'], axis = 1)
+X = pff.drop(['hcho'], axis = 1)
 X = X.drop(['O3'], axis = 1)
 X = X.drop(['NOx'], axis = 1)
 X = X.drop(['WD'], axis = 1)
@@ -287,7 +295,7 @@ print("Model Score:", model.score(X, y))
 #Model Intercept: -0.3686562673084044
 #Model Score: 0.15796381195269982
 #exit()
-LINEAR MODEL END"""
+"""LINEAR MODEL END"""
 
 def Plot6var(df,title):
     x5 = df['AT'].values.flatten()
@@ -402,7 +410,7 @@ def scatter_hist(x, y, ax, ax_histx, ax_histy):
 "METFILTER"
 pffPC = pff.loc[pff['PC'] == 0]
 print(len(pffPC))
-pffAT = pffPC.loc[pffPC['AT'] > 10] #15
+pffAT = pffPC.loc[(pffPC['AT'] > 15)] #and (pffPC['AT'] < 25)]
 print(len(pffAT))
 pffRSS_low = pffAT.loc[pffAT['SM'] <= 0.5] #relative soil moisture RSS sub wWheat (40-100cm)
 pffRSS_high = pffAT.loc[pffAT['SM'] > 0.5] #relative soil moisture RSS sub wWheat (40-100cm)
@@ -411,22 +419,38 @@ pffRSS_high = pffAT.loc[pffAT['SM'] > 0.5] #relative soil moisture RSS sub wWhea
 title = "NW, metfilter, RSS<0.5" #WD=270°-360°,PC=0,GR>90%,ATmax>10 C°"
 pffNW_low = pffRSS_low.loc[(pffRSS_low['WD'] >=270) & (pffRSS_low['WD'] <=359)]
 pffNW_low = pffNW_low.dropna()
-Plot6var(pffNW_low, title)
+try:
+    Plot6var(pffNW_low, title)
+except:
+    print("NW_low empty")
+    pass
 
 title = "NW, metfilter, RSS>0.5" #WD=270°-360°,PC=0,GR>90%,ATmax>10 C°"
 pffNW_high = pffRSS_high.loc[(pffRSS_high['WD'] >=270) & (pffRSS_high['WD'] <=359)]
 pffNW_high = pffNW_high.dropna()
-Plot6var(pffNW_high, title)
+try:
+    Plot6var(pffNW_high, title)
+except:
+    print("NW_high empty")
+    pass
 #SW
 title = "SE, metfilter, RSS<0.5" #WD=90°-180°,PC=0,GR>90%,ATmax>10 C°
 pffSE_low = pffRSS_low.loc[(pffRSS_low['WD'] >=90) & (pffRSS_low['WD'] <=180)]
 pffSE_low = pffSE_low.dropna()
-Plot6var(pffSE_low, title)
+try:
+    Plot6var(pffSE_low, title)
+except:
+    print("SE_low empty")
+    pass
 
 title = "SE, metfilter, RSS>0.5" #WD=90°-180°,PC=0,GR>90%,ATmax>10 C°
 pffSE_high = pffRSS_high.loc[(pffRSS_high['WD'] >=90) & (pffRSS_high['WD'] <=180)]
 pffSE_high = pffSE_high.dropna()
-Plot6var(pffSE_high, title)
+try:
+    Plot6var(pffSE_high, title)
+except:
+    print("SE_high empty")
+    pass
 
 #SW:MAM
 title = "MAM, SE, metfilter, RSS<0.5" #WD=90°-180°,PC=0,GR>90%,ATmax>10 C°,
@@ -434,14 +458,14 @@ pffSEMAM19 = pffSE_low[March19:June19].resample('D').mean()
 pffSEMAM20 = pffSE_low[March:June].resample('D').mean()
 pffSEMAM = pffSEMAM19.append(pffSEMAM20)
 pffSEMAM = pffSEMAM.dropna()
-Plot6var(pffSEMAM, title)
+#Plot6var(pffSEMAM, title)
 
 title = "MAM, SE, metfilter, RSS>0.5" #WD=90°-180°,PC=0,GR>90%,ATmax>10 C°,
 pffSEMAM19 = pffSE_high[March19:June19].resample('D').mean()
 pffSEMAM20 = pffSE_high[March:June].resample('D').mean()
 pffSEMAM = pffSEMAM19.append(pffSEMAM20)
 pffSEMAM = pffSEMAM.dropna()
-Plot6var(pffSEMAM, title)
+#Plot6var(pffSEMAM, title)
 
 #SW:JJA
 title = "JJA, SE, metfilter, RSS<0.5" #WD=90°-180°,PC=0,GR>90%,ATmax>10 C°
@@ -463,8 +487,10 @@ print(pffSEJJA)
 try:
     Plot6var(pffSEJJA, title)
 except:
+    print("SEJJA empty")
     pass
 
+exit()
 #SPRING: MAM
 title = "MAM, no filter"
 pff5 = pff[March19:June19].resample('D').mean()
