@@ -22,6 +22,7 @@ def loadfile(foldername, filename, hcho_date):
     hcho = []
     file = foldername+'/'+filename
     with open(file,"r") as f:    #Einlesen des Files in eine Liste
+        #print(f) #<_io.TextIOWrapper name='/windata/DATA/remote/ground/maxdoas/MAXDOAS_KQ/210408KQ_91_HCHO_mixing_ratio.asc' mode='r' encoding='UTF-8'>
         alldata = f.readlines()
         splitdata = []  # splitlistcomp = [i.split() for i in data]
         for i in alldata:

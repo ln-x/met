@@ -131,9 +131,8 @@ rss_sub_5daymean = np.convolve(rss_sub['RSS_sub_wWheat'], np.ones(N)/N, mode='va
 atmax_5daymean = np.convolve(BOKUMetData_dailymax['AT'], np.ones(N)/N, mode='valid')
 
 Runningmean_5d = BOKUMetData_dailysum[4:]
-Runningmean_5d['GR5d'] = grsum_5daymean.tolist() #TODO A value is trying to be set on a copy of a slice from a DataFrame. Try using .loc[row_indexer,col_indexer] = value instead
-#Runningmean_5d['RSS5d'] = rss_sub_5daymean.tolist()
-Runningmean_5d['AT5d'] = atmax_5daymean.tolist()
+Runningmean_5d.insert(1,'GR5d', grsum_5daymean.tolist()) #TODO A value is trying to be set on a copy of a slice from a DataFrame. Try using .loc[row_indexer,col_indexer] = value instead
+Runningmean_5d.insert(1,'AT5d', atmax_5daymean.tolist())
 #print(Runningmean_5d['GR5d'])
 #exit()
 
@@ -224,12 +223,12 @@ nox_1990_2020_da = nox_1990_2020_da.resample('D').mean()
 o3_1990_2020_da = o3_1990_2020_da.resample('D').mean()
 
 #VERS5 including GR filter > 90%, Ceilometer PBL, gliding mean for AT and GR ??Runningmean_5d['RSS5d']
-pff = pd.concat([hcho_dmax,rss_sub["RSS_sub_grass"],Runningmean_5d['AT5d'],Runningmean_5d['GR5d'],tsif,
-                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],pbl["PBL"]], axis=1)
+#pff = pd.concat([hcho_dmax,rss_sub["RSS_sub_grass"],Runningmean_5d['AT5d'],Runningmean_5d['GR5d'],tsif,
+#                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],pbl["PBL"]], axis=1)
 
 #VERS4 including GR filter > 90%, Ceilometer PBL
-#pff = pd.concat([hcho_dmax,rss_sub["RSS_sub_grass"],BOKUMetData_dailymax["AT"],HighGRdays["GR"],tsif,
-#                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],pbl["PBL"]],axis=1)
+pff = pd.concat([hcho_dmax,rss_sub["RSS_sub_grass"],BOKUMetData_dailymax["AT"],HighGRdays["GR"],tsif,
+                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],pbl["PBL"]],axis=1)
 #VERS3 including GR filter > 90%, Ceilometer PBL, VWC
 #pff = pd.concat([hcho_dmax,vwc_sub['VWC_sub_wWheat'],BOKUMetData_dailymax["AT"],HighGRdays["GR"],tsif,
 #                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],pbl["PBL"]],axis=1)
@@ -243,59 +242,58 @@ pff = pd.concat([hcho_dmax,rss_sub["RSS_sub_grass"],Runningmean_5d['AT5d'],Runni
 
 pff.columns =['hcho', 'SM', 'AT', 'GR', 'SIF', 'O3','NOx','WD','PC','PBL']
 pff = pff.dropna()
+pff = pff.resample('W').mean()
 print(pff)
 #TODO: nox_1990_2020_da["AT9STEF"],'NOx' procudes additional timesteps (1:00 instead of 0:00) which makes the boolean filters fail
 #start_ph = datetime(2020, 1, 1, 00, 00)
 #end_ph = datetime(2020, 8, 31, 00, 00)
 """LINEAR MODEL"""
-#"""
-pffPC = pff.loc[pff['PC'] == 0]
-pffNW = pffPC.loc[(pffPC['WD'] >=270) & (pffPC['WD'] <=360)]
-pffNW = pffNW.dropna()
-pffSE = pffPC.loc[(pffPC['WD'] >=90) & (pffPC['WD'] <=180)]
-pffSEMAM19 = pffSE[March19:June19].resample('D').mean()
-pffSEMAM20 = pffSE[March:June].resample('D').mean()
-pffSEMAM = pffSEMAM19.append(pffSEMAM20)
-pffSEMAM = pffSEMAM.dropna()
-#pffSE = pffSE.dropna()
-pffSEJJA19 = pffSE[June19:Sept19].resample('D').mean()
-pffSEJJA20 = pffSE[June:Sept].resample('D').mean()
-pffSEJJA = pffSEJJA19.append(pffSEMAM20)
-pffSEJJA = pffSEJJA.dropna()
-pff5 = pffSEJJA #[start:end]
+""
+def LinearModel(df,droppar):
+    #pffPC = pff.loc[pff['PC'] == 0]
+    #pffNW = pffPC.loc[(pffPC['WD'] >=270) & (pffPC['WD'] <=360)]
+    #pffNW = pffNW.dropna()
+    #pffSE = pffPC.loc[(pffPC['WD'] >=90) & (pffPC['WD'] <=180)]
+    #pffSEMAM19 = pffSE[March19:June19].resample('D').mean()
+    #pffSEMAM20 = pffSE[March:June].resample('D').mean()
+    #pffSEMAM = pffSEMAM19.append(pffSEMAM20)
+    #pffSEMAM = pffSEMAM.dropna()
+    #pffSE = pffSE.dropna()
+    #pffSEJJA19 = pffSE[June19:Sept19].resample('D').mean()
+    #pffSEJJA20 = pffSE[June:Sept].resample('D').mean()
+    #pffSEJJA = pffSEJJA19.append(pffSEMAM20)
+    #pffSEJJA = pffSEJJA.dropna()
+    #pff5 = pffSEJJA #[start:end]
+    #pff5 = pffPC
+    print(droppar)
+    X = df.drop(['hcho'], axis = 1)
+    X = X.drop(droppar, axis = 1)
+    #X = X.drop(['O3'], axis = 1)
+    #X = X.drop(['NOx'], axis = 1)
+    #X = X.drop(['WD'], axis = 1)
+    #X = X.drop(['PC'], axis = 1)
+    #X = X.drop(['GR'], axis = 1)
+    #X = X.drop(['SIF'], axis = 1)
+    #X = X.drop(['SM'], axis = 1)
+    #X = X.drop(['AT'], axis = 1)
+    #X = X.drop(['PBL'], axis = 1)
+    print(X.columns)
+    #X = X.values.reshape(-1,8)
+    y = df['hcho']
+    #print(y.columns)
+    ols = linear_model.LinearRegression()
+    model = ols.fit(X, y)
+    output = ("Model Coefficients:", model.coef_, "Model Intercept:", model.intercept_,"Model Score:", model.score(X, y))
+    return output
+    #Model Scores for PC=0 and GR>90%:
+    # JJA20, NW f(SM,AT,GR,SIF,PBL) : 0.862053877091254
+    # JJA20, SE f(SM,AT,GR,SIF,PBL) : 0.6779170809900591
 
-X = pff.drop(['hcho'], axis = 1)
-X = X.drop(['O3'], axis = 1)
-X = X.drop(['NOx'], axis = 1)
-X = X.drop(['WD'], axis = 1)
-X = X.drop(['PC'], axis = 1)
-#X = X.drop(['GR'], axis = 1)
-#X = X.drop(['SIF'], axis = 1)
-#X = X.drop(['SM'], axis = 1)
-#X = X.drop(['AT'], axis = 1)
-#X = X.drop(['PBL'], axis = 1)
-print(X.columns)
-#X = X.values.reshape(-1,8)
-y = pff5['hcho']
-#print(y.columns)
-
-ols = linear_model.LinearRegression()
-model = ols.fit(X, y)
-print("Model Coefficients:", model.coef_)
-print("Model Intercept:", model.intercept_)
-print("Model Score:", model.score(X, y))
-
-#Model Scores for PC=0 and GR>90%:
-# JJA20, NW f(SM,AT,GR,SIF,PBL) : 0.862053877091254
-# JJA20, SE f(SM,AT,GR,SIF,PBL) : 0.6779170809900591
-
-#MAM19+20, SE['SM', 'AT', 'GR', 'SIF', 'PBL']
-#Model Coefficients: [-7.46621888e-02 -6.40716503e-02  3.92873396e-04 -4.36954194e-01
-#  8.30631989e-04]
-#Model Intercept: -0.3686562673084044
-#Model Score: 0.15796381195269982
-#exit()
-"""LINEAR MODEL END"""
+    #MAM19+20, SE['SM', 'AT', 'GR', 'SIF', 'PBL']
+    #Model Coefficients: [-7.46621888e-02 -6.40716503e-02  3.92873396e-04 -4.36954194e-01
+    #  8.30631989e-04]
+    #Model Intercept: -0.3686562673084044
+    #Model Score: 0.15796381195269982
 
 def Plot6var(df,title):
     x5 = df['AT'].values.flatten()
@@ -419,12 +417,15 @@ pffRSS_high = pffAT.loc[pffAT['SM'] > 0.5] #relative soil moisture RSS sub wWhea
 title = "NW, metfilter, RSS<0.5" #WD=270°-360°,PC=0,GR>90%,ATmax>10 C°"
 pffNW_low = pffRSS_low.loc[(pffRSS_low['WD'] >=270) & (pffRSS_low['WD'] <=359)]
 pffNW_low = pffNW_low.dropna()
+#droppar = ["03","NOx","WD","PC","GR","SIF","SM","AT","PBL"]
+droppar = ["AT"]
 try:
+    LinearModel(pffNW_low, droppar)
     Plot6var(pffNW_low, title)
+
 except:
     print("NW_low empty")
     pass
-
 title = "NW, metfilter, RSS>0.5" #WD=270°-360°,PC=0,GR>90%,ATmax>10 C°"
 pffNW_high = pffRSS_high.loc[(pffRSS_high['WD'] >=270) & (pffRSS_high['WD'] <=359)]
 pffNW_high = pffNW_high.dropna()
@@ -438,6 +439,7 @@ title = "SE, metfilter, RSS<0.5" #WD=90°-180°,PC=0,GR>90%,ATmax>10 C°
 pffSE_low = pffRSS_low.loc[(pffRSS_low['WD'] >=90) & (pffRSS_low['WD'] <=180)]
 pffSE_low = pffSE_low.dropna()
 try:
+    LinearModel(pffSE_low, droppar)
     Plot6var(pffSE_low, title)
 except:
     print("SE_low empty")
@@ -447,6 +449,7 @@ title = "SE, metfilter, RSS>0.5" #WD=90°-180°,PC=0,GR>90%,ATmax>10 C°
 pffSE_high = pffRSS_high.loc[(pffRSS_high['WD'] >=90) & (pffRSS_high['WD'] <=180)]
 pffSE_high = pffSE_high.dropna()
 try:
+    LinearModel(pffSE_high, droppar)
     Plot6var(pffSE_high, title)
 except:
     print("SE_high empty")
@@ -485,12 +488,12 @@ pffSEJJA = pffSEJJA19.append(pffSEJJA20)
 pffSEJJA = pffSEJJA.dropna()
 print(pffSEJJA)
 try:
+    LinearModel(pffSEJJA, droppar)
     Plot6var(pffSEJJA, title)
 except:
     print("SEJJA empty")
     pass
 
-exit()
 #SPRING: MAM
 title = "MAM, no filter"
 pff5 = pff[March19:June19].resample('D').mean()

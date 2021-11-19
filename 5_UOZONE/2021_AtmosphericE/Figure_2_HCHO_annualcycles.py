@@ -7,7 +7,7 @@ import met.library.BOKUMet_Data
 from met.library.Datetime_recipies import datestdtojd
 from met.library.conversions import *
 from met.library import ReadinVindobona_Filter_fullperiod
-
+from met.library import ReadinVindobona_Glyoxal
 
 '''READ IN BOKU Metdata'''
 BOKUMetData = met.library.BOKUMet_Data.BOKUMet() #10min values
@@ -42,16 +42,18 @@ BOKUMetData_dailymax_m = BOKUMetData_dailymax.resample('M').agg({'DT': np.mean, 
 BOKUMetData_dailymax_w = BOKUMetData_dailymax.resample('W').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.mean, 'WS': np.mean,
                                                      'WD': np.mean, 'WSG': np.mean, 'PC': np.sum, 'AP': np.mean})
 
-
 "read in VINDOBONA"
 
 foldername_D = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_DQ"
 foldername_K = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_KQ"
+foldername_glyoxal = "/windata/DATA/remote/ground/maxdoas/chocho2020"
 
 hcho_d, hcho_dmax, hcho_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_D,"D", begin= datetime(2017, 5, 1, 0, 0, 0))
+hchoK_d, hchoK_dmax, hchoK_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_K,"K", begin= datetime(2020, 1, 1, 0, 0, 0))
 #hchoK_d, hchoK_dmax, hchoK_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_K,"K", begin= datetime.datetime(2020, 1, 1, 0, 0, 0)))
 #print(len(hchoK_dmax))
 #print(len(hcho_dmax))
+chochoD_dmax, chochoK_dmax = ReadinVindobona_Glyoxal.loadfileALL(foldername_glyoxal)
 
 hcho_dmax_m = hcho_dmax.resample('M').mean()
 hcho_dmax_w = hcho_dmax.resample('W').mean()
@@ -88,6 +90,28 @@ hcho_dmax20_m = hcho_dmax20.resample('M').mean()
 hcho_dmax21_m = hcho_dmax21.resample('M').mean()
 print(hcho_dmax17_a_m, hcho_dmax18_m,hcho_dmax19_m,hcho_dmax20_m,hcho_dmax21_m)
 
+pff = pd.concat([hcho_dmax, BOKUMetData_dailymax["AT"],HighGRdays["GR"],HighGRdays["WD"]],axis=1)
+pff.columns =['hcho', 'AT', 'GR', 'WD']
+pff = pff.dropna()
+pffNW = pff.loc[(pff['WD'] >=270) & (pff['WD'] <=359)]
+pffNW = pffNW.dropna()
+pffSE = pff.loc[(pff['WD'] >=90) & (pff['WD'] <=180)]
+pffSE = pffSE.dropna()
+pffK = pd.concat([hchoK_dmax, BOKUMetData_dailymax["AT"],HighGRdays["GR"],HighGRdays["WD"]],axis=1)
+pffKNW = pffK.loc[(pff['WD'] >=270) & (pffK['WD'] <=359)]
+pffKNW = pffKNW.dropna()
+pffKSE = pffK.loc[(pff['WD'] >=90) & (pffK['WD'] <=180)]
+pffKSE = pffKSE.dropna()
+pffCHOCHO = pd.concat([chochoD_dmax, BOKUMetData_dailymax["AT"],HighGRdays["GR"],HighGRdays["WD"]],axis=1)
+pff.columns =['chocho', 'AT', 'GR', 'WD']
+pff = pff.dropna()
+pffNWcho = pffCHOCHO.loc[(pff['WD'] >=270) & (pffCHOCHO['WD'] <=359)]
+pffNWcho = pffNWcho.dropna()
+pffSEcho = pffCHOCHO.loc[(pff['WD'] >=90) & (pffCHOCHO['WD'] <=180)]
+pffSEcho = pffSEcho.dropna()
+
+
+
 figure = plt.figure
 plt.plot(range(len(hcho_dmax17_a)), hcho_dmax17_a, color='violet', label="2017", linewidth=0.2)
 plt.plot(range(len(hcho_dmax18)), hcho_dmax18, color='blue', label="2018",linewidth=0.2)
@@ -104,6 +128,62 @@ plt.xlabel("days")
 plt.ylabel("hcho [ppb]")
 plt.legend()
 plt.show()
+
+figure = plt.figure
+ax1 = plt.gca()
+ax2 = ax1.twinx()
+#ax1.plot(pffNW['AT'],color='powderblue',label="NW AT_max", linewidth=2)
+#ax1.plot(pffSE['AT'],color='peachpuff',label="SE AT_max", linewidth=2)
+#ax1.plot(pffKNW['AT'],color='lightblue',label="NW AT_max", linestyle="-", linewidth=2)
+#ax1.plot(pffKSE['AT'],color='lightred',label="SE AT_max",  linestyle="-", linewidth=2)
+#ax1.plot(BOKUMetData_dailymax['AT'][start2017:end2021],color='grey',label="AT_max", linewidth=0.5)
+#ax1.plot(BOKUMetData_dailymax_m['AT'][start2017:end2021],color='grey',label="AT_max", linewidth=1)
+#ax1.plot(BOKUMetData_dailymax_w['AT'][start2017:end2021],color='grey',label="AT_max", linewidth=2)
+ax2.plot(pffNW['hcho'], color='blue', label="NW hcho_max D", marker="x", linestyle="-", linewidth=0.5)
+ax2.plot(pffSE['hcho'], color='red', label="SE hcho_max D", marker="x", linestyle="-", linewidth=0.5)
+ax2.plot(pffKNW['hcho'], color='turquoise', label="NW hcho_max K", marker="x", linestyle="-", linewidth=0.5)
+ax2.plot(pffKSE['hcho'], color='orange', label="SE hcho_max K", marker="x", linestyle="-", linewidth=0.5)
+ax1.plot(pffNWcho['chocho'], color='brown', label="NW chocho D", linestyle="-", linewidth=1)
+ax1.plot(pffSEcho['chocho'], color='violet', label="SE chocho D", linestyle="-", linewidth=1)
+ax1.legend(loc='upper left')
+ax2.legend(loc='upper right')
+#plt.xticks(yM, yM_ticks)
+plt.xlabel("time [days]")
+ax2.set_ylabel("VMR hcho [ppb]")
+ax1.set_ylabel("DSC [Molek / cmý]")
+#ax1.set_ylabel("air temperature [°C]")
+#ax1.set_ylim(-5, 80)
+#ax2.set_ylim(0, 6)
+plt.legend()
+plt.show()
+
+#exit()
+
+figure = plt.figure
+ax1 = plt.gca()
+ax2 = ax1.twinx()
+ax1.plot(pffNW['AT'],color='powderblue',label="NW AT_max", linewidth=2)
+ax1.plot(pffSE['AT'],color='peachpuff',label="SE AT_max", linewidth=2)
+#ax1.plot(pffKNW['AT'],color='lightblue',label="NW AT_max", linestyle="-", linewidth=2)
+#ax1.plot(pffKSE['AT'],color='lightred',label="SE AT_max",  linestyle="-", linewidth=2)
+#ax1.plot(BOKUMetData_dailymax['AT'][start2017:end2021],color='grey',label="AT_max", linewidth=0.5)
+#ax1.plot(BOKUMetData_dailymax_m['AT'][start2017:end2021],color='grey',label="AT_max", linewidth=1)
+#ax1.plot(BOKUMetData_dailymax_w['AT'][start2017:end2021],color='grey',label="AT_max", linewidth=2)
+ax2.plot(pffNW['hcho'], color='blue', label="NW hcho_max D", marker="x", linestyle="-", linewidth=0.5)
+ax2.plot(pffSE['hcho'], color='red', label="SE hcho_max D", marker="x", linestyle="-", linewidth=0.5)
+ax2.plot(pffKNW['hcho'], color='turquoise', label="NW hcho_max K", marker="x", linestyle="-", linewidth=0.5)
+ax2.plot(pffKSE['hcho'], color='orange', label="SE hcho_max K", marker="x", linestyle="-", linewidth=0.5)
+ax1.legend(loc='upper left')
+ax2.legend(loc='upper right')
+#plt.xticks(yM, yM_ticks)
+plt.xlabel("time [days]")
+ax2.set_ylabel("VMR hcho [ppb]")
+ax1.set_ylabel("air temperature [°C]")
+ax1.set_ylim(-5, 80)
+#ax2.set_ylim(0, 6)
+plt.legend()
+plt.show()
+
 
 #exit()
 figure = plt.figure
