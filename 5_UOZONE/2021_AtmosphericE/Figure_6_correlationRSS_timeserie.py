@@ -191,23 +191,6 @@ osif_757_r = pd.read_csv("/windata/DATA/remote/satellite/OCO2/OSIF_8100_757nm.cs
 osif_757 = osif_757_r.set_index(pd.to_datetime(osif_757_r['time']))
 osif_757 = osif_757.drop(columns=['time'])
 
-
-'''READ IN CAMX PBL'''
-#starttime = datetime(2020, 1, 1, 0, 00)
-#wrfc_time_construct = np.array([starttime + timedelta(hours=i) for i in range(6481)])
-#camx3_y_vie_is = 76  #for Wien Innere Stadt 1,76,181
-#camx3_x_vie_is = 181 #for Wien Innere Stadt
-
-#i = 'zmla'
-#file = "/windata/DATA/models/boku/CAMX/BOKU2020/4_CAMXoutput/BOKU2020_BASE_WRFchem9_202001-09_zmla.nc"
-#f = Dataset(file, mode='r')
-#par = f.variables[i][:, :, :]
-#par1 = pd.DataFrame(par[:, 76, 181], index=wrfc_time_construct)
-#globals()[f"camx3_2020_{i}_d"] = par1.resample('D').mean()
-#globals()[f"camx3_2020_{i}_dmax"] = par1.resample('D').max()
-#par1.columns = ["zmla"]
-#par1 = par1.resample('D').max()
-
 '''READ IN CEILOMETER DATA'''
 file_pbl = "/windata/DATA/obs_point/met/ZAMG/Ceilometer/MH_Wien_Hohe_Warte_20170101_20201231.csv"
 pbl = pd.read_csv(file_pbl,skiprows=2, parse_dates={'datetime':[0,1]})
@@ -218,27 +201,6 @@ pbl = pbl.resample('D').max()
 #print(pbl)
 
 '''TIMESLICES'''
-March17 = datetime(2017, 3, 1, 00, 00)  #JD 2020=183
-June17 = datetime(2017, 6, 1, 00, 00)  #JD 2020=183
-Sept17 = datetime(2017, 9, 1, 00, 00)  #JD 2020=183
-Dec17 = datetime(2017, 12, 1, 00, 00)  #JD 2020=183
-March18 = datetime(2018, 3, 1, 00, 00) #JD 2020=92
-June18 = datetime(2018, 6, 1, 00, 00)  #JD 2020=183
-Sept18 = datetime(2018, 9, 1, 00, 00)  #JD 2020=183
-Dec18 = datetime(2018, 12, 1, 00, 00)  #JD 2020=183
-March19 = datetime(2019, 3, 1, 00, 00) #JD 2020=92
-June19 = datetime(2019, 6, 1, 00, 00)  #JD 2020=183
-Sept19 = datetime(2019, 9, 1, 00, 00)  #JD 2020=183
-Dec19 = datetime(2019, 12, 1, 00, 00)  #JD 2020=183
-March20 = datetime(2020, 3, 1, 00, 00) #JD 2020=92
-June20 = datetime(2020, 6, 1, 00, 00)  #JD 2020=183
-Sept20 = datetime(2020, 9, 1, 00, 00)  #JD 2020=183
-Dec20 = datetime(2020, 12, 1, 00, 00)  #JD 2020=183
-March21 = datetime(2021, 3, 1, 00, 00) #JD 2020=92
-June21 = datetime(2021, 6, 1, 00, 00)  #JD 2020=183
-Sept21 = datetime(2021, 9, 1, 00, 00)  #JD 2020=183
-Dec21 = datetime(2021, 12, 1, 00, 00)  #JD 2020=183
-
 
 '''
 Plotting
@@ -255,17 +217,24 @@ o3_1990_2020_da = o3_1990_2020_da.resample('D').mean()
 #print(nox_1990_2020_da) 1990-1-1 - 2021-01-01
 #print(pbl) 2017-01-01 - 2021-01-01
 
-#VERS7 without GR filter
-pff_nofilter = pd.concat([hcho_dmax,rss_sub_diff_w,BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],tsif,
+#VER8
+pff_all = pd.concat([hcho_dmax,rss_sub["RSS_sub_wWheat"],BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],tsif,
                 o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"],pbl["PBL"]],axis=1)
-pff_nofilter.columns =['hcho', 'SM', 'AT', 'GR', 'SIF', 'O3','NOx','WD','PC','PBL']
-pff_nofilter.index.name = 'datetime'
+pff_all.columns =['hcho', 'SM', 'AT', 'GR', 'SIF', 'O3', 'NOX','WD','PC','PBL']
+pff_all.index.name = 'datetime'
+#pff_all.dropna()
+
+#VERS7 without GR filter
+#pff_nofilter = pd.concat([hcho_dmax,rss_sub_diff_w,BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],tsif,
+#                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"],pbl["PBL"]],axis=1)
+#pff_nofilter.columns =['hcho', 'SM', 'AT', 'GR', 'SIF', 'O3','NOx','WD','PC','PBL']
+#pff_nofilter.index.name = 'datetime'
 
 #VERS6 including RSS_climatological diff instead of RSS, GR filter > 90%, Ceilometer PBL
-pff = pd.concat([hcho_dmax,rss_sub_diff_w,BOKUMetData_dailymax["AT"],HighGRdays["GR"],tsif,
-                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],pbl["PBL"]],axis=1)
-pff = pff.dropna(subset=['GR'])   #df.dropna(subset=['TotalMarks'])
-pd.set_option("display.max_rows", None, "display.max_columns", None)
+#pff = pd.concat([hcho_dmax,rss_sub_diff_w,BOKUMetData_dailymax["AT"],HighGRdays["GR"],tsif,
+#                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],pbl["PBL"]],axis=1)
+#pff = pff.dropna(subset=['GR'])   #df.dropna(subset=['TotalMarks'])
+#pd.set_option("display.max_rows", None, "display.max_columns", None)
 
 
 #print(pff[June17:June18])
@@ -276,8 +245,10 @@ pd.set_option("display.max_rows", None, "display.max_columns", None)
 #                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],pbl["PBL"]], axis=1)
 
 #VERS4 including GR filter > 90%, Ceilometer PBL
-pff_vers4 = pd.concat([hcho_dmax,rss_sub["RSS_sub_grass"],BOKUMetData_dailymax["AT"],HighGRdays["GR"],tsif,
+pff_clear = pd.concat([hcho_dmax,rss_sub["RSS_sub_wWheat"],BOKUMetData_dailymax["AT"],HighGRdays["GR"],tsif,
                 o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],pbl["PBL"]],axis=1)
+pff_clear = pff_clear.dropna(subset=['GR'])   #df.dropna(subset=['TotalMarks'])
+
 #VERS3 including GR filter > 90%, Ceilometer PBL, VWC
 #pff = pd.concat([hcho_dmax,vwc_sub['VWC_sub_wWheat'],BOKUMetData_dailymax["AT"],HighGRdays["GR"],tsif,
 #                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],pbl["PBL"]],axis=1)
@@ -289,16 +260,14 @@ pff_vers4 = pd.concat([hcho_dmax,rss_sub["RSS_sub_grass"],BOKUMetData_dailymax["
 #pff_nofilter = pd.concat([hcho_dmax,rss_sub["RSS_sub_wWheat"],BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],tsif,
 #                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"],par1["zmla"]],axis=1)
 
-pff.columns =['hcho', 'SM', 'AT', 'GR', 'SIF', 'O3','NOx','WD','PC','PBL']
-pff.index.name = 'datetime'
-pff_vers4.columns = ['hcho', 'SM', 'AT', 'GR', 'SIF', 'O3','NOx','WD','PC','PBL']
-pff.index.name = 'datetime'
-pff_weekly_rss_clear = pff_vers4.resample("W").mean()
+#pff.columns =['hcho', 'SM', 'AT', 'GR', 'SIF', 'O3','NOx','WD','PC','PBL']
+#pff.index.name = 'datetime'
+pff_clear.columns = ['hcho', 'SM', 'AT', 'GR', 'SIF', 'O3','NOx','WD','PC','PBL']
+pff_clear.index.name = 'datetime'
 
-#pff = pff.dropna()
-#pff = pff.resample('W').mean()
-#print(pff)
-#exit()
+pffNW_clear = pff_clear.loc[(pff_clear['WD'] >=270) & (pff_clear['WD'] <=359)]
+#pff_weekly_rss_clear = pff_vers4.resample("W").mean()
+
 #TODO: nox_1990_2020_da["AT9STEF"],'NOx' procudes additional timesteps (1:00 instead of 0:00) which makes the boolean filters fail
 """LINEAR MODEL"""
 ""
@@ -457,28 +426,6 @@ def Plot6var(df,title):
     plt.savefig("/home/heidit/Downloads/"+title+".jpg")
     plt.show()
 
-    """
-    #scatter histograms
-    y = y5[a:]
-    for i in [x5, x5_GR, x5_SM, x5_SIF, x5_NOx, x5_O3]:
-        x = i[a:]
-        # definitions for the axes
-        left, width = 0.1, 0.65
-        bottom, height = 0.1, 0.65
-        spacing = 0.005
-        rect_scatter = [left, bottom, width, height]
-        rect_histx = [left, bottom + height + spacing, width, 0.2]
-        rect_histy = [left + width + spacing, bottom, 0.2, height]
-        # start with a square Figure
-        fig = plt.figure(figsize=(8, 8))
-        ax = fig.add_axes(rect_scatter)
-        ax_histx = fig.add_axes(rect_histx, sharex=ax)
-        ax_histy = fig.add_axes(rect_histy, sharey=ax)
-        # use the previously defined function
-        scatter_hist(x, y, ax, ax_histx, ax_histy)
-        plt.show()
-    """
-
 def scatter_hist(x, y, ax, ax_histx, ax_histy):
     # no labels
     ax_histx.tick_params(axis="x", labelbottom=False)
@@ -493,34 +440,140 @@ def scatter_hist(x, y, ax, ax_histx, ax_histy):
     ax_histx.hist(x, bins=bins)
     ax_histy.hist(y, bins=bins, orientation='horizontal')
 
+def CalcRegressionCoef(df):
+    print("test1")
+    #print(df['SM'].values.flatten())
+    x5 = df['AT'].values.flatten()
+    #x5_GR = df['GR'].values.flatten()
+    x5_SM = df['SM'].values.flatten()
+    x5_SIF = df['SIF'].values.flatten()
+    #x5_NOx = df['NOx'].values.flatten()
+    x5_O3 = df['O3'].values.flatten()
+    #x5_PBL = df['PBL'].values.flatten()
+    y5 = df['hcho'].values.flatten()
+    #print(x5)
+    idxAT = np.isfinite(x5) & np.isfinite(y5)
+    #idxGR = np.isfinite(x5_GR) & np.isfinite(y5)
+    idxSIF = np.isfinite(x5_SIF) & np.isfinite(y5)
+    idxSM = np.isfinite(x5_SM) & np.isfinite(y5)
+    #idxNOX = np.isfinite(x5_NOx) & np.isfinite(y5)
+    idxO3 = np.isfinite(x5_O3) & np.isfinite(y5)
+    #idxPBL = np.isfinite(x5_PBL) & np.isfinite(y5)
+    #print(idxAT)
+    nAT = len(y5[idxAT])
+    #nGR = len(y5[idxGR])
+    nSIF = len(y5[idxSIF])
+    nSM = len(y5[idxSM])
+    #nNOx = len(y5[idxNOX])
+    nO3 = len(y5[idxO3])
+    #nPBL = len(y5[idxPBL])
+    #print("hcho",len(y5),"nAT,nGR,nSIF,nSM,nNOx,nO3,nPBL", nAT,nGR,nSIF,nSM,nNOx,nO3,nPBL)
+    SRho_AT, Sp_AT = (stats.spearmanr(x5[idxAT], y5[idxAT]))
+    #SRho_GR, Sp_GR = (stats.spearmanr(x5_GR[idxGR], y5[idxGR]))
+    SRho_SM, Sp_SM = (stats.spearmanr(x5_SM[idxSM], y5[idxSM]))
+    SRho_SIF, Sp_SIF = (stats.spearmanr(x5_SIF[idxSIF], y5[idxSIF]))
+    #SRho_NOX, Sp_NOX = (stats.spearmanr(x5_NOx[idxNOX], y5[idxNOX]))
+    SRho_O3, Sp_O3 = (stats.spearmanr(x5_O3[idxO3], y5[idxO3]))
+    #SRho_PBL, Sp_PBL = (stats.spearmanr(x5_PBL[idxPBL], y5[idxPBL]))
+    #Pr_AT, p_AT = (stats.pearsonr(x5[idxAT], y5[idxAT]))
+    #Pr_GR, p_GR = (stats.pearsonr(x5_GR[idxGR], y5[idxGR]))
+    #Pr_SM, p_SM = (stats.pearsonr(x5_SM[idxSM], y5[idxSM]))
+    #Pr_SIF, p_SIF = (stats.pearsonr(x5_SIF[idxSIF], y5[idxSIF]))
+    #Pr_NOX, p_NOX = (stats.pearsonr(x5_NOx[idxNOX], y5[idxNOX]))
+    #Pr_O3, p_O3 = (stats.pearsonr(x5_O3[idxO3], y5[idxO3]))
+    #Pr_PBL, p_PBL = (stats.pearsonr(x5_PBL[idxPBL], y5[idxPBL]))
+
+    return(SRho_AT, SRho_SM, SRho_SIF, SRho_O3)
+    #return(SRho_AT, SRho_GR, SRho_SM, SRho_SIF, SRho_NOX, SRho_O3, SRho_PBL, SRho_PBL)
+
 """FULL PERIOD"""
 #"""
 title = "full year, no filter"
-#pff5 = pff.dropna()
-#print("pff", pff)
-#print("after dropna", pff5)
-#print(len(pff),len(pff5))
-Plot6var(pff_nofilter, title)
+#Plot6var(pff_nofilter, title)
 
-title = "full year, clear, weekly values, RSS"
-Plot6var(pff_weekly_rss_clear, title)
-pff_weekly_rss_clear_NW = pff_weekly_rss_clear.loc[(pff_weekly_rss_clear['WD'] >=270) & (pff_weekly_rss_clear['WD'] <=359)]
-pff_weekly_rss_clear_SE = pff_weekly_rss_clear.loc[(pff_weekly_rss_clear['WD'] >=90) & (pff_weekly_rss_clear['WD'] <=180)]
-title = "NW, clear, weekly values, RSS"
-Plot6var(pff_weekly_rss_clear_NW,title)
-title = "SE, clear, weekly values, RSS"
-Plot6var(pff_weekly_rss_clear_SE,title)
+title = "full year, no filter, weekly values, RSS"
+pffNW_clear1 = pffNW_clear[datetime(2017,5,1,0,0):datetime(2020,12,31,0,0)]
+pffNW_clear1 = pffNW_clear1.reset_index()
 
-pff_weekly_rss_clear_MAM_18 = pff_weekly_rss_clear[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
-pff_weekly_rss_clear_MAM_20 = pff_weekly_rss_clear[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
-title = "MAM18, clear, weekly values, RSS"
-Plot6var(pff_weekly_rss_clear_MAM_18,title)
-title = "MAM20, clear, weekly values, RSS"
-Plot6var(pff_weekly_rss_clear_MAM_20,title)
+pff_clear1 = pff_clear[datetime(2017,5,1,0,0):datetime(2020,12,31,0,0)]
+pff_clear1 = pff_clear1.reset_index()
+pff_all1 = pff_all[datetime(2017,5,1,0,0):datetime(2020,12,31,0,0)]
+pff_all1 = pff_all1.reset_index()
+#print("print pff-all", pff_all1)
+gNW_clear = pffNW_clear1.groupby(pd.Grouper(key='datetime', freq='M'))
+g_clear = pff_clear1.groupby(pd.Grouper(key='datetime', freq='M'))
+g_all = pff_all1.groupby(pd.Grouper(key='datetime', freq='M'))
+#g_all = pff_all.groupby(pd.Grouper(key='datetime', freq='M'))
+# groups to a list of dataframes with list comprehension
+dfsNW_clear = [group for _,group in gNW_clear]
+dfs_clear = [group for _,group in g_clear]
+dfs = [group for _,group in g_all]
+#print("print dfs", dfs)
+
+SRho_SM_array,SRho_SIF_array,SRho_O3_array = [],[],[]
+date = []
+months = []
+years = []
+
+for i in dfsNW_clear:
+    #i.dropna()
+    #print(1)
+    #print(i['datetime'])
+    #print(i['datetime'].iloc[0].month)
+    try:
+        SRho_AT, SRho_SM, SRho_SIF, SRho_O3 = CalcRegressionCoef(i)
+        print(SRho_SM)
+        #date.append(datetime(year=i['datetime'].iloc[0].year,month=i['datetime'].iloc[0].month))
+        #months.append(i['datetime'].iloc[0].month)
+        #years.append(i['datetime'].iloc[0].year)
+
+
+    except:
+        pass
+    SRho_SM_array.append(SRho_SM)
+    SRho_SIF_array.append(SRho_SIF)
+    SRho_O3_array.append(SRho_O3)
+print(months)
+print(SRho_SM_array)
+print(SRho_SIF_array)
+print(SRho_O3_array)
+
+#exit()
+#df = pd.DataFrame([SRho_SM_array,SRho_SIF_array,SRho_O3_array], columns=['RSS', 'SIF', 'O3'], index=date)
+#print(df)
+print(len(SRho_SM_array), len(SRho_SIF_array), len(SRho_O3_array)) #44 _ Mai/2017 -> Dez/(2020)
+yM = [3,6,9,12,15,18,21,24,27,30,33,36,39,42]
+yM_ticks = ["7/17","10/17","1/18","4/18","7/18","10/18","1/19","4/19","7/19","10/19","1/20","4/20","7/20","10/20"]
+
+figure = plt.figure
+plt.plot(range(len(SRho_SM_array)), SRho_SM_array, marker="x", linestyle=":", linewidth="0.5", color="orange", label="SRho RSS")
+plt.plot(range(len(SRho_SM_array)), SRho_SIF_array, marker="x", linestyle=":",linewidth="0.5", color="green", label="SRho SIF")
+plt.plot(range(len(SRho_SM_array)), SRho_O3_array, marker="x", linestyle=":",linewidth="0.5", color="violet", label="SRho O3")
+plt.hlines(y=0,xmin=0, xmax=44)
+plt.xticks(yM, yM_ticks)
+plt.legend()
+plt.show()
+
+#plt.plot(df.index,df.RSS,label="SRho rss")
+#plt.plot(df.index,df.SIF,label="SRho sif")
+#plt.plot(df.index,df.O3,label="SRho O3")
+#print(dfs)
+
+exit()
+#TODO
+"""
+dfs_for_boxplots = []
+for i in dfs:
+    dfs_for_boxplots = dfs_for_boxplots.append(i["hcho"])
+
+figure = plt.figure()
+plt.boxplot(len(range(44),dfs_for_boxplots) #TypeError: list indices must be integers or slices, not str
+plt.show()
+
+"""
 exit()
 
-
-exit()
+Plot6var(pff_all, title)
 
 title = "MAM, no filter"
 #pffMAM = pff.loc[(pff["datetime"].dt.month==12)]

@@ -7,20 +7,21 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import met.library.BOKUMet_Data
 from met.library.Datetime_recipies import datestdtojd
-from met.library import ReadinVindobona_Filter
-from met.library import ReadinVindobona_Filter2019
+from met.library import ReadinVindobona_Filter_fullperiod
+#from met.library import ReadinVindobona_Filter2019
 
 "read in VINDOBONA"
 
 foldername = "/windata/DATA/remote/ground/maxdoas/MAXDOAS2020/DQ/"
-foldername2019 = "/windata/DATA/remote/ground/maxdoas/MAXDOAS2019/"
-foldername_A = "/windata/DATA/remote/ground/maxdoas/MAXDOAS2020/AQ/"
-foldername_K = "/windata/DATA/remote/ground/maxdoas/MAXDOAS2020/KQ/"
-hcho_d, hcho_dmax, hcho_m = ReadinVindobona_Filter.loadfileALL(foldername)
-hcho19_d, hcho19_dmax, hcho19_m = ReadinVindobona_Filter2019.loadfileALL(foldername2019)
-hcho_d_A, hcho_dmax_A, hcho_m_A = ReadinVindobona_Filter.loadfileALL(foldername_A)
-hcho_d_K, hcho_dmax_K, hcho_m_K = ReadinVindobona_Filter.loadfileALL(foldername_K)
-hcho_dmax = hcho19_dmax.append(hcho_dmax)
+#foldername2019 = "/windata/DATA/remote/ground/maxdoas/MAXDOAS2019/"
+#foldername_A = "/windata/DATA/remote/ground/maxdoas/MAXDOAS2020/AQ/"
+#foldername_K = "/windata/DATA/remote/ground/maxdoas/MAXDOAS2020/KQ/"
+hcho_d, hcho_dmax, hcho_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername,"D", begin= datetime(2017, 5, 1, 0, 0, 0))
+#hcho_d, hcho_dmax, hcho_m = ReadinVindobona_Filter.loadfileALL(foldername)
+#hcho19_d, hcho19_dmax, hcho19_m = ReadinVindobona_Filter2019.loadfileALL(foldername2019)
+#hcho_d_A, hcho_dmax_A, hcho_m_A = ReadinVindobona_Filter.loadfileALL(foldername_A)
+#hcho_d_K, hcho_dmax_K, hcho_m_K = ReadinVindobona_Filter.loadfileALL(foldername_K)
+#hcho_dmax = hcho19_dmax.append(hcho_dmax)
 
 '''READ IN BOKU Metdata'''
 BOKUMetData = met.library.BOKUMet_Data.BOKUMet()

@@ -7,6 +7,9 @@ import met.library.BOKUMet_Data
 from met.library.Datetime_recipies import datestdtojd
 from met.library.conversions import *
 from met.library import ReadinVindobona_Filter_fullperiod
+from matplotlib.dates import DateFormatter
+import matplotlib.gridspec as gridspec
+
 
 
 
@@ -121,19 +124,19 @@ vwc_sub_grass = grass_fc_sub_Layer - (1-rss_sub)*grass_afc_sub_Layer
 vwc_sub.columns = ['VWC_sub_maize', 'VWC_sub_sBarley','VWC_sub_sugBeet','VWC_sub_wWheat', 'VWC_sub_grass']  #TODO: local time!
 #print(vwc_sub)
 
-rss_sub08 = rss_sub[datetime(2008, 1, 1, 00, 00):datetime(2009, 1, 1, 00, 00)]
-rss_sub09 = rss_sub[datetime(2009, 1, 1, 00, 00):datetime(2010, 1, 1, 00, 00)]
-rss_sub10 = rss_sub[datetime(2010, 1, 1, 00, 00):datetime(2011, 1, 1, 00, 00)]
-rss_sub11 = rss_sub[datetime(2011, 1, 1, 00, 00):datetime(2012, 1, 1, 00, 00)]
-rss_sub12 = rss_sub[datetime(2012, 1, 1, 00, 00):datetime(2013, 1, 1, 00, 00)]
-rss_sub13 = rss_sub[datetime(2013, 1, 1, 00, 00):datetime(2014, 1, 1, 00, 00)]
-rss_sub14 = rss_sub[datetime(2014, 1, 1, 00, 00):datetime(2015, 1, 1, 00, 00)]
-rss_sub15 = rss_sub[datetime(2015, 1, 1, 00, 00):datetime(2016, 1, 1, 00, 00)]
-rss_sub16 = rss_sub[datetime(2016, 1, 1, 00, 00):datetime(2017, 1, 1, 00, 00)]
-rss_sub17 = rss_sub[datetime(2017, 1, 1, 00, 00):datetime(2018, 1, 1, 00, 00)]
-rss_sub18 = rss_sub[datetime(2018, 1, 1, 00, 00):datetime(2019, 1, 1, 00, 00)]
-rss_sub19 = rss_sub[datetime(2019, 1, 1, 00, 00):datetime(2020, 1, 1, 00, 00)]
-rss_sub20 = rss_sub[datetime(2020, 1, 1, 00, 00):datetime(2021, 1, 1, 00, 00)]
+rss_sub08 = rss_sub[datetime(2008, 1, 1, 00, 00):datetime(2008, 12, 31, 00, 00)]
+rss_sub09 = rss_sub[datetime(2009, 1, 1, 00, 00):datetime(2009, 12, 31, 00, 00)]
+rss_sub10 = rss_sub[datetime(2010, 1, 1, 00, 00):datetime(2010, 12, 31, 00, 00)]
+rss_sub11 = rss_sub[datetime(2011, 1, 1, 00, 00):datetime(2011, 12, 31, 00, 00)]
+rss_sub12 = rss_sub[datetime(2012, 1, 1, 00, 00):datetime(2012, 12, 31, 00, 00)]
+rss_sub13 = rss_sub[datetime(2013, 1, 1, 00, 00):datetime(2013, 12, 31, 00, 00)]
+rss_sub14 = rss_sub[datetime(2014, 1, 1, 00, 00):datetime(2014, 12, 31, 00, 00)]
+rss_sub15 = rss_sub[datetime(2015, 1, 1, 00, 00):datetime(2015, 12, 31, 00, 00)]
+rss_sub16 = rss_sub[datetime(2016, 1, 1, 00, 00):datetime(2016, 12, 31, 00, 00)]
+rss_sub17 = rss_sub[datetime(2017, 1, 1, 00, 00):datetime(2017, 12, 31, 00, 00)]
+rss_sub18 = rss_sub[datetime(2018, 1, 1, 00, 00):datetime(2018, 12, 31, 00, 00)]
+rss_sub19 = rss_sub[datetime(2019, 1, 1, 00, 00):datetime(2019, 12, 31, 00, 00)]
+rss_sub20 = rss_sub[datetime(2020, 1, 1, 00, 00):datetime(2020, 12, 31, 00, 00)]
 
 yM_ticks = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
 yM = [15,46,74,105,135,166,196,227,258,288,319,349]
@@ -153,8 +156,8 @@ rss_19_m = rss_sub19.resample('M').mean()
 rss_20_m = rss_sub20.resample('M').mean()
 #print(rss_17_m)
 
-print(rss_08_m["RSS_sub_grass"].values)
-print(rss_09_m["RSS_sub_grass"].values)
+#print(rss_08_m["RSS_sub_grass"].values)
+#print(rss_09_m["RSS_sub_grass"].values)
 
 cultivar = "RSS_sub_grass"
 
@@ -166,7 +169,6 @@ matrix12yr_m1 = np.concatenate((np.matrix(rss_08_m["RSS_sub_grass"].values).T,np
                               np.matrix(rss_18_m["RSS_sub_grass"].values).T,np.matrix(rss_19_m["RSS_sub_grass"].values).T),axis=1)
 mean12yr_m_grass = np.mean(matrix12yr_m1,axis=1)
 
-
 matrix12yr_m2 = np.concatenate((np.matrix(rss_08_m["RSS_sub_wWheat"].values).T,np.matrix(rss_09_m["RSS_sub_wWheat"].values).T,
                               np.matrix(rss_10_m["RSS_sub_wWheat"].values).T,np.matrix(rss_11_m["RSS_sub_wWheat"].values).T,
                               np.matrix(rss_12_m["RSS_sub_wWheat"].values).T,np.matrix(rss_13_m["RSS_sub_wWheat"].values).T,
@@ -174,9 +176,62 @@ matrix12yr_m2 = np.concatenate((np.matrix(rss_08_m["RSS_sub_wWheat"].values).T,n
                               np.matrix(rss_16_m["RSS_sub_wWheat"].values).T,np.matrix(rss_17_m["RSS_sub_wWheat"].values).T,
                               np.matrix(rss_18_m["RSS_sub_wWheat"].values).T,np.matrix(rss_19_m["RSS_sub_wWheat"].values).T),axis=1)
 mean12yr_m_wWheat = np.mean(matrix12yr_m2,axis=1)
+mean12yr_d = rss_sub.groupby([rss_sub.index.month, rss_sub.index.day]).mean()
+mean12yr_d["new_index"] = mean12yr_d.index.map(lambda x:datetime(2000, x[0], x[1]))
+mean12yr_d = mean12yr_d.set_index("new_index")
+#print(mean12yr_d['RSS_sub_wWheat'])
+mean12yr_d_noleap = mean12yr_d.drop(pd.date_range('2000-02-29','2000-2-29'), errors='ignore') #remove 29.Feb
+#print(mean12yr_d['2000-02-28':'2000-03-2'])
+#print(rss_sub)
+
+rss_sub17_diff_w = rss_sub17['RSS_sub_wWheat'][datetime(2017,5,1):].values - mean12yr_d_noleap['RSS_sub_wWheat'][datetime(2000,5,1):].values
+rss_sub18_diff_w = rss_sub18['RSS_sub_wWheat'].values - mean12yr_d_noleap['RSS_sub_wWheat'].values
+rss_sub19_diff_w = rss_sub19['RSS_sub_wWheat'].values - mean12yr_d_noleap['RSS_sub_wWheat'].values
+rss_sub20_diff_w = rss_sub20['RSS_sub_wWheat'].values - mean12yr_d['RSS_sub_wWheat'].values  #leap year
+rss_sub_diff_w = np.concatenate([rss_sub17_diff_w,rss_sub18_diff_w,rss_sub19_diff_w,rss_sub20_diff_w])
+
+print(rss_sub_diff_w)
+
+#mean12yr_m.to_csv("/home/heidit/Downloads/mean12yr_m.csv")
+#mean12yr_d.to_csv("/home/heidit/Downloads/mean12yr_d.csv")
 
 print(matrix12yr_m2, mean12yr_m_wWheat)
 #exit()
+
+
+fig = plt.figure()
+ax1 = fig.add_subplot(111)
+
+gs = gridspec.GridSpec(2, 1,height_ratios=[2,1])
+plt.title("wWheat, 40-100 cm")
+ax1 = plt.subplot(gs[0])
+ax2 = plt.subplot(gs[1])
+ax1.plot(range(len(rss_sub18)), rss_sub18["RSS_sub_wWheat"], color='blue',label="2018", linewidth=1)
+ax1.plot(range(len(rss_sub19)), rss_sub19["RSS_sub_wWheat"], color='green',label="2019", linewidth=1)
+ax1.plot(range(len(rss_sub20)), rss_sub20["RSS_sub_wWheat"], color='orange',label="2020", linewidth=1)
+ax1.plot(range(365),mean12yr_d_noleap['RSS_sub_wWheat'].values,color='grey',label="2008-2020",linewidth=2)
+#ax1.plot(yM,mean12yr_m_grass, color='grey', label="2008-2020")
+ax1.set_ylabel("rss [0-1]")
+ax1.set_xticks(yM)
+ax1.legend(loc="lower left",fontsize='small')
+#ax1.plot(range(len(rss_sub17)), rss_sub20["RSS_sub_wWheat"], color='orange',label="2017", linewidth=0.5)
+#ax1.plot(timelist,S202WOvalues, label=r"$\alpha_{g}$:0,13;$\alpha_{w}$:0,10", color="red")#,linestyle="dashed")
+#ax1.set_ylabel(r"$T_{a}$"u'[°C]')
+#ax1.set_ylim(16,37)
+#ax1.legend(loc="lower right",fontsize='small')
+ax2.plot(range(len(rss_sub18_diff_w)), rss_sub18_diff_w, color='blue',label="2018", linewidth=1)
+ax2.plot(range(len(rss_sub19_diff_w)), rss_sub19_diff_w, color='green',label="2019", linewidth=1)
+ax2.plot(range(len(rss_sub20_diff_w)), rss_sub20_diff_w, color='orange',label="2020", linewidth=1)
+ax2.set_ylabel(r"$\Delta$ rss [0-1]")
+plt.xticks(yM, yM_ticks)
+ax1.set_xlabel('time[days]')
+ax1.grid(True)
+ax2.grid(True)
+#myFmt = DateFormatter("%M")
+#ax1.xaxis.set_major_formatter(myFmt)
+plt.show()
+
+exit()
 
 figure = plt.figure
 plt.plot(range(len(rss_sub17)), rss_sub17["RSS_sub_grass"], color='violet', label="2017", linewidth=0.5)
@@ -184,11 +239,11 @@ plt.plot(range(len(rss_sub18)), rss_sub18["RSS_sub_grass"], color='blue', label=
 plt.plot(range(len(rss_sub19)), rss_sub19["RSS_sub_grass"], color='green',label="2019", linewidth=0.5)
 plt.plot(range(len(rss_sub20)), rss_sub20["RSS_sub_grass"], color='orange',label="2020", linewidth=0.5)
 #plt.plot(range(len(rss_sub20)), rss_sub20, color='red',label="2021", linewidth=0.5)
-plt.plot(yM,rss_17_m["RSS_sub_grass"][:-1], color='violet', linewidth=2)
-plt.plot(yM,rss_18_m["RSS_sub_grass"][:-1], color='blue', linewidth=2)
-plt.plot(yM,rss_19_m["RSS_sub_grass"][:-1], color='green', linewidth=2)
-plt.plot(yM,rss_20_m["RSS_sub_grass"][:-1], color='orange', linewidth=2)
-plt.plot(yM,mean12yr_m_grass[:-1], color='grey', label="2008-2020")
+plt.plot(yM,rss_17_m["RSS_sub_grass"], color='violet', linewidth=2)
+plt.plot(yM,rss_18_m["RSS_sub_grass"], color='blue', linewidth=2)
+plt.plot(yM,rss_19_m["RSS_sub_grass"], color='green', linewidth=2)
+plt.plot(yM,rss_20_m["RSS_sub_grass"], color='orange', linewidth=2)
+plt.plot(yM,mean12yr_m_grass, color='grey', label="2008-2020")
 #plt.plot(yM,rss_21_m[:-1], color='orange', linewidth=2)
 plt.xticks(yM, yM_ticks)
 plt.xlabel("julian days")
@@ -202,11 +257,11 @@ plt.plot(range(len(rss_sub18)), rss_sub18["RSS_sub_wWheat"], color='blue', label
 plt.plot(range(len(rss_sub19)), rss_sub19["RSS_sub_wWheat"], color='green',label="2019", linewidth=0.5)
 plt.plot(range(len(rss_sub20)), rss_sub20["RSS_sub_wWheat"], color='orange',label="2020", linewidth=0.5)
 #plt.plot(range(len(rss_sub20)), rss_sub20, color='red',label="2021", linewidth=0.5)
-plt.plot(yM,rss_17_m["RSS_sub_wWheat"][:-1], color='violet', linewidth=2)
-plt.plot(yM,rss_18_m["RSS_sub_wWheat"][:-1], color='blue', linewidth=2)
-plt.plot(yM,rss_19_m["RSS_sub_wWheat"][:-1], color='green', linewidth=2)
-plt.plot(yM,rss_20_m["RSS_sub_wWheat"][:-1], color='orange', linewidth=2)
-plt.plot(yM,mean12yr_m_wWheat[:-1], color='grey', label="2008-2020")
+plt.plot(yM,rss_17_m["RSS_sub_wWheat"], color='violet', linewidth=2)
+plt.plot(yM,rss_18_m["RSS_sub_wWheat"], color='blue', linewidth=2)
+plt.plot(yM,rss_19_m["RSS_sub_wWheat"], color='green', linewidth=2)
+plt.plot(yM,rss_20_m["RSS_sub_wWheat"], color='orange', linewidth=2)
+plt.plot(yM,mean12yr_m_wWheat, color='grey', label="2008-2020")
 #plt.plot(yM,rss_21_m[:-1], color='orange', linewidth=2)
 plt.xticks(yM, yM_ticks)
 plt.xlabel("julian days")
