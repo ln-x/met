@@ -10,39 +10,12 @@ from met.library import ReadinVindobona_Filter_fullperiod
 from met.library import ReadinVindobona_Glyoxal
 import matplotlib.gridspec as gridspec
 
-yM = [15,46,74,105,135,166,196,227,258,288,319,349]
-yM_ticks = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
-yM18 = [15,46,74,105,135,166,196,227,258,288,319]
-yM19 = [15,46,74,105,135,166,196,227,258,288]
-yM20 = [15,46,74,105,135,166,196,227,258,288,319]
-yM21 = [15,46,74,105,135,166,196,227]
-start2017 = datetime(2017, 5, 1, 00, 00)
-start2018 = datetime(2018, 1, 1, 00, 00)
-start2019 = datetime(2019, 1, 1, 00, 00)
-start2020 = datetime(2020, 1, 1, 00, 00)
-end2020 = datetime(2020, 12, 31, 00, 00)
-start2021 = datetime(2021, 1, 1, 00, 00)
-end2021 = datetime(2021, 9, 1, 00, 00)
 
 '''READ IN BOKU Metdata'''
 BOKUMetData = met.library.BOKUMet_Data.BOKUMet() #10min values
 BOKUMetData_hourlymean = BOKUMetData.resample('H').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.mean, 'WS': np.mean, 'WD': np.mean, 'WSG': np.mean, 'PC': np.sum, 'AP': np.mean})
 BOKUMetData_dailysum = BOKUMetData_hourlymean.resample('D').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.sum, 'WS': np.mean, 'WD': np.mean, 'WSG': np.mean, 'PC': np.sum, 'AP': np.mean})
 BOKUMetData_dailymax = BOKUMetData_hourlymean.resample('D').agg({'DT': np.max, 'AT': np.max, 'RH': np.max, 'GR': np.max, 'WS': np.max,'WD': np.max, 'WSG': np.max, 'PC': np.sum, 'AP': np.max})
-
-#print(BOKUMetData_hourlymean['RH'])
-vp_sat = 0.611 * np.exp((17.3 * BOKUMetData_hourlymean["AT"])/(BOKUMetData_hourlymean["AT"]+237.3))  #kPa sh. Dingman
-vp_air = 0.611 * np.exp((17.3 * BOKUMetData_hourlymean["AT"])/(BOKUMetData_hourlymean["AT"]+237.3)) * (BOKUMetData_hourlymean["RH"]/100)
-vpd = vp_sat - vp_air
-#print(vp_sat,vp_air, vpd)
-
-#vpd.plot()
-#plt.show()
-
-vpd_d = vpd.resample('D').mean()
-vpd_dmax = vpd.resample('D').max()
-vpd_dmax_w = vpd_dmax.resample('W').mean()
-vpd_dmax_sigma = vpd_dmax.std()
 
 BOKUMetData_dailysum['JD'] = (BOKUMetData_dailysum.index) #JULIAN DAY
 f = lambda x: datestdtojd(str(x)[:-9])
@@ -71,89 +44,77 @@ BOKUMetData_dailymax_m = BOKUMetData_dailymax.resample('M').agg({'DT': np.mean, 
 BOKUMetData_dailymax_w = BOKUMetData_dailymax.resample('W').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.mean, 'WS': np.mean,
                                                      'WD': np.mean, 'WSG': np.mean, 'PC': np.sum, 'AP': np.mean})
 
-AT_dmax_sigma= BOKUMetData_dailymax["AT"].std()
-
 
 "read in EDO - SPI data"
 spi = pd.read_csv("/windata/DATA/obs_point/land/EDO/SPI_16_48.2017to2021.20211206100030.txt", delimiter="|",skiprows=2,header=0)
 spi = spi.set_index(pd.to_datetime(spi['Date'])) #utc=True
 spi = spi.drop(columns=['Date'])
-spi = spi[4:-4]
+spi = spi[:-12]
 #print(spi)
 #exit()
 
+'''READ IN EEA air pollution data'''
+pathbase2 = "/windata/DATA/obs_point/chem/EEA/"
+o3_1990_2019_mda1 = pd.read_csv(pathbase2 + "o3_mda1_1990-2019_AT_mug.csv")
+o3_1990_2019_mda1 = o3_1990_2019_mda1.set_index(pd.to_datetime(o3_1990_2019_mda1['date']))
+o3_1990_2019_mda1 = o3_1990_2019_mda1.drop(columns=['date'])
+o3_1990_2019_mda8 = pd.read_csv(pathbase2 + "o3_mda8_1990-2019_AT_mug.csv")
+o3_1990_2019_mda8 = o3_1990_2019_mda8.set_index(pd.to_datetime(o3_1990_2019_mda8['date']))
+o3_1990_2019_mda8 = o3_1990_2019_mda8.drop(columns=['date'])
+o3_2020_mda1 = pd.read_csv(pathbase2 + "AT_O3_2020.csv")                        #TODO! replace mda1 with mda8!
+o3_2020_mda1 = o3_2020_mda1.set_index(pd.to_datetime(o3_2020_mda1['date']))
+o3_2020_mda1 = o3_2020_mda1.drop(columns=['date'])
+#print(o3_1990_2019_mda1)
+o3_2020_mda8 = o3_2020_mda1.resample('8H', label='right').mean()
+o3_2020_mda8 = o3_2020_mda8.resample('D').mean()
 
-"read in VINDOBONA"
+o3_1990_2020_mda8 = pd.concat([o3_1990_2019_mda8, o3_2020_mda8], axis=0)
+o3_1990_2020_mda8 = o3_1990_2020_mda8["AT9STEF"]**ugm3toppb_o3 #MUG->PPB
+#o3_1990_2020_da = o3_1990_2020_mda8["AT9STEF"].resample('D').mean()
+o3_1990_2020_m = o3_1990_2020_mda8[datetime(2017,1,1):datetime(2021,12,30)].resample('M').mean()
+o3_1990_2020_m = o3_1990_2020_m[:-1]
+print(spi,o3_1990_2020_m)
 
-foldername_D = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_DQ"
-foldername_K = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_KQ"
-foldername_glyoxal = "/windata/DATA/remote/ground/maxdoas/chocho2020"
-
-hcho_d, hcho_dmax, hcho_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_D,"D", begin= datetime(2017, 5, 1, 0, 0, 0))
-hchoK_d, hchoK_dmax, hchoK_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_K,"K", begin= datetime(2020, 1, 1, 0, 0, 0))
-#hchoK_d, hchoK_dmax, hchoK_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_K,"K", begin= datetime.datetime(2020, 1, 1, 0, 0, 0)))
-#print(len(hchoK_dmax))
-#print(len(hcho_dmax))
-chochoD_dmax, chochoK_dmax = ReadinVindobona_Glyoxal.loadfileALL(foldername_glyoxal)
-
-nw = pd.concat([hcho_d,BOKUMetData_dailymax_w["WD"][datetime(2017,5,1):datetime(2021,8,31)]],axis=1)
-nw.columns =['hcho', 'WD']
-nw.index.name = 'datetime'
-nw =nw.loc[(nw['WD'] >=270) & (nw['WD'] <=359)]
-
-hcho_dmax_m = hcho_dmax.resample('M').mean()
-#hcho_d_m = hcho_d.resample('M').mean()   #TODO switch between all data and nw only
-hcho_d_m = nw['hcho'].resample('M').mean()
-#print(hcho_d_m)
-
-hcho_d_m_spring = hcho_d_m.loc[(hcho_d_m.index.month>=3)&(hcho_d_m.index.month<=5)]
+o3_1990_2020_m_spring = o3_1990_2020_m.loc[(o3_1990_2020_m.index.month >= 3) & (o3_1990_2020_m.index.month <= 5)]
 spi3_d_m_spring = spi.loc[(spi.index.month>=3)&(spi.index.month<=5)]
-hcho_d_m_winter = hcho_d_m.loc[(hcho_d_m.index.month<=2)|(hcho_d_m.index.month>=12)]
+o3_1990_2020_m_winter = o3_1990_2020_m.loc[(o3_1990_2020_m.index.month<=2)|(o3_1990_2020_m.index.month>=12)]
 spi3_d_m_winter = spi.loc[(spi.index.month<=2)|(spi.index.month>=12)]
-hcho_d_m_summer = hcho_d_m.loc[(hcho_d_m.index.month>=6)&(hcho_d_m.index.month<=8)]
+o3_1990_2020_m_summer = o3_1990_2020_m.loc[(o3_1990_2020_m.index.month>=6)&(o3_1990_2020_m.index.month<=8)]
 spi3_d_m_summer = spi.loc[(spi.index.month>=6)&(spi.index.month<=8)]
-hcho_d_m_autumn = hcho_d_m.loc[(hcho_d_m.index.month>=9)&(hcho_d_m.index.month<=11)]
+o3_1990_2020_m_autumn = o3_1990_2020_m.loc[(o3_1990_2020_m.index.month>=9)&(o3_1990_2020_m.index.month<=11)]
 spi3_d_m_autumn = spi.loc[(spi.index.month>=9)&(spi.index.month<=11)]
 
-hcho_d_m_jfm = hcho_d_m.loc[(hcho_d_m.index.month>=1)&(hcho_d_m.index.month<=3)]
+o3_1990_2020_m_jfm = o3_1990_2020_m.loc[(o3_1990_2020_m.index.month>=1)&(o3_1990_2020_m.index.month<=3)]
 spi3_d_m_jfm = spi.loc[(spi.index.month>=1)&(spi.index.month<=3)]
-hcho_d_m_fma = hcho_d_m.loc[(hcho_d_m.index.month>=2)&(hcho_d_m.index.month<=4)]
+o3_1990_2020_m_fma = o3_1990_2020_m.loc[(o3_1990_2020_m.index.month>=2)&(o3_1990_2020_m.index.month<=4)]
 spi3_d_m_fma = spi.loc[(spi.index.month>=2)&(spi.index.month<=4)]
 
-hcho_dmax_w = hcho_dmax.resample('W').mean()
-hcho_dmax_sigma = hcho_dmax.std()#(axis=1)
 
-print(hcho_dmax_sigma)
-#exit()
 """Timeserie HCHO_SPI"""
-"""
-
 figure = plt.figure
 ax1 = plt.gca()
 ax2 = ax1.twinx()
 ax1.plot(spi['SPI-3'], color="orange", label="SPI-3")
 ax1.plot(spi['SPI-6'], color="red", label="SPI-6")
-ax2.plot(hcho_d_m, label= "hcho_d")
+ax2.plot(o3_1990_2020_m, label= "O3 STEF")
 ax1.legend(loc="upper left")
 ax2.legend()
 plt.show()
 
-"""
-#Regresssion seasons
-"""
-y5_djf = hcho_d_m_winter.values.flatten()
-y5_mam = hcho_d_m_spring.values.flatten()
-y5_jja = hcho_d_m_summer.values.flatten()
-y5_son = hcho_d_m_autumn.values.flatten()
-y5_jfm = hcho_d_m_jfm.values.flatten()
-y5_fma = hcho_d_m_fma.values.flatten()
+"""Regresssion seasons"""
+y5_djf = o3_1990_2020_m_winter.values.flatten()
+y5_mam = o3_1990_2020_m_spring.values.flatten()
+y5_jja = o3_1990_2020_m_summer.values.flatten()
+y5_son = o3_1990_2020_m_autumn.values.flatten()
+y5_jfm = o3_1990_2020_m_jfm.values.flatten()
+y5_fma = o3_1990_2020_m_fma.values.flatten()
 
-x5_SPI3_djf = spi3_d_m_winter['SPI-1'].values.flatten()
-x5_SPI3_mam = spi3_d_m_spring['SPI-1'].values.flatten()
-x5_SPI3_jja = spi3_d_m_summer['SPI-1'].values.flatten()
-x5_SPI3_son = spi3_d_m_autumn['SPI-1'].values.flatten()
-x5_SPI3_jfm = spi3_d_m_jfm['SPI-1'].values.flatten()
-x5_SPI3_fma = spi3_d_m_fma['SPI-1'].values.flatten()
+x5_SPI3_djf = spi3_d_m_winter['SPI-12'].values.flatten()
+x5_SPI3_mam = spi3_d_m_spring['SPI-12'].values.flatten()
+x5_SPI3_jja = spi3_d_m_summer['SPI-12'].values.flatten()
+x5_SPI3_son = spi3_d_m_autumn['SPI-12'].values.flatten()
+x5_SPI3_jfm = spi3_d_m_jfm['SPI-12'].values.flatten()
+x5_SPI3_fma = spi3_d_m_fma['SPI-12'].values.flatten()
 
 m5_SPI3_djf, b5_SPI3_djf = np.polyfit(x5_SPI3_djf, y5_djf, 1)
 m5_SPI3_mam, b5_SPI3_mam = np.polyfit(x5_SPI3_mam, y5_mam, 1)
@@ -166,12 +127,12 @@ SRho_SPI3_djf, Sp_SPI3_djf = (stats.spearmanr(x5_SPI3_djf, y5_djf))
 SRho_SPI3_mam, Sp_SPI3_mam = (stats.spearmanr(x5_SPI3_mam, y5_mam))
 SRho_SPI3_jja, Sp_SPI3_jja = (stats.spearmanr(x5_SPI3_jja, y5_jja))
 fig = plt.figure
-plt.scatter(x5_SPI3_djf, y5_djf, color='black', label="SPI-1 winter (DJF)", s=5)
-plt.scatter(x5_SPI3_jfm, y5_jfm, color='blue', label="SPI-1 JFM", s=5)
-plt.scatter(x5_SPI3_fma, y5_fma, color='turquoise', label="SPI-1 FMA", s=5)
-plt.scatter(x5_SPI3_mam, y5_mam, color='green', label="SPI-1 spring (MAM)", s=5)
-plt.scatter(x5_SPI3_jja, y5_jja, color='red', label="SPI-1 summer (JJA)", s=5)
-plt.scatter(x5_SPI3_son, y5_son, color='brown', label="SPI-1 autumn (SON)", s=5)
+plt.scatter(x5_SPI3_djf, y5_djf, color='black', label="SPI-12 winter (DJF)", s=5)
+plt.scatter(x5_SPI3_jfm, y5_jfm, color='blue', label="SPI-12 JFM", s=5)
+plt.scatter(x5_SPI3_fma, y5_fma, color='turquoise', label="SPI-12 FMA", s=5)
+plt.scatter(x5_SPI3_mam, y5_mam, color='green', label="SPI-12 spring (MAM)", s=5)
+plt.scatter(x5_SPI3_jja, y5_jja, color='red', label="SPI-12 summer (JJA)", s=5)
+plt.scatter(x5_SPI3_son, y5_son, color='brown', label="SPI-12 autumn (SON)", s=5)
 
 plt.plot(x5_SPI3_djf, m5_SPI3_djf * x5_SPI3_djf + b5_SPI3_djf, color='black')
 plt.plot(x5_SPI3_jfm, m5_SPI3_jfm * x5_SPI3_jfm + b5_SPI3_jfm, color='blue')
@@ -179,17 +140,16 @@ plt.plot(x5_SPI3_fma, m5_SPI3_fma * x5_SPI3_fma + b5_SPI3_fma, color='turquoise'
 plt.plot(x5_SPI3_mam, m5_SPI3_mam * x5_SPI3_mam + b5_SPI3_mam, color='green')
 plt.plot(x5_SPI3_jja, m5_SPI3_jja * x5_SPI3_jja + b5_SPI3_jja, color='red')
 plt.plot(x5_SPI3_son, m5_SPI3_son * x5_SPI3_son + b5_SPI3_son, color='brown')
-plt.ylabel("HCHO [ppb]", size="small")
+plt.ylabel("O3 [ppb]", size="small")
 plt.xlabel("SPI [-]", size="small")
 plt.legend(loc="upper right")
 #plt.title("full year")
 #plt.title('r={:.2f} \n p={:.2f} \n n=52'.format(SRho_SPI, Sp_SPI), fontsize='small')
 plt.show()
 
-"""
-#Regression SPI-HCHO
-"""
-y5 = hcho_d_m.values.flatten()  #Mai 17 - Aug 2021
+#exit()
+"""Regression SPI-HCHO"""
+y5 = o3_1990_2020_m.values.flatten()  #Mai 17 - Aug 2021
 x5_SPI1 = spi['SPI-1'].values.flatten()
 x5_SPI3 = spi['SPI-3'].values.flatten()
 x5_SPI6 = spi['SPI-6'].values.flatten()
@@ -219,12 +179,21 @@ plt.plot(x5_SPI3, m5_SPI3 * x5_SPI3 + b5_SPI3, color='orange')
 plt.plot(x5_SPI6, m5_SPI6 * x5_SPI6 + b5_SPI6, color='red')
 plt.plot(x5_SPI9, m5_SPI9 * x5_SPI9 + b5_SPI9, color='violet')
 plt.plot(x5_SPI12, m5_SPI12 * x5_SPI12 + b5_SPI12, color='blue')
-plt.ylabel("HCHO [ppb]", size="small")
+plt.ylabel("O3 [ppb]", size="small")
 plt.xlabel("SPI [-]", size="small")
 plt.legend()
 plt.title("full year")
 #plt.title('r={:.2f} \n p={:.2f} \n n=52'.format(SRho_SPI, Sp_SPI), fontsize='small')
 plt.show()
+exit()
+
+
+start2017 = datetime(2017, 5, 1, 00, 00)
+start2018 = datetime(2018, 1, 1, 00, 00)
+start2019 = datetime(2019, 1, 1, 00, 00)
+start2020 = datetime(2020, 1, 1, 00, 00)
+start2021 = datetime(2021, 1, 1, 00, 00)
+end2021 = datetime(2021, 9, 1, 00, 00)
 
 pff = pd.concat([hcho_dmax, BOKUMetData_dailymax["AT"],HighGRdays["GR"],HighGRdays["WD"]],axis=1)
 pff.columns =['hcho', 'AT', 'GR', 'WD']
@@ -258,7 +227,12 @@ hcho_dmax21 = hcho_dmax[start2021:end2021]
 
 #print(hcho_dmax17_a,hcho_dmax18,hcho_dmax19,hcho_dmax20,hcho_dmax21)
 
-
+yM = [15,46,74,105,135,166,196,227,258,288,319,349]
+yM_ticks = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
+yM18 = [15,46,74,105,135,166,196,227,258,288,319]
+yM19 = [15,46,74,105,135,166,196,227,258,288]
+yM20 = [15,46,74,105,135,166,196,227,258,288,319]
+yM21 = [15,46,74,105,135,166,196,227]
 hcho_dmax17_m = hcho_dmax17.resample('M').mean()
 hcho_17fill_m = np.full(shape=4,fill_value=np.NaN)
 hcho_dmax17_a_m = np.append(hcho_17fill_m, hcho_dmax17_m)
@@ -266,13 +240,11 @@ hcho_dmax18_m = hcho_dmax18.resample('M').mean()
 hcho_dmax19_m = hcho_dmax19.resample('M').mean()
 hcho_dmax20_m = hcho_dmax20.resample('M').mean()
 hcho_dmax21_m = hcho_dmax21.resample('M').mean()
-#print(hcho_dmax17_m, hcho_dmax18_m,hcho_dmax19_m,hcho_dmax20_m,hcho_dmax21_m)
+#print(hcho_dmax17_a_m, hcho_dmax18_m,hcho_dmax19_m,hcho_dmax20_m,hcho_dmax21_m)
 
 print(hcho_dmax17, hcho_dmax18_m, hcho_dmax19_m, hcho_dmax20_m)
 
-"""
-#read in soil moisture data
-"""
+"""read in soil moisture data"""
 file_rss_rutz = "/windata/DATA/obs_point/land/Bodenfeuchte_Rutzendorf/2008_2020_Rutzendorf_ARIS_results_sepp.xlsx"
 rss = pd.read_excel(file_rss_rutz, sheet_name="RSS_top", usecols="A,B,C,D,E,F", skiprows=11)#, converters={'A': pd.to_datetime})
 rss.columns = ['datetime', 'RSS_top_maize', 'RSS_top_sBarley','RSS_top_sugBeet','RSS_top_wWheat', 'RSS_top_grass']  #TODO: local time!
@@ -310,13 +282,13 @@ plt.plot(yM18,hcho_dmax18_m, color='blue', linewidth=1, marker="x", label="2018"
 plt.plot(yM19,hcho_dmax19_m, color='green', linewidth=1, marker="x",label="2019")
 plt.plot(yM20,hcho_dmax20_m, color='orange', linewidth=1, marker="x",label="2020")
 plt.plot(yM21,hcho_dmax21_m, color='red', linewidth=1, marker="x",label="2021")
-plt.title("NW days")
 plt.xticks(yM, yM_ticks)
 plt.xlabel("days")
 plt.ylabel("hcho [ppb]")
 plt.legend()
 plt.show()
 
+exit()
 figure = plt.figure
 ax1 = plt.gca()
 ax2 = ax1.twinx()
@@ -406,80 +378,41 @@ ax1.legend(loc='lower left')
 #ax4.legend(loc='upper right')
 plt.xlabel("time [days]")
 plt.show()
-"""
 
+exit()
 figure = plt.figure
-gs = gridspec.GridSpec(3, 1,height_ratios=[1,1,1])
+gs = gridspec.GridSpec(2, 1,height_ratios=[2,1])
 #plt.title("wWheat, 40-100 cm")
 ax1 = plt.subplot(gs[0])
-#ax1 = plt.gca()
-#ax2 = ax1.twinx()
-#ax3 = ax1.twinx()
-ax2 = plt.subplot(gs[1])
-ax3 = plt.subplot(gs[2])
-
-#ax2.plot(hcho_dmax, color='black', label="HCHO dmean", linewidth=0.1)
+ax1 = plt.gca()
+ax2 = ax1.twinx()
+ax3 = plt.subplot(gs[1])
+ax1.plot(BOKUMetData_dailymax['AT'][start2017:end2021],color='grey',label="AT dmax", linewidth=0.1)
+ax1.plot(BOKUMetData_dailymax_m['AT'][start2017:end2021],color='grey',label="AT dmax monthly", linewidth=1)
+ax1.plot(BOKUMetData_dailymax_w['AT'][start2017:end2021],color='grey',label="AT dmax weekly", linewidth=2)
+ax2.plot(hcho_dmax, color='violet', label="HCHO dmean", linewidth=0.1)
 #ax2.plot(hcho_dmax17, color='violet', label="2017", linewidth=0.1)
 #ax2.plot(hcho_dmax18, color='blue', label="2018", linewidth=0.1)
 #ax2.plot(hcho_dmax19, color='green', label="2019", linewidth=0.1)
 #ax2.plot(hcho_dmax20, color='orange', label="2020", linewidth=0.1)
 #ax2.plot(hcho_dmax21, color='violet', label="2021", linewidth=0.1)
-AT = BOKUMetData_dailymax_m[start2017:end2021]['AT']
-print(AT)
-#ax1.plot(BOKUMetData_dailymax['AT'][start2017:end2021],color='grey',label="AT dmax", linewidth=0.1)
-ax1.fill_between(AT.index, AT+AT_dmax_sigma,AT - AT_dmax_sigma, facecolor='grey', alpha=0.2)
-ax1.plot(AT,color='grey',label="AT dmax monthly", linewidth=1)
-ax1.plot(BOKUMetData_dailymax_w['AT'][start2017:end2021],color='grey',label="AT dmax weekly", linewidth=2)
-
-#interestingdates = [datetime(2017,9,30),datetime(2017,10,22),datetime(2018,8,5),datetime(2021,5,30)]
-#ax1.axvline(x=interestingdates)
-ax1.axvline(x=datetime(2017,9,30))
-ax1.axvline(x=datetime(2017,10,22))
-ax1.axvline(x=datetime(2018,8,5))
-ax1.axvline(x=datetime(2021,5,30))
-ax2.axvline(x=datetime(2017,9,30))
-ax2.axvline(x=datetime(2017,10,22))
-ax2.axvline(x=datetime(2018,8,5))
-ax2.axvline(x=datetime(2021,5,30))
-ax3.axvline(x=datetime(2017,9,30))
-ax3.axvline(x=datetime(2017,10,22))
-ax3.axvline(x=datetime(2018,8,5))
-ax3.axvline(x=datetime(2021,5,30))
-
-ax1.axvline(x=datetime(2020,9,6))
-ax2.axvline(x=datetime(2020,9,6))
-ax3.axvline(x=datetime(2020,9,6))
-
-ax1.axvline(x=datetime(2019,10,6))
-ax2.axvline(x=datetime(2019,10,6))
-ax3.axvline(x=datetime(2019,10,6))
-
-
-
-
-
-ax2.fill_between(hcho_dmax_m[start2017:end2021].index, hcho_dmax_m[start2017:end2021]+hcho_dmax_sigma, hcho_dmax_m[start2017:end2021] - hcho_dmax_sigma, facecolor='purple', alpha=0.2)
-ax2.plot(hcho_dmax_m, color="purple",label="HCHO dmax monthly",linewidth=1)
-ax2.plot(hcho_dmax_w, color="purple",label="HCHO dax weekly",linewidth=2)
-#ax2.set_title(r'hcho observation $\mu$ and $\pm \sigma$ interval')
-
-ax3.plot(vpd_dmax_w[start2017:end2021], color="blue", label="vpd_dmax weekly", linewidth=2)
-ax3.fill_between(vpd_dmax_w[start2017:end2021].index,vpd_dmax_w[start2017:end2021]+vpd_dmax_sigma, vpd_dmax_w[start2017:end2021]-vpd_dmax_sigma, facecolor="blue", alpha=0.2)
-#ax3.plot(vpd_dmax[start2017:end2021], color="blue", label="vpd_dmax weekly", linewidth=0.1)
-#ax3.plot(rss_sub_diff_w,color="black", label="rss_diff")
-#ax3.axhline(y=0,color='black')
+ax2.plot(hcho_dmax_m, color="violet",label="HCHO dmean monthly",linewidth=1)
+ax2.plot(hcho_dmax_w, color="violet",label="HCHO dmean weekly",linewidth=2)
+ax3.plot(rss_sub_diff_w,color="black", label="rss_diff")
+ax3.axhline(y=0,color='black')
 #upper = 0.0
 #supper = np.ma.masked_where(rss_sub_diff_w > upper, rss_sub_diff_w)
 #slower = np.ma.masked_where(rss_sub_diff_w < upper, rss_sub_diff_w)
 #ax.plot(t, slower, t, supper)
-#ax2.legend(loc="lower right")
-#ax1.legend(loc="lower right")
-#ax3.legend(loc="lower right")
+
+ax2.legend(loc="upper right")
+ax1.legend(loc="upper left")
+ax3.legend(loc="upper right")
 #plt.xticks(yM, yM_ticks)
 plt.xlabel("time [days]")
-ax3.set_ylabel("vapour pressure deficit [kPa]")
 ax2.set_ylabel("VMR hcho [ppb]")
 ax1.set_ylabel("air temperature [°C]")
-#ax1.set_ylim(-5, 80)
-#ax2.set_ylim(0, 6)
+ax1.set_ylim(-5, 80)
+ax2.set_ylim(0, 6)
+plt.legend()
 plt.show()

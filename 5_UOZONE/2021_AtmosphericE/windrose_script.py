@@ -46,7 +46,7 @@ IS = df.loc[df['station'] == 11034]
 HW = df.loc[df['station'] == 11035]
 UL = df.loc[df['station'] == 11040]
 
-start = datetime(2019, 1, 1, 00, 00) #start
+start = datetime(2017, 5, 1, 00, 00) #start
 DP1_s = datetime(2019, 3, 17, 00, 00) #drought period1 start
 DP1_e = datetime(2019, 4, 29, 00, 00) #drought period1 end
 DP2_s = datetime(2019, 6, 8, 00, 00) #drought period2 start
