@@ -3,13 +3,15 @@ __author__ = 'lnx'
 import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
+from matplotlib.axis import Axis
 import sys
 from datetime import datetime
 from datetime import timedelta
 import numpy as np
 from matplotlib import dates as d
 import datetime as dt
-import BOKUMet_Data
+import met.library.BOKUMet_Data as BOKUMet_Data
+from met.library.conversions import *
 
 def datestdtojd (stddate):
     fmt='%Y-%m-%d'
@@ -68,16 +70,74 @@ HighGRdays = BOKUMetData_dailysum[isHighGR]
 #print(HighGRdays.shape)
 #print(HighGRdays)
 
+
+'''READ IN EEA air pollution data'''
+pathbase2 = "/windata/DATA/obs_point/chem/EEA/"
+o3_1990_2019_mda8 = pd.read_csv(pathbase2 + "o3_mda8_1990-2019_AT_mug.csv")
+o3_1990_2019_mda8 = o3_1990_2019_mda8.set_index(pd.to_datetime(o3_1990_2019_mda8['date']))
+o3_1990_2019_mda8 = o3_1990_2019_mda8.drop(columns=['date'])
+o3_2020_mda1 = pd.read_csv(pathbase2 + "AT_O3_2020.csv")
+o3_2020_mda1 = o3_2020_mda1.set_index(pd.to_datetime(o3_2020_mda1['date']))
+o3_2020_mda1 = o3_2020_mda1.drop(columns=['date'])
+o3_2020_mda8 = o3_2020_mda1.resample('8H', label='right').mean()
+o3_2020_mda8 = o3_2020_mda8.resample('D').mean()
+o3_1990_2020_mda8 = pd.concat([o3_1990_2019_mda8, o3_2020_mda8], axis=0)
+o3_1990_2020_mda8 = o3_1990_2020_mda8*ugm3toppb_o3 #MUG->PPB
+o3_1990_2020_da = o3_1990_2020_mda8.resample('D').mean()
+o3_1990_2020_m = o3_1990_2020_mda8.resample('M').mean()
+o3_1990_2020_mda8_w = o3_1990_2020_mda8.resample('W').mean()
+
 #HCHO DATA
-Vindobona = "/windata/Google Drive/DATA/remote/ground/maxdoas/Monika/"  # in DSCD
+Vindobona = "/windata/DATA/remote/ground/maxdoas/Monika/"  # in DSCD
 tframe = '60T'
+AxisA = pd.read_csv(Vindobona + "hcho_A_1.6.2017-31.5.2020.csv")
+AxisA = AxisA.set_index(pd.to_datetime(AxisA['date']))
+AxisA= AxisA.rename(columns={'HCHO': 'HCHO_A'})
+AxisA_drop = AxisA.drop(columns=['date'])
+AxisA_hr_mean = AxisA_drop.resample(tframe).mean()
+AxisA_d_mean = AxisA_hr_mean.resample('D').mean()
+AxisA_d_max = AxisA_hr_mean.resample('D').max()
+
+AxisB = pd.read_csv(Vindobona + "hcho_B_1.6.2017-31.5.2020.csv")
+AxisB = AxisB.set_index(pd.to_datetime(AxisB['date']))
+AxisB= AxisB.rename(columns={'HCHO': 'HCHO_B'})
+AxisB_drop = AxisB.drop(columns=['date'])
+AxisB_hr_mean = AxisB_drop.resample(tframe).mean()
+AxisB_d_mean = AxisB_hr_mean.resample('D').mean()
+AxisB_d_max = AxisB_hr_mean.resample('D').max()
+
+AxisC = pd.read_csv(Vindobona + "hcho_C_1.6.2017-31.5.2020.csv")
+AxisC = AxisC.set_index(pd.to_datetime(AxisC['date']))
+AxisC = AxisC.rename(columns={'HCHO': 'HCHO_C'})
+AxisC_drop = AxisC.drop(columns=['date'])
+AxisC_hr_mean = AxisC_drop.resample(tframe).mean()
+AxisC_d_mean = AxisC_hr_mean.resample('D').mean()
+AxisC_d_max = AxisC_hr_mean.resample('D').max()
+
 AxisD = pd.read_csv(Vindobona + "hcho_D_1.6.2017-31.5.2020.csv")
 AxisD = AxisD.set_index(pd.to_datetime(AxisD['date']))
 AxisD = AxisD.rename(columns={'HCHO': 'HCHO_D'})
 AxisD_drop = AxisD.drop(columns=['date'])
 AxisD_hr_mean = AxisD_drop.resample(tframe).mean()
 AxisD_d_mean = AxisD_hr_mean.resample('D').mean()
+AxisD_d_max = AxisD_hr_mean.resample('D').max()
 #print(AxisD_d_mean)
+
+AxisF = pd.read_csv(Vindobona + "hcho_F_1.6.2017-31.5.2020.csv")
+AxisF = AxisF.set_index(pd.to_datetime(AxisF['date']))
+AxisF = AxisF.rename(columns={'HCHO': 'HCHO_F'})
+AxisF_drop = AxisF.drop(columns=['date'])
+AxisF_hr_mean = AxisF_drop.resample(tframe).mean()
+AxisF_d_mean = AxisF_hr_mean.resample('D').mean()
+AxisF_d_max = AxisF_hr_mean.resample('D').max()
+
+AxisG = pd.read_csv(Vindobona + "hcho_G_1.6.2017-31.5.2020.csv")
+AxisG = AxisG.set_index(pd.to_datetime(AxisG['date']))
+AxisG = AxisG.rename(columns={'HCHO': 'HCHO_G'})
+AxisG_drop = AxisG.drop(columns=['date'])
+AxisG_hr_mean = AxisG_drop.resample(tframe).mean()
+AxisG_d_mean = AxisG_hr_mean.resample('D').mean()
+AxisG_d_max = AxisG_hr_mean.resample('D').max()
 
 AxisK = pd.read_csv(Vindobona + "hcho_K_13.3.2019-31.5.2020.csv")#, parse_dates=["date"])
 AxisK = AxisK.set_index(pd.to_datetime(AxisK['date']))
@@ -85,6 +145,8 @@ AxisK = AxisK.rename(columns={'HCHO': 'HCHO_K'})
 AxisK_drop = AxisK.drop(columns=['date'])
 AxisK_hr_mean = AxisK_drop.resample(tframe).mean()
 AxisK_d_mean = AxisK_hr_mean.resample('D').mean()
+AxisK_d_max = AxisK_hr_mean.resample('D').max()
+
 #print(AxisK_d_mean)
 HCHO_met = pd.concat([BOKUMetData_dailysum, AxisD_d_mean, AxisK_d_mean], axis=1)
 HCHO_met_hr = pd.concat([BOKUMetData, AxisD_hr_mean, AxisK_hr_mean], axis=1)
@@ -147,6 +209,7 @@ FIG 0 END """
 
 
 """FIG1 monthly mean diurnal cycles"""
+
 fig, ax = plt.subplots(1, figsize=(12,6))
 #dataframe['Month'] = dataframe.index.map(lambda x: x.strftime("%m"))
 #dataframe['Time'] = dataframe.index.map(lambda x: x.strftime("%H:%M"))
@@ -162,7 +225,7 @@ AxisK_monthly_mean = []
 for month in AxisD_hr_mean['Month'].unique():
     df = AxisD_hr_mean.loc[AxisD_hr_mean['Month'] == month]
     df = df.groupby('Time').describe() #.mean()
-    #print(df['HCHO']['mean'])       #12x24h ok!
+    #print(df['HCHO_D']['mean'])       #12x24h ok!
     #print(df.index) #12x24h ok!
     ax.plot(df['HCHO_D']['mean'], linewidth=2.0, color=colors[month], label = month)
     AxisD_monthly_mean.append(df['HCHO_D']['mean'])
@@ -173,44 +236,73 @@ for month in AxisK_hr_mean['Month'].unique():
     df = df.groupby('Time').describe() #.mean()
     ax.plot(df['HCHO_K']['mean'], linewidth=2.0, linestyle='dotted', color=colors[month])#, label = month)
     AxisK_monthly_mean.append(df['HCHO_K']['mean'])
-#ax.legend()
 
-ax.set_xlabel("time [Month]", size="medium")
+ax.set_xlabel("time [hours]", size="medium")
 ax.set_ylabel("HCHO DSCD [molec cm-2]", size="medium")
 plt.title("all weather conditions: D (city) - solid, K (vineyard, forest) - dotted ")
 
-#ax1.set_xlim(0, 240)
-   #ax1.set_ylim(0, 50)
-   #plt.title("NO2,Stefansplatz")#, Vienna region", size="large")#+"2m air temperature"))
-myFmt = matplotlib.dates.DateFormatter("%h")  #d
-ax.xaxis.set_major_formatter(myFmt)
-    #fig1.autofmt_xdate()
+#hours = d.HourLocator()
+#ax.xaxis.set_major_locator(hours)
 
-#ticks = ax.get_xticks()
-#ax.set_xticks(np.linspace(ticks[0], d.date2num(d.num2date(ticks[-1]) + dt.timedelta(hours=1)), 5))
-#ax.set_xticks(np.linspace(ticks[0], d.date2num(d.num2date(ticks[-1]) + dt.timedelta(hours=1)), 25), minor=True)
-#fig.autofmt_xdate()
+
+fig.autofmt_xdate()
 plt.show()
+
 """FIG 1 END"""
 
 exit()
 
 """FIG 2 scatter plot """
-"""
-print(len(AxisD_hr_mean[:-1004]), len(timeaxis_NO2[7255::2]))  #JD 31.Mai: 151*(24*2 half hours)=7248
-print(AxisD_hr_mean[:-1004])
-print(timeaxis_NO2[7255::2])
+
+start=datetime(2018,1,1)
+start2=datetime(2020,1,1)
+end=datetime(2020,5,31)
+
+#print(len(AxisD_hr_mean[:-1004]), len(timeaxis_NO2[7255::2]))  #JD 31.Mai: 151*(24*2 half hours)=7248
+#print(AxisD_hr_mean[:-1004])
+#print(timeaxis_NO2[7255::2])
+
+print(AxisA_d_mean[start:end])
+print(o3_1990_2020_da["AT9STEF"][start:end])
+
+
 try:
     fig = plt.figure()
-    #plt.scatter(AxisA_hr_mean[:-1004], NO2_HMW["STEF"][7255::2], color='navy', label="hcho_obs_A vs. NO2_STEF")
-    plt.scatter(AxisD_hr_mean[:-1003], NO2_HMW["STEF"][7255::2], color='navy', label="hcho_obs_D vs. NO2_STEF")
-    plt.legend(loc='upper left')
+    plt.scatter(AxisA_d_max[start:end], o3_1990_2020_da["AT9STEF"][start:end], color='navy', label="A", marker=".")
+    plt.scatter(AxisB_d_max[start:end], o3_1990_2020_da["AT9STEF"][start:end], color='green', label="B", marker=".")
+    plt.scatter(AxisC_d_max[start:end], o3_1990_2020_da["AT9STEF"][start:end], color='yellow', label="C", marker=".")
+    plt.scatter(AxisD_d_max[start:end], o3_1990_2020_da["AT9STEF"][start:end], color='red', label="D", marker=".")
+    plt.scatter(AxisF_d_max[start:end], o3_1990_2020_da["AT9STEF"][start:end], color='turquoise', label="F", marker=".")
+    plt.scatter(AxisG_d_max[start:end], o3_1990_2020_da["AT9STEF"][start:end], color='purple', label="G", marker=".")
+    plt.scatter(AxisK_d_max[start2:end], o3_1990_2020_da["AT9STEF"][start2:end], color='black', label="K", marker=".")
+    plt.legend(loc='lower right')
+    plt.ylabel("O3 mda8 [ppb]")
+    plt.xlabel("HCHO dmax DSCD [molec cm-2]")
     plt.show()
 except:
     print("Oops!", sys.exc_info()[0], "occurred.")
     pass
-"""
+
+
+try:
+    fig = plt.figure()
+    plt.scatter(AxisA_d_mean[start:end], o3_1990_2020_da["AT9STEF"][start:end], color='navy', label="A", marker=".")
+    plt.scatter(AxisB_d_mean[start:end], o3_1990_2020_da["AT9STEF"][start:end], color='green', label="B", marker=".")
+    plt.scatter(AxisC_d_mean[start:end], o3_1990_2020_da["AT9STEF"][start:end], color='yellow', label="C", marker=".")
+    plt.scatter(AxisD_d_mean[start:end], o3_1990_2020_da["AT9STEF"][start:end], color='red', label="D", marker=".")
+    plt.scatter(AxisF_d_mean[start:end], o3_1990_2020_da["AT9STEF"][start:end], color='turquoise', label="F", marker=".")
+    plt.scatter(AxisG_d_mean[start:end], o3_1990_2020_da["AT9STEF"][start:end], color='purple', label="G", marker=".")
+    plt.scatter(AxisK_d_mean[start2:end], o3_1990_2020_da["AT9STEF"][start2:end], color='black', label="K", marker=".")
+    plt.legend(loc='lower right')
+    plt.ylabel("O3 mda8 [ppb]")
+    plt.xlabel("HCHO dmean DSCD [molec cm-2]")
+    plt.show()
+except:
+    print("Oops!", sys.exc_info()[0], "occurred.")
+    pass
+
 """FIG 2 END"""
+exit()
 
 NO2_HMW = NO2_HMW.set_index(pd.to_datetime(NO2_HMW['timestamp.MEZ']))
 NO2_HMW_drop = NO2_HMW.drop(columns=['timestamp.MEZ'])

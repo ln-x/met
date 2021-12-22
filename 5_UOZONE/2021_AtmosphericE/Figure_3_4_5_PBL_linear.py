@@ -397,8 +397,8 @@ def Plot6var(df,title):
     Pr_PBL, p_PBL = (stats.pearsonr(x5_PBL[idxPBL], y5[idxPBL]))
     print(title, "Spearman:", "AT", SRho_AT, Sp_AT, "GR", SRho_GR, Sp_GR, "SM", SRho_SM, Sp_SM, "SIF", SRho_SIF, Sp_SIF,
           "NOX", SRho_NOX, Sp_NOX, "O3", SRho_O3, Sp_O3, "PBL", SRho_PBL, Sp_PBL)
-    print(title, "Pearson:", "AT", Pr_AT, p_AT, "GR", Pr_GR, p_GR, "SM", Pr_SM, p_SM, "SIF", Pr_SIF, p_SIF,
-          "NOX", Pr_NOX, p_NOX, "O3", Pr_O3, p_O3, "PBL", Pr_PBL, p_PBL)
+    #print(title, "Pearson:", "AT", Pr_AT, p_AT, "GR", Pr_GR, p_GR, "SM", Pr_SM, p_SM, "SIF", Pr_SIF, p_SIF,
+    #      "NOX", Pr_NOX, p_NOX, "O3", Pr_O3, p_O3, "PBL", Pr_PBL, p_PBL)
     #exit()
 
     #print(R_AT, R_GR, R_SM, R_SIF, R_NOX, R_O3)

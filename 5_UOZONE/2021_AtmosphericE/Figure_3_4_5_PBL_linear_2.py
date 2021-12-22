@@ -14,6 +14,8 @@ from met.library.Datetime_recipies import datestdtojd
 from met.library.conversions import *
 from met.library import ReadinVindobona_Filter_fullperiod
 
+pd.set_option("display.max_rows", None, "display.max_columns", None) #TODO cool option to turn on and off weather to see all data or only start+end
+
 "read in VINDOBONA"
 
 foldername_D = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_DQ"
@@ -21,8 +23,6 @@ foldername_K = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_KQ"
 
 hcho_d, hcho_dmax, hcho_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_D,"D", begin= datetime(2017, 5, 1, 0, 0, 0))
 #hchoK_d, hchoK_dmax, hchoK_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_K,"K", begin= datetime.datetime(2020, 1, 1, 0, 0, 0)))
-#print(len(hchoK_dmax))
-#print(len(hcho_dmax))
 
 '''READ IN EEA air pollution data'''
 pathbase2 = "/windata/DATA/obs_point/chem/EEA/"
@@ -47,7 +47,6 @@ o3_1990_2019_mda8 = o3_1990_2019_mda8.drop(columns=['date'])
 o3_2020_mda1 = pd.read_csv(pathbase2 + "AT_O3_2020.csv")                        #TODO! replace mda1 with mda8!
 o3_2020_mda1 = o3_2020_mda1.set_index(pd.to_datetime(o3_2020_mda1['date']))
 o3_2020_mda1 = o3_2020_mda1.drop(columns=['date'])
-#print(o3_1990_2019_mda1)
 o3_2020_mda8 = o3_2020_mda1.resample('8H', label='right').mean()
 o3_2020_mda8 = o3_2020_mda8.resample('D').mean()
 
@@ -56,7 +55,7 @@ o3_2020_mda8 = o3_2020_mda8.resample('D').mean()
 #o3_1990_2020_da = o3_1990_2020_mda8.resample('D').mean()
 #o3_1990_2020_m = o3_1990_2020_mda8.resample('M').mean()
 o3_1990_2020_mda8 = pd.concat([o3_1990_2019_mda8, o3_2020_mda8], axis=0)
-o3_1990_2020_mda8 = o3_1990_2020_mda8**ugm3toppb_o3 #MUG->PPB
+o3_1990_2020_mda8 = o3_1990_2020_mda8*ugm3toppb_o3 #MUG->PPB
 o3_1990_2020_da = o3_1990_2020_mda8.resample('D').mean()
 o3_1990_2020_m = o3_1990_2020_mda8.resample('M').mean()
 
@@ -91,7 +90,7 @@ BOKUMetData_dailysum["GRthres"] = BOKUMetData_dailysum['JD'].apply(f2)
 
 isHighGR = BOKUMetData_dailysum["GR"] > BOKUMetData_dailysum["GRthres"]
 HighGRdays = BOKUMetData_dailysum[isHighGR]
-#print(HighGRdays)
+#print(HighGRdays[datetime(2018,1,1):])
 
 BOKUMetData_monthly = BOKUMetData.resample('M').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.mean, 'WS': np.mean,
                                                      'WD': np.mean, 'WSG': np.mean, 'PC': np.sum, 'AP': np.mean})
@@ -190,32 +189,22 @@ vwc_sub.columns = ['VWC_sub_maize', 'VWC_sub_sBarley','VWC_sub_sugBeet','VWC_sub
 #print(vwc_sub)
 
 #TSIF_743
-tsif_r = pd.read_csv("/windata/DATA/remote/satellite/TROPOMI/TSIF_743.csv", sep=",")
+tsif_r = pd.read_csv("/windata/DATA/remote/satellite/TROPOMI/TSIF_743_LAT48_28_LON16_23.csv", sep=",")
 tsif = tsif_r.set_index(pd.to_datetime(tsif_r['time']))
 tsif = tsif.drop(columns=['time'])
+tsif.columns = ['SIF']
+
 #osif_771_r = pd.read_csv("/windata/DATA/remote/satellite/OCO/OSIF_8100_771nm.csv", sep=",")
 #osif_771 = osif_771_r.set_index(pd.to_datetime(osif_771_r['time']))
 #osif_771 = osif_771.drop(columns=['time'])
 osif_757_r = pd.read_csv("/windata/DATA/remote/satellite/OCO2/OSIF_8100_757nm.csv", sep=",")
 osif_757 = osif_757_r.set_index(pd.to_datetime(osif_757_r['time']))
 osif_757 = osif_757.drop(columns=['time'])
+osif_757.columns = ['SIF']
 
-
-'''READ IN CAMX PBL'''
-#starttime = datetime(2020, 1, 1, 0, 00)
-#wrfc_time_construct = np.array([starttime + timedelta(hours=i) for i in range(6481)])
-#camx3_y_vie_is = 76  #for Wien Innere Stadt 1,76,181
-#camx3_x_vie_is = 181 #for Wien Innere Stadt
-
-#i = 'zmla'
-#file = "/windata/DATA/models/boku/CAMX/BOKU2020/4_CAMXoutput/BOKU2020_BASE_WRFchem9_202001-09_zmla.nc"
-#f = Dataset(file, mode='r')
-#par = f.variables[i][:, :, :]
-#par1 = pd.DataFrame(par[:, 76, 181], index=wrfc_time_construct)
-#globals()[f"camx3_2020_{i}_d"] = par1.resample('D').mean()
-#globals()[f"camx3_2020_{i}_dmax"] = par1.resample('D').max()
-#par1.columns = ["zmla"]
-#par1 = par1.resample('D').max()
+sif_joint = pd.concat([osif_757[:datetime(2018,7,1)],tsif[datetime(2018,7,1):]], axis=0)
+#print(sif_joint)
+#print(tsif)
 
 '''READ IN CEILOMETER DATA'''
 file_pbl = "/windata/DATA/obs_point/met/ZAMG/Ceilometer/MH_Wien_Hohe_Warte_20170101_20201231.csv"
@@ -226,94 +215,25 @@ pbl = pbl.drop(columns=['datetime'])
 pbl = pbl.resample('D').max()
 #print(pbl)
 
-'''TIMESLICES'''
-March17 = datetime(2017, 3, 1, 00, 00)  #JD 2020=183
-June17 = datetime(2017, 6, 1, 00, 00)  #JD 2020=183
-Sept17 = datetime(2017, 9, 1, 00, 00)  #JD 2020=183
-Dec17 = datetime(2017, 12, 1, 00, 00)  #JD 2020=183
-March18 = datetime(2018, 3, 1, 00, 00) #JD 2020=92
-June18 = datetime(2018, 6, 1, 00, 00)  #JD 2020=183
-Sept18 = datetime(2018, 9, 1, 00, 00)  #JD 2020=183
-Dec18 = datetime(2018, 12, 1, 00, 00)  #JD 2020=183
-March19 = datetime(2019, 3, 1, 00, 00) #JD 2020=92
-June19 = datetime(2019, 6, 1, 00, 00)  #JD 2020=183
-Sept19 = datetime(2019, 9, 1, 00, 00)  #JD 2020=183
-Dec19 = datetime(2019, 12, 1, 00, 00)  #JD 2020=183
-March20 = datetime(2020, 3, 1, 00, 00) #JD 2020=92
-June20 = datetime(2020, 6, 1, 00, 00)  #JD 2020=183
-Sept20 = datetime(2020, 9, 1, 00, 00)  #JD 2020=183
-Dec20 = datetime(2020, 12, 1, 00, 00)  #JD 2020=183
-March21 = datetime(2021, 3, 1, 00, 00) #JD 2020=92
-June21 = datetime(2021, 6, 1, 00, 00)  #JD 2020=183
-Sept21 = datetime(2021, 9, 1, 00, 00)  #JD 2020=183
-Dec21 = datetime(2021, 12, 1, 00, 00)  #JD 2020=183
-
-
 '''
 Plotting
 '''
 nox_1990_2020_da = nox_1990_2020_da.resample('D').mean()
 o3_1990_2020_da = o3_1990_2020_da.resample('D').mean()
 
-#print(hcho_dmax) 2017-05-01 - 2021-08-31
-#print(rss_sub_diff_w) 2017-05-01 - 2020-12-31
-#print(BOKUMetData_dailymax) 2009-01-01 - 2021-10-21
-#print(HighGRdays)
-#print(tsif) 2018-05-01  - 2021-3-20
-#print(o3_1990_2020_da)  1990-1-1 - 2020-12-31
-#print(nox_1990_2020_da) 1990-1-1 - 2021-01-01
-#print(pbl) 2017-01-01 - 2021-01-01
 
-#VERS7 without GR filter
-pff_nofilter = pd.concat([hcho_dmax,vpd_dmax, rss_sub_diff_w,BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],tsif,
-                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"],pbl["PBL"]],axis=1)
-pff_nofilter.columns =['hcho', 'vpd', 'SM', 'AT', 'GR', 'SIF', 'O3','NOx','WD','PC','PBL']
-pff_nofilter.index.name = 'datetime'
-pff_nofilter = pff_nofilter.dropna()
-
-#VERS6 including RSS_climatological diff instead of RSS, GR filter > 90%, Ceilometer PBL
-pff = pd.concat([hcho_dmax,vpd_dmax, rss_sub_diff_w,BOKUMetData_dailymax["AT"],HighGRdays["GR"],tsif,
-                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],pbl["PBL"]],axis=1)
-pff = pff.dropna(subset=['GR'])   #df.dropna(subset=['TotalMarks'])
-pd.set_option("display.max_rows", None, "display.max_columns", None)
-
-#print(pff[June17:June18])
+pff_full = pd.concat([hcho_dmax,vpd_dmax, rss_sub["RSS_sub_wWheat"],BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],HighGRdays["GR"], tsif,
+                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"],pbl["PBL"]], axis=1)
+pff_full.columns = ['hcho', 'vpd', 'SM', 'AT', 'GR', 'GRhigh', 'SIF', 'O3','NOx','WD','PC','PBL']
+pff_clear = pff_full.dropna(subset=['GRhigh'])
+pff_weekly_rss_clear = pff_clear.resample("W").mean()
+#pff_weekly_rss_clear = pff_weekly_rss_clear.dropna()
+#print(pff_full[datetime(2018,1,1):])
+#print(pff_clear[datetime(2018,1,1):])
+#print(pff_weekly_rss_clear[datetime(2018,1,1):])
 #exit()
 
-#VERS5 including GR filter > 90%, Ceilometer PBL, gliding mean for AT and GR ??Runningmean_5d['RSS5d']
-#pff = pd.concat([hcho_dmax,rss_sub["RSS_sub_grass"],Runningmean_5d['AT5d'],Runningmean_5d['GR5d'],tsif,
-#                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],pbl["PBL"]], axis=1)
-
-#VERS4 including GR filter > 90%, Ceilometer PBL
-pff_vers4 = pd.concat([hcho_dmax,vpd_dmax, rss_sub["RSS_sub_grass"],BOKUMetData_dailymax["AT"],HighGRdays["GR"],tsif,
-                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],pbl["PBL"]],axis=1)
-#VERS3 including GR filter > 90%, Ceilometer PBL, VWC
-#pff = pd.concat([hcho_dmax,vwc_sub['VWC_sub_wWheat'],BOKUMetData_dailymax["AT"],HighGRdays["GR"],tsif,
-#                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],pbl["PBL"]],axis=1)
-
-#VERS2 including GR filter > 90%, CAMX PBL
-#pff_vers2 = pd.concat([hcho_dmax,rss_sub["RSS_sub_wWheat"],BOKUMetData_dailymax["AT"],HighGRdays["GR"],tsif,
-#                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],HighGRdays["WD"],HighGRdays["PC"],par1["zmla"]],axis=1)
-#VERS1 without GR filter
-#pff_nofilter = pd.concat([hcho_dmax,rss_sub["RSS_sub_wWheat"],BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],tsif,
-#                o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"],par1["zmla"]],axis=1)
-
-pff.columns =['hcho','vpd', 'SM', 'AT', 'GR', 'SIF', 'O3','NOx','WD','PC','PBL']
-pff.index.name = 'datetime'
-
-pff_vers4.columns = ['hcho', 'vpd', 'SM', 'AT', 'GR', 'SIF', 'O3','NOx','WD','PC','PBL']
-pff.index.name = 'datetime'
-pff_weekly_rss_clear = pff_vers4.resample("W").mean()
-pff_weekly_rss_clear = pff_weekly_rss_clear.dropna()
-
-
-#pff = pff.dropna()
-#pff = pff.resample('W').mean()
-#print(pff)
-#exit()
-#TODO: nox_1990_2020_da["AT9STEF"],'NOx' procudes additional timesteps (1:00 instead of 0:00) which makes the boolean filters fail
 """LINEAR MODEL"""
-""
 def LinearModel(df,droppar):
     #pffPC = pff.loc[pff['PC'] == 0]
     #pffNW = pffPC.loc[(pffPC['WD'] >=270) & (pffPC['WD'] <=360)]
@@ -367,6 +287,8 @@ def LinearModel(df,droppar):
     #Model Score: 0.15796381195269982
 
 def Plot6var(df,title,ylimit):
+    df = df[datetime(2018, 1, 1, 00, 00): datetime(2020, 12, 31, 00, 00)]
+    #print(df)
     x5 = df['AT'].values.flatten()
     x5_GR = df['GR'].values.flatten()
     x5_SM = df['SM'].values.flatten()
@@ -384,14 +306,14 @@ def Plot6var(df,title,ylimit):
     idxNOX = np.isfinite(x5_NOx) & np.isfinite(y5)
     idxO3 = np.isfinite(x5_O3) & np.isfinite(y5)
     idxPBL = np.isfinite(x5_PBL) & np.isfinite(y5)
-    nAT = len(y5[idxAT])
-    nGR = len(y5[idxGR])
-    nSIF = len(y5[idxSIF])
-    nVPD = len(y5[idxVPD])
-    nSM = len(y5[idxSM])
-    nNOx = len(y5[idxNOX])
-    nO3 = len(y5[idxO3])
-    nPBL = len(y5[idxPBL])
+    nAT = len(x5)
+    nGR = len(x5_GR)
+    nSIF = len(x5_SIF)
+    nVPD = len(x5_VPD)
+    nSM = len(x5_SM)
+    #nNOx = len(x5_NOX)
+    nO3 = len(x5_O3)
+    nPBL = len(x5_PBL)
     #print("hcho",len(y5),"nAT,nGR,nSIF,nSM,nNOx,nO3,nPBL", nAT,nGR,nSIF,nSM,nNOx,nO3,nPBL)
     m5, b5 = np.polyfit(x5[idxAT], y5[idxAT], 1)
     #y_err_AT = 1.96 * (np.std(x5) / np.sqrt(len(x5))) #TODO: find correct implementation of confidence intervall
@@ -429,6 +351,8 @@ def Plot6var(df,title,ylimit):
     #Pr_PBL, p_PBL = (stats.pearsonr(x5_PBL[idxPBL], y5[idxPBL]))
     print(title, "Spearman:", "VPD", SRho_VPD, Sp_VPD, "AT", SRho_AT, Sp_AT, "GR", SRho_GR, Sp_GR, "SM", SRho_SM, Sp_SM, "SIF", SRho_SIF, Sp_SIF,
           "NOX", SRho_NOX, Sp_NOX, "O3", SRho_O3, Sp_O3, "PBL", SRho_PBL, Sp_PBL)
+    #print(title, "average:", "AT", np.nanmean(x5), "GR", np.nanmean(x5_GR), "SM", np.nanmean(x5_SM), "SIF", np.nanmean(x5_SIF), "NOX", np.nanmean(x5_NOx), "VPD",
+    #      np.nanmean(x5_VPD), "O3", np.nanmean(x5_O3), "PBL", np.nanmean(x5_PBL), "HCHO", np.nanmean(y5),)
     #print(title, "Pearson:", "VPD", Pr_VPD, p_VPD, "AT", Pr_AT, p_AT, "GR", Pr_GR, p_GR, "SM", Pr_SM, p_SM, "SIF", Pr_SIF, p_SIF,
     #      "NOX", Pr_NOX, p_NOX, "O3", Pr_O3, p_O3, "PBL", Pr_PBL, p_PBL)
     #exit()
@@ -508,28 +432,6 @@ def Plot6var(df,title,ylimit):
     plt.savefig("/home/heidit/Downloads/"+title+".jpg")
     plt.show()
 
-    """
-    #scatter histograms
-    y = y5[a:]
-    for i in [x5, x5_GR, x5_SM, x5_SIF, x5_NOx, x5_O3]:
-        x = i[a:]
-        # definitions for the axes
-        left, width = 0.1, 0.65
-        bottom, height = 0.1, 0.65
-        spacing = 0.005
-        rect_scatter = [left, bottom, width, height]
-        rect_histx = [left, bottom + height + spacing, width, 0.2]
-        rect_histy = [left + width + spacing, bottom, 0.2, height]
-        # start with a square Figure
-        fig = plt.figure(figsize=(8, 8))
-        ax = fig.add_axes(rect_scatter)
-        ax_histx = fig.add_axes(rect_histx, sharex=ax)
-        ax_histy = fig.add_axes(rect_histy, sharey=ax)
-        # use the previously defined function
-        scatter_hist(x, y, ax, ax_histx, ax_histy)
-        plt.show()
-    """
-
 def scatter_hist(x, y, ax, ax_histx, ax_histy):
     # no labels
     ax_histx.tick_params(axis="x", labelbottom=False)
@@ -545,157 +447,249 @@ def scatter_hist(x, y, ax, ax_histx, ax_histy):
     ax_histy.hist(y, bins=bins, orientation='horizontal')
 
 """FULL PERIOD"""
-#"""
+
 title = "full year, no filter"
-#pff5 = pff.dropna()
-#print("pff", pff)
-#print("after dropna", pff5)
-#print(len(pff),len(pff5))
-Plot6var(pff_nofilter, title, ylimit=8)
+Plot6var(pff_full, title, ylimit=8)
+
+pff_20_I = pff_full[datetime(2020, 4, 20, 00, 00):datetime(2020, 5, 10, 00, 00)].resample('D').mean()
+pff_20_II = pff_full[datetime(2020, 5, 10, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
+title = "dry episode start"
+Plot6var(pff_20_I,title, ylimit=8)
+title = "dry episode end"
+Plot6var(pff_20_II,title, ylimit=8)
+
+pff_M18 = pff_full[datetime(2018, 5, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
+pff_M20 = pff_full[datetime(2020, 5, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
+pff_A20 = pff_full[datetime(2020, 8, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
+pff_A19 = pff_full[datetime(2019, 8, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
+title = "May18"
+Plot6var(pff_M18,title, ylimit=8)
+title = "May20"
+Plot6var(pff_M20,title, ylimit=8)
+title = "Aug20"
+Plot6var(pff_A20,title, ylimit=8)
+title = "Aug19"
+Plot6var(pff_A19,title, ylimit=8)
+exit()
+
+pff_NW = pff_full.loc[(pff_full['WD'] >=270) & (pff_full['WD'] <=359)]
+pff_SE = pff_full.loc[(pff_full['WD'] >=90) & (pff_full['WD'] <=180)]
+
+title = "NW"
+Plot6var(pff_NW,title, ylimit=8)
+title = "SE"
+Plot6var(pff_SE,title, ylimit=8)
+
 #droppar = ["AT","vpd","GR","SIF","SM","PBL"]
 #droppar = ["O3","NOx","WD","PC"]
 droppar = ["PC","GR","PBL","WD"]
-LinearModel(pff_nofilter, droppar)
+#LinearModel(pff_full, droppar)
 
+title = "full year, clear"
+Plot6var(pff_clear, title, ylimit=8)
+
+pff_clear_NW = pff_clear.loc[(pff_clear['WD'] >=270) & (pff_clear['WD'] <=359)]
+pff_clear_SE = pff_clear.loc[(pff_clear['WD'] >=90) & (pff_clear['WD'] <=180)]
+#print(pff_clear_SE)
+
+title = "NW, clear"
+Plot6var(pff_clear_NW,title, ylimit=4)
+
+pff_clear_NW_weekly = pff_clear_NW.resample("W").mean()
+title = "NW, clear, weekly values"
+Plot6var(pff_clear_NW_weekly,title, ylimit=4)
+#LinearModel(pff_weekly_rss_clear_NW, droppar)
+
+title = "SE, clear"
+Plot6var(pff_clear_SE,title, ylimit=4)
+
+pff_clear_SE_weekly = pff_clear_SE.resample("W").mean()
+title = "SE, clear, weekly values"
+Plot6var(pff_clear_SE_weekly,title, ylimit=4)
+
+pff_weekly_rss_clear = pff_clear.resample("W").mean()
 title = "full year, clear, weekly values, RSS"
-Plot6var(pff_weekly_rss_clear, title, ylimit=3)
-LinearModel(pff_weekly_rss_clear, droppar)
+Plot6var(pff_weekly_rss_clear, title, ylimit=4)
+#LinearModel(pff_weekly_rss_clear, droppar)
 
-pff_weekly_rss_clear_NW = pff_weekly_rss_clear.loc[(pff_weekly_rss_clear['WD'] >=270) & (pff_weekly_rss_clear['WD'] <=359)]
-pff_weekly_rss_clear_SE = pff_weekly_rss_clear.loc[(pff_weekly_rss_clear['WD'] >=90) & (pff_weekly_rss_clear['WD'] <=180)]
-title = "NW, clear, weekly values, RSS"
-Plot6var(pff_weekly_rss_clear_NW,title, ylimit=3)
-LinearModel(pff_weekly_rss_clear_NW, droppar)
+pff_NW_MAM_18 = pff_NW[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
+pff_NW_MAM_20 = pff_NW[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
+pff_SE_MAM_18 = pff_SE[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
+pff_SE_MAM_20 = pff_SE[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
+pff_NW_JJA_20 = pff_NW[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
+pff_NW_JJA_19 = pff_NW[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
+pff_SE_JJA_20 = pff_SE[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
+pff_SE_JJA_19 = pff_SE[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
+title = "MAM18, NW"
+Plot6var(pff_NW_MAM_18,title, ylimit=4)
+#LinearModel(pff_weekly_rss_clear_MAM_18, droppar)
+title = "MAM20, NW"
+Plot6var(pff_NW_MAM_20,title, ylimit=4)
+title = "MAM18, SE"
+Plot6var(pff_SE_MAM_18,title, ylimit=4)
+title = "MAM20, SE"
+Plot6var(pff_SE_MAM_20,title, ylimit=4)
+title = "JJA20, NW"
+Plot6var(pff_NW_JJA_20,title, ylimit=4)
+title = "JJA19, NW"
+Plot6var(pff_NW_JJA_19,title, ylimit=4)
+title = "JJA20, SE"
+Plot6var(pff_SE_JJA_20,title, ylimit=4)
+title = "JJA19, SE"
+Plot6var(pff_SE_JJA_19,title, ylimit=4)
 
-title = "SE, clear, weekly values, RSS"
-Plot6var(pff_weekly_rss_clear_SE,title, ylimit=3)
-LinearModel(pff_weekly_rss_clear_SE, droppar)
 
-"""
+pff_clearNW_MAM_18 = pff_clear_NW[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
+pff_clearNW_MAM_20 = pff_clear_NW[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
+pff_clearNW_JJA_20 = pff_clear_NW[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
+pff_clearNW_JJA_19 = pff_clear_NW[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
+title = "MAM18, clear, NW, RSS"
+Plot6var(pff_clearNW_MAM_18,title, ylimit=8)
+#LinearModel(pff_weekly_rss_clear_MAM_18, droppar)
+title = "MAM20, clear, NW, RSS"
+Plot6var(pff_clearNW_MAM_20,title, ylimit=8)
+#LinearModel(pff_weekly_rss_clear_MAM_20, droppar)
+title = "JJA20, clear, NW, RSS"
+Plot6var(pff_clearNW_JJA_20,title, ylimit=8)
+title = "JJA19, clear, NW, RSS"
+Plot6var(pff_clearNW_JJA_19,title, ylimit=8)
+
+pff_MAM_18 = pff_full[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
+pff_MAM_20 = pff_full[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
+pff_JJA_20 = pff_full[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
+pff_JJA_19 = pff_full[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
+title = "MAM18"
+Plot6var(pff_MAM_18,title, ylimit=8)
+#LinearModel(pff_weekly_rss_clear_MAM_18, droppar)
+title = "MAM20"
+Plot6var(pff_MAM_20,title, ylimit=8)
+#LinearModel(pff_weekly_rss_clear_MAM_20, droppar)
+title = "JJA20"
+Plot6var(pff_JJA_20,title, ylimit=8)
+title = "JJA19"
+Plot6var(pff_JJA_19,title, ylimit=8)
+
 
 pff_weekly_rss_clear_MAM_18 = pff_weekly_rss_clear[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
 pff_weekly_rss_clear_MAM_20 = pff_weekly_rss_clear[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
+pff_weekly_rss_clear_JJA_20 = pff_weekly_rss_clear[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
+pff_weekly_rss_clear_JJA_19 = pff_weekly_rss_clear[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
 title = "MAM18, clear, weekly values, RSS"
 Plot6var(pff_weekly_rss_clear_MAM_18,title, ylimit=8)
 #LinearModel(pff_weekly_rss_clear_MAM_18, droppar)
-
 title = "MAM20, clear, weekly values, RSS"
 Plot6var(pff_weekly_rss_clear_MAM_20,title, ylimit=8)
 #LinearModel(pff_weekly_rss_clear_MAM_20, droppar)
+title = "JJA20, clear, weekly values, RSS"
+Plot6var(pff_weekly_rss_clear_JJA_20,title, ylimit=8)
+title = "JJA19, clear, weekly values, RSS"
+Plot6var(pff_weekly_rss_clear_JJA_19,title, ylimit=8)
 
 title = "MAM, no filter"
 #pffMAM = pff.loc[(pff["datetime"].dt.month==12)]
 #print(pffMAM)
 #exit()
-pffMAM_17 = pff_nofilter[datetime(2017, 3, 1, 00, 00):datetime(2017, 5, 31, 00, 00)].resample('D').mean() #CHECKED OK
-pffMAM_18 = pff_nofilter[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
-pffMAM_19 = pff_nofilter[datetime(2019, 3, 1, 00, 00):datetime(2019, 5, 31, 00, 00)].resample('D').mean()
-pffMAM_20 = pff_nofilter[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
-pffMAM_21 = pff_nofilter[datetime(2021, 3, 1, 00, 00):datetime(2021, 5, 31, 00, 00)].resample('D').mean()
+pffMAM_17 = pff_full[datetime(2017, 3, 1, 00, 00):datetime(2017, 5, 31, 00, 00)].resample('D').mean() #CHECKED OK
+pffMAM_18 = pff_full[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
+pffMAM_19 = pff_full[datetime(2019, 3, 1, 00, 00):datetime(2019, 5, 31, 00, 00)].resample('D').mean()
+pffMAM_20 = pff_full[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
+pffMAM_21 = pff_full[datetime(2021, 3, 1, 00, 00):datetime(2021, 5, 31, 00, 00)].resample('D').mean()
 pffMAM = pd.concat([pffMAM_17,pffMAM_18,pffMAM_19,pffMAM_21])
 Plot6var(pffMAM, title, ylimit=8)
-LinearModel(pffMAM.dropna(), droppar)
+#LinearModel(pffMAM.dropna(), droppar)
 
 #SUMMER: JJA
 title = "JJA, no filter"
-pffJJA_17 = pff_nofilter[datetime(2017, 6, 1, 00, 00):datetime(2017, 8, 31, 00, 00)].resample('D').mean()
-pffJJA_18 = pff_nofilter[datetime(2018, 6, 1, 00, 00):datetime(2018, 8, 31, 00, 00)].resample('D').mean()
-pffJJA_19 = pff_nofilter[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
-pffJJA_20 = pff_nofilter[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
-pffJJA_21 = pff_nofilter[datetime(2021, 6, 1, 00, 00):datetime(2021, 8, 31, 00, 00)].resample('D').mean()
+pffJJA_17 = pff_full[datetime(2017, 6, 1, 00, 00):datetime(2017, 8, 31, 00, 00)].resample('D').mean()
+pffJJA_18 = pff_full[datetime(2018, 6, 1, 00, 00):datetime(2018, 8, 31, 00, 00)].resample('D').mean()
+pffJJA_19 = pff_full[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
+pffJJA_20 = pff_full[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
+pffJJA_21 = pff_full[datetime(2021, 6, 1, 00, 00):datetime(2021, 8, 31, 00, 00)].resample('D').mean()
 pffJJA = pd.concat([pffJJA_17,pffJJA_18,pffJJA_19,pffJJA_20,pffJJA_21])
 Plot6var(pffJJA, title, ylimit=8)
-LinearModel(pffJJA.dropna(), droppar)
+#LinearModel(pffJJA.dropna(), droppar)
 
 #SUMMER: SON
 title = "SON, no filter"
-pffSON_17 = pff_nofilter[datetime(2017, 9, 1, 00, 00):datetime(2017, 11, 30, 00, 00)].resample('D').mean()
-pffSON_18 = pff_nofilter[datetime(2018, 9, 1, 00, 00):datetime(2018, 11, 30, 00, 00)].resample('D').mean()
-pffSON_19 = pff_nofilter[datetime(2019, 9, 1, 00, 00):datetime(2019, 11, 30, 00, 00)].resample('D').mean()
-pffSON_20 = pff_nofilter[datetime(2020, 9, 1, 00, 00):datetime(2020, 11, 30, 00, 00)].resample('D').mean()
+pffSON_17 = pff_full[datetime(2017, 9, 1, 00, 00):datetime(2017, 11, 30, 00, 00)].resample('D').mean()
+pffSON_18 = pff_full[datetime(2018, 9, 1, 00, 00):datetime(2018, 11, 30, 00, 00)].resample('D').mean()
+pffSON_19 = pff_full[datetime(2019, 9, 1, 00, 00):datetime(2019, 11, 30, 00, 00)].resample('D').mean()
+pffSON_20 = pff_full[datetime(2020, 9, 1, 00, 00):datetime(2020, 11, 30, 00, 00)].resample('D').mean()
 pffSON = pd.concat([pffSON_17,pffSON_18,pffSON_19,pffSON_20])
-Plot6var(pffSON.dropna(), title, ylimit=8)
+Plot6var(pffSON, title, ylimit=8)
 #SUMMER: DJF
 title = "DJF, no filter"
-pffDJF_17 = pff_nofilter[datetime(2017, 12, 1, 00, 00):datetime(2018, 2, 28, 00, 00)].resample('D').mean()
-pffDJF_18 = pff_nofilter[datetime(2018, 12, 1, 00, 00):datetime(2019, 2, 28, 00, 00)].resample('D').mean()
-pffDJF_19 = pff_nofilter[datetime(2019, 12, 1, 00, 00):datetime(2020, 2, 29, 00, 00)].resample('D').mean()
-pffDJF_20 = pff_nofilter[datetime(2020, 12, 1, 00, 00):datetime(2021, 2, 28, 00, 00)].resample('D').mean()
+pffDJF_17 = pff_full[datetime(2017, 12, 1, 00, 00):datetime(2018, 2, 28, 00, 00)].resample('D').mean()
+pffDJF_18 = pff_full[datetime(2018, 12, 1, 00, 00):datetime(2019, 2, 28, 00, 00)].resample('D').mean()
+pffDJF_19 = pff_full[datetime(2019, 12, 1, 00, 00):datetime(2020, 2, 29, 00, 00)].resample('D').mean()
+pffDJF_20 = pff_full[datetime(2020, 12, 1, 00, 00):datetime(2021, 2, 28, 00, 00)].resample('D').mean()
 pffDJF = pd.concat([pffDJF_17,pffDJF_18,pffDJF_19,pffDJF_20])
-Plot6var(pffDJF.dropna(), title, ylimit=8)
+Plot6var(pffDJF, title, ylimit=8)
 
 title = "full year, 90% GR"
-#pff5 = pff.dropna()
-#print("pff", pff)
-#print("after dropna", pff5)
-#print(len(pff),len(pff5))
-Plot6var(pff.dropna(), title, ylimit=8)
-#exit()
+Plot6var(pff_clear, title, ylimit=8)
+
 
 title = "MAM, 90% GR"
 #pffMAM = pff.loc[(pff["datetime"].dt.month==12)]
 #print(pffMAM)
 #exit()
-pffMAM_17 = pff[March17:datetime(2017, 5, 31, 00, 00)].resample('D').mean()
-pffMAM_18 = pff[March18:datetime(2018, 5, 31, 00, 00)].resample('D').mean()
-pffMAM_19 = pff[March19:datetime(2019, 5, 31, 00, 00)].resample('D').mean()
-pffMAM_20 = pff[March20:datetime(2020, 5, 31, 00, 00)].resample('D').mean()
-pffMAM_21 = pff[March21:datetime(2021, 5, 31, 00, 00)].resample('D').mean()
+pffMAM_17 = pff_clear[datetime(2017, 3, 1, 00, 00):datetime(2017, 5, 31, 00, 00)].resample('D').mean()
+pffMAM_18 = pff_clear[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
+pffMAM_19 = pff_clear[datetime(2019, 3, 1, 00, 00):datetime(2019, 5, 31, 00, 00)].resample('D').mean()
+pffMAM_20 = pff_clear[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
+pffMAM_21 = pff_clear[datetime(2021, 3, 1, 00, 00):datetime(2021, 5, 31, 00, 00)].resample('D').mean()
 pffMAM = pd.concat([pffMAM_17,pffMAM_18,pffMAM_19,pffMAM_21])
 Plot6var(pffMAM, title, ylimit=8)
+pffMAM_w = pffMAM.resample("W").mean()
+title = "MAM, 90% GR, weekly"
+Plot6var(pffMAM_w, title, ylimit=8)
+
 #SUMMER: JJA
 title = "JJA, 90% GR"
-pffJJA_17 = pff[June17:datetime(2017, 8, 31, 00, 00)].resample('D').mean()
-pffJJA_18 = pff[June18:datetime(2018, 8, 31, 00, 00)].resample('D').mean()
-pffJJA_19 = pff[June19:datetime(2019, 8, 31, 00, 00)].resample('D').mean()
-pffJJA_20 = pff[June20:datetime(2020, 8, 31, 00, 00)].resample('D').mean()
-pffJJA_21 = pff[June21:datetime(2021, 8, 31, 00, 00)].resample('D').mean()
+pffJJA_17 = pff_clear[datetime(2017, 6, 1, 00, 00):datetime(2017, 8, 31, 00, 00)].resample('D').mean()
+pffJJA_18 = pff_clear[datetime(2018, 6, 1, 00, 00):datetime(2018, 8, 31, 00, 00)].resample('D').mean()
+pffJJA_19 = pff_clear[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
+pffJJA_20 = pff_clear[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
+pffJJA_21 = pff_clear[datetime(2021, 6, 1, 00, 00):datetime(2021, 8, 31, 00, 00)].resample('D').mean()
 pffJJA = pd.concat([pffJJA_17,pffJJA_18,pffJJA_19,pffJJA_20,pffJJA_21])
 Plot6var(pffJJA, title, ylimit=8)
+pffJJA_w = pffJJA.resample("W").mean()
+title = "JJA, 90% GR, weekly"
+Plot6var(pffJJA_w, title, ylimit=8)
+
+
 #SUMMER: SON
 title = "SON, 90% GR"
-pffSON_17 = pff[Sept17:datetime(2017, 11, 30, 00, 00)].resample('D').mean()
-pffSON_18 = pff[Sept18:datetime(2018, 11, 30, 00, 00)].resample('D').mean()
-pffSON_19 = pff[Sept19:datetime(2019, 11, 30, 00, 00)].resample('D').mean()
-pffSON_20 = pff[Sept20:datetime(2020, 11, 30, 00, 00)].resample('D').mean()
+pffSON_17 = pff_clear[datetime(2017, 9, 1, 00, 00):datetime(2017, 11, 30, 00, 00)].resample('D').mean()
+pffSON_18 = pff_clear[datetime(2018, 9, 1, 00, 00):datetime(2018, 11, 30, 00, 00)].resample('D').mean()
+pffSON_19 = pff_clear[datetime(2019, 9, 1, 00, 00):datetime(2019, 11, 30, 00, 00)].resample('D').mean()
+pffSON_20 = pff_clear[datetime(2020, 9, 1, 00, 00):datetime(2020, 11, 30, 00, 00)].resample('D').mean()
 pffSON = pd.concat([pffSON_17,pffSON_18,pffSON_19,pffSON_20])
 Plot6var(pffSON, title, ylimit=8)
+pffSON_w = pffSON.resample("W").mean()
+title = "SON, 90% GR, weekly"
+Plot6var(pffSON_w, title, ylimit=8)
+
 #SUMMER: DJF
 title = "DJF, 90% GR"
-pffDJF_17 = pff[Dec17:datetime(2018, 2, 28, 00, 00)].resample('D').mean()
-pffDJF_18 = pff[Dec18:datetime(2019, 2, 28, 00, 00)].resample('D').mean()
-pffDJF_19 = pff[Dec19:datetime(2020, 2, 28, 00, 00)].resample('D').mean()
-pffDJF_20 = pff[Dec20:datetime(2021, 2, 28, 00, 00)].resample('D').mean()
+pffDJF_17 = pff_clear[datetime(2017, 12, 1, 00, 00):datetime(2018, 2, 28, 00, 00)].resample('D').mean()
+pffDJF_18 = pff_clear[datetime(2018, 12, 1, 00, 00):datetime(2019, 2, 28, 00, 00)].resample('D').mean()
+pffDJF_19 = pff_clear[datetime(2019, 12, 1, 00, 00):datetime(2020, 2, 28, 00, 00)].resample('D').mean()
+pffDJF_20 = pff_clear[datetime(2020, 12, 1, 00, 00):datetime(2021, 2, 28, 00, 00)].resample('D').mean()
 pffDJF = pd.concat([pffDJF_17,pffDJF_18,pffDJF_19,pffDJF_20])
 Plot6var(pffDJF, title, ylimit=8)
-#"
-#monthley:
+pffDJF_w = pffDJF.resample("W").mean()
+title = "DJF, 90% GR, weekly"
+Plot6var(pffDJF_w, title, ylimit=8)
 
-
-
-#NW episodes
-#title = "NW selected episodes, 90% GR"
-#pffSPI_spring1 = pff[datetime(2019, 4, 1, 00, 00):datetime(2019, 4, 30, 00, 00)]
-#pffSPI_spring2 = pff[datetime(2020, 4, 1, 00, 00):datetime(2019, 5, 31, 00, 00)]
-#pffSPI_spring =
-#pffNW = pff.loc[(pff['WD'] >=270) & (pff['WD'] <=359)]
-
-#pffNW_1 = pff[datetime(2019, 3, 24, 00, 00):datetime(2019, 3, 29, 00, 00)].resample('D').mean()
-#pffNW_2 = pff[datetime(2019, 4, 9, 00, 00):datetime(2019, 4, 16, 00, 00)].resample('D').mean()
-#pffNW_3 = pff[datetime(2019, 4, 9, 00, 00):datetime(2019, 4, 16, 00, 00)].resample('D').mean()
-#pffDJF_19 = pff[Dec19:datetime(2020, 2, 28, 00, 00)].resample('D').mean()
-#pffDJF_20 = pff[Dec20:datetime(2021, 2, 28, 00, 00)].resample('D').mean()
-#pffDJF = pd.concat([pffDJF_17,pffDJF_18,pffDJF_19,pffDJF_20])
-
-"""
 """METFILTER"""
 
-pffPC = pff.loc[pff['PC'] == 0]  #CHECKED OK
+pffPC = pff_clear.loc[pff_clear['PC'] == 0]  #CHECKED OK
 pffAT = pffPC.loc[(pffPC['AT'] > 15)] #and (pffPC['AT'] < 25)]
 
 title = "SE, PR=0, GR=90%, ATmax>15"
 pffSE_met = pffAT.loc[(pffAT['WD'] >=90) & (pffAT['WD'] <=180)]
-pffSE_met = pffSE_met.dropna()
 try:
     Plot6var(pffSE_met, title, ylimit=8)
     LinearModel(pffSE_met, droppar)
@@ -703,9 +697,13 @@ except:
     print("SE_low empty")
     pass
 
+pffSE_met_w = pffSE_met.resample("W").mean()
+title = "SE, PR=0, GR=90%, ATmax>15, weekly"
+Plot6var(pffSE_met_w, title, ylimit=8)
+
 title = "NW, PR=0, GR=90%, ATmax>15"
 pffNW_met = pffAT.loc[(pffAT['WD'] >=270) & (pffAT['WD'] <=360)]
-pffNW_met = pffNW_met.dropna()
+pffNW_met = pffNW_met
 try:
     Plot6var(pffNW_met, title, ylimit=8)
     LinearModel(pffNW_met, droppar)
@@ -713,161 +711,7 @@ except:
     print("NW_low empty")
     pass
 
-exit()
 
-#(pffAT)
-#pffRSS_low = pffAT.loc[pffAT['SM'] <= 0.0] #relative soil moisture RSS sub wWheat (40-100cm)
-#pffRSS_high = pffAT.loc[pffAT['SM'] > 0.0] #relative soil moisture RSS sub wWheat (40-100cm)
-#print(pffRSS_low)
-
-#print(len(pffRSS))
-#NW
-#pffNW_low = pffRSS_low.loc[(pffRSS_low['WD'] >=270) & (pffRSS_low['WD'] <=359)]
-#pffNW_low = pffNW_low.dropna()
-#droppar = ["03","NOx","WD","PC","GR","SIF","SM","AT","PBL"]
-#print(pffNW_low)
-try:
-    title = "PR=0, GR=90%, ATmax>15, RSS<climate mean"
-    Plot6var(pffRSS_low, title, ylimit=8)
-    LinearModel(pffNW_low.dropna(), droppar)
-except:
-    print("RSS_low empty")
-    pass
-try:
-    title = "PR=0, GR=90%, ATmax>15, RSS>climate mean"
-    #LinearModel(pffNW_low, droppar)
-    LinearModel(pffNW_low.dropna(), droppar)
-    Plot6var(pffRSS_high, title, ylimit=8)
-except:
-    print("RSS_high empty")
-    pass
-try:
-    title = "NW, PR=0, GR=90%, ATmax>15, RSS<climate mean"
-    #LinearModel(pffNW_low, droppar)
-    Plot6var(pffNW_low, title, ylimit=8)
-    LinearModel(pffNW_low.dropna(), droppar)
-
-except:
-    print("NW_low empty")
-    pass
-
-title = "NW, PR=0, GR=90%, ATmax>30, RSS<climate mean"
-pffNW_low = pffRSS_low.loc[(pffRSS_low['WD'] >=270) & (pffRSS_low['WD'] <=359)]
-pffNW_low_hot = pffNW_low.loc[(pffNW_low['AT'] > 30)] #and (pffPC['AT'] < 25)]
-#pffNW_low_hot = pffNW_low_hot.dropna()
-#droppar = ["03","NOx","WD","PC","GR","SIF","SM","AT","PBL"]
-droppar = ["AT"]
-try:
-    LinearModel(pffNW_low_hot.drona(), droppar)
-    Plot6var(pffNW_low_hot, title, ylimit=8)
-except:
-    print("NW_low_hot empty")
-    pass
-
-
-"""title = "NW, PR=0, GR=90%, ATmax>15, RSS>climate mean" #WD=270°-360°,PC=0,GR>90%,ATmax>10 C°"""
-#pffNW_high = pffRSS_high.loc[(pffRSS_high['WD'] >=270) & (pffRSS_high['WD'] <=359)]
-#pffNW_high = pffNW_high.dropna()
-#try:
-#    Plot6var(pffNW_high, title)
-#except:
-#    print("NW_high empty")
-#    pass
-
-#SW
-title = "SE, PR=0, GR=90%, ATmax>30, RSS<climate mean"
-pffSE_low = pffRSS_low.loc[(pffRSS_low['WD'] >=90) & (pffRSS_low['WD'] <=180)]
-pffSE_low_hot = pffSE_low.loc[(pffSE_low['AT'] > 30)] #and (pffPC['AT'] < 25)]
-#pffSE_low_hot = pffSE_low_hot.dropna()
-try:
-    #LinearModel(pffSE_low_hot, droppar)
-    Plot6var(pffSE_low_hot, title, ylimit=8)
-except:
-    print("SE_low_hot empty")
-    pass
-
-#print("pffAT",pffAT[June19:Sept19])
-#print("pffRSS_low",pffRSS_low[June19:Sept19])
-#print("pffRSS_high",pffRSS_high[June19:Sept19])
-#print("pffNW_low",pffRSS_high[June19:Sept19])
-#print("pffSE_low",pffSE_low[June19:Sept19])
-#exit()
-
-"""title = "SE, PR=0, GR=90%, ATmax>15&<30, RSS<climate mean"""
-#pffSE_low = pffRSS_low.loc[(pffRSS_low['WD'] >=90) & (pffRSS_low['WD'] <=180)]
-#pffSE_low_ideal = pffRSS_low.loc[(pffRSS_low['AT'] > 15) & (pffRSS_low['AT'] < 30)]
-#pffSE_low_ideal = pffSE_low_ideal.dropna()
-#try:
-#    LinearModel(pffSE_low_ideal, droppar)
-#    Plot6var(pffSE_low_ideal, title)
-#except:
-#    print("SE_low_ideal empty")
-#    pass
-
-title = "SE, PR=0, GR=90%, ATmax>15, RSS<climate mean"
-pffSE_low = pffRSS_low.loc[(pffRSS_low['WD'] >=90) & (pffRSS_low['WD'] <=180)]
-pffNW_low = pffRSS_low.loc[(pffRSS_low['WD'] >=270) & (pffRSS_low['WD'] <=360)]
-#pffSE_low = pffSE_low.dropna()
-try:
-    Plot6var(pffSE_low, title, ylimit=8)
-    LinearModel(pffSE_low, droppar)
-    Plot6var(pffNW_low, title, ylimit=8)
-    LinearModel(pffNW_low, droppar)
-except:
-    print("SE_low empty")
-    pass
-
-"""title = "SE, PR=0, GR=90%, ATmax>15, RSS>climate mean" #WD=90°-180°,PC=0,GR>90%,ATmax>10 C°"""
-#pffSE_high = pffRSS_high.loc[(pffRSS_high['WD'] >=90) & (pffRSS_high['WD'] <=180)]
-#pffSE_high = pffSE_high.dropna()
-#try:
-#    LinearModel(pffSE_high, droppar)
-#    Plot6var(pffSE_high, title)
-#except:
-#    print("SE_high empty")
-#    pass
-
-#SW:MAM
-"""title = "MAM, SE, PR=0, GR=90%, ATmax>15, RSS<climate mean"""
-#pffSEMAM19 = pffSE_low[March19:June19].resample('D').mean()
-#pffSEMAM20 = pffSE_low[March:June].resample('D').mean()
-#pffSEMAM = pffSEMAM19.append(pffSEMAM20)
-#pffSEMAM = pffSEMAM.dropna()
-#Plot6var(pffSEMAM, title)
-"""title = "MAM, SE, PR=0, GR=90%, ATmax>15, RSS>climate mean" #WD=90°-180°,PC=0,GR>90%,ATmax>10 C°,"""
-#pffSEMAM19 = pffSE_high[March19:June19].resample('D').mean()
-#pffSEMAM20 = pffSE_high[March:June].resample('D').mean()
-#pffSEMAM = pffSEMAM19.append(pffSEMAM20)
-#pffSEMAM = pffSEMAM.dropna()
-#Plot6var(pffSEMAM, title)
-
-#SW:JJA
-"""title = "JJA, SE,  PR=0, GR=90%, ATmax>15, RSS<climate mean"""
-#pffSEJJA19 = pffSE_low[June19:Sept19].resample('D').mean()
-#pffSEJJA20 = pffSE_low[June:Sept].resample('D').mean()
-#pffSEJJA = pffSEJJA19.append(pffSEJJA20)
-#print(pffSEJJA19)
-#print(pffSEJJA20)
-#print(pffSEJJA)
-#pffSEJJA = pffSEJJA.dropna()
-#Plot6var(pffSEJJA, title)
-"""title = "JJA, SE, PR=0, GR=90%, ATmax>15, RSS>climate mean"""
-#pffSEJJA19 = pffSE_high[June19:Sept19].resample('D').mean()
-#pffSEJJA20 = pffSE_high[June:Sept].resample('D').mean()
-#pffSEJJA = pffSEJJA19.append(pffSEJJA20)
-#pffSEJJA = pffSEJJA.dropna()
-#print(pffSEJJA)
-#try:
-#    LinearModel(pffSEJJA, droppar)
-#    Plot6var(pffSEJJA, title)
-#except:
-#    print("SEJJA empty")
-#    pass
-
-#SPRING: MAM
-
-
-
-
-
-
+pffNW_met_w = pffNW_met.resample("W").mean()
+title = "NW, PR=0, GR=90%, ATmax>15, weekly"
+Plot6var(pffNW_met_w, title, ylimit=8)

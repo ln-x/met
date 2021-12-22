@@ -46,7 +46,8 @@ BOKUMetData_dailymax_w = BOKUMetData_dailymax.resample('W').agg({'DT': np.mean, 
 
 
 "read in EDO - SPI data"
-spi = pd.read_csv("/windata/DATA/obs_point/land/EDO/SPI_16_48.2017to2021.20211206100030.txt", delimiter="|",skiprows=2,header=0)
+#spi = pd.read_csv("/windata/DATA/obs_point/land/EDO/SPI_16_48.2017to2021.20211206100030.txt", delimiter="|",skiprows=2,header=0)
+spi = pd.read_csv("/windata/DATA/obs_point/land/EDO/spi.16_48.1990to2021.20211217121607.txt", delimiter="|",skiprows=2,header=0) #spi1.16_48.1990to2021.20211217120417.txt
 spi = spi.set_index(pd.to_datetime(spi['Date'])) #utc=True
 spi = spi.drop(columns=['Date'])
 spi = spi[:-12]
@@ -69,9 +70,8 @@ o3_2020_mda8 = o3_2020_mda1.resample('8H', label='right').mean()
 o3_2020_mda8 = o3_2020_mda8.resample('D').mean()
 
 o3_1990_2020_mda8 = pd.concat([o3_1990_2019_mda8, o3_2020_mda8], axis=0)
-o3_1990_2020_mda8 = o3_1990_2020_mda8["AT9STEF"]**ugm3toppb_o3 #MUG->PPB
-#o3_1990_2020_da = o3_1990_2020_mda8["AT9STEF"].resample('D').mean()
-o3_1990_2020_m = o3_1990_2020_mda8[datetime(2017,1,1):datetime(2021,12,30)].resample('M').mean()
+o3_1990_2020_mda8 = o3_1990_2020_mda8["AT9STEF"]*ugm3toppb_o3 #MUG->PPB
+o3_1990_2020_m = o3_1990_2020_mda8[datetime(1990,1,1):datetime(2021,12,30)].resample('M').mean()
 o3_1990_2020_m = o3_1990_2020_m[:-1]
 print(spi,o3_1990_2020_m)
 
@@ -90,6 +90,54 @@ o3_1990_2020_m_fma = o3_1990_2020_m.loc[(o3_1990_2020_m.index.month>=2)&(o3_1990
 spi3_d_m_fma = spi.loc[(spi.index.month>=2)&(spi.index.month<=4)]
 
 
+"""Regresssion seasons"""
+y5_djf = o3_1990_2020_m_winter.values.flatten()
+y5_mam = o3_1990_2020_m_spring.values.flatten()
+y5_jja = o3_1990_2020_m_summer.values.flatten()
+y5_son = o3_1990_2020_m_autumn.values.flatten()
+y5_jfm = o3_1990_2020_m_jfm.values.flatten()
+y5_fma = o3_1990_2020_m_fma.values.flatten()
+
+x5_SPI3_djf = spi3_d_m_winter['SPI-6'].values.flatten()
+x5_SPI3_mam = spi3_d_m_spring['SPI-6'].values.flatten()
+x5_SPI3_jja = spi3_d_m_summer['SPI-6'].values.flatten()
+x5_SPI3_son = spi3_d_m_autumn['SPI-6'].values.flatten()
+x5_SPI3_jfm = spi3_d_m_jfm['SPI-6'].values.flatten()
+x5_SPI3_fma = spi3_d_m_fma['SPI-6'].values.flatten()
+
+#m5_SPI3_djf, b5_SPI3_djf = np.polyfit(x5_SPI3_djf, y5_djf, 1)
+#m5_SPI3_mam, b5_SPI3_mam = np.polyfit(x5_SPI3_mam, y5_mam, 1)
+#m5_SPI3_jja, b5_SPI3_jja = np.polyfit(x5_SPI3_jja, y5_jja, 1)
+#m5_SPI3_son, b5_SPI3_son = np.polyfit(x5_SPI3_son, y5_son, 1)
+#m5_SPI3_jfm, b5_SPI3_jfm = np.polyfit(x5_SPI3_jfm, y5_jfm, 1)
+#m5_SPI3_fma, b5_SPI3_fma = np.polyfit(x5_SPI3_fma, y5_fma, 1)
+
+#SRho_SPI3_djf, Sp_SPI3_djf = (stats.spearmanr(x5_SPI3_djf, y5_djf))
+#SRho_SPI3_mam, Sp_SPI3_mam = (stats.spearmanr(x5_SPI3_mam, y5_mam))
+#SRho_SPI3_jja, Sp_SPI3_jja = (stats.spearmanr(x5_SPI3_jja, y5_jja))
+fig = plt.figure
+#plt.scatter(x5_SPI3_djf, y5_djf, color='turquoise', label="DJF", s=5)
+#plt.scatter(x5_SPI3_jfm, y5_jfm, color='blue', label="SPI-1 JFM", s=5)
+#plt.scatter(x5_SPI3_fma, y5_fma, color='turquoise', label="SPI-1 FMA", s=5)
+plt.scatter(x5_SPI3_mam, y5_mam, color='green', label="MAM", s=5)
+plt.scatter(x5_SPI3_jja, y5_jja, color='red', label="JJA", s=5)
+#plt.scatter(x5_SPI3_son, y5_son, color='brown', label="SON", s=5)
+
+#plt.plot(x5_SPI3_djf, m5_SPI3_djf * x5_SPI3_djf + b5_SPI3_djf, color='black')
+#plt.plot(x5_SPI3_jfm, m5_SPI3_jfm * x5_SPI3_jfm + b5_SPI3_jfm, color='blue')
+#plt.plot(x5_SPI3_fma, m5_SPI3_fma * x5_SPI3_fma + b5_SPI3_fma, color='turquoise')
+#plt.plot(x5_SPI3_mam, m5_SPI3_mam * x5_SPI3_mam + b5_SPI3_mam, color='green')
+#plt.plot(x5_SPI3_jja, m5_SPI3_jja * x5_SPI3_jja + b5_SPI3_jja, color='red')
+#plt.plot(x5_SPI3_son, m5_SPI3_son * x5_SPI3_son + b5_SPI3_son, color='brown')
+plt.ylabel("O3 [ppb]", size="small")
+plt.xlabel("SPI 6 [-]", size="small")
+plt.legend(loc="lower right")
+#plt.title("full year")
+#plt.title('r={:.2f} \n p={:.2f} \n n=52'.format(SRho_SPI, Sp_SPI), fontsize='small')
+plt.show()
+
+exit()
+
 """Timeserie HCHO_SPI"""
 figure = plt.figure
 ax1 = plt.gca()
@@ -101,51 +149,6 @@ ax1.legend(loc="upper left")
 ax2.legend()
 plt.show()
 
-"""Regresssion seasons"""
-y5_djf = o3_1990_2020_m_winter.values.flatten()
-y5_mam = o3_1990_2020_m_spring.values.flatten()
-y5_jja = o3_1990_2020_m_summer.values.flatten()
-y5_son = o3_1990_2020_m_autumn.values.flatten()
-y5_jfm = o3_1990_2020_m_jfm.values.flatten()
-y5_fma = o3_1990_2020_m_fma.values.flatten()
-
-x5_SPI3_djf = spi3_d_m_winter['SPI-12'].values.flatten()
-x5_SPI3_mam = spi3_d_m_spring['SPI-12'].values.flatten()
-x5_SPI3_jja = spi3_d_m_summer['SPI-12'].values.flatten()
-x5_SPI3_son = spi3_d_m_autumn['SPI-12'].values.flatten()
-x5_SPI3_jfm = spi3_d_m_jfm['SPI-12'].values.flatten()
-x5_SPI3_fma = spi3_d_m_fma['SPI-12'].values.flatten()
-
-m5_SPI3_djf, b5_SPI3_djf = np.polyfit(x5_SPI3_djf, y5_djf, 1)
-m5_SPI3_mam, b5_SPI3_mam = np.polyfit(x5_SPI3_mam, y5_mam, 1)
-m5_SPI3_jja, b5_SPI3_jja = np.polyfit(x5_SPI3_jja, y5_jja, 1)
-m5_SPI3_son, b5_SPI3_son = np.polyfit(x5_SPI3_son, y5_son, 1)
-m5_SPI3_jfm, b5_SPI3_jfm = np.polyfit(x5_SPI3_jfm, y5_jfm, 1)
-m5_SPI3_fma, b5_SPI3_fma = np.polyfit(x5_SPI3_fma, y5_fma, 1)
-
-SRho_SPI3_djf, Sp_SPI3_djf = (stats.spearmanr(x5_SPI3_djf, y5_djf))
-SRho_SPI3_mam, Sp_SPI3_mam = (stats.spearmanr(x5_SPI3_mam, y5_mam))
-SRho_SPI3_jja, Sp_SPI3_jja = (stats.spearmanr(x5_SPI3_jja, y5_jja))
-fig = plt.figure
-plt.scatter(x5_SPI3_djf, y5_djf, color='black', label="SPI-12 winter (DJF)", s=5)
-plt.scatter(x5_SPI3_jfm, y5_jfm, color='blue', label="SPI-12 JFM", s=5)
-plt.scatter(x5_SPI3_fma, y5_fma, color='turquoise', label="SPI-12 FMA", s=5)
-plt.scatter(x5_SPI3_mam, y5_mam, color='green', label="SPI-12 spring (MAM)", s=5)
-plt.scatter(x5_SPI3_jja, y5_jja, color='red', label="SPI-12 summer (JJA)", s=5)
-plt.scatter(x5_SPI3_son, y5_son, color='brown', label="SPI-12 autumn (SON)", s=5)
-
-plt.plot(x5_SPI3_djf, m5_SPI3_djf * x5_SPI3_djf + b5_SPI3_djf, color='black')
-plt.plot(x5_SPI3_jfm, m5_SPI3_jfm * x5_SPI3_jfm + b5_SPI3_jfm, color='blue')
-plt.plot(x5_SPI3_fma, m5_SPI3_fma * x5_SPI3_fma + b5_SPI3_fma, color='turquoise')
-plt.plot(x5_SPI3_mam, m5_SPI3_mam * x5_SPI3_mam + b5_SPI3_mam, color='green')
-plt.plot(x5_SPI3_jja, m5_SPI3_jja * x5_SPI3_jja + b5_SPI3_jja, color='red')
-plt.plot(x5_SPI3_son, m5_SPI3_son * x5_SPI3_son + b5_SPI3_son, color='brown')
-plt.ylabel("O3 [ppb]", size="small")
-plt.xlabel("SPI [-]", size="small")
-plt.legend(loc="upper right")
-#plt.title("full year")
-#plt.title('r={:.2f} \n p={:.2f} \n n=52'.format(SRho_SPI, Sp_SPI), fontsize='small')
-plt.show()
 
 #exit()
 """Regression SPI-HCHO"""
@@ -187,7 +190,7 @@ plt.title("full year")
 plt.show()
 exit()
 
-
+start = datetime(1990,1,1)
 start2017 = datetime(2017, 5, 1, 00, 00)
 start2018 = datetime(2018, 1, 1, 00, 00)
 start2019 = datetime(2019, 1, 1, 00, 00)

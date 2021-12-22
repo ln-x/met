@@ -225,7 +225,7 @@ plt.legend()
 plt.title("full year")
 #plt.title('r={:.2f} \n p={:.2f} \n n=52'.format(SRho_SPI, Sp_SPI), fontsize='small')
 plt.show()
-
+"""
 pff = pd.concat([hcho_dmax, BOKUMetData_dailymax["AT"],HighGRdays["GR"],HighGRdays["WD"]],axis=1)
 pff.columns =['hcho', 'AT', 'GR', 'WD']
 #pff = pff.dropna()
@@ -259,16 +259,16 @@ hcho_dmax21 = hcho_dmax[start2021:end2021]
 #print(hcho_dmax17_a,hcho_dmax18,hcho_dmax19,hcho_dmax20,hcho_dmax21)
 
 
-hcho_dmax17_m = hcho_dmax17.resample('M').mean()
+hcho_dmax17_m = hcho_dmax17.resample('W').mean()
 hcho_17fill_m = np.full(shape=4,fill_value=np.NaN)
 hcho_dmax17_a_m = np.append(hcho_17fill_m, hcho_dmax17_m)
-hcho_dmax18_m = hcho_dmax18.resample('M').mean()
-hcho_dmax19_m = hcho_dmax19.resample('M').mean()
-hcho_dmax20_m = hcho_dmax20.resample('M').mean()
-hcho_dmax21_m = hcho_dmax21.resample('M').mean()
+hcho_dmax18_m = hcho_dmax18.resample('W').mean()
+hcho_dmax19_m = hcho_dmax19.resample('W').mean()
+hcho_dmax20_m = hcho_dmax20.resample('W').mean()
+hcho_dmax21_m = hcho_dmax21.resample('W').mean()
 #print(hcho_dmax17_m, hcho_dmax18_m,hcho_dmax19_m,hcho_dmax20_m,hcho_dmax21_m)
 
-print(hcho_dmax17, hcho_dmax18_m, hcho_dmax19_m, hcho_dmax20_m)
+#print(hcho_dmax17, hcho_dmax18_m, hcho_dmax19_m, hcho_dmax20_m)
 
 """
 #read in soil moisture data
@@ -298,20 +298,25 @@ rss_sub19_diff_w = rss_sub['RSS_sub_wWheat'][datetime(2019,1,1):datetime(2019,12
 rss_sub20_diff_w = rss_sub['RSS_sub_wWheat'][datetime(2020,1,1):datetime(2020,12,31)].sub(mean12yr_d['RSS_sub_wWheat'].values)
 rss_sub_diff_w = pd.concat([rss_sub17_diff_w,rss_sub18_diff_w,rss_sub19_diff_w,rss_sub20_diff_w])
 #print(rss_sub_diff_w)
+""" FIGURE 8 """
+
+print(hcho_dmax18_m, hcho_dmax19_m, hcho_dmax20_m)
 
 figure = plt.figure
-#plt.plot(range(len(hcho_dmax17_a)), hcho_dmax17_a, color='violet', label="2017", linewidth=0.2)
-#plt.plot(range(len(hcho_dmax18)), hcho_dmax18, color='blue', label="2018",linewidth=0.2)
-#plt.plot(range(len(hcho_dmax19)), hcho_dmax19, color='green',label="2019", linewidth=0.2)
-#plt.plot(range(len(hcho_dmax20)), hcho_dmax20, color='orange',label="2020", linewidth=0.2)
-#plt.plot(range(len(hcho_dmax21)), hcho_dmax21, color='red',label="2021", linewidth=0.2)
-plt.plot(yM,hcho_dmax17_a_m, color='violet', linewidth=1, marker="x", label="2017")
-plt.plot(yM18,hcho_dmax18_m, color='blue', linewidth=1, marker="x", label="2018")
-plt.plot(yM19,hcho_dmax19_m, color='green', linewidth=1, marker="x",label="2019")
-plt.plot(yM20,hcho_dmax20_m, color='orange', linewidth=1, marker="x",label="2020")
-plt.plot(yM21,hcho_dmax21_m, color='red', linewidth=1, marker="x",label="2021")
+gs = gridspec.GridSpec(2, 1,height_ratios=[2,1])
+#plt.title("")
+ax1 = plt.subplot(gs[0])
+ax2 = plt.subplot(gs[1])
+ax1.plot(range(len(hcho_dmax18_m)),hcho_dmax18_m, color='blue', linestyle="", marker="x", label="2018")
+ax1.plot(range(len(hcho_dmax19_m)),hcho_dmax19_m, color='green', linestyle="", marker="x",label="2019")
+ax1.plot(range(len(hcho_dmax20_m)),hcho_dmax20_m, color='orange', linestyle="", marker="x",label="2020")
+#plt.plot(yM21,hcho_dmax21_m, color='red', linewidth=1, marker="x",label="2021")
 plt.title("NW days")
+ax1.grid(True)
+ax2.grid(True)
 plt.xticks(yM, yM_ticks)
+#ax2.plot(range(len(hcho_dmax20_m)),hcho_dmax20_m["hcho"]-hcho_dmax19_m["hcho"], color='green', linewidth=1, marker="x",label="2020-19")
+#ax2.plot(range(len(hcho_dmax20_m)),hcho_dmax20_m-hcho_dmax18_m, color='blue', linewidth=1, marker="x",label="2020-18")
 plt.xlabel("days")
 plt.ylabel("hcho [ppb]")
 plt.legend()
@@ -345,8 +350,6 @@ ax1.set_ylabel("DSC [Molek / cmý]")
 plt.legend()
 plt.show()
 
-#exit()
-
 N=7 #days
 atmaxSE_5daymean = np.convolve(pffSE['AT'], np.ones(N)/N, mode='valid')
 atmaxNW_5daymean = np.convolve(pffNW['AT'], np.ones(N)/N, mode='valid')
@@ -356,15 +359,30 @@ hchomaxNW_5daymean = np.convolve(pffNW['hcho'], np.ones(N)/N, mode='valid')
 Runningmean_5daysSE = pffSE[6:]
 Runningmean_5daysSE.insert(1,'AT5d', atmaxSE_5daymean.tolist())
 Runningmean_5daysSE.insert(1,'hcho5d', hchomaxSE_5daymean.tolist())
-print(Runningmean_5daysSE['AT5d'])
+#print(Runningmean_5daysSE['AT5d'])
 Runningmean_5daysNW = pffNW[6:]
 Runningmean_5daysNW.insert(1,'AT5d', atmaxNW_5daymean.tolist())
 Runningmean_5daysNW.insert(1,'hcho5d', hchomaxNW_5daymean.tolist())
-print(Runningmean_5daysNW['AT5d'])
+#print(Runningmean_5daysNW['AT5d'])
 
+pffSE_veg = pffSE.loc[(pffSE.index.month>=4)&(pffSE.index.month<=10)]
+pffSE_noveg = pffSE.loc[(pffSE.index.month>=11)|(pffSE.index.month<=3)]
+pffNW_veg = pffNW.loc[(pffNW.index.month>=4)&(pffNW.index.month<=10)]
+pffNW_noveg = pffNW.loc[(pffNW.index.month>=11)|(pffNW.index.month<=3)]
+
+print("all: \n ")
+print(pffSE,pffNW)
 print("AT SE:", pffSE['AT'].mean()," AT NW:", pffNW['AT'].mean()," hcho SE:", pffSE['hcho'].mean(), " hcho NW:", pffNW['hcho'].mean())
+print("veg: \n ")
+print(pffSE_veg, pffNW_veg)
+print("AT SE:", pffSE_veg['AT'].mean()," AT NW:", pffNW_veg['AT'].mean()," hcho SE:", pffSE_veg['hcho'].mean(), " hcho NW:", pffNW_veg['hcho'].mean())
+print("noveg: \n ")
+print(pffSE_noveg, pffNW_noveg)
+print("AT SE:", pffSE_noveg['AT'].mean()," AT NW:", pffNW_noveg['AT'].mean()," hcho SE:", pffSE_noveg['hcho'].mean(), " hcho NW:", pffNW_noveg['hcho'].mean())
 
 
+
+""" FIGURE 5 """
 commonstart = datetime(2017,6,14)
 commonend = datetime(2021,8,12)
 
@@ -376,8 +394,8 @@ ax1 = plt.gca()
 ax3 = plt.subplot(gs[1])
 ax3 = plt.gca()
 #ax4 = ax3.twinx()
-ax1.plot(Runningmean_5daysSE['AT5d'],color='red',label="SE", linewidth=2) #pffNW['AT']
-ax1.plot(Runningmean_5daysNW['AT5d'],color='blue',label="NW", linewidth=2) #pffSE['AT']
+ax1.plot(Runningmean_5daysSE['AT5d'],color='red',label="SE", linewidth=2,linestyle="",marker="o",markersize=5) #pffNW['AT']
+ax1.plot(Runningmean_5daysNW['AT5d'],color='blue',label="NW", linewidth=2,linestyle="",marker="o",markersize=5) #pffSE['AT']
 #ax1.plot(pffKNW['AT'],color='lightblue',label="NW AT_max", linestyle="-", linewidth=2)
 #ax1.plot(pffKSE['AT'],color='lightred',label="SE AT_max",  linestyle="-", linewidth=2)
 #ax1.plot(BOKUMetData_dailymax['AT'][start2017:end2021],color='grey',label="AT_max", linewidth=0.5)
@@ -390,8 +408,8 @@ ax1.plot(Runningmean_5daysNW['AT5d'],color='blue',label="NW", linewidth=2) #pffS
 #plt.xticks(yM, yM_ticks)
 ax1.set_ylabel("air temperature [°C]")
 #ax1.set_ylim(-5, 80)
-ax3.plot(Runningmean_5daysSE['hcho'],color='red',label="SE AT_max", linewidth=2) #pffNW['AT']
-ax3.plot(Runningmean_5daysNW['hcho'],color='blue',label="NW AT_max", linewidth=2) #pffSE['AT']
+ax3.plot(Runningmean_5daysSE['hcho'],color='red',label="SE AT_max", linewidth=2,linestyle="",marker="o",markersize=5) #pffNW['AT']
+ax3.plot(Runningmean_5daysNW['hcho'],color='blue',label="NW AT_max", linewidth=2,linestyle="",marker="o",markersize=5) #pffSE['AT']
 ax3.set_ylabel("VMR hcho [ppb]")
 #ax3.plot(Runningmean_5daysSE['AT5d'][commonstart:commonend] - Runningmean_5daysNW['AT5d'][commonstart:commonend], color='black',label="SE - NW AT_dmax 5 day gliding mean", linewidth=2)
 #ax3.plot(pffNW['AT'].resample("2W").mean(),color='black',label="NW AT_dmax weekly", linewidth=2)
@@ -406,8 +424,8 @@ ax1.legend(loc='lower left')
 #ax4.legend(loc='upper right')
 plt.xlabel("time [days]")
 plt.show()
-"""
 
+""" FIGURE 1 """
 figure = plt.figure
 gs = gridspec.GridSpec(3, 1,height_ratios=[1,1,1])
 #plt.title("wWheat, 40-100 cm")

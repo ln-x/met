@@ -19,9 +19,11 @@ def OCO2_SIF():
     RUT_LON = 16.624939
     CEN_LAT = 48.196613
     CEN_LON = 16.382294
+    WW_LAT = 48.28
+    WW_LON = 16.23
 
     OCO2_SIF_BASE = "/windata/DATA/remote/satellite/OCO2/sif_lite_B8100/"
-    years = ['2019','2020'] #,'2021'] # '2018',
+    years = ['2017','2018','2019','2020'] #,'2021'] # '2018',
     months = ['01','02','03','04','05','06','07','08','09','10','11','12']
     #days = np.array(range(31))
     #days.astype(str)
@@ -33,7 +35,7 @@ def OCO2_SIF():
         for month in months:
             try:
               directory = OCO2_SIF_BASE + year + "/" + month + "/"
-              for filename in os.listdir(directory):
+              for filename in sorted(os.listdir(directory)):
                   if filename.endswith("nc4"):
                       day = filename[15:17]
                       time = datetime(int(year), int(month), int(day))
@@ -41,10 +43,10 @@ def OCO2_SIF():
                       try:
                           infile1 = netCDF4.Dataset(directory+"/"+filename)
                           #OSIF_8100 = infile1.variables['SIF_757nm'][1]
-                          OSIF_757 = find_nearest_xy(infile1.variables['latitude'], CEN_LAT,
+                          OSIF_757 = find_nearest_xy(infile1.variables['latitude'], WW_LAT,
                                                      infile1.variables['longitude'],
                                                      CEN_LON, infile1.variables['SIF_757nm'])
-                          OSIF_771 = find_nearest_xy(infile1.variables['latitude'], CEN_LAT,
+                          OSIF_771 = find_nearest_xy(infile1.variables['latitude'], WW_LAT,
                                                      infile1.variables['longitude'],
                                                      CEN_LON, infile1.variables['SIF_771nm'])
                           frames.append(OSIF_757)

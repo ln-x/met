@@ -10,11 +10,15 @@ RUT_LAT = 48.192142
 RUT_LON = 16.624939
 CEN_LAT = 48.196613
 CEN_LON = 16.382294
+WW_LAT = 48.28
+WW_LON = 16.23
 
-def find_nearest_xy(array1, value1, array2, value2, array3):
+
+def find_nearest_xy(array1, value1, array2, value2, array3, array4):
    array1 = np.asarray(array1)
    array2 = np.asarray(array2)
    idx = (np.abs(array1 - value1)+np.abs(array2 - value2)).argmin()
+   print(array4[idx])
    return array3[idx]
 
 def TROPOMI_SIF():
@@ -27,7 +31,7 @@ def TROPOMI_SIF():
         for month in months:
           try:
             foldername = TROPOMI_SIF_BASE + year + "/" + month
-            files = os.listdir(foldername)
+            files = sorted(os.listdir(foldername))
             for i in files:
                     try:
                         #print(str(i[21:23]))
@@ -43,9 +47,9 @@ def TROPOMI_SIF():
 
                         infile1 = netCDF4.Dataset(filename)
                         infile1_data = infile1['/PRODUCT']
-                        TSIF_743 = find_nearest_xy(infile1_data.variables['latitude'], CEN_LAT,
+                        TSIF_743 = find_nearest_xy(infile1_data.variables['latitude'], WW_LAT,
                                                    infile1_data.variables['longitude'],
-                                                   CEN_LON, infile1_data.variables['SIF_743'])
+                                                   WW_LON, infile1_data.variables['SIF_743'],infile1_data.variables['delta_time'])
                         frames.append(TSIF_743)
 
                     except:
@@ -63,7 +67,7 @@ def TROPOMI_SIF():
 if __name__ == '__main__':
     TSIF_743 = TROPOMI_SIF()
     #print(TSIF_743)
-    TSIF_743.to_csv("/home/heidit/Downloads/TSIF_743.csv")
+    TSIF_743.to_csv("/windata/DATA/remote/satellite/TROPOMI/TSIF_743_LAT48_28_LON16_23.csv")
 
 #TODO solve error:
 #File "/home/heidit/PycharmProjects/met/library/ReadinTROPOMISIF_743.py", line 51, in TROPOMI_SIF
