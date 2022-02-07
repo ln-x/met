@@ -70,7 +70,7 @@ o3_2020_mda8 = o3_2020_mda1.resample('8H', label='right').mean()
 o3_2020_mda8 = o3_2020_mda8.resample('D').mean()
 
 o3_1990_2020_mda8 = pd.concat([o3_1990_2019_mda8, o3_2020_mda8], axis=0)
-o3_1990_2020_mda8 = o3_1990_2020_mda8["AT9STEF"]*ugm3toppb_o3 #MUG->PPB
+o3_1990_2020_mda8 = o3_1990_2020_mda8["AT9STEF"]#*ugm3toppb_o3 #MUG->PPB
 o3_1990_2020_m = o3_1990_2020_mda8[datetime(1990,1,1):datetime(2021,12,30)].resample('M').mean()
 o3_1990_2020_m = o3_1990_2020_m[:-1]
 print(spi,o3_1990_2020_m)
@@ -89,25 +89,45 @@ spi3_d_m_jfm = spi.loc[(spi.index.month>=1)&(spi.index.month<=3)]
 o3_1990_2020_m_fma = o3_1990_2020_m.loc[(o3_1990_2020_m.index.month>=2)&(o3_1990_2020_m.index.month<=4)]
 spi3_d_m_fma = spi.loc[(spi.index.month>=2)&(spi.index.month<=4)]
 
+#o3_1990_2020_m_spring = o3_1990_2020_m_spring.resample("M").mean()
+spi3_d_m_spring = spi3_d_m_spring.resample("M").mean()
+spring_dry = pd.concat([spi3_d_m_spring, o3_1990_2020_m_spring], axis=1)
+spring_dry = spring_dry.loc[(spring_dry['SPI-6'] <= 0 )]
+spring_dry = spring_dry[datetime(1990,1,1):datetime(1999,12,31)].dropna()
+print(spring_dry)
+spi3_d_m_summer = spi3_d_m_summer.resample("M").mean()
+summer_dry = pd.concat([spi3_d_m_summer, o3_1990_2020_m_summer], axis=1)
+summer_dry = summer_dry.loc[(summer_dry['SPI-6'] <= 0 )]
+summer_dry = summer_dry[datetime(1990,1,1):datetime(1999,12,31)].dropna()
+
 
 """Regresssion seasons"""
 y5_djf = o3_1990_2020_m_winter.values.flatten()
-y5_mam = o3_1990_2020_m_spring.values.flatten()
-y5_jja = o3_1990_2020_m_summer.values.flatten()
+y5_mam = spring_dry['AT9STEF'].values.flatten()
+y5_jja = summer_dry['AT9STEF'].values.flatten()
 y5_son = o3_1990_2020_m_autumn.values.flatten()
 y5_jfm = o3_1990_2020_m_jfm.values.flatten()
 y5_fma = o3_1990_2020_m_fma.values.flatten()
 
-x5_SPI3_djf = spi3_d_m_winter['SPI-6'].values.flatten()
-x5_SPI3_mam = spi3_d_m_spring['SPI-6'].values.flatten()
-x5_SPI3_jja = spi3_d_m_summer['SPI-6'].values.flatten()
-x5_SPI3_son = spi3_d_m_autumn['SPI-6'].values.flatten()
-x5_SPI3_jfm = spi3_d_m_jfm['SPI-6'].values.flatten()
-x5_SPI3_fma = spi3_d_m_fma['SPI-6'].values.flatten()
+x5_SPI3_djf = spi3_d_m_winter['SPI-3'].values.flatten()
+#x5_SPI3_mam = spi3_d_m_spring['SPI-6'].values.flatten()
+#x5_SPI3_jja = spi3_d_m_summer['SPI-6'].values.flatten()
+x5_SPI3_mam = spring_dry['SPI-6'].values.flatten()  #TODO: decide - keep dry or not dry?
+x5_SPI3_jja = summer_dry['SPI-6'].values.flatten()
+x5_SPI3_son = spi3_d_m_autumn['SPI-3'].values.flatten()
+x5_SPI3_jfm = spi3_d_m_jfm['SPI-3'].values.flatten()
+x5_SPI3_fma = spi3_d_m_fma['SPI-3'].values.flatten()
+
+
+
+#idxPBL = np.isfinite(x5_PBL) & np.isfinite(y5)
+#m5, b5 = np.polyfit(x5[idxAT], y5[idxAT], 1)
+idx_SPI3_mam = np.isfinite(x5_SPI3_mam) & np.isfinite(y5_mam)
+idx_SPI3_jja = np.isfinite(x5_SPI3_jja) & np.isfinite(y5_jja)
 
 #m5_SPI3_djf, b5_SPI3_djf = np.polyfit(x5_SPI3_djf, y5_djf, 1)
-#m5_SPI3_mam, b5_SPI3_mam = np.polyfit(x5_SPI3_mam, y5_mam, 1)
-#m5_SPI3_jja, b5_SPI3_jja = np.polyfit(x5_SPI3_jja, y5_jja, 1)
+m5_SPI3_mam, b5_SPI3_mam = np.polyfit(x5_SPI3_mam[idx_SPI3_mam], y5_mam[idx_SPI3_mam], 1)
+m5_SPI3_jja, b5_SPI3_jja = np.polyfit(x5_SPI3_jja[idx_SPI3_jja], y5_jja[idx_SPI3_jja], 1)
 #m5_SPI3_son, b5_SPI3_son = np.polyfit(x5_SPI3_son, y5_son, 1)
 #m5_SPI3_jfm, b5_SPI3_jfm = np.polyfit(x5_SPI3_jfm, y5_jfm, 1)
 #m5_SPI3_fma, b5_SPI3_fma = np.polyfit(x5_SPI3_fma, y5_fma, 1)
@@ -126,12 +146,14 @@ plt.scatter(x5_SPI3_jja, y5_jja, color='red', label="JJA", s=5)
 #plt.plot(x5_SPI3_djf, m5_SPI3_djf * x5_SPI3_djf + b5_SPI3_djf, color='black')
 #plt.plot(x5_SPI3_jfm, m5_SPI3_jfm * x5_SPI3_jfm + b5_SPI3_jfm, color='blue')
 #plt.plot(x5_SPI3_fma, m5_SPI3_fma * x5_SPI3_fma + b5_SPI3_fma, color='turquoise')
-#plt.plot(x5_SPI3_mam, m5_SPI3_mam * x5_SPI3_mam + b5_SPI3_mam, color='green')
-#plt.plot(x5_SPI3_jja, m5_SPI3_jja * x5_SPI3_jja + b5_SPI3_jja, color='red')
+plt.plot(x5_SPI3_mam, m5_SPI3_mam * x5_SPI3_mam + b5_SPI3_mam, color='green')
+plt.plot(x5_SPI3_jja, m5_SPI3_jja * x5_SPI3_jja + b5_SPI3_jja, color='red')
 #plt.plot(x5_SPI3_son, m5_SPI3_son * x5_SPI3_son + b5_SPI3_son, color='brown')
-plt.ylabel("O3 [ppb]", size="small")
+plt.ylabel("O3 [μg/m³]", size="small")
 plt.xlabel("SPI 6 [-]", size="small")
 plt.legend(loc="lower right")
+plt.xlim([-3, 0])
+#plt.xlim([0, 2])
 #plt.title("full year")
 #plt.title('r={:.2f} \n p={:.2f} \n n=52'.format(SRho_SPI, Sp_SPI), fontsize='small')
 plt.show()

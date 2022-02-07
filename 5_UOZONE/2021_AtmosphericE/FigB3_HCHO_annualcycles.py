@@ -10,6 +10,10 @@ from met.library import ReadinVindobona_Filter_fullperiod
 from met.library import ReadinVindobona_Glyoxal
 import matplotlib.gridspec as gridspec
 
+from mpl_toolkits.axes_grid1 import host_subplot
+from mpl_toolkits import axisartist
+import matplotlib.pyplot as plt
+
 yM = [15,46,74,105,135,166,196,227,258,288,319,349]
 yM_ticks = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
 yM18 = [15,46,74,105,135,166,196,227,258,288,319]
@@ -125,20 +129,88 @@ hcho_dmax_sigma = hcho_dmax.std()#(axis=1)
 
 print(hcho_dmax_sigma)
 #exit()
-"""Timeserie HCHO_SPI"""
-"""
 
-figure = plt.figure
-ax1 = plt.gca()
-ax2 = ax1.twinx()
-ax1.plot(spi['SPI-3'], color="orange", label="SPI-3")
-ax1.plot(spi['SPI-6'], color="red", label="SPI-6")
-ax2.plot(hcho_d_m, label= "hcho_d")
-ax1.legend(loc="upper left")
-ax2.legend()
+'''READ IN EEA air pollution data'''
+pathbase2 = "/windata/DATA/obs_point/chem/EEA/"
+o3_1990_2019_mda1 = pd.read_csv(pathbase2 + "o3_mda1_1990-2019_AT_mug.csv")
+o3_1990_2019_mda1 = o3_1990_2019_mda1.set_index(pd.to_datetime(o3_1990_2019_mda1['date']))
+o3_1990_2019_mda1 = o3_1990_2019_mda1.drop(columns=['date'])
+o3_1990_2019_mda8 = pd.read_csv(pathbase2 + "o3_mda8_1990-2019_AT_mug.csv")
+o3_1990_2019_mda8 = o3_1990_2019_mda8.set_index(pd.to_datetime(o3_1990_2019_mda8['date']))
+o3_1990_2019_mda8 = o3_1990_2019_mda8.drop(columns=['date'])
+o3_2020_mda1 = pd.read_csv(pathbase2 + "AT_O3_2020.csv")                        #TODO! replace mda1 with mda8!
+o3_2020_mda1 = o3_2020_mda1.set_index(pd.to_datetime(o3_2020_mda1['date']))
+o3_2020_mda1 = o3_2020_mda1.drop(columns=['date'])
+#print(o3_1990_2019_mda1)
+o3_2020_mda8 = o3_2020_mda1.resample('8H', label='right').mean()
+o3_2020_mda8 = o3_2020_mda8.resample('D').mean()
+
+o3_1990_2020_mda8 = pd.concat([o3_1990_2019_mda8, o3_2020_mda8], axis=0)
+o3_1990_2020_mda8 = o3_1990_2020_mda8["AT9STEF"]#*ugm3toppb_o3 #MUG->PPB
+o3_1990_2020_m = o3_1990_2020_mda8[datetime(1990,1,1):datetime(2021,12,30)].resample('M').mean()
+o3_1990_2020_m = o3_1990_2020_m[:-1]
+
+
+"""Timeserie HCHO_SPI"""
+
+#figure = plt.figure
+#ax1 = plt.gca()
+#ax2 = ax1.twinx()
+#ax3 = ax1.twinx()
+#ax1.plot(spi['SPI-3'][datetime(2018,1,1):datetime(2020,12,31)], color="orange", label="SPI-3")
+#ax1.plot(spi['SPI-6'][datetime(2018,1,1):datetime(2020,12,31)], color="red", label="SPI-6")
+#ax2.plot(hcho_d_m[datetime(2018,1,1):datetime(2020,12,31)],color="black", label= "HCHO")
+#ax3.plot(o3_1990_2020_m[datetime(2018,1,1):datetime(2020,12,31)],color="violet", label= "O3")
+#ax1.legend(loc="upper left")
+#ax2.legend(loc="upper right")
+#ax3.legend(loc="lower right")
+#ax1.set_ylabel("[-]")
+#ax2.set_ylabel("[ppb]")
+#ax3.set_ylabel("[ug m-3]")
+#plt.show()
+
+host = host_subplot(111, axes_class=axisartist.Axes)
+plt.subplots_adjust(right=0.75)
+par1 = host.twinx()
+par2 = host.twinx()
+par2.axis["right"] = par2.new_fixed_axis(loc="right", offset=(60, 0))
+par1.axis["right"].toggle(all=True)
+par2.axis["right"].toggle(all=True)
+p1, = host.plot(spi['SPI-3'][datetime(2018,4,1):datetime(2018,10,31)], color="orange", linewidth="2", label="SPI-3")
+p1, = host.plot(spi['SPI-6'][datetime(2018,4,1):datetime(2018,10,31)], color="red", linewidth="2",label="SPI-6")
+p2, = par1.plot(hcho_d_m[datetime(2018,4,1):datetime(2018,10,31)], color="black", label="HCHO")
+p3, = par2.plot(o3_1990_2020_m[datetime(2018,4,1):datetime(2018,10,31)],color="violet", label="O3")
+
+p1, = host.plot(spi['SPI-3'][datetime(2019,4,1):datetime(2019,10,31)], color="orange", linewidth="2")
+p1, = host.plot(spi['SPI-6'][datetime(2019,4,1):datetime(2019,10,31)], color="red", linewidth="2")
+p2, = par1.plot(hcho_d_m[datetime(2019,4,1):datetime(2019,10,31)], color="black")
+p3, = par2.plot(o3_1990_2020_m[datetime(2019,4,1):datetime(2019,10,31)],color="violet")
+
+p1, = host.plot(spi['SPI-3'][datetime(2020,4,1):datetime(2020,10,31)], color="orange", linewidth="2")
+p1, = host.plot(spi['SPI-6'][datetime(2020,4,1):datetime(2020,10,31)], color="red", linewidth="2")
+p2, = par1.plot(hcho_d_m[datetime(2020,4,1):datetime(2020,10,31)], color="black")
+p3, = par2.plot(o3_1990_2020_m[datetime(2020,4,1):datetime(2020,10,31)],color="violet")
+
+#host.set_xlim(0, 2)
+#host.set_ylim(0, 2)
+#par1.set_ylim(0, 4)
+#par2.set_ylim(1, 65)
+host.set_xlabel("time [months]")
+host.set_ylabel("SPI [-]")
+par1.set_ylabel("HCHO [ppb]")
+par2.set_ylabel("O3 [ug/m-3]")
+
+host.legend(loc="lower left")
+
+host.axis["left"].label.set_color(p1.get_color())
+par1.axis["right"].label.set_color(p2.get_color())
+par2.axis["right"].label.set_color(p3.get_color())
+
 plt.show()
 
-"""
+
+exit()
+
 #Regresssion seasons
 """
 y5_djf = hcho_d_m_winter.values.flatten()
@@ -406,11 +478,11 @@ ax1.plot(Runningmean_5daysNW['AT5d'],color='blue',label="NW", linewidth=2,linest
 #ax2.plot(pffKNW['hcho'], color='turquoise', label="NW hcho_max K", marker="x", linestyle="-", linewidth=0.5)
 #ax2.plot(pffKSE['hcho'], color='orange', label="SE hcho_max K", marker="x", linestyle="-", linewidth=0.5)
 #plt.xticks(yM, yM_ticks)
-ax1.set_ylabel("air temperature [°C]")
+ax1.set_ylabel("AT [°C]")
 #ax1.set_ylim(-5, 80)
 ax3.plot(Runningmean_5daysSE['hcho'],color='red',label="SE AT_max", linewidth=2,linestyle="",marker="o",markersize=5) #pffNW['AT']
 ax3.plot(Runningmean_5daysNW['hcho'],color='blue',label="NW AT_max", linewidth=2,linestyle="",marker="o",markersize=5) #pffSE['AT']
-ax3.set_ylabel("VMR hcho [ppb]")
+ax3.set_ylabel("HCHO [ppb]")
 #ax3.plot(Runningmean_5daysSE['AT5d'][commonstart:commonend] - Runningmean_5daysNW['AT5d'][commonstart:commonend], color='black',label="SE - NW AT_dmax 5 day gliding mean", linewidth=2)
 #ax3.plot(pffNW['AT'].resample("2W").mean(),color='black',label="NW AT_dmax weekly", linewidth=2)
 #ax3.plot(pffSE['AT'].resample("2W").mean() - pffNW['AT'].resample("2W").mean(),color='black',label="SE - NW AT_dmax weekly", linewidth=2)
@@ -446,39 +518,36 @@ AT = BOKUMetData_dailymax_m[start2017:end2021]['AT']
 print(AT)
 #ax1.plot(BOKUMetData_dailymax['AT'][start2017:end2021],color='grey',label="AT dmax", linewidth=0.1)
 ax1.fill_between(AT.index, AT+AT_dmax_sigma,AT - AT_dmax_sigma, facecolor='grey', alpha=0.2)
-ax1.plot(AT,color='grey',label="AT dmax monthly", linewidth=1)
+#ax1.plot(AT,color='grey',label="AT dmax monthly", linewidth=1)
 ax1.plot(BOKUMetData_dailymax_w['AT'][start2017:end2021],color='grey',label="AT dmax weekly", linewidth=2)
 
 #interestingdates = [datetime(2017,9,30),datetime(2017,10,22),datetime(2018,8,5),datetime(2021,5,30)]
 #ax1.axvline(x=interestingdates)
-ax1.axvline(x=datetime(2017,9,30))
-ax1.axvline(x=datetime(2017,10,22))
-ax1.axvline(x=datetime(2018,8,5))
-ax1.axvline(x=datetime(2021,5,30))
-ax2.axvline(x=datetime(2017,9,30))
-ax2.axvline(x=datetime(2017,10,22))
-ax2.axvline(x=datetime(2018,8,5))
-ax2.axvline(x=datetime(2021,5,30))
-ax3.axvline(x=datetime(2017,9,30))
-ax3.axvline(x=datetime(2017,10,22))
-ax3.axvline(x=datetime(2018,8,5))
-ax3.axvline(x=datetime(2021,5,30))
+#ax1.axvline(x=datetime(2017,9,30))
+#ax1.axvline(x=datetime(2017,10,22))
+#ax1.axvline(x=datetime(2018,8,5))
+#ax1.axvline(x=datetime(2021,5,30))
+#ax2.axvline(x=datetime(2017,9,30))
+#ax2.axvline(x=datetime(2017,10,22))
+#ax2.axvline(x=datetime(2018,8,5))
+#ax2.axvline(x=datetime(2021,5,30))
+#ax3.axvline(x=datetime(2017,9,30))
+#ax3.axvline(x=datetime(2017,10,22))
+#ax3.axvline(x=datetime(2018,8,5))
+#ax3.axvline(x=datetime(2021,5,30))
 
-ax1.axvline(x=datetime(2020,9,6))
-ax2.axvline(x=datetime(2020,9,6))
-ax3.axvline(x=datetime(2020,9,6))
+#ax1.axvline(x=datetime(2020,9,6))
+#ax2.axvline(x=datetime(2020,9,6))
+#ax3.axvline(x=datetime(2020,9,6))
 
-ax1.axvline(x=datetime(2019,10,6))
-ax2.axvline(x=datetime(2019,10,6))
-ax3.axvline(x=datetime(2019,10,6))
-
-
-
+#ax1.axvline(x=datetime(2019,10,6))
+#ax2.axvline(x=datetime(2019,10,6))
+#ax3.axvline(x=datetime(2019,10,6))
 
 
 ax2.fill_between(hcho_dmax_m[start2017:end2021].index, hcho_dmax_m[start2017:end2021]+hcho_dmax_sigma, hcho_dmax_m[start2017:end2021] - hcho_dmax_sigma, facecolor='purple', alpha=0.2)
-ax2.plot(hcho_dmax_m, color="purple",label="HCHO dmax monthly",linewidth=1)
-ax2.plot(hcho_dmax_w, color="purple",label="HCHO dax weekly",linewidth=2)
+#ax2.plot(hcho_dmax_m[start2017:end2021], color="purple",label="HCHO dmax monthly",linewidth=1)
+ax2.plot(hcho_dmax_w[start2017:end2021], color="purple",label="HCHO dax weekly",linewidth=2)
 #ax2.set_title(r'hcho observation $\mu$ and $\pm \sigma$ interval')
 
 ax3.plot(vpd_dmax_w[start2017:end2021], color="blue", label="vpd_dmax weekly", linewidth=2)
@@ -495,9 +564,9 @@ ax3.fill_between(vpd_dmax_w[start2017:end2021].index,vpd_dmax_w[start2017:end202
 #ax3.legend(loc="lower right")
 #plt.xticks(yM, yM_ticks)
 plt.xlabel("time [days]")
-ax3.set_ylabel("vapour pressure deficit [kPa]")
-ax2.set_ylabel("VMR hcho [ppb]")
-ax1.set_ylabel("air temperature [°C]")
+ax3.set_ylabel("VPD [kPa]")
+ax2.set_ylabel("HCHO [ppb]")
+ax1.set_ylabel("AT [°C]")
 #ax1.set_ylim(-5, 80)
 #ax2.set_ylim(0, 6)
 plt.show()

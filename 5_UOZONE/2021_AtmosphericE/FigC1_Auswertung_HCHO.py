@@ -19,8 +19,9 @@ thres.glob <- (1.25e-12*x^5+ 7.38E-09*x^4 - 5.365E-06*x^3 + 0.000926*x^2 - 0.000
 LG Monika
 """
 
-Vindobona = "/windata/Google Drive/DATA/remote/ground/maxdoas/Monika/"  # in DSCD
+Vindobona = "/windata/DATA/remote/ground/maxdoas/Monika/"  # in DSCD
 tframe = '60T'
+
 AxisA = pd.read_csv(Vindobona + "hcho_A_1.6.2017-31.5.2020.csv")#, parse_dates=["date"])
 #print(AxisA.date)  #0        2017-06-01 04:39:34
 #AxisA.date = pd.to_datetime(AxisA.date)
@@ -28,43 +29,145 @@ AxisA = pd.read_csv(Vindobona + "hcho_A_1.6.2017-31.5.2020.csv")#, parse_dates=[
 #print(AxisA.index, AxisA.columns, AxisA.info, type(AxisA))
 AxisA = AxisA.set_index(pd.to_datetime(AxisA['date']))
 AxisA_drop = AxisA.drop(columns=['date'])
+AxisA_drop.columns = ["A"]
 AxisA_hr_mean = AxisA_drop.resample(tframe).mean()
+AxisA_d_mean = AxisA_hr_mean.resample("D").mean()
+print(AxisA_d_mean)
 #AxisA_resampled = AxisA_drop.resample('60min') #DatetimeIndexResampler [freq=<15 * Minutes>, axis=0, closed=left, label=left, convention=start, origin=start_day]#
 
 AxisB = pd.read_csv(Vindobona + "hcho_B_1.6.2017-31.5.2020.csv")
 AxisB = AxisB.set_index(pd.to_datetime(AxisB['date']))
 AxisB_drop = AxisB.drop(columns=['date'])
+AxisB_drop.columns = ["B"]
 AxisB_hr_mean = AxisB_drop.resample(tframe).mean()
+AxisB_d_mean = AxisB_hr_mean.resample("D").mean()
 
 AxisC = pd.read_csv(Vindobona + "hcho_C_1.6.2017-31.5.2020.csv")
 AxisC = AxisC.set_index(pd.to_datetime(AxisC['date']))
 AxisC_drop = AxisC.drop(columns=['date'])
+AxisC_drop.columns = ["C"]
 AxisC_hr_mean = AxisC_drop.resample(tframe).mean()
+AxisC_d_mean = AxisC_hr_mean.resample("D").mean()
 
 AxisD = pd.read_csv(Vindobona + "hcho_D_1.6.2017-31.5.2020.csv")
 AxisD = AxisD.set_index(pd.to_datetime(AxisD['date']))
 AxisD_drop = AxisD.drop(columns=['date'])
+AxisD_drop.columns = ["D"]
 AxisD_hr_mean = AxisD_drop.resample(tframe).mean()
+AxisD_d_mean = AxisD_hr_mean.resample("D").mean()
 
 AxisF = pd.read_csv(Vindobona + "hcho_F_1.6.2017-31.5.2020.csv")
 AxisF = AxisF.set_index(pd.to_datetime(AxisF['date']))
 AxisF_drop = AxisF.drop(columns=['date'])
+AxisF_drop.columns = ["F"]
 AxisF_hr_mean = AxisF_drop.resample(tframe).mean()
+AxisF_d_mean = AxisF_hr_mean.resample("D").mean()
 
 AxisG = pd.read_csv(Vindobona + "hcho_G_1.6.2017-31.5.2020.csv")
 AxisG = AxisG.set_index(pd.to_datetime(AxisG['date']))
 AxisG_drop = AxisG.drop(columns=['date'])
+AxisG_drop.columns = ["G"]
 AxisG_hr_mean = AxisG_drop.resample(tframe).mean()
+AxisG_d_mean = AxisG_hr_mean.resample("D").mean()
 #df.groupby('a').resample('3T').sum()
 #print(AxisG_hr_mean.dt.dayofweek)
 
-fig = plt.figure(figsize=(12,4))
-ax = fig.add_subplot(111)
-AxisD_hr_mean.plot(ax=ax)#,title='%s at %s' % (wrfc_hcho.long_name,nc.id))
-ax.set_ylabel("AxisD_hr_mean[DSCD]")
+data = pd.concat([AxisA_d_mean,AxisB_d_mean,AxisC_d_mean,AxisD_d_mean,AxisF_d_mean,AxisG_d_mean],axis=1)
+
+print(data)
+labels =["A","B","C","D","F","G"] #list('ABCD')
+
+#ax = plt.figure()
+ax = data[datetime(2018,3,1):datetime(2018,5,31)].plot.box(notch=True)#whis=[5,95],showfliers=False) #showmeans=True, showfliers=False, showcaps=False
+plt.title("2018, MAM", fontsize="small")
+#plt.yscale('log') #ax.set_yscale('log')
+plt.ylabel("HCHO DSCD [molec cm-2]")
+#ax.set_ylim(0,4)
+plt.show()
+
+#fig = plt.figure()
+data[datetime(2019,3,1):datetime(2019,5,31)].plot.box(notch=True)# ,whis=[5,95]) #showmeans=True, showfliers=False, showcaps=False
+plt.title("2019, MAM", fontsize="small")
+#plt.yscale('log') #ax.set_yscale('log')
+plt.ylabel("HCHO DSCD [molec cm-2]")
+#plt.ylim(0,4)
+plt.show()
+
+#fig = plt.figure()
+data[datetime(2020,3,1):datetime(2020,5,31)].plot.box(notch=True)# ,whis=[5,95]) #showmeans=True, showfliers=False, showcaps=False
+plt.title("2020, MAM", fontsize="small")
+plt.ylabel("HCHO DSCD [molec cm-2]")
+plt.ylim(4)
+#plt.yscale('log') #ax.set_yscale('log')
+plt.show()
+
+#fig = plt.figure()
+data[datetime(2017,6,1):datetime(2017,8,31)].plot.box(notch=True)# ,whis=[5,95]) #showmeans=True, showfliers=False, showcaps=False
+plt.title("2017, JJA", fontsize="small")
+#plt.yscale('log') #ax.set_yscale('log')
+plt.ylabel("HCHO DSCD [molec cm-2]")
+plt.ylim(4)
+plt.show()
+
+#fig = plt.figure()
+data[datetime(2018,6,1):datetime(2018,8,31)].plot.box(notch=True)# ,whis=[5,95]) #showmeans=True, showfliers=False, showcaps=False
+plt.title("2018, JJA", fontsize="small")
+#plt.yscale('log') #ax.set_yscale('log')
+plt.ylabel("HCHO DSCD [molec cm-2]")
+plt.ylim(4)
+plt.show()
+
+fig = plt.figure()
+data[datetime(2019,6,1):datetime(2019,8,31)].plot.box(notch=True)# ,whis=[5,95]) #showmeans=True, showfliers=False, showcaps=False
+plt.title("2019, JJA", fontsize="small")
+#plt.yscale('log') #ax.set_yscale('log')
+plt.ylabel("HCHO DSCD [molec cm-2]")
+plt.ylim(4)
 plt.show()
 
 exit()
+
+#df = pd.DataFrame(np.random.randn(10, 3), columns=['Col1', 'Col2', 'Col3'])
+#df['X'] = data
+#df['Y'] = data
+#df['X'] = pd.Series(['A', 'A', 'A', 'A', 'A',
+#                     'B', 'B', 'B', 'B', 'B'])
+#df['Y'] = pd.Series(['A', 'B', 'A', 'B', 'A',
+#                     'B', 'A', 'B', 'A', 'B'])
+#boxplot = df.boxplot(column=['Col1', 'Col2'], by=['X', 'Y'])
+#plt.show()
+##test with random data
+#np.random.seed(937)
+#data = np.random.lognormal(size=(37, 4), mean=1.5, sigma=1.75)
+#labels = list('ABCD')
+#print(data)
+#fig, axs = plt.subplots(2, 2, figsize=(8, 6), dpi=100)
+##fig.suptitle(title, fontsize="small")
+#axs[0, 0].boxplot(data, labels=labels)
+#axs[0, 0].set_ylabel("HCHO DSCD [molec cm-2]")
+#axs[0, 1].boxplot(data, labels=labels, showmeans=True, notch=True)
+#axs[1, 0].boxplot(data, labels=labels)
+#axs[1, 1].boxplot(data, labels=labels)
+#fig.tight_layout()
+#plt.legend()
+#plt.show()
+
+
+exit()
+
+fig = plt.figure(figsize=(12,4))
+ax = fig.add_subplot(111)
+plt.plot(AxisA_d_mean[start:end], label="A",color="blue")
+plt.plot(AxisB_d_mean[start:end], label="B",color="green")
+plt.plot(AxisC_d_mean[start:end], label="C",color="yellow")
+plt.plot(AxisD_d_mean[start:end], label="D",color="red")
+plt.plot(AxisF_d_mean[start:end], label="F",color="turquoise")
+plt.plot(AxisG_d_mean[start:end], label="G",color="purple")
+#AxisD_hr_mean.plot(ax=ax)#,title='%s at %s' % (wrfc_hcho.long_name,nc.id))
+ax.set_ylabel("HCHO DSCD [molec cm-2]")
+plt.legend()
+plt.show()
+
 
 Luftmessnetz = "/windata/Google Drive/DATA/obs_point/chem/Luftmessnetz/"
 """
