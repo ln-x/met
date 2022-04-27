@@ -1,0 +1,61 @@
+on VSC:
+#setup git:
+ssh -V
+OpenSSH_7.4p1, OpenSSL 1.0.2k-fips
+cd .ssh/
+ssh-keygen -t ed25519 -C sshkey_htrimmel3
+xclip -sel clip < ~/.ssh/id_ed25519.pub
+ssh -T git@git.nilu.no/
+git clone -b MEGAN3-SURFEX_VSC git@git.nilu.no:pdh/couplage-megan-surfex.git
+
+#locate library locations and update makefiles
+nc-config --all
+ --cflags        -> -I/binfl/lv71449/htrimmel3/WRF/wrfbuild/opt/netcdf_c/include -I/binfl/lv71449/htrimmel3/WRF/wrfbuild/opt/hdf5/include -I/binfl/lv71449/htrimmel3/WRF/wrfbuild/opt/zlib/include
+ --libs          -> -L/binfl/lv71449/htrimmel3/WRF/wrfbuild/opt/netcdf_c/lib -lnetcdf
+ --fc            -> mpiifort
+ --fflags        -> -I/binfl/lv71449/htrimmel3/WRF/wrfbuild/opt/netcdf_f/include -I/binfl/lv71449/htrimmel3/WRF/wrfbuild/opt/netcdf_f/include
+ --flibs         -> -L/binfl/lv71449/htrimmel3/WRF/wrfbuild/opt/netcdf_f/lib -lnetcdff -L/binfl/lv71449/htrimmel3/WRF/wrfbuild/opt/hdf5/lib -L/binfl/lv71449/htrimmel3/WRF/wrfbuild/opt/zlib/lib -L/binfl/lv71449/htrimmel3/WRF/wrfbuild/opt/netcdf_c/lib -L/binfl/lv71449/htrimmel3/WRF/wrfbuild/opt/curl/lib -lnetcdf -lnetcdf -lm
+ --includedir    -> /binfl/lv71449/htrimmel3/WRF/wrfbuild/opt/netcdf_c/include
+ --libdir        -> /binfl/lv71449/htrimmel3/WRF/wrfbuild/opt/netcdf_c/lib
+ --version       -> netCDF 4.8.1-development
+
+#change file permissions: chmod +rwx folder
+#??? necessary? change filepath in csh scripts: whereis csh? > /usr/bin/csh
+#export MGNHOME="/binfl/lv71449/htrimmel3/couplage-megan-surfex"
+#env | grep HOME
+
+./makefile: line 7: -g: command not found
+./makefile: line 18: -lnetcdf: command not found
+./makefile: line 24: PROGRAM: command not found
+./makefile: line 24: -I/binfl/lv71449/htrimmel3/WRF/wrfbuild/opt/netcdf_f/include: No such file or directory
+./makefile: line 28: PROGRAM: command not found
+./makefile: line 28: .o: command not found
+./makefile: line 30: *mod.f: command not found
+./makefile: line 34: fg: no job control
+./makefile: line 37: .SUFFIXES:: command not found
+./makefile: line 39: .f.o:: command not found
+./makefile: line 40: syntax error near unexpected token `newline'
+./makefile: line 40: `	$(FC) -c $(FFLAGS) $(INCLUDE) $<'
+
+
+
+
+cd src
+./make_all_programs.scr 64 bit
+
+
+
+
+
+
+'''
+whereis netcdf ... /usr/include/netcdf.h /usr/share/man/man3/netcdf.3.gz
+which ncdump ... /usr/bin/ncdump
+ncdump ... netcdf library version 4.7.3 of Jan 23 2020 04:18:16 $
+
+FAIL: tst_remote3.sh
+PASS: tst_formatx.sh
+
+
+
+

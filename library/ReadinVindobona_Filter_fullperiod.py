@@ -43,12 +43,14 @@ def loadfile(foldername, filename, hcho_date):
            else:
                pass
     hcho_dft = pd.DataFrame({'datetime': timeaxis, 'hcho': hcho, 'sza': sza,'hOPL': hOPL})
-    hcho_dft['datetime'] = pd.to_datetime(hcho_dft['datetime'])
+    hcho_dft['datetime'] = pd.to_datetime(hcho_dft['datetime'])#, unit='D')
+    #print("to_datetime", hcho_dft['datetime'])
     hcho_dft = hcho_dft.set_index(['datetime'])
     return(hcho_dft)
 
 def loadfileALL(foldername,axis,begin):
     files = os.listdir(foldername)
+    files = sorted(files) #TODO test
     appended_data1 = []
     totalmeasdays = [*range(1,(len(files)+1),1)]
 
@@ -59,7 +61,9 @@ def loadfileALL(foldername,axis,begin):
         year = "20"+ str(files[i][0:2]) #splitlistcomp[:2]
         #print(day,month,year)
         hcho_date = datetime.datetime(year=int(year),month=int(month), day=int(day))
+        #hcho_date = pd.to_datetime(hcho_date, unit="s")
         #print(hcho_date)
+
         #exit()
         dayofmeas = totalmeasdays[i]
         #data_hcho = loadfile(foldername=foldername, filename=files[i], begin=begin,dayofmeas=dayofmeas)

@@ -5,6 +5,12 @@ __author__ = 'lnx'
 # 1_VAL_SM_VOC_20192020_onlycorrelations_inklSIF_inklO3.py
 from sklearn import linear_model
 import numpy as np
+import scipy
+import statsmodels.api as smod
+from statsmodels.formula.api import ols
+from scipy.stats import shapiro
+from scipy.stats import kstest
+from scipy.stats import ks_2samp
 import pandas as pd
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -216,24 +222,24 @@ pbl = pbl.drop(columns=['datetime'])
 pbl = pbl.resample('D').max()
 #print(pbl)
 
+
 '''
 Plotting
 '''
 nox_1990_2020_da = nox_1990_2020_da.resample('D').mean()
 o3_1990_2020_da = o3_1990_2020_da.resample('D').mean()
 
-
-pff_full = pd.concat([hcho_dmax,vpd_dmax, rss_sub["RSS_sub_wWheat"],BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],HighGRdays["GR"], sif_join,
+pff_full = pd.concat([hcho_dmax,vpd_dmax, rss_sub["RSS_sub_grass"],BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],HighGRdays["GR"], sif_join,
                 o3_1990_2020_da["AT9STEF"],nox_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"],pbl["PBL"]], axis=1)
 pff_full.columns = ['hcho', 'vpd', 'SM', 'AT', 'GR', 'GRhigh', 'SIF', 'O3','NOx','WD','PC','PBL']
 pff_clear = pff_full.dropna(subset=['GRhigh'])
-print(pff_clear[datetime(2018,1,1):datetime(2020,12,31)])
+#print(pff_clear[datetime(2018,1,1):datetime(2020,12,31)])
 pff_clear2 = pff_clear.loc[pff_clear["GR"] >= 4500]
-print(pff_clear2[datetime(2018,1,1):datetime(2020,12,31)])
+#print(pff_clear2[datetime(2018,1,1):datetime(2020,12,31)])
 pff_clear2_o3high = pff_clear2.loc[pff_clear2["O3"] > 100]
-print(pff_clear2_o3high[datetime(2018,1,1):datetime(2020,12,31)]["O3"])
+#print(pff_clear2_o3high[datetime(2018,1,1):datetime(2020,12,31)]["O3"])
 pff_clear2_o3low = pff_clear2.loc[pff_clear2["O3"] <= 100]
-print(pff_clear2_o3low[datetime(2018,1,1):datetime(2020,12,31)]["O3"])
+#print(pff_clear2_o3low[datetime(2018,1,1):datetime(2020,12,31)]["O3"])
 pff_clear2_o3high_NW = pff_clear2_o3high.loc[(pff_clear2_o3high['WD'] >=270) & (pff_clear2_o3high['WD'] <=360)]
 pff_clear2_o3high_SE = pff_clear2_o3high.loc[(pff_clear2_o3high['WD'] >=90) & (pff_clear2_o3high['WD'] <=180)]
 
@@ -243,6 +249,97 @@ pff_weekly_rss_clear = pff_clear.resample("W").mean()
 #print(pff_clear[datetime(2018,1,1):])
 #print(pff_weekly_rss_clear[datetime(2018,1,1):])
 #exit()
+
+pff_test1 = pff_full[['hcho','AT','GR']]
+pff_MAM_18 = pff_full[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
+pff_MAM_20 = pff_full[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
+pff_JJA_20 = pff_full[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
+pff_JJA_19 = pff_full[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
+
+#QQPLOTs
+"""
+QQPLOTS
+fig = smod.qqplot(pff_full["AT"])#, line='45')
+plt.show()
+fig = smod.qqplot(pff_full["GR"])#, line='45')
+plt.show()
+fig = smod.qqplot(pff_full["SM"])#, line='45')
+plt.show()
+fig = smod.qqplot(pff_full["SIF"])#, line='45')
+plt.show()
+"""
+
+#HISTOGRAMs
+"""
+season="MAM20"
+plt.hist(pff_MAM_20["AT"], bins = 30)
+plt.title("AT"+season)
+plt.show()
+plt.hist(pff_MAM_20["GR"], bins = 30)
+plt.title("GR"+season)
+plt.show()
+plt.hist(pff_MAM_20["SM"], bins = 30)
+plt.title("SM"+season)
+plt.show()
+plt.hist(pff_MAM_20["SIF"], bins = 30)
+plt.title("SIF"+season)
+plt.show()
+plt.hist(pff_MAM_20["vpd"], bins = 30)
+plt.title("VDP"+season)
+plt.show()
+plt.hist(pff_MAM_20["O3"], bins = 30)
+plt.title("O3"+season)
+plt.show()
+plt.hist(pff_MAM_20["NOx"], bins = 30)
+plt.title("NOx"+season)
+plt.show()
+plt.hist(pff_MAM_20["WD"], bins = 30)
+plt.title("WD"+season)
+plt.show()
+plt.hist(pff_MAM_20["PC"], bins = 30)
+plt.title("PC"+season)
+plt.show()
+plt.hist(pff_MAM_20["PBL"], bins = 30)
+plt.title("PBL"+season)
+plt.show()
+"""
+exit()
+
+
+linear_model = ols('hcho ~ AT + GR', data=pff_MAM_18).fit()
+print(linear_model.summary()) # display model summary
+fig = plt.figure(figsize=(14, 8)) # modify figure size
+fig = smod.graphics.plot_regress_exog(linear_model,'AT', fig=fig) # creating regression plots
+plt.show()
+exit()
+#linear_model = ols('hcho ~ SM', data=pff_test1).fit()  # fit simple linear regression model
+linear_model = ols('hcho ~ AT + SM', data=pff_MAM_18).fit()
+print(linear_model.summary()) # display model summary
+fig = plt.figure(figsize=(14, 8)) # modify figure size
+fig = smod.graphics.plot_regress_exog(linear_model,'AT', fig=fig) # creating regression plots
+plt.show()
+linear_model = ols('hcho ~ AT + SM', data=pff_MAM_20).fit()
+print(linear_model.summary()) # display model summary
+fig = plt.figure(figsize=(14, 8)) # modify figure size
+fig = smod.graphics.plot_regress_exog(linear_model,'AT', fig=fig) # creating regression plots
+plt.show()
+
+pff_test1 = pff_full[['hcho','SIF']]
+#linear_model = ols('hcho ~ SIF', data=pff_test1).fit()  # fit simple linear regression model
+linear_model = ols('hcho ~ SIF+I(SIF**2)', data=pff_test1).fit()
+print(linear_model.summary()) # display model summary
+fig = plt.figure(figsize=(14, 8)) # modify figure size
+fig = smod.graphics.plot_regress_exog(linear_model,'SIF', fig=fig) # creating regression plots
+plt.show()
+
+pff_test1 = pff_full[['hcho','AT']]
+#linear_model = ols('hcho ~ AT', data=pff_test1).fit()  # fit simple linear regression model
+linear_model = ols('hcho ~ AT+I(AT**2)', data=pff_test1).fit()
+print(linear_model.summary()) # display model summary
+fig = plt.figure(figsize=(14, 8)) # modify figure size
+fig = smod.graphics.plot_regress_exog(linear_model,'AT', fig=fig) # creating regression plots
+plt.show()
+exit()
 
 """LINEAR MODEL"""
 def LinearModel(df,droppar):
@@ -343,6 +440,11 @@ def Plot6var(df,title,ylimit):
     m5NOx, b5NOx = np.polyfit(x5_NOx[idxNOX], y5[idxNOX], 1)
     m5O3, b5O3 = np.polyfit(x5_O3[idxO3], y5[idxO3], 1)
     m5PBL, b5PBL = np.polyfit(x5_PBL[idxPBL], y5[idxPBL], 1)
+    # full == True  -> gives:
+    # residuals – sum of squared residuals of the least squares fit
+    # rank – the effective rank of the scaled Vandermonde coefficient matrix
+    # singular_values– singular values of the scaled Vandermonde coefficient matrix
+    # rcond – value of rcond.
 
     SRho_AT, Sp_AT = (stats.spearmanr(x5[idxAT], y5[idxAT]))
     SRho_GR, Sp_GR = (stats.spearmanr(x5_GR[idxGR], y5[idxGR]))
@@ -360,10 +462,74 @@ def Plot6var(df,title,ylimit):
     #Pr_NOX, p_NOX = (stats.pearsonr(x5_NOx[idxNOX], y5[idxNOX]))
     #Pr_O3, p_O3 = (stats.pearsonr(x5_O3[idxO3], y5[idxO3]))
     #Pr_PBL, p_PBL = (stats.pearsonr(x5_PBL[idxPBL], y5[idxPBL]))
-    print(title, "Spearman:", "VPD", SRho_VPD, Sp_VPD, "AT", SRho_AT, Sp_AT, "GR", SRho_GR, Sp_GR, "SM", SRho_SM, Sp_SM, "SIF", SRho_SIF, Sp_SIF,
-          "NOX", SRho_NOX, Sp_NOX, "O3", SRho_O3, Sp_O3, "PBL", SRho_PBL, Sp_PBL)
-    #print(title, "average:", "AT", np.nanmean(x5), "GR", np.nanmean(x5_GR), "SM", np.nanmean(x5_SM), "SIF", np.nanmean(x5_SIF), "NOX", np.nanmean(x5_NOx), "VPD",
-    #      np.nanmean(x5_VPD), "O3", np.nanmean(x5_O3), "PBL", np.nanmean(x5_PBL), "HCHO", np.nanmean(y5),)
+    #print("Spearman:", "AT", f'{SRho_AT:.2f}', f'{Sp_AT:.2f}', "GR", f'{SRho_GR:.2f}', f'{Sp_GR:.2f}',
+    #      "RSS_g_s", f'{SRho_SM:.2f}', f'{Sp_SM:.2f}', "SIF", f'{SRho_SIF:.2f}', f'{Sp_SIF:.2f}', "VPD", f'{SRho_VPD:.2f}' , f'{Sp_VPD:.2f}',
+    #      "O3", f'{SRho_O3:.2f}', f'{Sp_O3:.2f}', "PBL", f'{SRho_PBL:.2f}', f'{Sp_PBL:.2f}', "NOX", f'{SRho_NOX:.2f}', f'{Sp_NOX:.2f}', title)
+
+    print(title, "average:", "AT", np.nanmean(x5), "GR", np.nanmean(x5_GR), "SM", np.nanmean(x5_SM), "SIF", np.nanmean(x5_SIF), "NOX", np.nanmean(x5_NOx), "VPD",
+          np.nanmean(x5_VPD), "O3", np.nanmean(x5_O3), "PBL", np.nanmean(x5_PBL), "HCHO", np.nanmean(y5),)
+
+    "STATISTICS CHECK"
+    #print("1a) Normal? Histogram")
+    print("1b) Normal? QQPlots Normal distribution?")
+    sm.qqplot(x5[idxAT].values, line='45')
+    sm.qqplot(x5_GR[idxGR].data, line='45')
+    sm.qqplot(x5_VPD[idxVPD].data, line='45')
+    sm.qqplot(x5_SM[idxSM].data, line='45')
+    sm.qqplot(x5_SIF[idxSIF].data, line='45')
+    sm.qqplot(x5_O3[idxO3].data, line='45')
+    sm.qqplot(x5_PBL[idxPBL].data, line='45')
+    sm.qqplot(y5[idxAT].data, line='45')
+    exit()
+    print("1c) Normal? Shapiro")
+    print("W value (if high -> normal")
+    print("AT", shapiro(x5[idxAT]).statistic, "GR", shapiro(x5_GR[idxGR]).statistic, "VDP", shapiro(x5_VPD[idxVPD]).statistic,
+          "SM", shapiro(x5_SM[idxSM]).statistic, "SIF", shapiro(x5_SIF[idxSIF]).statistic, "O3", shapiro(x5_O3[idxO3]).statistic,
+          "Hcho", shapiro(y5[idxAT]).statistic)
+    print("pvalue (might not be accurat for N >5000")
+    print("AT", shapiro(x5[idxAT]).pvalue, "GR", shapiro(x5_GR[idxGR]).pvalue, "VDP", shapiro(x5_VPD[idxVPD]).pvalue,
+          "SM", shapiro(x5_SM[idxSM]).pvalue, "SIF", shapiro(x5_SIF[idxSIF]).pvalue, "O3", shapiro(x5_O3[idxO3]).pvalue,
+          "Hcho", shapiro(y5[idxAT]).pvalue)
+
+
+    print("1d) Normal? Kolmogorov-Smirnov/Normality for one-sided samples")
+    print("statistic: if high: NOT normal")
+    print("AT", kstest(x5[idxAT], 'norm').statistic, "GR", kstest(x5_GR[idxGR], 'norm').statistic, "SM", kstest(x5_SM[idxSM], 'norm').statistic,
+          "SIF", kstest(x5_SIF[idxSIF], 'norm').statistic,"NOX", kstest(x5_NOx[idxNOX], 'norm').statistic, "VPD", kstest(x5_VPD[idxVPD], 'norm').statistic,
+          "O3", kstest(x5_O3[idxO3], 'norm').statistic, "PBL", kstest(x5_PBL[idxPBL], 'norm').statistic, "HCHO", kstest(y5[idxAT], 'norm').statistic)
+    print("pvalue: below 0.05: NOT normal Since the p-value is less than .05, we reject the null hypothesis. We have sufficient evidence to say that the sample data does not come from a normal distribution.")
+    print("AT", kstest(x5[idxAT], 'norm').pvalue, "GR", kstest(x5_GR[idxGR], 'norm').pvalue, "SM", kstest(x5_SM[idxSM], 'norm').pvalue, "SIF", kstest(x5_SIF[idxSIF], 'norm').pvalue,
+          "NOX", kstest(x5_NOx[idxNOX], 'norm').pvalue, "VPD", kstest(x5_VPD[idxVPD], 'norm').pvalue, "O3", kstest(x5_O3[idxO3], 'norm').pvalue, "PBL", kstest(x5_PBL[idxPBL], 'norm').pvalue, "HCHO",
+          kstest(y5[idxAT], 'norm').pvalue, "\n \n")
+
+    print("1e) Kolmogorov-Smirnov/Normality for two-sided samples")
+    print("statistic: if high: NOT from same distribution")
+    print("AT", ks_2samp(x5[idxAT], y5[idxAT]).statistic, "GR", ks_2samp(x5_GR[idxGR], y5[idxAT]).statistic, "SM", ks_2samp(x5_SM[idxSM], y5[idxAT]).statistic,
+          "SIF", ks_2samp(x5_SIF[idxSIF],y5[idxAT]).statistic,"NOX", ks_2samp(x5_NOx[idxNOX],y5[idxAT]).statistic, "VPD", ks_2samp(x5_VPD[idxVPD], y5[idxAT]).statistic,
+          "O3", ks_2samp(x5_O3[idxO3], y5[idxAT]).statistic, "PBL", ks_2samp(x5_PBL[idxPBL], y5[idxAT]).statistic)
+    print("pvalue: below 0.05: NOT from same distribution, Since the p-value is less than .05, we reject the null hypothesis. We have sufficient evidence to say that the two sample datasets do not come from the same distribution.")
+    print("AT", ks_2samp(x5[idxAT], y5[idxAT]).pvalue, "GR", ks_2samp(x5_GR[idxGR], y5[idxAT]).pvalue, "SM", ks_2samp(x5_SM[idxSM], y5[idxAT]).pvalue, "SIF", ks_2samp(x5_SIF[idxSIF], y5[idxAT]).pvalue,
+          "NOX", ks_2samp(x5_NOx[idxNOX], y5[idxAT]).pvalue, "VPD", ks_2samp(x5_VPD[idxVPD], y5[idxAT]).pvalue, "O3", ks_2samp(x5_O3[idxO3], y5[idxAT]).pvalue, "PBL", ks_2samp(x5_PBL[idxPBL], y5[idxAT]).pvalue, "HCHO",
+          ks_2samp(y5[idxAT], y5[idxAT]).pvalue)
+
+    exit()
+
+
+    print("2a) Variance")
+    var = [np.var(x, ddof=1) for x in [x5, x5_GR, x5_VPD, x5_SM, x5_SIF, x5_O3]]
+    print(var)
+    print([np.var(x, ddof=1) for x in [x5, x5_GR, x5_VPD, x5_SM, x5_SIF, x5_O3]])
+    print("2b) Levene Test/Homoscedasticity")
+    Lw_AT, Lp_AT = scipy.stats.levene(x5[idxAT], y5[idxAT])
+    Lw_GR, Lp_GR = scipy.stats.levene(x5[idxGR], y5[idxGR])
+    Lw_VPD, Lp_VPD = scipy.stats.levene(x5[idxVPD], y5[idxVPD])
+    Lw_SM, Lp_SM = scipy.stats.levene(x5[idxSM], y5[idxSM])
+    Lw_SIF, Lp_SIF = scipy.stats.levene(x5[idxSIF], y5[idxSIF])
+    Lw_O3, Lp_O3 = scipy.stats.levene(x5[idxO3], y5[idxO3])
+    print("AT", Lp_AT, "GR", Lp_GR, "VPD", Lp_VPD, "SM", Lp_SM, "SIF", Lp_SIF, "O3", Lp_O3)
+    print("3a) Spearman Test/Significance of Linear Regression:")
+    print("AT", Sp_AT, "GR", Sp_GR, "VPD", Sp_VPD, "SM", Sp_SM, "SIF", Sp_SIF, "O3", Sp_O3)
+    "3b) Pearson"
     #print(title, "Pearson:", "VPD", Pr_VPD, p_VPD, "AT", Pr_AT, p_AT, "GR", Pr_GR, p_GR, "SM", Pr_SM, p_SM, "SIF", Pr_SIF, p_SIF,
     #      "NOX", Pr_NOX, p_NOX, "O3", Pr_O3, p_O3, "PBL", Pr_PBL, p_PBL)
     #exit()
@@ -373,6 +539,7 @@ def Plot6var(df,title,ylimit):
     #print(R2_AT, R2_GR, R2_SM, R2_SIF, R2_NOX, R2_O3)
     # -0.11468772201686629 0.12327935222672066 0.26591170630878136 0.04979757085020243 -0.21842105263157893 0.12834008097165991
     # 0.013153273581417997 0.015197798685439858 0.07070903555204759 0.0024797980625809305 0.04770775623268697 0.016471176383812222
+    """
     a = 0
     #fig, axes = plt.subplots(nrows=1, ncols=6, figsize=(8, 6), dpi=100)
 
@@ -440,6 +607,7 @@ def Plot6var(df,title,ylimit):
     fig.tight_layout()
     plt.show()
     plt.savefig("/home/heidit/Downloads/" + title + ".jpg")
+    """
 
 def scatter_hist(x, y, ax, ax_histx, ax_histy):
     # no labels
@@ -457,9 +625,10 @@ def scatter_hist(x, y, ax, ax_histx, ax_histy):
 
 """FULL PERIOD"""
 
-#title = "full year, no filter"
-#Plot6var(pff_full, title, ylimit=8)
+title = "full year, no filter"
+Plot6var(pff_full, title, ylimit=8)
 
+exit()
 title = "full year, clear"
 Plot6var(pff_clear, title, ylimit=8)
 
