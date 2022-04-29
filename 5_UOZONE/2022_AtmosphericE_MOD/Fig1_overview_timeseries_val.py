@@ -208,7 +208,7 @@ end = datetime(2020, 12, 31, 00, 00)
 #print(emep_hcho_d.index)
 #print(emep_hcho_d.values)
 
-"""
+
 fig = plt.figure()
 #gridspec_kw={'height_ratios': [1, 2]
 plt.suptitle("1a biogenic VOC emission/CAMX")
@@ -220,6 +220,26 @@ ax1.plot(BioEmis_20.index,BioEmis_20["Meth"].values,linewidth="1", color='green'
 ax1.plot(BioEmis_1819.index,BioEmis_1819["Isop"].values,linewidth="1", color='red',linestyle=" ", marker="x") # label="E_C5H8_camx",
 ax1.plot(BioEmis_1819.index,BioEmis_1819["Terp"].values,linewidth="1", color='orange', linestyle=" ", marker="x") #label="E_TERP_camx",
 ax1.plot(BioEmis_1819.index,BioEmis_1819["Meth"].values,linewidth="1", color='green', linestyle=" ", marker="x") #label="E_METH_camx",
+
+ax1.plot(BioEmis_1819.index,BioEmis_1819["PAR"].values,linewidth="1", color='blue', linestyle=" ", marker="x", label="Par") #label="E_METH_camx",
+ax1.plot(BioEmis_1819.index,BioEmis_1819["XYL"].values,linewidth="1", color='turquoise', linestyle=" ", marker="x", label="Xyl") #label="E_METH_camx",
+ax1.plot(BioEmis_1819.index,BioEmis_1819["OLE"].values,linewidth="1", color='yellow', linestyle=" ", marker="x", label="Ole") #label="E_METH_camx",
+#ax1.plot(BioEmis_1819.index,BioEmis_1819["Nr"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Nr") #label="E_METH_camx",
+#ax1.plot(BioEmis_1819.index,BioEmis_1819["Ch4"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Ch4" #label="E_METH_camx",
+#ax1.plot(BioEmis_1819.index,BioEmis_1819["Nh3"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Nh3" #label="E_METH_camx",
+#ax1.plot(BioEmis_1819.index,BioEmis_1819["NO"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="NO") #label="E_METH_camx",
+#ax1.plot(BioEmis_1819.index,BioEmis_1819["Alde2"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Alde2") #label="E_METH_camx",
+#ax1.plot(BioEmis_1819.index,BioEmis_1819["Etoh"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Etoh") #label="E_METH_camx",
+#ax1.plot(BioEmis_1819.index,BioEmis_1819["Form"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Form") #label="E_METH_camx",
+#ax1.plot(BioEmis_1819.index,BioEmis_1819["Aldex"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Aldex") #label="E_METH_camx",
+#ax1.plot(BioEmis_1819.index,BioEmis_1819["Tol"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Tol") #label="E_METH_camx",
+#ax1.plot(BioEmis_1819.index,BioEmis_1819["Iole"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Iole") #label="E_METH_camx",
+#ax1.plot(BioEmis_1819.index,BioEmis_1819["Co"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Co") #label="E_METH_camx",
+#ax1.plot(BioEmis_1819.index,BioEmis_1819["Ehta"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Ehta") #label="E_METH_camx",
+#ax1.plot(BioEmis_1819.index,BioEmis_1819["Eth"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Eth") #label="E_METH_camx",
+#ax1.plot(BioEmis_1819.index,BioEmis_1819["Gday"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Gday") #label="E_METH_camx",
+
+
 ax1.set_ylabel("[mol/s]", size="medium")
 ax1.grid()
 ax1.legend(loc='upper left')
@@ -231,7 +251,8 @@ ax3.set_ylabel("LAI[-]")
 ax4.set_ylabel("AT[°C]") #average daily temperature
 #ax3.set_xlabel("days")
 plt.show()
-"""
+
+exit()
 """
 fig = plt.figure()
 #gridspec_kw={'height_ratios': [1, 2]
