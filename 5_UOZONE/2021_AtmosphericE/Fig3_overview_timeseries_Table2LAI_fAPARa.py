@@ -179,11 +179,22 @@ JJA19_e = datetime(2019, 8, 31, 00, 00)
 JJA20_s = datetime(2020, 6, 1, 00, 00)
 JJA20_e = datetime(2020, 8, 31, 00, 00)
 
+print("fAPAR mean")
+print("MAM18:", fAPAR[MAM18_s:MAM18_e].mean())
+print("MAM20:", fAPAR[MAM20_s:MAM20_e].mean())
+print("JJA20:", fAPAR[JJA20_s:JJA20_e].mean())
+print("JJA19:", fAPAR[JJA19_s:JJA19_e].mean())
+
+print("May18:", fAPAR[datetime(2018, 5, 1, 00, 00):MAM18_e].mean())
+print("May20:", fAPAR[datetime(2020, 5, 1, 00, 00):MAM20_e].mean())
+print("Aug20:", fAPAR[datetime(2020, 8, 1, 00, 00):JJA20_e].mean())
+print("Aug19:", fAPAR[datetime(2019, 8, 1, 00, 00):JJA19_e].mean())
+
+print("LAI mean")
 print("MAM18:", LAI_df[MAM18_s:MAM18_e].mean())
 print("MAM20:", LAI_df[MAM20_s:MAM20_e].mean())
 print("JJA20:", LAI_df[JJA20_s:JJA20_e].mean())
 print("JJA19:", LAI_df[JJA19_s:JJA19_e].mean())
-
 
 print("Mar18:", LAI_df[datetime(2018, 3, 1, 00, 00):datetime(2018, 3, 31, 00, 00)].mean())
 print("Mar20:", LAI_df[datetime(2020, 3, 1, 00, 00):datetime(2020, 3, 31, 00, 00)].mean())

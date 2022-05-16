@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import os
 
-
 def find_nearest_xy(array1, value1, array2, value2, array3):
    array1 = np.asarray(array1)
    array2 = np.asarray(array2)

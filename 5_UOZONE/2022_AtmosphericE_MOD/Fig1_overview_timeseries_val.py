@@ -121,7 +121,7 @@ camx3_x_vie_is1819 = 100 #102 #100: WienerWald west of Vienna
 
 #EMISSIONS
 BioEmis_1819 = ReadinCAMX_2.loadCAMXALL(pathbase_camx_1819,camx3_x_vie_is1819,camx3_y_vie_is1819)
-#print(BioEmis_1819)
+print(BioEmis_1819)
 BioEmis_20 = ReadinCAMX_2.loadCAMXALL(pathbase_camx_2020,camx3_x_vie_isBOKU20,camx3_y_vie_isBOKU20)
 #print(BioEmis)
 
@@ -178,21 +178,20 @@ foldername_D = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_DQ"
 hcho_d, hcho_dmax, hcho_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_D,"D", begin= datetime(2017, 5, 1))
 #print(hcho_d.index)
 
+'''READ IN PROBAV_LAI300m'''
+LAI_df = ReadinPROBAV_LAI_300m.LAI()
 
-"""
 #print("MAM18:", LAI_df[MAM18_s:MAM18_e].mean())
 #print("MAM20:", LAI_df[MAM20_s:MAM20_e].mean())
 #print("JJA20:", LAI_df[JJA20_s:JJA20_e].mean())
 #print("JJA19:", LAI_df[JJA19_s:JJA19_e].mean())
 
-#print("May18:", LAI_df[datetime(2018, 5, 1, 00, 00):MAM18_e].mean())
-#print("May20:", LAI_df[datetime(2020, 5, 1, 00, 00):MAM20_e].mean())
+print("May18:", LAI_df[datetime(2018, 5, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].mean())
+print("May20:", LAI_df[datetime(2020, 5, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].mean())
 #print("Aug20:", LAI_df[datetime(2020, 8, 1, 00, 00):JJA20_e].mean())
 #print("Aug19:", LAI_df[datetime(2019, 8, 1, 00, 00):JJA19_e].mean())
-#exit()
-"""
-'''READ IN PROBAV_LAI300m'''
-LAI_df = ReadinPROBAV_LAI_300m.LAI()
+exit()
+
 
 '''
 Plotting
@@ -221,9 +220,9 @@ ax1.plot(BioEmis_1819.index,BioEmis_1819["Isop"].values,linewidth="1", color='re
 ax1.plot(BioEmis_1819.index,BioEmis_1819["Terp"].values,linewidth="1", color='orange', linestyle=" ", marker="x") #label="E_TERP_camx",
 ax1.plot(BioEmis_1819.index,BioEmis_1819["Meth"].values,linewidth="1", color='green', linestyle=" ", marker="x") #label="E_METH_camx",
 
-ax1.plot(BioEmis_1819.index,BioEmis_1819["PAR"].values,linewidth="1", color='blue', linestyle=" ", marker="x", label="Par") #label="E_METH_camx",
-ax1.plot(BioEmis_1819.index,BioEmis_1819["XYL"].values,linewidth="1", color='turquoise', linestyle=" ", marker="x", label="Xyl") #label="E_METH_camx",
-ax1.plot(BioEmis_1819.index,BioEmis_1819["OLE"].values,linewidth="1", color='yellow', linestyle=" ", marker="x", label="Ole") #label="E_METH_camx",
+ax1.plot(BioEmis_1819.index,BioEmis_1819["Par"].values,linewidth="1", color='blue', linestyle=" ", marker="x", label="Par") #label="E_METH_camx",
+ax1.plot(BioEmis_1819.index,BioEmis_1819["Xyl"].values,linewidth="1", color='turquoise', linestyle=" ", marker="x", label="Xyl") #label="E_METH_camx",
+ax1.plot(BioEmis_1819.index,BioEmis_1819["Ole"].values,linewidth="1", color='yellow', linestyle=" ", marker="x", label="Ole") #label="E_METH_camx",
 #ax1.plot(BioEmis_1819.index,BioEmis_1819["Nr"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Nr") #label="E_METH_camx",
 #ax1.plot(BioEmis_1819.index,BioEmis_1819["Ch4"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Ch4" #label="E_METH_camx",
 #ax1.plot(BioEmis_1819.index,BioEmis_1819["Nh3"].values,linewidth="1", color='green', linestyle=" ", marker="x", label="Nh3" #label="E_METH_camx",

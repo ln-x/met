@@ -11,6 +11,9 @@ def loadCAMXALL(pathbase_camx,x,y):
     appended_IsopC = []
     appended_TerpC = []
     appended_MethC = []
+    appended_ParC = []
+    appended_XylC = []
+    appended_OleC = []
     dateaxis=[]
     for i in range(len(files)):
         day = str(files[i][-5:-3])  # splitlistcomp[3:4]
@@ -20,12 +23,16 @@ def loadCAMXALL(pathbase_camx,x,y):
         date = datetime(year=int(year), month=int(month), day=int(day))
         #print(date)
         #exit()
-        IsopC, TerpC, MethC = loadfileCAMX(foldername=foldername, filename=files[i], date=date, x=x, y=y)
+        IsopC, TerpC, MethC, ParC, XylC, OleC = loadfileCAMX(foldername=foldername, filename=files[i], date=date, x=x, y=y)
         appended_IsopC.append(IsopC)
         appended_TerpC.append(TerpC)
         appended_MethC.append(MethC)
+        appended_ParC.append(ParC)
+        appended_XylC.append(XylC)
+        appended_OleC.append(OleC)
         dateaxis.append(date)
-    Bio_Emis = pd.DataFrame({'datetime': dateaxis, 'Isop': appended_IsopC, 'Terp': appended_TerpC, 'Meth': appended_MethC})
+    Bio_Emis = pd.DataFrame({'datetime': dateaxis, 'Isop': appended_IsopC, 'Terp': appended_TerpC, 'Meth': appended_MethC,
+                             'Par': appended_ParC, 'Xyl': appended_XylC, 'Ole': appended_OleC})
     Bio_Emis['datetime'] = pd.to_datetime(Bio_Emis['datetime'])  # , unit='D')
     Bio_Emis = Bio_Emis.set_index(['datetime'])
 
@@ -37,6 +44,10 @@ def loadfileCAMX(foldername, filename, date, x, y):
     Meth = f.variables["MEOH"][:, 0, y, x]  # ISOP(TSTEP, LAY, ROW, COL) ; [mol/s]
     Isop = f.variables["ISOP"][:, 0, y, x]
     Terp = f.variables["TERP"][:, 0, y, x]
+    Par = f.variables["PAR"][:, 0, y, x]
+    Xyl = f.variables["XYL"][:, 0, y, x]
+    Ole = f.variables["OLE"][:, 0, y, x]
+
     #print(Meth)
     #Tflag = f.variables["TFLAG"][0, 0, 0]  # TSTEP, VAR, DATE-TIME flags 0:YYYYDDD, 1:HHMMSS
     # hourly values in daily files, "ISOP", "TERP", "PAR", "XYL", "OLE", "NR", "MEOH", "CH4", "NH3", "NO", "ALD2",
@@ -47,8 +58,7 @@ def loadfileCAMX(foldername, filename, date, x, y):
     #hcho_dft['datetime'] = pd.to_datetime(hcho_dft['datetime'])#, unit='D')
     #print("to_datetime", hcho_dft['datetime'])
     #hcho_dft = hcho_dft.set_index(['datetime'])
-    return(np.mean(Isop), np.mean(Terp), np.mean(Meth))
-
+    return(np.mean(Isop), np.mean(Terp), np.mean(Meth), np.mean(Par), np.mean(Xyl), np.mean(Ole))
 
 def loadCAMXALL_DD(pathbase_camx,x,y):
     foldername = pathbase_camx + '/4_CAMXoutput/depn/'

@@ -10,9 +10,6 @@ from met.library import ReadinVindobona_Filter_fullperiod
 from matplotlib.dates import DateFormatter
 import matplotlib.gridspec as gridspec
 
-
-
-
 '''READ IN BOKU Metdata'''
 BOKUMetData = met.library.BOKUMet_Data.BOKUMet() #10min values
 BOKUMetData_hourlymean = BOKUMetData.resample('H').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.mean, 'WS': np.mean, 'WD': np.mean, 'WSG': np.mean, 'PC': np.sum, 'AP': np.mean})
