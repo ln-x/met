@@ -92,6 +92,7 @@ HighGRdays = BOKUMetData_dailysum[isHighGR]
 
 pff = pd.concat([hcho_dmax, BOKUMetData_dailymax["AT"],HighGRdays["GR"],HighGRdays["WD"]],axis=1)
 pff.columns =['hcho', 'AT', 'GR', 'WD']
+
 pffNW = pff.loc[(pff['WD'] >=270) & (pff['WD'] <=359)]
 pffNW = pffNW.dropna()
 pffSE = pff.loc[(pff['WD'] >=90) & (pff['WD'] <=180)]
@@ -103,6 +104,7 @@ atmaxNW_5daymean = np.convolve(pffNW['AT'], np.ones(N)/N, mode='valid')
 hchomaxSE_5daymean = np.convolve(pffSE['hcho'], np.ones(N)/N, mode='valid')
 hchomaxNW_5daymean = np.convolve(pffNW['hcho'], np.ones(N)/N, mode='valid')
 
+
 Runningmean_5daysSE = pffSE[6:]
 Runningmean_5daysSE.insert(1,'AT5d', atmaxSE_5daymean.tolist())
 Runningmean_5daysSE.insert(1,'hcho5d', hchomaxSE_5daymean.tolist())
@@ -111,11 +113,107 @@ Runningmean_5daysNW = pffNW[6:]
 Runningmean_5daysNW.insert(1,'AT5d', atmaxNW_5daymean.tolist())
 Runningmean_5daysNW.insert(1,'hcho5d', hchomaxNW_5daymean.tolist())
 #print(Runningmean_5daysNW['AT5d'])
+#exit()
 
 pffSE_veg = pffSE.loc[(pffSE.index.month>=4)&(pffSE.index.month<=10)]
 pffSE_noveg = pffSE.loc[(pffSE.index.month>=11)|(pffSE.index.month<=3)]
 pffNW_veg = pffNW.loc[(pffNW.index.month>=4)&(pffNW.index.month<=10)]
 pffNW_noveg = pffNW.loc[(pffNW.index.month>=11)|(pffNW.index.month<=3)]
+
+pff = pff[:datetime(2019,12,31,0,0)]
+pff_veg = pff.loc[(pff.index.month>=4)&(pff.index.month<=10)]
+pff_veg = pff_veg.dropna()
+pff_noveg = pff.loc[(pff.index.month>=11)|(pff.index.month<=3)]
+#pff_noveg = pff.loc[(pff.index.month==2)]
+pff_noveg = pff_noveg.dropna()
+print(pff_veg)
+
+m, b = np.polyfit(pff_noveg['AT'],pff_noveg['hcho'],1)
+SRho, Sp = (stats.spearmanr(pff_noveg['AT'], pff_noveg['hcho']))
+m_veg, b_veg = np.polyfit(pff_veg['AT'],pff_veg['hcho'],1)
+SRho_veg, Sp_veg = (stats.spearmanr(pff_veg['AT'], pff_veg['hcho']))
+
+m_NW, b5_NW = np.polyfit(pffNW['AT'], pffNW['hcho'], 1)
+#SRhoNW, SpNW = (stats.spearmanr(pffNW['AT'], pffNW['hcho']))
+m_vegNW, b5_vegNW = np.polyfit(pffNW_veg['AT'], pffNW_veg['hcho'], 1)
+#SRho_veg, Sp_veg = (stats.spearmanr(pffNW_veg['AT'], pffNW_veg['hcho']))
+m_novegNW, b5_novegNW = np.polyfit(pffNW_noveg['AT'], pffNW_noveg['hcho'], 1)
+#SRho_noveg, Sp_noveg = (stats.spearmanr(pffNW_noveg['AT'], pffNW_noveg['hcho']))
+m_vegSE, b5_vegSE = np.polyfit(pffSE_veg['AT'], pffSE_veg['hcho'], 1)
+#SRho_veg, Sp_veg = (stats.spearmanr(pffNW_veg['AT'], pffNW_veg['hcho']))
+m_novegSE, b5_novegSE = np.polyfit(pffSE_noveg['AT'], pffSE_noveg['hcho'], 1)
+
+print("slope ALL veg, noveg, NW, veg, noveg", m_veg, m, m_vegNW, m_novegNW)
+print("intercept ALL veg, noveg, NW, veg, noveg", b_veg, b, b5_vegNW, b5_novegNW)
+print("\n\n")
+
+AT_NW_veg = 22.6918403
+AT_SE_veg = 24.787648
+AT_diff = 1.98692453
+AT_diff_noveg = 2.66448734
+HCHO_diff = 1.147235
+HCHO_diff_noveg = 0.85987319
+
+print("****")
+y_est_veg1 = m_vegNW*20 + b5_vegNW
+y_est_veg2 = m_vegNW*21 + b5_vegNW
+y_est_perdegC = y_est_veg2-y_est_veg1
+print("for NW/VP:", y_est_perdegC, "ppb/degC")
+print("Biogenic Part of HCHO: ", y_est_perdegC*AT_diff, "[ppb]")
+print("Anthropogenic Part:", HCHO_diff-(y_est_perdegC*AT_diff), "[ppb]")
+
+y_est_veg3 = m_NW*20 + b5_NW
+y_est_veg4 = m_NW*21 + b5_NW
+y_est_perdegC_2 = y_est_veg3-y_est_veg4
+print("for NW/NVP:", y_est_perdegC_2, "ppb/degC")
+print("Biogenic Part of HCHO: ", y_est_perdegC_2*AT_diff_noveg, "[ppb]")
+print("Anthropogenic Part:", HCHO_diff_noveg-(y_est_perdegC_2*AT_diff_noveg), "[ppb]")
+
+print("****")
+y_est_veg1 = m_vegSE*20 + b5_vegSE
+y_est_veg2 = m_vegSE*21 + b5_vegSE
+y_est_perdegC = y_est_veg2-y_est_veg1
+print("for SE/VP:", y_est_perdegC, "ppb/degC")
+print("Biogenic Part of HCHO: ", y_est_perdegC*AT_diff, "[ppb]")
+print("Anthropogenic Part:", HCHO_diff-(y_est_perdegC*AT_diff), "[ppb]")
+
+y_est_veg3 = m_novegNW*20 + b5_novegNW
+y_est_veg4 = m_novegNW*21 + b5_novegNW
+y_est_perdegC_2 = y_est_veg3-y_est_veg4
+print("for SE/NVP:", y_est_perdegC_2, "ppb/degC")
+print("Biogenic Part of HCHO: ", y_est_perdegC_2*AT_diff_noveg, "[ppb]")
+print("Anthropogenic Part:", HCHO_diff_noveg-(y_est_perdegC_2*AT_diff_noveg), "[ppb]")
+
+print("****")
+
+y_est_veg1a = m_veg*20 + b_veg
+y_est_veg2a = m_veg*21 + b_veg
+y_est_perdegCa = y_est_veg2a-y_est_veg1a
+print("\nfor all:", y_est_perdegCa, "ppb/degC")
+print("Biogenic Part in HCHO: ", y_est_perdegCa*AT_diff, "[ppb]")
+print("Anthropogenic Part:", HCHO_diff-(y_est_perdegCa*AT_diff), "[ppb]")
+print("****")
+
+
+fig = plt.figure(figsize=(8, 6), dpi=100)
+plt.scatter(pffNW_noveg['AT'], pffNW_noveg['hcho'], color='grey', s=5)
+plt.scatter(pffNW_veg['AT'], pffNW_veg['hcho'], color='lightgreen', s=5)
+y_est = m_NW * pffNW_noveg['AT'] + b5_NW
+y2_est = m_vegNW * pffNW_veg['AT'] + b5_vegNW
+plt.plot(pffNW_noveg['AT'], y_est, color='black')
+plt.plot(pffNW_veg['AT'], y2_est, color='green')
+plt.title('slope_NWnoveg={:.2f} slope_NWveg={:.2f}'.format(m_NW,m_vegNW), fontsize='small')
+plt.ylabel("HCHO [ppb]", size="small")
+plt.xlabel("AT [C°]", size="small")
+plt.show()
+
+print("\n noveg", "intercept:", m, "slope:", b, SRho, Sp)
+print("veg","intercept:", m_veg, "slope:", b_veg, SRho_veg, Sp_veg)
+
+print("NWall", m_NW, b5_NW, SRhoNW, SpNW)
+print("NWveg", m_vegNW, b5_vegNW, SRho_veg, Sp_veg)
+print("NWnoveg", m_novegNW, b5_novegNW, SRho_noveg, Sp_noveg)
+#exit()
 
 print("\n all: ")
 #print(pffSE,pffNW)
@@ -127,9 +225,12 @@ print("\n noveg:")
 #print(pffSE_noveg, pffNW_noveg)
 print("AT SE:", pffSE_noveg['AT'].mean()," AT NW:", pffNW_noveg['AT'].mean()," hcho SE:", pffSE_noveg['hcho'].mean(), " hcho NW:", pffNW_noveg['hcho'].mean())
 
+
 """FIGURE 7"""
-commonstart = datetime(2017,6,14)
-commonend = datetime(2021,8,12)
+#commonstart = datetime(2017,6,14)
+#commonend = datetime(2021,8,12)
+start = datetime(2018,1,1)
+end = datetime(2020,12,31)
 
 figure = plt.figure
 gs = gridspec.GridSpec(2, 1,height_ratios=[2,1])
@@ -137,13 +238,13 @@ ax1 = plt.subplot(gs[0])
 ax1 = plt.gca()
 ax3 = plt.subplot(gs[1])
 ax3 = plt.gca()
-ax1.plot(Runningmean_5daysSE['AT5d'],color='red',label="SE", linewidth=2,linestyle="",marker="o",markersize=5) #pffNW['AT']
-ax1.plot(Runningmean_5daysNW['AT5d'],color='blue',label="NW", linewidth=2,linestyle="",marker="o",markersize=5) #pffSE['AT']
-ax1.set_ylabel("AT [°C]")
-ax3.plot(Runningmean_5daysSE['hcho'],color='red',label="SE AT_max", linewidth=2,linestyle="",marker="o",markersize=5) #pffNW['AT']
-ax3.plot(Runningmean_5daysNW['hcho'],color='blue',label="NW AT_max", linewidth=2,linestyle="",marker="o",markersize=5) #pffSE['AT']
-ax3.set_ylabel("HCHO [ppb]")
-ax1.legend(loc='lower left')
-plt.xlabel("time [days]")
+ax1.plot(Runningmean_5daysSE['hcho'][start:end],color='red',label="SE", linewidth=2,linestyle="",marker="o",markersize=5) #pffNW['AT']
+ax1.plot(Runningmean_5daysNW['hcho'][start:end],color='blue',label="NW", linewidth=2,linestyle="",marker="o",markersize=5) #pffSE['AT']
+ax1.set_ylabel("HCHO [ppb]")
+ax3.plot(Runningmean_5daysSE['AT5d'][start:end],color='red',label="SE", linewidth=2,linestyle="",marker="o",markersize=5) #pffNW['AT']
+ax3.plot(Runningmean_5daysNW['AT5d'][start:end],color='blue',label="NW", linewidth=2,linestyle="",marker="o",markersize=5) #pffSE['AT']
+ax3.set_ylabel("AT [°C]")
+ax1.legend(loc='upper right')
+#plt.xlabel("time [days]")
 plt.show()
 

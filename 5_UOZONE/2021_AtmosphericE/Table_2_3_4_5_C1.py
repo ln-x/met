@@ -3,13 +3,15 @@ __author__ = 'lnx'
 #version history: cleaned version 20211105 building on:
 # 1_VAL_SM_VOC_20192020
 # 1_VAL_SM_VOC_20192020_onlycorrelations_inklSIF_inklO3.py
-from sklearn import linear_model
 import numpy as np
+from sklearn import linear_model
 import scipy
 import statsmodels.api as sm
 from scipy.stats import shapiro
 from scipy.stats import kstest
 from scipy.stats import ks_2samp
+import statsmodels.api as smod
+from statsmodels.formula.api import ols
 import pandas as pd
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -227,6 +229,7 @@ pff_full = pd.concat([hcho_dmax,vpd_dmax, rss_sub["RSS_sub_grass"], rss_sub["RSS
                 o3_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"],pbl["PBL"]], axis=1)
 pff_full.columns = ['hcho', 'vpd', 'RSSg', 'RSSw', 'AT', 'GR', 'GRhigh', 'SIF', 'O3','WD','PC','PBL']
 pff_clear = pff_full.dropna(subset=['GRhigh'])
+print(pff_clear)
 pff_clear2 = pff_clear.loc[pff_clear["GR"] >= 4500]
 pff_clear2_o3high = pff_clear2.loc[pff_clear2["O3"] > 100]
 pff_clear2_o3low = pff_clear2.loc[pff_clear2["O3"] <= 100]
@@ -296,10 +299,10 @@ def Plot6var(df,title,ylimit):
     SRho_PBL, Sp_PBL = (stats.spearmanr(x5_PBL[idxPBL], y5[idxPBL]))
 
     #TODO: toggle on and off average/Spearman for better readability
-    #print(title, "average:", "AT", np.nanmean(x5), "GR", np.nanmean(x5_GR), "RSS_g_s", np.nanmean(x5_SM), "SIF", np.nanmean(x5_SIF), "RSS_w_s", np.nanmean(x5_SMw), "VPD",
-    #      np.nanmean(x5_VPD), "O3", np.nanmean(x5_O3), "PBL", np.nanmean(x5_PBL), "HCHO", np.nanmean(y5),)
-    print("Spearman p:", "AT", f'{Sp_AT:.2f}', "GR", f'{Sp_GR:.2f}', "RSS_g_s",f'{Sp_SM:.2f}', "SIF",  f'{Sp_SIF:.2f}', "VPD",
-          f'{Sp_VPD:.2f}', "O3", f'{Sp_O3:.2f}', "PBL", f'{Sp_PBL:.2f}', "RSS_w_s", f'{Sp_SMw:.2f}', title)
+    print(title, "average:", "AT", np.nanmean(x5), "GR", np.nanmean(x5_GR), "RSS_g_s", np.nanmean(x5_SM), "SIF", np.nanmean(x5_SIF), "RSS_w_s", np.nanmean(x5_SMw), "VPD",
+          np.nanmean(x5_VPD), "O3", np.nanmean(x5_O3), "PBL", np.nanmean(x5_PBL), "HCHO", np.nanmean(y5),)
+    #print("Spearman p:", "AT", f'{Sp_AT:.2f}', "GR", f'{Sp_GR:.2f}', "RSS_g_s",f'{Sp_SM:.2f}', "SIF",  f'{Sp_SIF:.2f}', "VPD",
+    #      f'{Sp_VPD:.2f}', "O3", f'{Sp_O3:.2f}', "PBL", f'{Sp_PBL:.2f}', "RSS_w_s", f'{Sp_SMw:.2f}', title)
     #print("Spearman Rho:", "AT", f'{SRho_AT:.2f}', "GR", f'{SRho_GR:.2f}', "RSS_g_s", f'{SRho_SM:.2f}', "RSS_w_s", f'{SRho_SMw:.2f}', "SIF", f'{SRho_SIF:.2f}', "VPD",
     #      f'{SRho_VPD:.2f}',"O3", f'{SRho_O3:.2f}',"PBL", f'{SRho_PBL:.2f}', title)
 
@@ -375,6 +378,14 @@ def Plot6var(df,title,ylimit):
 """Table 2"""
 print("\n ******")
 print("Table 2")
+
+
+#linear_model = ols('hcho ~ AT + GR', data=pff_MAM_18).fit()
+#print(linear_model.summary()) # display model summary
+#fig = plt.figure(figsize=(14, 8)) # modify figure size
+#fig = smod.graphics.plot_regress_exog(linear_model,'AT', fig=fig) # creating regression plots
+#plt.show()
+
 pff_MAM_18 = pff_full[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
 pff_MAM_20 = pff_full[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
 pff_JJA_20 = pff_full[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
@@ -428,14 +439,20 @@ Plot6var(pff_clear2_o3high_SE, title, ylimit=8)
 """Table 4 + 5 """
 print("\n ******")
 print("Table 4+5")
-pff_NW = pff_full.loc[(pff_full['WD'] >=270) & (pff_full['WD'] <=359)]
-pff_SE = pff_full.loc[(pff_full['WD'] >=90) & (pff_full['WD'] <=180)]
+#pff_NW = pff_full.loc[(pff_full['WD'] >=270) & (pff_full['WD'] <=359)]
+#pff_SE = pff_full.loc[(pff_full['WD'] >=90) & (pff_full['WD'] <=180)]
+pff_NW = pff_clear.loc[(pff_full['WD'] >=270) & (pff_clear2['WD'] <=359)]
+pff_SE = pff_clear.loc[(pff_full['WD'] >=90) & (pff_clear2['WD'] <=180)]
 pff_NW_MAM_18 = pff_NW[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
 pff_NW_MAM_20 = pff_NW[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
+pff_NW_M18 = pff_NW[datetime(2018, 5, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
+pff_NW_M20 = pff_NW[datetime(2020, 5, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
 #pff_SE_MAM_18 = pff_SE[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
 #pff_SE_MAM_20 = pff_SE[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
 pff_NW_JJA_20 = pff_NW[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
 pff_NW_JJA_19 = pff_NW[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
+pff_NW_A20 = pff_NW[datetime(2020, 8, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
+pff_NW_A19 = pff_NW[datetime(2019, 8, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
 #pff_SE_JJA_20 = pff_SE[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
 #pff_SE_JJA_19 = pff_SE[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
 
@@ -452,6 +469,11 @@ Plot6var(pff_NW_MAM_20,title, ylimit=4)
 #Plot6var(pff_SE_MAM_18,title, ylimit=4)
 #title = "MAM20, SE"
 #Plot6var(pff_SE_MAM_20,title, ylimit=4)
+title = "May18"
+Plot6var(pff_NW_M18,title, ylimit=8)
+title = "May20"
+Plot6var(pff_NW_M20,title, ylimit=8)
+
 title = "JJA19, NW"
 Plot6var(pff_NW_JJA_19,title, ylimit=4)
 title = "JJA20, NW"
@@ -460,6 +482,11 @@ Plot6var(pff_NW_JJA_20,title, ylimit=4)
 #Plot6var(pff_SE_JJA_19,title, ylimit=4)
 #title = "JJA20, SE"
 #Plot6var(pff_SE_JJA_20,title, ylimit=4)
+title = "Aug19"
+Plot6var(pff_NW_A19,title, ylimit=8)
+title = "Aug20"
+Plot6var(pff_NW_A20,title, ylimit=8)
+
 
 
 "Table C.1"

@@ -289,11 +289,11 @@ ax1 = fig.add_subplot(511)
 ax1.set_title('(a)', loc='left', size='medium')#, color='green')
 x1 = plt.gca()
 ax2 = ax1.twinx()
-ax2.plot(o3_1990_2020_mda8_w['AT9STEF'][start:end],linewidth="1", color='violet', linestyle="solid",label="O3") #label="O3,mda8,w",
-ax2.plot(o3_1990_2020_mda8_w['AT9STEF'][start:end].index, o3_1990_2020_mda8_w['AT9STEF'][datetime(2018, 3, 1):datetime(2018, 6, 7)].values,linewidth="1", color='violet', linestyle=":")
+ax2.plot(o3_1990_2020_mda8_w['AT9STEF'][start:end],linewidth="1", color='violet', linestyle="solid",label="O3_dry") #label="O3,mda8,w",
+ax2.plot(o3_1990_2020_mda8_w['AT9STEF'][start:end].index, o3_1990_2020_mda8_w['AT9STEF'][datetime(2018, 3, 1):datetime(2018, 6, 7)].values,linewidth="1", color='violet', linestyle=":", label="O3_reg")
 #ax1.plot(BOKUMetData_dailysum["GR"][start:end], linewidth="0.1", color='orange')  #label="GR,sum"
-ax1.plot(BOKUMetData_weekly["GR"][start:end]/1000, linewidth="1", color='orange', label="GR") #label="GR,sum,w"
-ax1.plot(BOKUMetData_weekly["GR"][start:end].index, (BOKUMetData_weekly["GR"][datetime(2018, 3, 1):datetime(2018, 6, 7)].values)/1000, linewidth="1", color='orange', linestyle=":")
+ax1.plot(BOKUMetData_weekly["GR"][start:end]/1000, linewidth="1", color='orange', label="GR_dry") #label="GR,sum,w"
+ax1.plot(BOKUMetData_weekly["GR"][start:end].index, (BOKUMetData_weekly["GR"][datetime(2018, 3, 1):datetime(2018, 6, 7)].values)/1000, linewidth="1", color='orange', linestyle=":", label="GR_reg")
 ax1.set_xlim(start,end)
 ax1.set_ylabel("[kWh/m²]", size="medium")
 ax2.set_ylabel("[μg/m³]", size="medium")
@@ -308,11 +308,11 @@ ax1 = plt.gca()
 ax2 = ax1.twinx()
 #ax1.step(sif_joint[start:end].index, tsif[start:end], linewidth="0.5", color='violet')#, label="SIF, d", linestyle="", marker=".")
 #ax1.step(sif_joint[start:end].index, sif_joint[datetime(2018, 3, 1):datetime(2018, 6, 1)].values, linewidth="0.5", color='red', linestyle=":")#, label="SIF, d", linestyle="", marker=".")
-ax1.plot(tsif_w,color='violet', label="SIF") #label="SIF_w"
-ax1.plot(tsif_w[start:datetime(2020, 6, 1)].index, osif_757_w[datetime(2018, 3, 1):datetime(2018, 6, 7)].values,color='red',label="OCO-2 SIF",linestyle=":")
+ax1.plot(tsif_w,color='violet', label="SIF_dry (TROP)") #label="SIF_w"
+ax1.plot(tsif_w[start:datetime(2020, 6, 1)].index, osif_757_w[datetime(2018, 3, 1):datetime(2018, 6, 7)].values,color='red',label="SIF_reg (OCO)",linestyle=":")
 ax1.set_ylabel("[mW/m2/sr/nm]", size="medium")
-ax2.plot(fAPAR[start:datetime(2020, 6, 1)],color='green', label="fAPARa")#label="fAPAR anomaly"
-ax2.plot(fAPAR[start:datetime(2020, 6, 1)].index, fAPAR[datetime(2018, 3, 1):datetime(2018, 6, 7)].values,color='green', linestyle=":")
+ax2.plot(fAPAR[start:datetime(2020, 6, 1)],color='green', label="fAPARa_dry")#label="fAPAR anomaly"
+ax2.plot(fAPAR[start:datetime(2020, 6, 1)].index, fAPAR[datetime(2018, 3, 1):datetime(2018, 6, 7)].values,color='green', linestyle=":", label="fAPARa_reg")
 ax2.set_ylabel("[-]", size="medium")
 ax1.grid()
 ax1.set_xticks([])
@@ -324,20 +324,20 @@ ax1 = fig.add_subplot(513)
 ax1.set_title('(c)', loc='left', size='medium')#, color='green')
 ax1 = plt.gca()
 ax2 = ax1.twinx()
-ax1.plot(vwc['RSS_sub_wWheat'][start:end],linewidth="1", color='orange', linestyle="solid", label="RSS_w") #label="RSS_sub_w",
-ax1.plot(vwc['RSS_sub_wWheat'][start:end].index,vwc['RSS_sub_wWheat'][datetime(2018, 3, 1):datetime(2018, 6, 1)].values,linewidth="1", color='orange', linestyle=":") #label="RSS_sub_w",
-ax1.plot(vwc['RSS_sub_grass'][start:end],linewidth="1", color='green', linestyle="solid", label="RSS_g") #label="RSS_sub_g"
-ax1.plot(vwc['RSS_sub_grass'][start:end].index,vwc['RSS_sub_grass'][datetime(2018, 3, 1):datetime(2018, 6, 1)].values,linewidth="1", color='green', linestyle=":")
-ax2.step(BOKUMetData_dailysum[start:end].index,(BOKUMetData_dailysum["PC"]*0.1)[start:end], linewidth="0.3", color='blue', label="PR") #{'pre', 'post', 'mid'} label="PR,sum"
-ax2.step(BOKUMetData_dailysum[start:end].index,(BOKUMetData_dailysum["PC"]*0.1)[datetime(2018, 3, 1):datetime(2018, 6, 1)].values, linewidth="0.3", color='blue', linestyle=":") #{'pre', 'post', 'mid'}  label="PR,sum",
+ax1.plot(vwc['RSS_sub_wWheat'][start:end],linewidth="1", color='orange', linestyle="solid", label="RSS_w_dry")
+ax1.plot(vwc['RSS_sub_wWheat'][start:end].index,vwc['RSS_sub_wWheat'][datetime(2018, 3, 1):datetime(2018, 6, 1)].values,linewidth="1", color='orange', linestyle=":", label="RSS_sub_w_reg")
+ax1.plot(vwc['RSS_sub_grass'][start:end],linewidth="1", color='green', linestyle="solid", label="RSS_g_dry") #label="RSS_sub_g"
+ax1.plot(vwc['RSS_sub_grass'][start:end].index,vwc['RSS_sub_grass'][datetime(2018, 3, 1):datetime(2018, 6, 1)].values,linewidth="1", color='green', linestyle=":", label="RSS_g_reg")
+ax2.step(BOKUMetData_dailysum[start:end].index,(BOKUMetData_dailysum["PC"]*0.1)[start:end], linewidth="0.3", color='blue', label="PR_dry") #{'pre', 'post', 'mid'} label="PR,sum"
+ax2.step(BOKUMetData_dailysum[start:end].index,(BOKUMetData_dailysum["PC"]*0.1)[datetime(2018, 3, 1):datetime(2018, 6, 1)].values, linewidth="0.3", color='blue', linestyle=":", label="PR_reg") #{'pre', 'post', 'mid'}  label="PR,sum",
 ax2.axhline(0, color='grey',linestyle="dashed",linewidth="0.3")
 ax2.set_ylabel("[mm]", size="medium")
 ax1.set_ylabel("[-]", size="medium")
 ax1.set_xticks([])
 ax1.grid()
 ax1.set_xlim(start,end)
-ax1.legend(loc='upper left',fontsize="small")
-ax2.legend(loc='lower left',fontsize="small")
+ax1.legend(loc='upper left')
+ax2.legend(loc='upper right')
 ax1.grid()
 
 ax1 = fig.add_subplot(514)
@@ -346,13 +346,13 @@ ax1 = plt.gca()
 ax2 = ax1.twinx()
 ax1.axhline(0, color='grey',linestyle="dashed",linewidth="0.3")
 #ax2.plot(vpd_dmax[start:end], linewidth="0.1", color='green')#, label="vpd,dmax")
-ax2.plot(vpd_dmax_w[start:end], linewidth="1", color='green', label="VPD")#, label="vpd,dmax,w")
+ax2.plot(vpd_dmax_w[start:end], linewidth="1", color='green', label="VPD_dry")#, label="vpd,dmax,w")
 #ax2.plot(vpd_dmax[start:end].index, vpd_dmax[datetime(2018, 3, 1):datetime(2018, 6, 1)].values, linewidth="0.3", color='green', linestyle=":")
-ax2.plot(vpd_dmax_w[start:end].index, vpd_dmax_w[datetime(2018, 3, 1):datetime(2018, 6, 7)].values, linewidth="1", color='green', linestyle=":")
+ax2.plot(vpd_dmax_w[start:end].index, vpd_dmax_w[datetime(2018, 3, 1):datetime(2018, 6, 7)].values, linewidth="1", color='green', linestyle=":", label="VPD_reg")
 #ax1.plot(hcho_d[start:end], linewidth="0.1", color='black') #, label="HCHO,dmax", linestyle="solid")
-ax1.plot(hcho_w[start:end], linewidth="1", color='black',label="HCHO")#, label="HCHO,dmax,w", linestyle="solid")
+ax1.plot(hcho_w[start:end], linewidth="1", color='black',label="HCHO_dry") #, label="HCHO,dmax,w", linestyle="solid")
 #ax1.plot(hcho_d[start:end].index,hcho_d[MAM18_s: datetime(2018, 6, 1)].values, linewidth="0.3", color='black', linestyle=":")
-ax1.plot(hcho_w[start:end].index,hcho_w[datetime(2018, 3, 1):datetime(2018, 6, 7)].values, linewidth="1", color='black', linestyle=":")
+ax1.plot(hcho_w[start:end].index,hcho_w[datetime(2018, 3, 1):datetime(2018, 6, 7)].values, linewidth="1", color='black', linestyle=":", label="HCHO_reg")
 ax1.set_xlim(start,end)
 ax1.set_xticks([])
 ax2.set_ylabel("[kPa]", size="medium")
@@ -368,13 +368,13 @@ ax2 = ax1.twinx()
 #ax1.axhline(0, color='grey',linestyle="dashed",linewidth="0.3")
 #ax2.plot(vpd_dmax[JJA19_s:JJA19_e], linewidth="0.3", color='green', label="VDP") #vpd,dmax")
 #ax2.plot((BOKUMetData_dailymax["AT"][start:end]), linewidth="0.3", color='red')#, label="AT") #label="GR,sum,w"
-ax2.plot((BOKUMetData_weekly["AT"][start:end]), linewidth="1", color='red', label="AT") #label="GR,sum,w"
+ax2.plot((BOKUMetData_weekly["AT"][start:end]), linewidth="1", color='red', label="Tair_dry") #label="GR,sum,w"
 #ax2.plot(BOKUMetData_dailysum["AT"][start:end].index,BOKUMetData_dailymax["AT"][MAM18_s:datetime(2018, 6, 1)].values, linewidth="0.3", color='red', linestyle=":")
-ax2.plot(BOKUMetData_weekly["AT"][start:end].index,BOKUMetData_weekly["AT"][MAM18_s:datetime(2018, 6, 7)].values, linewidth="1", color='red', linestyle=":")
+ax2.plot(BOKUMetData_weekly["AT"][start:end].index,BOKUMetData_weekly["AT"][MAM18_s:datetime(2018, 6, 7)].values, linewidth="1", color='red', linestyle=":", label="Tair_reg")
 #ax1.plot(hcho_d[start:end], linewidth="0.3", color='black')#, label="HCHO") #,dmax", linestyle="solid")
-ax1.plot(hcho_w[start:end], linewidth="1", color='black',label="HCHO")#, label="HCHO,dmax,w", linestyle="solid")
+ax1.plot(hcho_w[start:end], linewidth="1", color='black',label="HCHO_dry")#, label="HCHO,dmax,w", linestyle="solid")
 #ax1.plot(hcho_d[start:end].index,hcho_d[MAM18_s: datetime(2018, 6, 1)].values, linewidth="0.3", color='black', linestyle=":")
-ax1.plot(hcho_w[start:end].index,hcho_w[MAM18_s: datetime(2018, 6, 7)].values, linewidth="1", color='black', linestyle=":")
+ax1.plot(hcho_w[start:end].index,hcho_w[MAM18_s: datetime(2018, 6, 7)].values, linewidth="1", color='black', linestyle=":",label="HCHO_dry")
 ax1.set_xlim(start,end)
 #ax2.axvline(x=datetime(2020,5,10))
 ax2.set_ylabel("[°C]", size="medium")
