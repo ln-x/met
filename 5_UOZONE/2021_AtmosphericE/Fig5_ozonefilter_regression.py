@@ -328,7 +328,7 @@ def Plot6var(df1, df2, title, ylimit):
     axs[0, 0].plot(x5_2, y_est_2, color=color4)
     # ax0.fill_between(x5, y_est - y_err_AT, y_est + y_err_AT, alpha=0.2)
     axs[0, 0].set_ylabel("HCHO [ppb]", size="small")
-    axs[0, 0].set_xlabel("air temp [C°]", size="small")
+    axs[0, 0].set_xlabel("AT [C°]", size="small")
 
     axs[0, 1].set_title('(b) \n p_lowO3={:.2f} \n p_highO3={:.2f}'.format(Sp_GR, Sp_GR_2), fontsize='small')
     axs[0, 1].scatter(x5_GR[a:], y5[a:], color=color1, s=5)

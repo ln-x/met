@@ -342,7 +342,8 @@ def Plot6var(df1, df2, title, ylimit):
     axs[1, 0].plot(x5_SM_2, m5SM_2 * x5_SM_2 + b5SM_2, color='red')
     axs[1, 0].set_xlabel("RSS [-]", size="medium")
 
-    axs[1, 1].set_title('(e) \n p_black={:.2f} \n p_red={:.2f}'.format(Sp_SIF, Sp_SIF_2), fontsize='small')
+    axs[1, 1].set_title('(e) \n Sp_black={:.2f} \n Sp_red={:.2f}'.format(Sp_SIF, Sp_SIF_2), fontsize='small')
+    #axs[1, 1].set_title('(e) \n SRho_black={:.2f} \n SRho_red={:.2f}'.format(SRho_SIF, SRho_SIF_2), fontsize='small')
     axs[1, 1].scatter(x5_SIF[a:], y5[a:], color='grey',s=5)
     axs[1, 1].plot(x5_SIF, m5SIF * x5_SIF + b5SIF, color='black')
     axs[1, 1].scatter(x5_SIF_2[a:], y5_2[a:], color='salmon', s=5)
