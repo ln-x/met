@@ -19,6 +19,7 @@ from datetime import datetime
 import met.library.BOKUMet_Data
 from met.library.Datetime_recipies import datestdtojd
 from met.library import ReadinVindobona_Filter_fullperiod
+import sys
 
 "read in VINDOBONA"
 
@@ -168,56 +169,76 @@ pff_clear2_o3high_NW = pff_clear2_o3high.loc[(pff_clear2_o3high['WD'] >=270) & (
 pff_clear2_o3high_SE = pff_clear2_o3high.loc[(pff_clear2_o3high['WD'] >=90) & (pff_clear2_o3high['WD'] <=180)]
 pff_weekly_rss_clear = pff_clear.resample("W").mean()
 
-#df = pff_full[datetime(2018,1,1):datetime(2020,12,31)]
-df = pff_full[datetime(2018,3,1):datetime(2018,5,31)]
-#df = pff_full[datetime(2020,3,1):datetime(2020,5,31)]
-#df = pff_full[datetime(2019,6,1):datetime(2019,8,31)]
-#df = pff_full[datetime(2020,6,1):datetime(2020,8,31)]
-
-df = df.dropna()
-#FROM: https://www.statology.org/lasso-regression-in-python/
-X = df[['vpd', 'RSSg', 'RSSw', 'AT', 'GR', 'GRhigh', 'SIF', 'O3','WD','PC','PBL']]
-y = df['hcho']
-#print(X.head(),y.head())
-
-#define cross-validation method to evaluate model
-cv = RepeatedKFold(n_splits=10, n_repeats=3, random_state=1)
-#define model
-model = LassoCV(alphas=arange(0, 1, 0.01), cv=cv, n_jobs=-1)
-#fit model
-model.fit(X, y)
-print(model.coef_)
-#display lambda that produced the lowest test MSE
-print(model.alpha_)
-
-figure = plt.figure
-#print(model.mse_path_)
-plt.semilogx(model.alphas_, model.mse_path_, ":")
-plt.plot(
-    model.alphas_ ,
-    model.mse_path_.mean(axis=-1),
-    "k",
-    label="Average across the folds",
-    linewidth=2,
-)
-plt.axvline(
+def LASSO(df, name):
+    #df = df.dropna()
+    # FROM: https://www.statology.org/lasso-regression-in-python/
+    X = df[['vpd', 'RSSg', 'RSSw', 'AT', 'GR', 'GRhigh', 'SIF', 'O3', 'WD', 'PC', 'PBL']]
+    y = df['hcho']
+    print(X.head(),y.head())
+    #define cross-validation method to evaluate model
+    cv = RepeatedKFold(n_splits=5, n_repeats=10, random_state=0) #n_splits= number of folds
+    #define model
+    model = LassoCV(alphas=arange(0, 1, 0.01), cv=cv, n_jobs=-1)
+    #fit model
+    model.fit(X, y)
+    print(name)
+    print(np.around(model.coef_,decimals=5))
+    #display lambda that produced the lowest test MSE
+    print(model.alpha_)
+    """
+    figure = plt.figure
+    #print(model.mse_path_)
+    plt.semilogx(model.alphas_, model.mse_path_, ":")
+    plt.plot(
+        model.alphas_ ,
+        model.mse_path_.mean(axis=-1),
+        "k",
+        label="Average across the folds",
+        linewidth=2,
+    )
+    plt.axvline(
     model.alpha_, linestyle="--", color="k", label="alpha: CV estimate"
-)
+    )
+    plt.legend()
+    plt.xlabel("alphas")
+    plt.ylabel("Mean square error")
+    plt.title("Mean square error on each fold")
+    plt.axis("tight")
+    plt.show()
+    #ymin, ymax = 50000, 250000
+    #plt.ylim(ymin, ymax);
+    """
+    #Use best value for our final model:
+    lasso_best = Lasso(alpha=model.alpha_)
 
-plt.legend()
-plt.xlabel("alphas")
-plt.ylabel("Mean square error")
-plt.title("Mean square error on each fold")
-plt.axis("tight")
-plt.show()
+df_full = pff_full[datetime(2018,1,1):datetime(2020,12,31)]
+df_full = df_full.dropna()
+LASSO(df_full,"full") #[ 4.4673e-01 -0.0000e+00 -0.0000e+00  4.8780e-02 -1.2000e-04 -0.0000e+00 5.1780e-02  1.5410e-02 -4.1500e-03  3.2000e-04 -4.2000e-04]
 
-#ymin, ymax = 50000, 250000
-#plt.ylim(ymin, ymax);
+df_NW = df_full.loc[(df_full['WD'] >=270) & (df_full['WD'] <=360)]
+#LASSO(df_NW,"full_NW")
+df_MAM18 = df_full[datetime(2018,3,1):datetime(2018,5,31)]
+np.set_printoptions(threshold=sys.maxsize)
+print(df_MAM18)
+LASSO(df_MAM18,"MAM18_NW")
 
-#Use best value for our final model:
-lasso_best = Lasso(alpha=model.alpha_)
+np.set_printoptions(suppress=True)  #toggle on and off scientific notation during printing
 
+df_MAM20 = df_NW[datetime(2020,3,1):datetime(2020,5,31)]
+LASSO(df_MAM20,"MAM20_NW")  #[ 5.544e-01  5.019e-02 -1.980e-03  1.128e-02 -3.000e-05  0.000e+00  -2.917e-02  3.770e-03  3.620e-03 -4.010e-03  1.700e-04]
+df_JJA20 = df_NW[datetime(2020,6,1):datetime(2020,8,31)]
+LASSO(df_JJA20,"JJA20_NW")  #[-0. 0. 0. 0.20662 -0.00022 -0. 0. -0.00023  0.01222 -0. -0.0003 ]
+df_JJA19 = df_NW[datetime(2019,6,1):datetime(2019,8,31)]
+LASSO(df_JJA19,"JJA19_NW") #[-0.0000e+00  0.0000e+00  0.0000e+00  1.6502e-01  9.0000e-05  0.0000e+00 -0.0000e+00  2.2550e-02  1.2300e-02 -1.8700e-03 -1.0000e-05]
 
+#df_MAM18 = df_full[datetime(2018,3,1):datetime(2018,5,31)]
+#LASSO(df_MAM18,"MAM18")
+#df_MAM20 = df_full[datetime(2020,3,1):datetime(2020,5,31)]
+#LASSO(df_MAM20,"MAM20")
+#df_JJA20 = df_full[datetime(2020,6,1):datetime(2020,8,31)]
+#LASSO(df_JJA20,"JJA20")
+#df_JJA19 = df_full[datetime(2019,6,1):datetime(2019,8,31)]
+#LASSO(df_JJA19,"JJA19")
 
 
 exit()

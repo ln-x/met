@@ -71,18 +71,25 @@ path = '/windata/DATA/models/boku/EMEP/output/UOZONE/'
 #"2019-10-14", "2019-11-25"]
 
 #EMISSIONS
-#fh_E = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/uozone_month_20180320_20200202.nc", mode='r') #TODO: join all files
-fh_E = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/uozone_month_20180320_20201226.nc", mode='r') #TODO: join all files
+#fh_E = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/uozone_month_20180320_20200202.nc", mode='r')
+#fh_E = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/uozone_month_20180320_20201226.nc", mode='r')
+fh_E = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/uozone_month_20180206_20201231.nc", mode='r') #TODO: join all files
+
 
 #CONCENTRATIONS
 #file1 = path + 'uozone_hourInst.nc'
 #fh_o3 = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/SURF_ppb_O3_uozone.nc", mode='r') #TODO: update join all files
-fh_o3 = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/SURF_ug_O3_uozone.nc", mode='r') #TODO: update join all files
-fh_hcho = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/SURF_ppb_HCHO_uozone.nc", mode='r') #TODO: update join all files
-fh_c5h8 = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/SURF_ppb_C5H8_uozone.nc", mode='r') #TODO: update join all files
+#fh_o3 = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/SURF_ug_O3_uozone.nc", mode='r') #TODO: update join all files
+#fh_hcho = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/SURF_ppb_HCHO_uozone.nc", mode='r') #TODO: update join all files
+#fh_c5h8 = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/SURF_ppb_C5H8_uozone.nc", mode='r') #TODO: update join all files
+fh_o3 = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/SURF_ug_O3_uozone_new.nc", mode='r') #TODO: update join all files
+fh_hcho = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/SURF_ppb_HCHO_uozone_new.nc", mode='r') #TODO: update join all files
+fh_c5h8 = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/SURF_ppb_C5H8_uozone_new.nc", mode='r') #TODO: update join all files
+
 
 ##DDEPOSTION
-fh_ddp = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/DDEP_O3_m2Grid_uozone.nc", mode='r') #TODO: update join all files
+#fh_ddp = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/DDEP_O3_m2Grid_uozone.nc", mode='r') #TODO: update join all files
+fh_ddp = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/DDEP_O3_m2Grid_new.nc", mode='r') #TODO: update join all files
 
 ##fh1 = Dataset(file1, mode='r')
 lons = fh_ddp.variables['lon'][1]
@@ -99,6 +106,10 @@ emep_E_c5h8_m = fh_E.variables['Emis_mgm2_BioNatC5H8'][:,wrf_vie_j, wrf_vie_i]
 emep_E_c5h8_m = pd.Series(emep_E_c5h8_m[:],index=jd_month)
 emep_E_terp_m = fh_E.variables['Emis_mgm2_BioNatTERP'][:,wrf_vie_j, wrf_vie_i]
 emep_E_terp_m = pd.Series(emep_E_terp_m[:],index=jd_month)
+
+
+#print(emep_E_c5h8_m)
+
 
 emep_c5h8_d = fh_c5h8.variables['SURF_ppb_C5H8'][:,wrf_vie_j, wrf_vie_i]
 emep_c5h8_d = pd.Series(emep_c5h8_d[:],index=jd_part)
@@ -186,11 +197,10 @@ LAI_df = ReadinPROBAV_LAI_300m.LAI()
 #print("JJA20:", LAI_df[JJA20_s:JJA20_e].mean())
 #print("JJA19:", LAI_df[JJA19_s:JJA19_e].mean())
 
-print("May18:", LAI_df[datetime(2018, 5, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].mean())
-print("May20:", LAI_df[datetime(2020, 5, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].mean())
+#print("May18:", LAI_df[datetime(2018, 5, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].mean())
+#print("May20:", LAI_df[datetime(2020, 5, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].mean())
 #print("Aug20:", LAI_df[datetime(2020, 8, 1, 00, 00):JJA20_e].mean())
 #print("Aug19:", LAI_df[datetime(2019, 8, 1, 00, 00):JJA19_e].mean())
-exit()
 
 
 '''
@@ -198,7 +208,7 @@ Plotting
 '''
 #start = datetime(2017, 5, 1, 00, 00)
 start = datetime(2018, 2, 6, 00, 00)
-#start = datetime(2017, 1, 1, 00, 00)
+start = datetime(2018, 3, 1, 00, 00)
 #end = datetime(2021, 8, 31, 00, 00)
 #end = datetime(2019, 11, 25, 00, 00)
 end = datetime(2020, 12, 31, 00, 00)
@@ -207,7 +217,7 @@ end = datetime(2020, 12, 31, 00, 00)
 #print(emep_hcho_d.index)
 #print(emep_hcho_d.values)
 
-
+"""
 fig = plt.figure()
 #gridspec_kw={'height_ratios': [1, 2]
 plt.suptitle("1a biogenic VOC emission/CAMX")
@@ -244,15 +254,18 @@ ax1.grid()
 ax1.legend(loc='upper left')
 ax3 = fig.add_subplot(3, 1, (3, 3))#, sharex=True)
 ax4 = ax3.twinx()
-ax3.plot(LAI_df[datetime(2018,1,1):datetime(2020,4,30)].index, LAI_df[datetime(2018,1,1):datetime(2020,4,30)].LAI, linewidth="3",color="green", alpha=0.3, label="LAI")
-ax4.plot(BOKUMetData_dailysum["AT"][datetime(2018,1,1):datetime(2020,4,30)].index,BOKUMetData_dailysum["AT"][datetime(2018,1,1):datetime(2020,4,30)].values,linewidth="2",color="red", alpha=0.2, label="T_air DA")
+ax3.plot(LAI_df[datetime(2018,1,1):datetime(2020,12,31)].index, LAI_df[datetime(2018,1,1):datetime(2020,12,31)].LAI, linewidth="3",color="green", alpha=0.3, label="LAI")
+ax4.plot(BOKUMetData_dailysum["AT"][datetime(2018,1,1):datetime(2020,12,31)].index,BOKUMetData_dailysum["AT"][datetime(2018,1,1):datetime(2020,12,31)].values,linewidth="2",color="red", alpha=0.2, label="T_air DA")
 ax3.set_ylabel("LAI[-]")
 ax4.set_ylabel("AT[°C]") #average daily temperature
 #ax3.set_xlabel("days")
 plt.show()
-
-exit()
 """
+
+print(hcho_w, emep_hcho_d, emep_c5h8_d)
+print(emep_E_c5h8_m, emep_E_terp_m)
+
+
 fig = plt.figure()
 #gridspec_kw={'height_ratios': [1, 2]
 plt.suptitle("1b biogenic VOC emission/EMEP")
@@ -261,10 +274,10 @@ ax1 = plt.gca()
 ax2 = ax1.twinx()
 #ax3 = ax2.twinx()
 ax1.plot(hcho_w[start:end], linewidth="1", color='black', label="HCHO", linestyle=":")
-ax1.plot(emep_hcho_d.index, emep_hcho_d.values, linewidth="1", color='black', label="HCHO_emep", linestyle=":")
-ax1.plot(emep_c5h8_d.index, emep_c5h8_d.values, linewidth="1", color='red', label="C5H8_emep", linestyle=":")
-ax2.plot(emep_E_c5h8_m.index,emep_E_c5h8_m.values,linewidth="1", color='red', label="E_C5H8_emep", linestyle=" ", marker="o")
-ax2.plot(emep_E_terp_m.index,emep_E_terp_m.values,linewidth="1", color='orange', label="E_TERP_emep", linestyle=" ", marker="o")
+#ax1.plot(emep_hcho_d[start:end].index, emep_hcho_d[start:end].values, linewidth="1", color='black', label="HCHO_emep", linestyle=":")
+#ax1.plot(emep_c5h8_d[start:end].index, emep_c5h8_d[start:end].values, linewidth="1", color='red', label="C5H8_emep", linestyle=":")
+ax2.plot(emep_E_c5h8_m[start:end].index,emep_E_c5h8_m[start:end].values,linewidth="1", color='red', label="E_C5H8_emep", linestyle=" ", marker="o")
+ax2.plot(emep_E_terp_m[start:end].index,emep_E_terp_m[start:end].values,linewidth="1", color='orange', label="E_TERP_emep", linestyle=" ", marker="o")
 
 #ax2.plot(emep_eISO_d[start:end], linewidth="1", color='black', label="ISO", linestyle="solid")
 #ax2.plot(emep_eTERP_d[start:end], linewidth="1", color='black', label="TERP", linestyle="solid")
@@ -286,7 +299,7 @@ ax3.set_ylabel("LAI[-]")
 ax4.set_ylabel("AT[°C]") #average daily temperature
 plt.show()
 """
-"""
+
 fig = plt.figure()
 plt.suptitle("2a deposition/CAMX")
 ax1 = fig.add_subplot(3, 1, (1, 2))#, sharex=True)
@@ -309,6 +322,7 @@ ax3.set_ylabel("LAI[-]")
 ax4.set_ylabel("AT[°C]") #average daily temperature
 plt.show()
 """
+
 fig = plt.figure()
 plt.suptitle("2b deposition/EMEP")
 ax1 = fig.add_subplot(3, 1, (1, 2))#, sharex=True)
@@ -330,8 +344,8 @@ ax4 = ax3.twinx()
 ax3.grid()
 ax3.plot(LAI_df[start:end].index, LAI_df[start:end].LAI, linewidth="3",color="green", alpha=0.3, label="LAI")
 ax4.plot(BOKUMetData_dailysum["AT"][start:end].index,BOKUMetData_dailysum["AT"][start:end].values,linewidth="2",color="red", alpha=0.2, label="T_air DA")
-ax3.set_ylabel("LAI[-]")
-ax4.set_ylabel("AT[°C]") #average daily temperature
+ax3.set_ylabel("LAI [-]")
+ax4.set_ylabel("AT [°C]") #average daily temperature
 plt.show()
 
 exit()
