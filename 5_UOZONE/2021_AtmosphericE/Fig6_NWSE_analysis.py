@@ -116,21 +116,32 @@ print("remaining difference (antrop?):", HCHO_diff_noveg-(y_est_perdegC_2*AT_dif
 
 print("****")
 fig = plt.figure(figsize=(8, 6), dpi=100)
-plt.scatter(pffNW_veg['AT'], pffNW_veg['hcho'], color='blue', s=5, label="NW_veg")
-plt.scatter(pffNW_noveg['AT'], pffNW_noveg['hcho'], color='powderblue', s=5, label="NW_noveg")
-plt.scatter(pffSE_veg['AT'], pffSE_veg['hcho'], color='red', s=5, label="SE_veg")
-plt.scatter(pffSE_noveg['AT'], pffSE_noveg['hcho'], color='salmon', s=5, label="SE_noveg")
+plt.scatter(pffNW_veg['AT'], pffNW_veg['hcho'], color='blue', s=5, label="NW_VP")
+plt.scatter(pffNW_noveg['AT'], pffNW_noveg['hcho'], color='powderblue', s=5, label="NW_NVP")
+plt.scatter(pffSE_veg['AT'], pffSE_veg['hcho'], color='red', s=5, label="SE_VP")
+plt.scatter(pffSE_noveg['AT'], pffSE_noveg['hcho'], color='salmon', s=5, label="SE_NOVP")
 
 y_est = m_novegNW * pffNW_noveg['AT'] + b5_novegNW
 y2_est = m_vegNW * pffNW_veg['AT'] + b5_vegNW
 ySE_est = m_novegSE * pffSE_noveg['AT'] + b5_novegSE
 y2SE_est = m_vegSE * pffSE_veg['AT'] + b5_vegSE
 
+#Absolute Mean Error
+AME_NWveg = np.mean(np.abs(pffNW_veg['hcho'] - y2_est))
+AME_SEveg = np.mean(np.abs(pffSE_veg['hcho'] - y2SE_est))
+
+print("Absolute Mean Error NW/SE:", AME_NWveg, AME_SEveg)
+#(Absolute) variance of residual Error
+var_absNW = np.var(np.abs(pffNW_veg['hcho'] - y2_est))
+var_absSE = np.var(np.abs(pffSE_veg['hcho'] - y2SE_est))
+#var = np.var(y_true - y_pred)
+print("Absolute variance of Error NW/SE:", var_absNW, var_absSE)
+
 plt.plot(pffNW_noveg['AT'], y_est, color='powderblue',linewidth="0.5")
 plt.plot(pffNW_veg['AT'], y2_est, color='blue',linewidth="0.5")
 plt.plot(pffSE_noveg['AT'], ySE_est, color='salmon',linewidth="0.5")
 plt.plot(pffSE_veg['AT'], y2SE_est, color='red',linewidth="0.5")
-plt.title('SRho: NW_veg={:.2f}, NW_noveg={:.2f}, SE_veg={:.2f}, SE_noveg={:.2f}'.format(SRho_vegNW,SRho_novegNW,SRho_vegSE,SRho_novegSE), fontsize='small')
+#plt.title('SRho: NW_veg={:.2f}, NW_noveg={:.2f}, SE_veg={:.2f}, SE_noveg={:.2f}'.format(SRho_vegNW,SRho_novegNW,SRho_vegSE,SRho_novegSE), fontsize='small')
 plt.ylabel("HCHO [ppb]", size="small")
 plt.xlabel("AT [C°]", size="small")
 plt.legend()

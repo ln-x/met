@@ -89,17 +89,20 @@ fh_c5h8 = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/SURF_ppb_C5H8_uo
 
 ##DDEPOSTION
 #fh_ddp = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/DDEP_O3_m2Grid_uozone.nc", mode='r') #TODO: update join all files
-fh_ddp = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/DDEP_O3_m2Grid_new.nc", mode='r') #TODO: update join all files
+fh_ddp = Dataset("/windata/DATA/models/boku/EMEP/output/UOZONE/DDEP_O3_m2Grid_new2.nc", mode='r') #TODO: update join all files
 
 ##fh1 = Dataset(file1, mode='r')
 lons = fh_ddp.variables['lon'][1]
 lats = fh_ddp.variables['lat'][1]
 emep_time = fh_c5h8.variables['time']
-emep_time_full = fh_ddp.variables['time']
+emep_time_ddp = fh_ddp.variables['time']
+emep_time_o3 = fh_o3.variables['time']
+
 
 emep_time_month = fh_E.variables['time']
 jd_part = netCDF4.num2date(emep_time[:],emep_time.units)
-jd = netCDF4.num2date(emep_time_full[:],emep_time_full.units)
+jd_ddp = netCDF4.num2date(emep_time_ddp[:],emep_time_ddp.units)
+jd_o3 = netCDF4.num2date(emep_time_o3[:],emep_time_o3.units)
 jd_month = netCDF4.num2date(emep_time_month[:],emep_time_month.units)
 ##print(jd)
 emep_E_c5h8_m = fh_E.variables['Emis_mgm2_BioNatC5H8'][:,wrf_vie_j, wrf_vie_i]
@@ -116,10 +119,10 @@ emep_c5h8_d = pd.Series(emep_c5h8_d[:],index=jd_part)
 emep_hcho_d = fh_hcho.variables['SURF_ppb_HCHO'][:,wrf_vie_j, wrf_vie_i]
 emep_hcho_d = pd.Series(emep_hcho_d[:],index=jd_part)
 emep_o3_d = fh_o3.variables['SURF_ug_O3'][:,wrf_vie_j,wrf_vie_i] #(time, j, i)
-emep_o3_d = pd.Series(emep_o3_d[:],index=jd)
+emep_o3_d = pd.Series(emep_o3_d[:],index=jd_o3)
 
 emep_ddep_d = fh_ddp.variables['DDEP_O3_m2Grid'][:,wrf_vie_j,wrf_vie_i] #(time, j, i)
-emep_ddep_d = pd.Series(emep_ddep_d[:],index=jd)
+emep_ddep_d = pd.Series(emep_ddep_d[:],index=jd_ddp)
 
 
 '''READ IN CAMX DATA'''
@@ -265,7 +268,6 @@ plt.show()
 print(hcho_w, emep_hcho_d, emep_c5h8_d)
 print(emep_E_c5h8_m, emep_E_terp_m)
 
-
 fig = plt.figure()
 #gridspec_kw={'height_ratios': [1, 2]
 plt.suptitle("1b biogenic VOC emission/EMEP")
@@ -274,10 +276,10 @@ ax1 = plt.gca()
 ax2 = ax1.twinx()
 #ax3 = ax2.twinx()
 ax1.plot(hcho_w[start:end], linewidth="1", color='black', label="HCHO", linestyle=":")
-#ax1.plot(emep_hcho_d[start:end].index, emep_hcho_d[start:end].values, linewidth="1", color='black', label="HCHO_emep", linestyle=":")
-#ax1.plot(emep_c5h8_d[start:end].index, emep_c5h8_d[start:end].values, linewidth="1", color='red', label="C5H8_emep", linestyle=":")
-ax2.plot(emep_E_c5h8_m[start:end].index,emep_E_c5h8_m[start:end].values,linewidth="1", color='red', label="E_C5H8_emep", linestyle=" ", marker="o")
-ax2.plot(emep_E_terp_m[start:end].index,emep_E_terp_m[start:end].values,linewidth="1", color='orange', label="E_TERP_emep", linestyle=" ", marker="o")
+ax1.plot(emep_hcho_d[start:end].index, emep_hcho_d[start:end].values, linewidth="1", color='black', label="HCHO_emep", linestyle=":")
+ax1.plot(emep_c5h8_d[start:end].index, emep_c5h8_d[start:end].values, linewidth="1", color='red', label="C5H8_emep", linestyle=":")
+#ax2.plot(emep_E_c5h8_m[start:end].index,emep_E_c5h8_m[start:end].values,linewidth="1", color='red', label="E_C5H8_emep", linestyle=" ", marker="o")
+#ax2.plot(emep_E_terp_m[start:end].index,emep_E_terp_m[start:end].values,linewidth="1", color='orange', label="E_TERP_emep", linestyle=" ", marker="o")
 
 #ax2.plot(emep_eISO_d[start:end], linewidth="1", color='black', label="ISO", linestyle="solid")
 #ax2.plot(emep_eTERP_d[start:end], linewidth="1", color='black', label="TERP", linestyle="solid")

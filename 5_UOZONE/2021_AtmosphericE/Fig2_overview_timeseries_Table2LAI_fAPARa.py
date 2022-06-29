@@ -328,7 +328,7 @@ ax1.plot(vwc['RSS_sub_grass'][start:end],linewidth="1", color='green', label="gr
 ax2.plot((BOKUMetData_dailysum["PC"]*0.1)[start:end], linewidth="1", color='blue')#, label="prec BOKUR OBS")
 ax2.axhline(0, color='grey',linestyle="dashed",linewidth="0.3")
 #ax1.set_xlabel("days")
-ax2.set_ylabel("PC[mm]", size="medium")
+ax2.set_ylabel("PR[mm]", size="medium")
 ax1.set_ylabel("RSS[-]", size="medium")
 ax1.set_xlim(start,end)
 #ax1.legend(loc='upper left',fontsize="small")
