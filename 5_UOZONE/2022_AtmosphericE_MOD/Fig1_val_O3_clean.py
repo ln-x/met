@@ -58,7 +58,7 @@ o3_2020_mda1 = pd.read_csv(pathbase2 + "AT_O3_2020.csv")
 o3_2020_mda1 = o3_2020_mda1.set_index(pd.to_datetime(o3_2020_mda1['date']))
 o3_2020_mda1 = o3_2020_mda1.drop(columns=['date'])
 o3_1990_2020_mda1 = pd.concat([o3_1990_2019_mda1, o3_2020_mda1], axis=0)
-o3_1990_2020_mda1 = o3_1990_2020_mda1[datetime(2018,1,1):datetime(2020,12,31)] #TODO: Attention! Timeserie is filtered#
+#o3_1990_2020_mda1 = o3_1990_2020_mda1[datetime(2018,1,1):datetime(2020,12,31)] #TODO: Attention! Timeserie is filtered#
 
 o3_2020_mda8 = o3_2020_mda1.resample('8H', label='right').mean()
 o3_2020_mda8 = o3_2020_mda8.resample('D').mean()
@@ -86,10 +86,11 @@ ax1.plot(emep_o3_d_STE_w,color='violet', linestyle=":")
 ax1.plot(emep_o3_d_LOB_w,color='chartreuse', linestyle=":")
 ax1.plot(emep_o3_d_area_w,color="grey",linestyle=":", linewidth="5", label="area mean")
 ax1.legend(loc='upper right')
-ax1.set_ylim(0, 150)
+#ax1.set_ylim(0, 150)
 ax1.set_ylabel("[ug/m2]", size="medium")
 plt.show()
 
+exit()
 data = pd.concat([o3_1990_2019_mda1['AT9JAEG'].resample("D").mean(), o3_1990_2019_mda1['AT9STEF'].resample("D").mean(),
                   o3_1990_2019_mda1['AT90LOB'].resample("D").mean(), emep_o3_d_HER.resample("D").mean(), emep_o3_d_STE.resample("D").mean(),
                   emep_o3_d_LOB.resample("D").mean()], axis=1)
