@@ -118,7 +118,7 @@ ax1.scatter(data['obs_gr'], data['mod_gr'],label="GR", s=1)
 #ax1.set_xlim(0,180)
 #ax2.set_xlim(0,180)
 #ax3.set_xlim(0,180)
-ax1.set_ylabel("[W/m²]", size="medium")
+ax1.set_ylabel("[kW/m²]", size="medium")
 plt.show()
 
 

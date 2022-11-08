@@ -67,7 +67,7 @@ ax1.plot(emep_hcho_d_LOB_w,color='chartreuse', linestyle=":",label="EMEP_LOB")
 ax1.plot(emep_hcho_d_area_w,color="grey",linestyle=":", linewidth="5", label="EMEP_area_mean")
 ax1.legend(loc='upper right')
 #ax1.set_ylim(0, 150)
-ax1.set_ylabel("[ug/m2]", size="medium")
+ax1.set_ylabel("[ppb]", size="medium")
 plt.show()
 
 data = pd.concat([hcho_dmax.resample("D").mean(), hcho_d.resample("D").mean(), emep_hcho_d_STE.resample("D").mean()], axis=1)

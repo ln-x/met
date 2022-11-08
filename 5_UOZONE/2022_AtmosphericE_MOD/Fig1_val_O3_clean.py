@@ -87,7 +87,8 @@ ax1.plot(emep_o3_d_LOB_w,color='chartreuse', linestyle=":")
 ax1.plot(emep_o3_d_area_w,color="grey",linestyle=":", linewidth="5", label="area mean")
 ax1.legend(loc='upper right')
 #ax1.set_ylim(0, 150)
-ax1.set_ylabel("[ug/m2]", size="medium")
+ax1.set_ylabel("[ug m-3]", size="medium")
+
 plt.show()
 
 exit()

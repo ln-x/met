@@ -233,9 +233,13 @@ ax1 = fig.add_subplot(111)
 x1 = plt.gca()
 ax2 = ax1.twinx()
 #ax2.plot(o3_1990_2020_da['AT9STEF'][start:end]*ugm3toppb_o3,linewidth="1", color='violet', label="o3 OBS da", linestyle="solid")
-ax2.plot(o3_1990_2020_mda8_w['AT9STEF'][start:end],linewidth="1", color='violet', label="O3", linestyle="solid")
+ax2.plot(o3_1990_2020_mda8_w['AT9STEF'][start:end],linewidth="1", color='black', label="STEF_O3", linestyle="solid")
+ax2.plot(o3_1990_2020_mda8_w['AT31901'][start:end],linewidth="1", color='violet', label="TULLN_O3", linestyle="solid")
+ax2.plot(o3_1990_2020_mda8_w['AT30701'][start:end],linewidth="1", color='blue', label="ZIERSD_O3", linestyle="solid")
+ax2.plot(o3_1990_2020_mda8_w['AT30302'][start:end],linewidth="1", color='red', label="STIX_O3", linestyle="solid")
+ax2.plot(o3_1990_2020_mda8_w['AT30401'][start:end],linewidth="1", color='green', label="GAENS_O3", linestyle="solid")
 #ax2.plot(o3_1990_2020_mda1_w['AT9STEF'][start:end]*ugm3toppb_o3,linewidth="1", color='violet', label="o3 OBS mda1", linestyle=":")
-ax1.plot(hcho_w[start:end], linewidth="1", color='black', label="HCHO", linestyle="solid") #274 = Julian Day 30.Sept2020
+ax1.plot(hcho_w[start:end], linewidth="1", color='black', label="HCHO", linestyle=":") #274 = Julian Day 30.Sept2020
 #ax1.set_ylim(0, 8)
 ax1.set_xlabel("days")
 ax1.set_xlim(start,end)
@@ -259,7 +263,11 @@ ax1.set_title('(a)', loc='left', size='medium')#, color='green')
 
 ax2 = ax1.twinx()
 #ax2.plot(o3_1990_2020_da['AT9STEF'][start:end]*ugm3toppb_o3,linewidth="1", color='violet', label="o3 OBS da", linestyle="solid")
-ax2.plot(o3_1990_2020_mda8_w['AT9STEF'][start:end],linewidth="1", color='violet', linestyle="solid") #label="o3 OBS mda8",
+ax2.plot(o3_1990_2020_mda8_w['AT9STEF'][start:end],linewidth="1", color='black', label="STEF_O3") #label="o3 OBS mda8",
+ax2.plot(o3_1990_2020_mda8_w['AT31901'][start:end],linewidth="1", color='violet', label="TULLN_O3", linestyle="solid")
+ax2.plot(o3_1990_2020_mda8_w['AT30701'][start:end],linewidth="1", color='blue', label="ZIERSD_O3", linestyle="solid")
+ax2.plot(o3_1990_2020_mda8_w['AT30302'][start:end],linewidth="1", color='red', label="STIX_O3", linestyle="solid")
+ax2.plot(o3_1990_2020_mda8_w['AT30401'][start:end],linewidth="1", color='green', label="GAENS_O3", linestyle="solid")
 #ax2.plot(o3_1990_2020_mda1_w['AT9STEF'][start:end]*ugm3toppb_o3,linewidth="1", color='violet', label="o3 OBS mda1", linestyle=":")
 #ax1.plot(BOKUMetData_dailysum["GR"][start:end], linewidth="1", color='orange', label="gr dmax BOKUR OBS")
 ax1.plot(BOKUMetData_weekly["GR"][start:end]/1000, linewidth="2", color='yellow')#, label="GR sum BOKUR")
