@@ -46,7 +46,9 @@ def loadfile(foldername, filename, hcho_date):
     hcho_dft['datetime'] = pd.to_datetime(hcho_dft['datetime'])#, unit='D')
     #print("to_datetime", hcho_dft['datetime'])
     hcho_dft = hcho_dft.set_index(['datetime'])
+    hcho_dft = hcho_dft.loc[(hcho_dft.index.hour >= 9) & (hcho_dft.index.hour <= 15)] #TODO keep filter?
     return(hcho_dft)
+   # exit()
 
 def loadfileALL(foldername,axis,begin):
     files = os.listdir(foldername)
