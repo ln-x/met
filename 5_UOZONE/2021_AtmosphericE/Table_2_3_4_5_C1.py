@@ -226,7 +226,8 @@ Plotting
 o3_1990_2020_da = o3_1990_2020_da.resample('D').mean()
 
 pff_full = pd.concat([hcho_dmax,vpd_dmax, rss_sub["RSS_sub_grass"], rss_sub["RSS_sub_wWheat"], BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],HighGRdays["GR"], sif_join,
-                o3_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"],pbl["PBL"]], axis=1)
+                o3_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["PC"],pbl["PBL"]], axis=1)  #TODO replace here BOKUMetData_dailymax["AT"] with BOKUMetData_dailysum["WS"] to get WS results!
+
 pff_full.columns = ['hcho', 'vpd', 'RSSg', 'RSSw', 'AT', 'GR', 'GRhigh', 'SIF', 'O3','WD','PC','PBL']
 pff_clear = pff_full.dropna(subset=['GRhigh'])
 print(pff_clear)
@@ -299,8 +300,13 @@ def Plot6var(df,title,ylimit):
     SRho_PBL, Sp_PBL = (stats.spearmanr(x5_PBL[idxPBL], y5[idxPBL]))
 
     #TODO: toggle on and off average/Spearman for better readability
-    print(title, "average:", "AT", np.nanmean(x5), "GR", np.nanmean(x5_GR), "RSS_g_s", np.nanmean(x5_SM), "SIF", np.nanmean(x5_SIF), "RSS_w_s", np.nanmean(x5_SMw), "VPD",
-          np.nanmean(x5_VPD), "O3", np.nanmean(x5_O3), "PBL", np.nanmean(x5_PBL), "HCHO", np.nanmean(y5),)
+    #print(title, "average:", "AT", np.nanmean(x5), "GR", np.nanmean(x5_GR), "RSS_g_s", np.nanmean(x5_SM), "SIF", np.nanmean(x5_SIF), "RSS_w_s", np.nanmean(x5_SMw), "VPD",
+    #      np.nanmean(x5_VPD), "O3", np.nanmean(x5_O3), "PBL", np.nanmean(x5_PBL), "HCHO", np.nanmean(y5),)
+
+    print(title, "average:", "AT", np.nanmean(x5), "GR", np.nanmean(x5_GR), "RSS_g_s", np.nanmean(x5_SM), "SIF",
+          np.nanmean(x5_SIF), "RSS_w_s", np.nanmean(x5_SMw), "VPD",
+          np.nanmean(x5_VPD), "O3", np.nanmean(x5_O3), "PBL", np.nanmean(x5_PBL), "HCHO", np.nanmean(y5), )
+
     #print("Spearman p:", "AT", f'{Sp_AT:.2f}', "GR", f'{Sp_GR:.2f}', "RSS_g_s",f'{Sp_SM:.2f}', "SIF",  f'{Sp_SIF:.2f}', "VPD",
     #      f'{Sp_VPD:.2f}', "O3", f'{Sp_O3:.2f}', "PBL", f'{Sp_PBL:.2f}', "RSS_w_s", f'{Sp_SMw:.2f}', title)
     #print("Spearman Rho:", "AT", f'{SRho_AT:.2f}', "GR", f'{SRho_GR:.2f}', "RSS_g_s", f'{SRho_SM:.2f}', "RSS_w_s", f'{SRho_SMw:.2f}', "SIF", f'{SRho_SIF:.2f}', "VPD",
