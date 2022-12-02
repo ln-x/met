@@ -186,36 +186,43 @@ ax.xaxis.set_ticklabels(['V0','STQ','V100'])
 plt.show()
 """
 
-#print(hcho_d[MAM20_s:MAM20_e].values)
-#hcho_d_comp = np.append([hcho_d[MAM20_s:MAM20_e], hcho_d[MAM18_s:MAM18_e].values], axis=1)
-#print(hcho_d_comp)
+#print(len(hcho_d[MAM20_s:MAM20_e].values))
+#print(len(hcho_d[MAM18_s:MAM18_e].values))
+
+#hcho_d_comp = np.concatenate((hcho_d[MAM20_s:MAM20_e].values, hcho_d[MAM18_s:MAM18_e].values), axis=1)
+#hcho_d_comp = np.append(hcho_d[MAM20_s:MAM20_e].values, [hcho_d[MAM18_s:MAM18_e].values], axis=1)
+#print(len(hcho_d_comp))
 #exit()
+
 ISO20 = Emis_assim_noontime20[MAM20_s:MAM20_e].values.flatten()
 ISO18 = Emis_assim_noontime18[MAM18_s:MAM18_e].values.flatten()
-print(ISO18,hcho_d[MAM20_s:MAM20_e].values)
+print(hcho_d[MAM20_s:MAM20_e].values)
+
+filtered_hcho20 = hcho_d[MAM20_s:MAM20_e].values[~np.isnan(hcho_d[MAM20_s:MAM20_e].values)]
+filtered_hcho18 = hcho_d[MAM18_s:MAM18_e].values[~np.isnan(hcho_d[MAM18_s:MAM18_e].values)]
 
 fig, axes = plt.subplots(nrows=2, ncols=2, sharey='row') #sharex='col', figsize=(6, 6))
 #fig.set_size_inches(3.39,2.54)
 
-axes[0, 0].boxplot(hcho_d[MAM20_s:MAM20_e].values)
-axes[0, 0].set_title('OBS', fontsize=fs)
+axes[0, 0].boxplot(filtered_hcho20)
+axes[0, 0].set_title('OBS_MAM20_dry', fontsize=fs)
 axes[0, 0].set_ylabel(u'HCHO [ppb]', fontsize=fs)
 #axes[0, 0].set_xticks(1,labels=['MAM20_dry'])
 #axes[0, 0].set(xticklabels=('DRY','REF'))
 
-axes[0, 1].boxplot(hcho_d[MAM18_s:MAM18_e].values)
-axes[0, 1].set_title('OBS', fontsize=fs)
-axes[0, 1].set_ylabel(u'HCHO [ppb]', fontsize=fs)
+axes[0, 1].boxplot(filtered_hcho18)
+axes[0, 1].set_title('OBS_MAM18_ref', fontsize=fs)
+#axes[0, 1].set_ylabel(u'HCHO [ppb]', fontsize=fs)
 #axes[0, 1].set_xticklabels('MAM18_dry')
 
 axes[1, 0].boxplot(ISO20)
-axes[1, 0].set_title('MOD', fontsize=fs)
+axes[1, 0].set_title('MOD_MAM20_dry', fontsize=fs)
 axes[1, 0].set_ylabel(u'isoprene [mol s-1 m-2]', fontsize=fs)
 #axes[0, 1].set(xticklabels=('DRY'))
 
 axes[1, 1].boxplot(ISO18)
-axes[1, 1].set_title('MOD', fontsize=fs)
-axes[1, 1].set_ylabel(u'isoprene [mol s-1 m-2]', fontsize=fs)
+axes[1, 1].set_title('MOD_MAM18_ref', fontsize=fs)
+#axes[1, 1].set_ylabel(u'isoprene [mol s-1 m-2]', fontsize=fs)
 #axes[1, 1].set(xticklabels=('REF'))
 
 #axes[1, 2].set(xticklabels=('1a','5a','max'))

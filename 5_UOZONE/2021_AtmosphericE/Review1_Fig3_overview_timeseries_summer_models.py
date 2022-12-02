@@ -130,6 +130,37 @@ o3_1990_2020_mda8_w = o3_1990_2020_mda8.resample('W').mean()
 '''TIMESLICES'''
 start = datetime(2019, 6, 1, 00, 00)
 end = datetime(2019, 9, 1, 00, 00)
+JJA19_s = datetime(2019, 6, 1, 00, 00)
+JJA19_e = datetime(2019, 8, 31, 00, 00)
+JJA20_s = datetime(2020, 6, 1, 00, 00)
+JJA20_e = datetime(2020, 8, 31, 00, 00)
+fs = 10  # fontsize
+
+ISO20_JJA = Emis_assim_noontime20[JJA20_s:JJA20_e].values.flatten()
+ISO19_JJA = Emis_assim_noontime[JJA19_s:JJA19_e].values.flatten()
+
+filtered_hcho20_JJA = hcho_d[JJA20_s:JJA20_e].values[~np.isnan(hcho_d[JJA20_s:JJA20_e].values)]
+filtered_hcho19_JJA = hcho_d[JJA19_s:JJA19_e].values[~np.isnan(hcho_d[JJA19_s:JJA19_e].values)]
+
+fig, axes = plt.subplots(nrows=2, ncols=2, sharey='row') #sharex='col', figsize=(6, 6))
+#fig.set_size_inches(3.39,2.54)
+
+axes[0, 0].boxplot(filtered_hcho19_JJA)
+axes[0, 0].set_title('OBS_JJA19_dry', fontsize=fs)
+axes[0, 0].set_ylabel(u'HCHO [ppb]', fontsize=fs)
+
+axes[0, 1].boxplot(filtered_hcho20_JJA)
+axes[0, 1].set_title('OBS_JJA20_ref', fontsize=fs)
+
+axes[1, 0].boxplot(ISO19_JJA)
+axes[1, 0].set_title('MOD_JJA19_dry', fontsize=fs)
+axes[1, 0].set_ylabel(u'isoprene [mol s-1 m-2]', fontsize=fs)
+
+axes[1, 1].boxplot(ISO20_JJA)
+axes[1, 1].set_title('MOD_JJA20_ref', fontsize=fs)
+plt.show()
+exit()
+
 
 fig = plt.figure(figsize=(8, 3), dpi=100)
 ax1 = fig.add_subplot(211)
