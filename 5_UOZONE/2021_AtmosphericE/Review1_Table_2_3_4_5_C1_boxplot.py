@@ -228,8 +228,12 @@ o3_1990_2020_da = o3_1990_2020_da.resample('D').mean()
 pff_full = pd.concat([hcho_dmax,vpd_dmax, rss_sub["RSS_sub_grass"], rss_sub["RSS_sub_wWheat"], BOKUMetData_dailymax["AT"],BOKUMetData_dailysum["GR"],HighGRdays["GR"], sif_join,
                 o3_1990_2020_da["AT9STEF"],BOKUMetData_dailysum["WD"],BOKUMetData_dailysum["WS"], BOKUMetData_dailysum["PC"],pbl["PBL"]], axis=1)
 pff_full.columns = ['hcho', 'vpd', 'RSSg', 'RSSw', 'AT', 'GR', 'GRhigh', 'SIF', 'O3','WD','WS','PC','PBL']
+
+pff_NW = pff_full.loc[(pff_full['WD'] >=270) & (pff_full['WD'] <=359)]
+pff_SE = pff_full.loc[(pff_full['WD'] >=90) & (pff_full['WD'] <=180)]
 pff_clear = pff_full.dropna(subset=['GRhigh'])
-print(pff_clear)
+#pff_clear = pff_NW.dropna(subset=['GRhigh'])
+#print(pff_clear)
 pff_clear2 = pff_clear.loc[pff_clear["GR"] >= 4500]
 pff_clear2_o3high = pff_clear2.loc[pff_clear2["O3"] > 100]
 pff_clear2_o3low = pff_clear2.loc[pff_clear2["O3"] <= 100]
@@ -237,186 +241,135 @@ pff_clear2_o3high_NW = pff_clear2_o3high.loc[(pff_clear2_o3high['WD'] >=270) & (
 pff_clear2_o3high_SE = pff_clear2_o3high.loc[(pff_clear2_o3high['WD'] >=90) & (pff_clear2_o3high['WD'] <=180)]
 pff_weekly_rss_clear = pff_clear.resample("W").mean()
 
-def Plot6var(df,title,ylimit):
-    df = df[datetime(2018, 1, 1, 00, 00): datetime(2020, 12, 31, 00, 00)]
-    #print(df)
-    x5 = df['AT'].values.flatten()
-    x5_GR = df['GR'].values.flatten()/1000
-    x5_SM = df['RSSg'].values.flatten()
-    x5_SMw = df['RSSw'].values.flatten()
-    x5_VPD = df['vpd'].values.flatten()
-    x5_SIF = df['SIF'].values.flatten()
-    x5_O3 = df['O3'].values.flatten()
-    x5_PBL = df['PBL'].values.flatten()
-    x5_WS = df['WS'].values.flatten()
-    x5_PC = df['PC'].values.flatten()
-    y5 = df['hcho'].values.flatten()
-    idxAT = np.isfinite(x5) & np.isfinite(y5)
-    idxGR = np.isfinite(x5_GR) & np.isfinite(y5)
-    idxSIF = np.isfinite(x5_SIF) & np.isfinite(y5)
-    idxVPD = np.isfinite(x5_VPD) & np.isfinite(y5)
-    idxSM = np.isfinite(x5_SM) & np.isfinite(y5)
-    idxSMw = np.isfinite(x5_SMw) & np.isfinite(y5)
-    idxO3 = np.isfinite(x5_O3) & np.isfinite(y5)
-    idxPBL = np.isfinite(x5_PBL) & np.isfinite(y5)
-    idxWS = np.isfinite(x5_WS) & np.isfinite(y5)
-    nAT = len(x5)
-    nGR = len(x5_GR)
-    nSIF = len(x5_SIF)
-    nVPD = len(x5_VPD)
-    nSM = len(x5_SM)
-    #nNOx = len(x5_NOX)
-    nO3 = len(x5_O3)
-    nPBL = len(x5_PBL)
-    #print("hcho",len(y5),"nAT,nGR,nSIF,nSM,nNOx,nO3,nPBL", nAT,nGR,nSIF,nSM,nNOx,nO3,nPBL)
-    m5, b5 = np.polyfit(x5[idxAT], y5[idxAT], 1)
-    #y_err_AT = 1.96 * (np.std(x5) / np.sqrt(len(x5))) #TODO: find correct implementation of confidence intervall
-    #print(y_err_AT)
-    #y_err_AT = x5.std() * np.sqrt(1 / len(x5) + (x5 - x5.mean()) ** 2 / np.sum((x5 - x5.mean()) ** 2))
-    #print(y_err_AT)
-    #fig = plt.figure()
-    #plt.plot(range(len(y_err_AT)), (m5 * x5 + b5) - y_err_AT)
-    #plt.show()
-    #exit()
-    #print("m5,b5, AT", m5,b5, title)
-    m5GR, b5GR = np.polyfit(x5_GR[idxGR], y5[idxGR], 1)
-    m5SM, b5SM = np.polyfit(x5_SM[idxSM], y5[idxSM], 1)
-    m5SMw, b5SMw = np.polyfit(x5_SMw[idxSMw], y5[idxSMw], 1)
-    m5VPD, b5VPD = np.polyfit(x5_VPD[idxVPD], y5[idxVPD], 1)
-    m5SIF, b5SIF = np.polyfit(x5_SIF[idxSIF], y5[idxSIF], 1)
-    m5O3, b5O3 = np.polyfit(x5_O3[idxO3], y5[idxO3], 1)
-    m5PBL, b5PBL = np.polyfit(x5_PBL[idxPBL], y5[idxPBL], 1)
-    m5WS, b5WS = np.polyfit(x5_WS[idxWS], y5[idxWS], 1)
-    # full == True  -> gives:
-    # residuals – sum of squared residuals of the least squares fit
-    # rank – the effective rank of the scaled Vandermonde coefficient matrix
-    # singular_values– singular values of the scaled Vandermonde coefficient matrix
-    # rcond – value of rcond.
+pffMAM_18 = pff_clear[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
+pffMAM_20 = pff_clear[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
+pffMAM_18 = pff_NW[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
+pffMAM_20 = pff_NW[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
 
-    SRho_AT, Sp_AT = (stats.spearmanr(x5[idxAT], y5[idxAT]))
-    SRho_GR, Sp_GR = (stats.spearmanr(x5_GR[idxGR], y5[idxGR]))
-    SRho_VPD, Sp_VPD = (stats.spearmanr(x5_VPD[idxVPD], y5[idxVPD]))
-    SRho_SM, Sp_SM = (stats.spearmanr(x5_SM[idxSM], y5[idxSM]))
-    SRho_SMw, Sp_SMw = (stats.spearmanr(x5_SMw[idxSMw], y5[idxSMw]))
-    SRho_SIF, Sp_SIF = (stats.spearmanr(x5_SIF[idxSIF], y5[idxSIF]))
-    SRho_O3, Sp_O3 = (stats.spearmanr(x5_O3[idxO3], y5[idxO3]))
-    SRho_PBL, Sp_PBL = (stats.spearmanr(x5_PBL[idxPBL], y5[idxPBL]))
-
-    #TODO: toggle on and off average/Spearman for better readability
-    print(title, "average:", "AT", np.nanmean(x5), "GR", np.nanmean(x5_GR), "RSS_g_s", np.nanmean(x5_SM), "SIF", np.nanmean(x5_SIF), "RSS_w_s", np.nanmean(x5_SMw), "VPD",
-          np.nanmean(x5_VPD), "O3", np.nanmean(x5_O3), "PBL", np.nanmean(x5_PBL), "WS", np.nanmean(x5_WS), "PC", np.nanmean(x5_PC),  "HCHO", np.nanmean(y5),)
-    #print("Spearman p:", "AT", f'{Sp_AT:.2f}', "GR", f'{Sp_GR:.2f}', "RSS_g_s",f'{Sp_SM:.2f}', "SIF",  f'{Sp_SIF:.2f}', "VPD",
-    #      f'{Sp_VPD:.2f}', "O3", f'{Sp_O3:.2f}', "PBL", f'{Sp_PBL:.2f}', "RSS_w_s", f'{Sp_SMw:.2f}', title)
-    #print("Spearman Rho:", "AT", f'{SRho_AT:.2f}', "GR", f'{SRho_GR:.2f}', "RSS_g_s", f'{SRho_SM:.2f}', "RSS_w_s", f'{SRho_SMw:.2f}', "SIF", f'{SRho_SIF:.2f}', "VPD",
-    #      f'{SRho_VPD:.2f}',"O3", f'{SRho_O3:.2f}',"PBL", f'{SRho_PBL:.2f}', title)
-
-    "STATISTICS CHECK"
-    """
-    print("1a) Normal? Histogram")
-    print("1b) Normal? QQPlots Normal distribution?")
-    sm.qqplot(x5[idxAT].values, line='45')
-    sm.qqplot(x5_GR[idxGR].data, line='45')
-    sm.qqplot(x5_VPD[idxVPD].data, line='45')
-    sm.qqplot(x5_SM[idxSM].data, line='45')
-    sm.qqplot(x5_SIF[idxSIF].data, line='45')
-    sm.qqplot(x5_O3[idxO3].data, line='45')
-    sm.qqplot(x5_PBL[idxPBL].data, line='45')
-    sm.qqplot(y5[idxAT].data, line='45')
-    print("1c) Normal? Shapiro")
-    print("W value (if high -> normal")
-    print("AT", shapiro(x5[idxAT]).statistic, "GR", shapiro(x5_GR[idxGR]).statistic, "VDP", shapiro(x5_VPD[idxVPD]).statistic,
-          "SM", shapiro(x5_SM[idxSM]).statistic, "SIF", shapiro(x5_SIF[idxSIF]).statistic, "O3", shapiro(x5_O3[idxO3]).statistic,
-          "Hcho", shapiro(y5[idxAT]).statistic)
-    print("pvalue (might not be accurat for N >5000")
-    print("AT", shapiro(x5[idxAT]).pvalue, "GR", shapiro(x5_GR[idxGR]).pvalue, "VDP", shapiro(x5_VPD[idxVPD]).pvalue,
-          "SM", shapiro(x5_SM[idxSM]).pvalue, "SIF", shapiro(x5_SIF[idxSIF]).pvalue, "O3", shapiro(x5_O3[idxO3]).pvalue,
-          "Hcho", shapiro(y5[idxAT]).pvalue)
+#SUMMER: JJA
+pffJJA_19 = pff_clear[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
+pffJJA_20 = pff_clear[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
+pffJJA_19 = pff_NW[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
+pffJJA_20 = pff_NW[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
+len = len(pffMAM_20['hcho'].values)
 
 
-    print("1d) Normal? Kolmogorov-Smirnov/Normality for one-sided samples")
-    print("statistic: if high: NOT normal")
-    print("AT", kstest(x5[idxAT], 'norm').statistic, "GR", kstest(x5_GR[idxGR], 'norm').statistic, "SM", kstest(x5_SM[idxSM], 'norm').statistic,
-          "SIF", kstest(x5_SIF[idxSIF], 'norm').statistic,"NOX", kstest(x5_NOx[idxNOX], 'norm').statistic, "VPD", kstest(x5_VPD[idxVPD], 'norm').statistic,
-          "O3", kstest(x5_O3[idxO3], 'norm').statistic, "PBL", kstest(x5_PBL[idxPBL], 'norm').statistic, "HCHO", kstest(y5[idxAT], 'norm').statistic)
-    print("pvalue: below 0.05: NOT normal Since the p-value is less than .05, we reject the null hypothesis. We have sufficient evidence to say that the sample data does not come from a normal distribution.")
-    print("AT", kstest(x5[idxAT], 'norm').pvalue, "GR", kstest(x5_GR[idxGR], 'norm').pvalue, "SM", kstest(x5_SM[idxSM], 'norm').pvalue, "SIF", kstest(x5_SIF[idxSIF], 'norm').pvalue,
-          "NOX", kstest(x5_NOx[idxNOX], 'norm').pvalue, "VPD", kstest(x5_VPD[idxVPD], 'norm').pvalue, "O3", kstest(x5_O3[idxO3], 'norm').pvalue, "PBL", kstest(x5_PBL[idxPBL], 'norm').pvalue, "HCHO",
-          kstest(y5[idxAT], 'norm').pvalue, "\n \n")
+#hcho_set = np.concatenate((pffMAM_20['hcho'].values,np.full((1,len),np.nan)))
+#print(hcho_set)
+#exit()
+#hcho_set[-1,:3] = pffJJA_20['hcho'].values
+# concatenate an array of the correct shape filled with np.nan
+#arr1_arr2 = np.concatenate((arr1, np.full((1, arr1.shape[1]), np.nan)))
+# fill concatenated row with values from arr2
 
-    print("1e) Kolmogorov-Smirnov/Normality for two-sided samples")
-    print("statistic: if high: NOT from same distribution")
-    print("AT", ks_2samp(x5[idxAT], y5[idxAT]).statistic, "GR", ks_2samp(x5_GR[idxGR], y5[idxAT]).statistic, "SM", ks_2samp(x5_SM[idxSM], y5[idxAT]).statistic,
-          "SIF", ks_2samp(x5_SIF[idxSIF],y5[idxAT]).statistic,"NOX", ks_2samp(x5_NOx[idxNOX],y5[idxAT]).statistic, "VPD", ks_2samp(x5_VPD[idxVPD], y5[idxAT]).statistic,
-          "O3", ks_2samp(x5_O3[idxO3], y5[idxAT]).statistic, "PBL", ks_2samp(x5_PBL[idxPBL], y5[idxAT]).statistic)
-    print("pvalue: below 0.05: NOT from same distribution, Since the p-value is less than .05, we reject the null hypothesis. We have sufficient evidence to say that the two sample datasets do not come from the same distribution.")
-    print("AT", ks_2samp(x5[idxAT], y5[idxAT]).pvalue, "GR", ks_2samp(x5_GR[idxGR], y5[idxAT]).pvalue, "SM", ks_2samp(x5_SM[idxSM], y5[idxAT]).pvalue, "SIF", ks_2samp(x5_SIF[idxSIF], y5[idxAT]).pvalue,
-          "NOX", ks_2samp(x5_NOx[idxNOX], y5[idxAT]).pvalue, "VPD", ks_2samp(x5_VPD[idxVPD], y5[idxAT]).pvalue, "O3", ks_2samp(x5_O3[idxO3], y5[idxAT]).pvalue, "PBL", ks_2samp(x5_PBL[idxPBL], y5[idxAT]).pvalue, "HCHO",
-          ks_2samp(y5[idxAT], y5[idxAT]).pvalue)
+pffMAM_20 = pffMAM_20.reset_index(drop=True)
+pffMAM_18 = pffMAM_18.reset_index(drop=True)
+pffJJA_19 = pffJJA_19.reset_index(drop=True)
+pffJJA_20 = pffJJA_20.reset_index(drop=True)
+hcho_set = pd.concat([pffMAM_20['hcho'],pffMAM_18['hcho']], axis=1)
+GR_set = pd.concat([pffMAM_20['GR'],pffMAM_18['GR'],pffJJA_19['GR'],pffJJA_20['GR']], axis=1)
+O3_set = pd.concat([pffMAM_20['O3'],pffMAM_18['O3'],pffJJA_19['O3'],pffJJA_20['O3']], axis=1)
+AT_set = pd.concat([pffMAM_20['AT'],pffMAM_18['AT'],pffJJA_19['AT'],pffJJA_20['AT']], axis=1)
+PBL_set = pd.concat([pffMAM_20['PBL'],pffMAM_18['PBL'],pffJJA_19['PBL'],pffJJA_20['PBL']], axis=1)
+WS_set = pd.concat([pffMAM_20['WS'],pffMAM_18['WS'],pffJJA_19['WS'],pffJJA_20['WS']], axis=1)
 
-    print("2a) Variance")
-    var = [np.var(x, ddof=1) for x in [x5, x5_GR, x5_VPD, x5_SM, x5_SIF, x5_O3]]
-    print(var)
-    print([np.var(x, ddof=1) for x in [x5, x5_GR, x5_VPD, x5_SM, x5_SIF, x5_O3]])
-    print("2b) Levene Test/Homoscedasticity")
-    Lw_AT, Lp_AT = scipy.stats.levene(x5[idxAT], y5[idxAT])
-    Lw_GR, Lp_GR = scipy.stats.levene(x5[idxGR], y5[idxGR])
-    Lw_VPD, Lp_VPD = scipy.stats.levene(x5[idxVPD], y5[idxVPD])
-    Lw_SM, Lp_SM = scipy.stats.levene(x5[idxSM], y5[idxSM])
-    Lw_SIF, Lp_SIF = scipy.stats.levene(x5[idxSIF], y5[idxSIF])
-    Lw_O3, Lp_O3 = scipy.stats.levene(x5[idxO3], y5[idxO3])
-    print("AT", Lp_AT, "GR", Lp_GR, "VPD", Lp_VPD, "SM", Lp_SM, "SIF", Lp_SIF, "O3", Lp_O3)
-    print("3a) Spearman Test/Significance of Linear Regression:")
-    print("AT", Sp_AT, "GR", Sp_GR, "VPD", Sp_VPD, "SM", Sp_SM, "SIF", Sp_SIF, "O3", Sp_O3)
-    "3b) Pearson"
-    #print(title, "Pearson:", "VPD", Pr_VPD, p_VPD, "AT", Pr_AT, p_AT, "GR", Pr_GR, p_GR, "SM", Pr_SM, p_SM, "SIF", Pr_SIF, p_SIF,
-    #      "NOX", Pr_NOX, p_NOX, "O3", Pr_O3, p_O3, "PBL", Pr_PBL, p_PBL)
-    #exit()
+GR_set2 = pd.concat([pffJJA_19['GR'],pffJJA_20['GR']], axis=1)
+O3_set2 = pd.concat([pffJJA_19['O3'],pffJJA_20['O3']], axis=1)
+AT_set2 = pd.concat([pffJJA_19['AT'],pffJJA_20['AT']], axis=1)
+PBL_set2 = pd.concat([pffJJA_19['PBL'],pffJJA_20['PBL']], axis=1)
+WS_set2 = pd.concat([pffJJA_19['WS'],pffJJA_20['WS']], axis=1)
 
-    #print(R_AT, R_GR, R_SM, R_SIF, R_NOX, R_O3)
-    #R2_AT, R2_GR, R2_SM, R2_SIF, R2_NOX, R2_O3 = R_AT ** 2, R_GR ** 2, R_SM ** 2, R_SIF ** 2, R_NOX ** 2, R_O3 ** 2
-    #print(R2_AT, R2_GR, R2_SM, R2_SIF, R2_NOX, R2_O3)
-    # -0.11468772201686629 0.12327935222672066 0.26591170630878136 0.04979757085020243 -0.21842105263157893 0.12834008097165991
-    # 0.013153273581417997 0.015197798685439858 0.07070903555204759 0.0024797980625809305 0.04770775623268697 0.016471176383812222
-    """
+pff_full.columns = ['hcho', 'vpd', 'RSSg', 'RSSw', 'AT', 'GR', 'GRhigh', 'SIF', 'O3','WD','WS','PC','PBL']
+#hcho_set.columns = ['20', '18']
+print(hcho_set)
+#exit()
+
+fs=10
+fig = plt.figure()  #figsize=(4,3)
+#axisrange = [0,2,16,30]
+#plt.axis(axisrange)
+plt.boxplot(hcho_set.dropna())
+#plt.title('', fontsize=fs)
+plt.ylabel(u'HCHO [ppb]', fontsize=fs)
+#ax = gca()
+#ax.xaxis.set_ticklabels(['V0','STQ','V100'])
+plt.show()
+
+fig, axes = plt.subplots(nrows=2, ncols=2)#, sharey='row') #sharex='col', figsize=(6, 6))
+#fig.set_size_inches(3.39,2.54)
+axes[0, 0].boxplot(GR_set2.dropna())
+#axes[0, 0].set_title('MAM20_dry', fontsize=fs)
+axes[0, 0].set_ylabel(u'global radiation [Wh m-2]', fontsize=fs)
+#axes[0, 0].set_xticks(1,labels=['MAM20_dry'])
+axes[0, 0].set(xticklabels=('JJA19_d','JJA20_r'))
+
+axes[0, 1].boxplot(O3_set2.dropna())
+#axes[0, 1].set_title('MAM18_ref', fontsize=fs)
+axes[0, 1].set_ylabel(u'O3 [ppb]', fontsize=fs)
+axes[0, 1].set(xticklabels=('JJA19_d','JJA20_r'))
+
+axes[1, 0].boxplot(WS_set2.dropna())
+#axes[1, 0].set_title('JJA19_dry', fontsize=fs)
+axes[1, 0].set_ylabel(u'wind speed [m s-1]', fontsize=fs)
+axes[1, 0].set(xticklabels=('JJA19_d','JJA20_r'))
+
+axes[1, 1].boxplot(PBL_set2.dropna())
+#axes[1, 1].set_title('JJA20_ref', fontsize=fs)
+axes[1, 1].set_ylabel(u'PBL [m]', fontsize=fs)
+axes[1, 1].set(xticklabels=('JJA19_d','JJA20_r'))
+#fig.subplots_adjust(hspace=0.4)
+#fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure3_total_5days_vegcomp.tiff')
+plt.show()
+
+fig, axes = plt.subplots(nrows=2, ncols=2)#, sharey='row') #sharex='col', figsize=(6, 6))
+#fig.set_size_inches(3.39,2.54)
+axes[0, 0].boxplot(GR_set.dropna())
+#axes[0, 0].set_title('MAM20_dry', fontsize=fs)
+axes[0, 0].set_ylabel(u'global radiation [Wh m-2]', fontsize=fs)
+#axes[0, 0].set_xticks(1,labels=['MAM20_dry'])
+axes[0, 0].set(xticklabels=('MAM20_d','MAM18_r','JJA19_d','JJA20_r'))
+
+axes[0, 1].boxplot(O3_set.dropna())
+#axes[0, 1].set_title('MAM18_ref', fontsize=fs)
+axes[0, 1].set_ylabel(u'O3 [ppb]', fontsize=fs)
+axes[0, 1].set(xticklabels=('MAM20_d','MAM18_r','JJA19_d','JJA20_r'))
+
+axes[1, 0].boxplot(WS_set.dropna())
+#axes[1, 0].set_title('JJA19_dry', fontsize=fs)
+axes[1, 0].set_ylabel(u'wind speed [m s-1]', fontsize=fs)
+axes[1, 0].set(xticklabels=('MAM20_d','MAM18_r','JJA19_d','JJA20_r'))
+
+axes[1, 1].boxplot(PBL_set.dropna())
+#axes[1, 1].set_title('JJA20_ref', fontsize=fs)
+axes[1, 1].set_ylabel(u'PBL [m]', fontsize=fs)
+axes[1, 1].set(xticklabels=('MAM20_d','MAM18_r','JJA19_d','JJA20_r'))
+#fig.subplots_adjust(hspace=0.4)
+#fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure3_total_5days_vegcomp.tiff')
+plt.show()
+exit()
+
+
 
 """Table 2"""
 print("\n ******")
 print("Table 2")
-
-
-#linear_model = ols('hcho ~ AT + GR', data=pff_MAM_18).fit()
-#print(linear_model.summary()) # display model summary
-#fig = plt.figure(figsize=(14, 8)) # modify figure size
-#fig = smod.graphics.plot_regress_exog(linear_model,'AT', fig=fig) # creating regression plots
-#plt.show()
-
 pff_MAM_18 = pff_full[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
-pff_MAM_19 = pff_full[datetime(2019, 3, 1, 00, 00):datetime(2019, 5, 31, 00, 00)].resample('D').mean()
 pff_MAM_20 = pff_full[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
 pff_JJA_20 = pff_full[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
 pff_JJA_19 = pff_full[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
-pff_M18 = pff_full[datetime(2018, 5, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
-pff_M20 = pff_full[datetime(2020, 5, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
-pff_A20 = pff_full[datetime(2020, 8, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
-pff_A19 = pff_full[datetime(2019, 8, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
+
 title = "MAM18"
 Plot6var(pff_MAM_18,title, ylimit=8)
-title = "MAM19"
-Plot6var(pff_MAM_19,title, ylimit=8)
 title = "MAM20"
 Plot6var(pff_MAM_20,title, ylimit=8)
 title = "JJA20"
 Plot6var(pff_JJA_20,title, ylimit=8)
 title = "JJA19"
 Plot6var(pff_JJA_19,title, ylimit=8)
-title = "May18"
-Plot6var(pff_M18,title, ylimit=8)
-title = "May20"
-Plot6var(pff_M20,title, ylimit=8)
-title = "Aug20"
-Plot6var(pff_A20,title, ylimit=8)
-title = "Aug19"
-Plot6var(pff_A19,title, ylimit=8)
+
+
+
+
 
 """Table 3"""
 print("\n ******")
