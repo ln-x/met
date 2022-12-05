@@ -122,7 +122,7 @@ vpd_d = vpd.resample('D').mean()
 vpd_dmax = vpd.resample('D').max()
 vpd_dmax_w = vpd_dmax.resample('W').max()
 
-'''READ IN EEA air pollution data
+'''READ IN EEA air pollution data'''
 pathbase2 = "/windata/DATA/obs_point/chem/EEA/"
 #"AT"+compound+"stationsname"+"year"+_"timeseries.csv"
 nox_1990_2019_da = pd.read_csv(pathbase2 + "nox_da_1990-2019_AT_ppb.csv")
@@ -161,7 +161,7 @@ o3_1990_2020_da = o3_1990_2020_mda8.resample('D').mean()
 o3_1990_2020_m = o3_1990_2020_mda8.resample('M').mean()
 o3_1990_2020_mda1_w = o3_1990_2020_mda1.resample('W').mean()
 o3_1990_2020_mda8_w = o3_1990_2020_mda8.resample('W').mean()
-'''
+
 '''TIMESLICES'''
 MAM18_s = datetime(2018, 3, 1, 00, 00)
 MAM18_e = datetime(2018, 5, 31, 00, 00)
@@ -177,14 +177,15 @@ start2 = datetime(2020, 4, 15, 00, 00)
 end2 = datetime(2020, 6, 1, 00, 00)
 start3 = datetime(2018, 4, 15, 00, 00)
 
-
+"""
 xout =[]
 yout =[]
 x = BOKUMetData_dailysum["WS"][start:end].values/3.6
-y = BOKUMetData_dailysum["WS"][start:end].index
-#y = range(len(BOKUMetData_dailysum[start:end]))
-#y = Pd.DataFrame(y)
-xout, yout, wout = loess_1d(x, y)#, xnew=None, degree=1, frac=0.5, npoints=None, rotate=False, sigy=None)
+print(x)
+#y = BOKUMetData_dailysum["WS"][start:end].index
+y = range(len(BOKUMetData_dailysum[start:end]))
+y = pd.DataFrame(y)
+xout, yout, wout = loess_1d(x, y, xnew=None, degree=1, frac=0.5, npoints=None, rotate=False, sigy=None)
 print(xout,yout,wout)
 #exit()
 ax = plt.figure()
@@ -194,7 +195,7 @@ ax.fill_between(xout.index, xout+wout,xout-wout, facecolor='grey', alpha=0.2)
 #ax.fill_between(AT.index, AT+AT_sigma,AT - AT_sigma, facecolor='grey', alpha=0.2)
 plt.show()
 exit()
-
+"""
 
 #labels = list['1a','5a','max']
 fs = 10  # fontsize
@@ -217,7 +218,7 @@ plt.show()
 #hcho_d_comp = np.append(hcho_d[MAM20_s:MAM20_e].values, [hcho_d[MAM18_s:MAM18_e].values], axis=1)
 #print(len(hcho_d_comp))
 #exit()
-
+"""
 ISO20 = Emis_assim_noontime20[MAM20_s:MAM20_e].values.flatten()
 ISO18 = Emis_assim_noontime18[MAM18_s:MAM18_e].values.flatten()
 print(hcho_d[MAM20_s:MAM20_e].values)
@@ -225,7 +226,7 @@ print(hcho_d[MAM20_s:MAM20_e].values)
 filtered_hcho20 = hcho_d[MAM20_s:MAM20_e].values[~np.isnan(hcho_d[MAM20_s:MAM20_e].values)]
 filtered_hcho18 = hcho_d[MAM18_s:MAM18_e].values[~np.isnan(hcho_d[MAM18_s:MAM18_e].values)]
 
-"""
+
 fig, axes = plt.subplots(nrows=2, ncols=2, sharey='row') #sharex='col', figsize=(6, 6))
 #fig.set_size_inches(3.39,2.54)
 
@@ -324,17 +325,30 @@ ax2.legend(loc='lower left')
 ax1.grid()
 """
 
-
+ws = BOKUMetData_dailysum["WS"]/3.6
+ws_w = ws.resample("W").mean()
+pbl_km = pbl/1000
+pbl_w = pbl_km.resample("W").mean()
+ws_sigma = ws.std()
+pbl_sigma = pbl_km.std()
+#ax.fill_between(AT.index, AT+AT_sigma,AT - AT_sigma, facecolor='grey', alpha=0.2)
 
 ax1 = fig.add_subplot(212)
 ax1.set_title('(b)', loc='left', size='medium')#, color='green')
 ax1 = plt.gca()
 ax2 = ax1.twinx()
-ax1.plot(BOKUMetData_dailysum["WS"][start:end]/3.6, linewidth="1", color='blue', label="WS") #label="GR,sum,w"
-ax1.plot(BOKUMetData_dailysum["WS"][start:end].index, (BOKUMetData_dailysum["WS"][datetime(2018, 3, 1):datetime(2018, 6, 1)].values)/3.6, linewidth="1", color='blue', linestyle=":")
-ax2.plot(pbl[start:end]/1000, linewidth="1", color='violet', label="PBL") #label="GR,sum,w"
-ax2.plot(pbl[start:end].index, (pbl[datetime(2018, 3, 1):datetime(2018, 6, 1)].values)/1000, linewidth="1", color='violet', linestyle=":")
+#ax1.plot(BOKUMetData_dailysum["WS"][start:end]/3.6, linewidth="1", color='blue', label="WS") #label="GR,sum,w"
+#ax1.plot(BOKUMetData_dailysum["WS"][start:end].index, (BOKUMetData_dailysum["WS"][datetime(2018, 3, 1):datetime(2018, 6, 1)].values)/3.6, linewidth="1", color='blue', linestyle=":")
+ax1.plot(ws_w[start:end], linewidth="1", color='blue', label="WS") #label="GR,sum,w"
+ax1.plot(ws_w[start:end].index, ws_w[datetime(2018, 3, 1):datetime(2018, 6, 7)].values, linewidth="1", color='blue', linestyle=":")
+ax1.fill_between(ws_w.index, ws_w+ws_sigma,ws_w - ws_sigma, facecolor='blue', alpha=0.2)
+#ax2.plot(pbl[start:end]/1000, linewidth="1", color='violet', label="PBL") #label="GR,sum,w"
+#ax2.plot(pbl[start:end].index, (pbl[datetime(2018, 3, 1):datetime(2018, 6, 1)].values)/1000, linewidth="1", color='violet', linestyle=":")
+#ax2.plot(pbl_w[start:end], linewidth="1", color='violet', label="PBL") #label="GR,sum,w"
+#ax2.plot(pbl_w[start:end].index, (pbl_w[datetime(2018, 3, 1):datetime(2018, 6, 7)].values), linewidth="1", color='violet', linestyle=":")
+#ax2.fill_between(ws_w.index, pbl_w+pbl_sigma,pbl_w - pbl_sigma, facecolor='violet', alpha=0.2)
 ax1.set_xlim(start,end)
+
 #ax2.axvline(x=datetime(2020,5,10))
 ax1.set_ylabel("[m s-1]", size="medium")
 ax2.set_ylabel("[km]", size="medium")
@@ -344,6 +358,7 @@ ax1.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
 ax1.grid()
 plt.show()
 
+exit()
 print(Emis_assim_noontime20[start:end])
 
 #fig = plt.figure()
