@@ -4,6 +4,7 @@ __author__ = 'lnx'
 import numpy as np
 import pandas as pd
 from datetime import datetime
+from loess.loess_1d import loess_1d
 import monthdelta
 import netCDF4
 import os
@@ -69,6 +70,7 @@ def EmisSEEDS(foldername):
     Emis_noontime = Emis_noontime.set_index(['datetime'])
     return Emis_max, Emis_noontime
 
+"""
 Emis_ol18, Emis_ol_noontime18 = EmisSEEDS(foldername_ol18)
 Emis_assim18, Emis_assim_noontime18 = EmisSEEDS(foldername_as18)
 #Emis_ol, Emis_ol_noontime = EmisSEEDS(foldername_ol)
@@ -78,13 +80,16 @@ Emis_assim20, Emis_assim_noontime20 = EmisSEEDS(foldername_as20)
 
 Emis_MAM2018 = Emis_assim_noontime18[datetime(2018, 3, 1, 00, 00): datetime(2018, 5, 31, 00, 00)]
 Emis_MAM2020 = Emis_assim_noontime20[datetime(2020, 3, 1, 00, 00): datetime(2020, 5, 31, 00, 00)]
-
+Emis_MAM2018_month = Emis_MAM2018.resample("M").mean()
+Emis_MAM2020_month = Emis_MAM2020.resample("M").mean()
 
 "read in VINDOBONA"
 foldername_D = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_DQ"
 hcho_d, hcho_dmax, hcho_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_D,"D", begin= datetime(2017, 5, 1, 0, 0, 0))
 hcho_w = hcho_dmax.resample("W").mean()
+hcho_month = hcho_d.resample("M").mean()
 
+"""
 '''READ IN BOKU Metdata'''
 BOKUMetData = met.library.BOKUMet_Data.BOKUMet()
 #print(BOKUMetData) #10min values
@@ -117,7 +122,7 @@ vpd_d = vpd.resample('D').mean()
 vpd_dmax = vpd.resample('D').max()
 vpd_dmax_w = vpd_dmax.resample('W').max()
 
-'''READ IN EEA air pollution data'''
+'''READ IN EEA air pollution data
 pathbase2 = "/windata/DATA/obs_point/chem/EEA/"
 #"AT"+compound+"stationsname"+"year"+_"timeseries.csv"
 nox_1990_2019_da = pd.read_csv(pathbase2 + "nox_da_1990-2019_AT_ppb.csv")
@@ -156,7 +161,7 @@ o3_1990_2020_da = o3_1990_2020_mda8.resample('D').mean()
 o3_1990_2020_m = o3_1990_2020_mda8.resample('M').mean()
 o3_1990_2020_mda1_w = o3_1990_2020_mda1.resample('W').mean()
 o3_1990_2020_mda8_w = o3_1990_2020_mda8.resample('W').mean()
-
+'''
 '''TIMESLICES'''
 MAM18_s = datetime(2018, 3, 1, 00, 00)
 MAM18_e = datetime(2018, 5, 31, 00, 00)
@@ -171,6 +176,25 @@ end = datetime(2020, 6, 1, 00, 00)
 start2 = datetime(2020, 4, 15, 00, 00)
 end2 = datetime(2020, 6, 1, 00, 00)
 start3 = datetime(2018, 4, 15, 00, 00)
+
+
+xout =[]
+yout =[]
+x = BOKUMetData_dailysum["WS"][start:end].values/3.6
+y = BOKUMetData_dailysum["WS"][start:end].index
+#y = range(len(BOKUMetData_dailysum[start:end]))
+#y = Pd.DataFrame(y)
+xout, yout, wout = loess_1d(x, y)#, xnew=None, degree=1, frac=0.5, npoints=None, rotate=False, sigy=None)
+print(xout,yout,wout)
+#exit()
+ax = plt.figure()
+ax.plot(xout,yout)
+ax.fill_between(xout.index, xout+wout,xout-wout, facecolor='grey', alpha=0.2)
+#AT_sigma = AT.std()
+#ax.fill_between(AT.index, AT+AT_sigma,AT - AT_sigma, facecolor='grey', alpha=0.2)
+plt.show()
+exit()
+
 
 #labels = list['1a','5a','max']
 fs = 10  # fontsize
@@ -201,6 +225,7 @@ print(hcho_d[MAM20_s:MAM20_e].values)
 filtered_hcho20 = hcho_d[MAM20_s:MAM20_e].values[~np.isnan(hcho_d[MAM20_s:MAM20_e].values)]
 filtered_hcho18 = hcho_d[MAM18_s:MAM18_e].values[~np.isnan(hcho_d[MAM18_s:MAM18_e].values)]
 
+"""
 fig, axes = plt.subplots(nrows=2, ncols=2, sharey='row') #sharex='col', figsize=(6, 6))
 #fig.set_size_inches(3.39,2.54)
 
@@ -231,8 +256,7 @@ axes[1, 1].set_title('MOD_MAM18_ref', fontsize=fs)
 
 #fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure3_total_5days_vegcomp.tiff')
 plt.show()
-exit()
-
+"""
 
 fig = plt.figure()
 plt.suptitle("MAM20 vs. MAM18")
@@ -299,6 +323,9 @@ ax1.legend(loc='upper left')
 ax2.legend(loc='lower left')
 ax1.grid()
 """
+
+
+
 ax1 = fig.add_subplot(212)
 ax1.set_title('(b)', loc='left', size='medium')#, color='green')
 ax1 = plt.gca()

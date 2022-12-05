@@ -99,6 +99,7 @@ isHighGR = BOKUMetData_dailysum["GR"] > BOKUMetData_dailysum["GRthres"]
 HighGRdays = BOKUMetData_dailysum[isHighGR]
 #print(isHighGR)  #boolean (False/True)
 #print(HighGRdays[datetime(2018,1,1):])
+#BOKUMetData_hourlymean['GR'].to_csv("/windata/DATA/BOKUMet_DATA_GR_noindex.csv",index=False)
 
 BOKUMetData_monthly = BOKUMetData.resample('M').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.mean, 'WS': np.mean,
                                                      'WD': np.mean, 'WSG': np.mean, 'PC': np.sum, 'AP': np.mean})
@@ -231,28 +232,27 @@ pff_full.columns = ['hcho', 'vpd', 'RSSg', 'RSSw', 'AT', 'GR', 'GRhigh', 'SIF', 
 
 pff_NW = pff_full.loc[(pff_full['WD'] >=270) & (pff_full['WD'] <=359)]
 pff_SE = pff_full.loc[(pff_full['WD'] >=90) & (pff_full['WD'] <=180)]
-pff_clear = pff_full.dropna(subset=['GRhigh'])
+#pff_clear = pff_full.dropna(subset=['GRhigh'])
 #pff_clear = pff_NW.dropna(subset=['GRhigh'])
 #print(pff_clear)
-pff_clear2 = pff_clear.loc[pff_clear["GR"] >= 4500]
-pff_clear2_o3high = pff_clear2.loc[pff_clear2["O3"] > 100]
-pff_clear2_o3low = pff_clear2.loc[pff_clear2["O3"] <= 100]
-pff_clear2_o3high_NW = pff_clear2_o3high.loc[(pff_clear2_o3high['WD'] >=270) & (pff_clear2_o3high['WD'] <=360)]
-pff_clear2_o3high_SE = pff_clear2_o3high.loc[(pff_clear2_o3high['WD'] >=90) & (pff_clear2_o3high['WD'] <=180)]
-pff_weekly_rss_clear = pff_clear.resample("W").mean()
+#pff_clear2 = pff_clear.loc[pff_clear["GR"] >= 4500]
+#pff_clear2_o3high = pff_clear2.loc[pff_clear2["O3"] > 100]
+#pff_clear2_o3low = pff_clear2.loc[pff_clear2["O3"] <= 100]
+#pff_clear2_o3high_NW = pff_clear2_o3high.loc[(pff_clear2_o3high['WD'] >=270) & (pff_clear2_o3high['WD'] <=360)]
+#pff_clear2_o3high_SE = pff_clear2_o3high.loc[(pff_clear2_o3high['WD'] >=90) & (pff_clear2_o3high['WD'] <=180)]
+#pff_weekly_rss_clear = pff_clear.resample("W").mean()
 
-pffMAM_18 = pff_clear[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
-pffMAM_20 = pff_clear[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
+#pffMAM_18 = pff_clear[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
+#pffMAM_20 = pff_clear[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
 pffMAM_18 = pff_NW[datetime(2018, 3, 1, 00, 00):datetime(2018, 5, 31, 00, 00)].resample('D').mean()
 pffMAM_20 = pff_NW[datetime(2020, 3, 1, 00, 00):datetime(2020, 5, 31, 00, 00)].resample('D').mean()
 
 #SUMMER: JJA
-pffJJA_19 = pff_clear[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
-pffJJA_20 = pff_clear[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
+#pffJJA_19 = pff_clear[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
+#pffJJA_20 = pff_clear[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
 pffJJA_19 = pff_NW[datetime(2019, 6, 1, 00, 00):datetime(2019, 8, 31, 00, 00)].resample('D').mean()
 pffJJA_20 = pff_NW[datetime(2020, 6, 1, 00, 00):datetime(2020, 8, 31, 00, 00)].resample('D').mean()
 len = len(pffMAM_20['hcho'].values)
-
 
 #hcho_set = np.concatenate((pffMAM_20['hcho'].values,np.full((1,len),np.nan)))
 #print(hcho_set)
@@ -279,12 +279,34 @@ AT_set2 = pd.concat([pffJJA_19['AT'],pffJJA_20['AT']], axis=1)
 PBL_set2 = pd.concat([pffJJA_19['PBL'],pffJJA_20['PBL']], axis=1)
 WS_set2 = pd.concat([pffJJA_19['WS'],pffJJA_20['WS']], axis=1)
 
-pff_full.columns = ['hcho', 'vpd', 'RSSg', 'RSSw', 'AT', 'GR', 'GRhigh', 'SIF', 'O3','WD','WS','PC','PBL']
-#hcho_set.columns = ['20', '18']
-print(hcho_set)
-#exit()
+GR_set3 = pd.concat([pffMAM_20['GR'],pffMAM_18['GR']], axis=1)
+O3_set3 = pd.concat([pffMAM_20['O3'],pffMAM_18['O3']], axis=1)
+AT_set3 = pd.concat([pffMAM_20['AT'],pffMAM_18['AT']], axis=1)
+PBL_set3 = pd.concat([pffMAM_20['PBL'],pffMAM_18['PBL']], axis=1)
+WS_set3 = pd.concat([pffMAM_20['WS'],pffMAM_18['WS']], axis=1)
 
 fs=10
+fig, axes = plt.subplots(nrows=2, ncols=2)#, sharey='row') #sharex='col', figsize=(6, 6))
+#fig.set_size_inches(3.39,2.54)
+axes[0, 0].boxplot(GR_set.dropna())
+axes[0, 0].set_ylabel(u'global radiation [Wh m-2]', fontsize=fs)
+axes[0, 0].set(xticklabels=('MAM20_d','MAM18_r','JJA19_d','JJA20_r'))
+
+axes[0, 1].boxplot(O3_set.dropna())
+axes[0, 1].set_ylabel(u'O3 [ppb]', fontsize=fs)
+axes[0, 1].set(xticklabels=('MAM20_d','MAM18_r','JJA19_d','JJA20_r'))
+
+axes[1, 0].boxplot(WS_set.dropna())
+axes[1, 0].set_ylabel(u'wind speed [m s-1]', fontsize=fs)
+axes[1, 0].set(xticklabels=('MAM20_d','MAM18_r','JJA19_d','JJA20_r'))
+
+axes[1, 1].boxplot(PBL_set.dropna())
+axes[1, 1].set_ylabel(u'PBL [m]', fontsize=fs)
+axes[1, 1].set(xticklabels=('MAM20_d','MAM18_r','JJA19_d','JJA20_r'))
+#fig.subplots_adjust(hspace=0.4)
+#fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure3_total_5days_vegcomp.tiff')
+plt.show()
+
 fig = plt.figure()  #figsize=(4,3)
 #axisrange = [0,2,16,30]
 #plt.axis(axisrange)
@@ -297,58 +319,30 @@ plt.show()
 
 fig, axes = plt.subplots(nrows=2, ncols=2)#, sharey='row') #sharex='col', figsize=(6, 6))
 #fig.set_size_inches(3.39,2.54)
-axes[0, 0].boxplot(GR_set2.dropna())
+axes[0, 0].boxplot(GR_set3.dropna())
 #axes[0, 0].set_title('MAM20_dry', fontsize=fs)
 axes[0, 0].set_ylabel(u'global radiation [Wh m-2]', fontsize=fs)
 #axes[0, 0].set_xticks(1,labels=['MAM20_dry'])
 axes[0, 0].set(xticklabels=('JJA19_d','JJA20_r'))
 
-axes[0, 1].boxplot(O3_set2.dropna())
+axes[0, 1].boxplot(O3_set3.dropna())
 #axes[0, 1].set_title('MAM18_ref', fontsize=fs)
 axes[0, 1].set_ylabel(u'O3 [ppb]', fontsize=fs)
 axes[0, 1].set(xticklabels=('JJA19_d','JJA20_r'))
 
-axes[1, 0].boxplot(WS_set2.dropna())
+axes[1, 0].boxplot(WS_set3.dropna())
 #axes[1, 0].set_title('JJA19_dry', fontsize=fs)
 axes[1, 0].set_ylabel(u'wind speed [m s-1]', fontsize=fs)
 axes[1, 0].set(xticklabels=('JJA19_d','JJA20_r'))
 
-axes[1, 1].boxplot(PBL_set2.dropna())
+axes[1, 1].boxplot(PBL_set3.dropna())
 #axes[1, 1].set_title('JJA20_ref', fontsize=fs)
 axes[1, 1].set_ylabel(u'PBL [m]', fontsize=fs)
 axes[1, 1].set(xticklabels=('JJA19_d','JJA20_r'))
 #fig.subplots_adjust(hspace=0.4)
 #fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure3_total_5days_vegcomp.tiff')
 plt.show()
-
-fig, axes = plt.subplots(nrows=2, ncols=2)#, sharey='row') #sharex='col', figsize=(6, 6))
-#fig.set_size_inches(3.39,2.54)
-axes[0, 0].boxplot(GR_set.dropna())
-#axes[0, 0].set_title('MAM20_dry', fontsize=fs)
-axes[0, 0].set_ylabel(u'global radiation [Wh m-2]', fontsize=fs)
-#axes[0, 0].set_xticks(1,labels=['MAM20_dry'])
-axes[0, 0].set(xticklabels=('MAM20_d','MAM18_r','JJA19_d','JJA20_r'))
-
-axes[0, 1].boxplot(O3_set.dropna())
-#axes[0, 1].set_title('MAM18_ref', fontsize=fs)
-axes[0, 1].set_ylabel(u'O3 [ppb]', fontsize=fs)
-axes[0, 1].set(xticklabels=('MAM20_d','MAM18_r','JJA19_d','JJA20_r'))
-
-axes[1, 0].boxplot(WS_set.dropna())
-#axes[1, 0].set_title('JJA19_dry', fontsize=fs)
-axes[1, 0].set_ylabel(u'wind speed [m s-1]', fontsize=fs)
-axes[1, 0].set(xticklabels=('MAM20_d','MAM18_r','JJA19_d','JJA20_r'))
-
-axes[1, 1].boxplot(PBL_set.dropna())
-#axes[1, 1].set_title('JJA20_ref', fontsize=fs)
-axes[1, 1].set_ylabel(u'PBL [m]', fontsize=fs)
-axes[1, 1].set(xticklabels=('MAM20_d','MAM18_r','JJA19_d','JJA20_r'))
-#fig.subplots_adjust(hspace=0.4)
-#fig.savefig('/home/lnx/2_Documents/_BioClic/_Simulationen/HS_Output_analysis/2015Paper/Figure3_total_5days_vegcomp.tiff')
-plt.show()
 exit()
-
-
 
 """Table 2"""
 print("\n ******")
