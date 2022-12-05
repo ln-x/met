@@ -279,7 +279,7 @@ ax1.set_xticks([])
 ax1.legend(loc='upper left')
 ax2.legend(loc='lower left')
 """
-ax1 = fig.add_subplot(211)
+ax1 = fig.add_subplot(311)
 ax1.set_title('(a)', loc='left', size='medium')#, color='green')
 ax1.plot(o3_1990_2020_mda8_w['AT30701'][start:end],linewidth="1", color='darkblue', linestyle="solid",label="O3_nw") #Irnfritz
 ax1.plot(o3_1990_2020_mda8_w['AT30701'][start:end].index, o3_1990_2020_mda8_w['AT30701'][datetime(2018, 3, 1):datetime(2018, 6, 7)].values,linewidth="1", color='darkblue', linestyle=":")
@@ -330,32 +330,57 @@ ws_w = ws.resample("W").mean()
 pbl_km = pbl/1000
 pbl_w = pbl_km.resample("W").mean()
 ws_sigma = ws.std()
-pbl_sigma = pbl_km.std()
+#pbl_sigma = pbl_km.std()
+pbl_sigma = 0.57383519
+#print("sigma",ws_sigma, pbl_sigma.values)
 #ax.fill_between(AT.index, AT+AT_sigma,AT - AT_sigma, facecolor='grey', alpha=0.2)
+print(ws_w.values)
+print(pbl_w.values.flatten())
 
-ax1 = fig.add_subplot(212)
+"""
+N=7 #days
+atmaxSE_xdaymean = np.convolve(se['AT'], np.ones(N)/N, mode='valid')
+atmaxNW_xdaymean = np.convolve(nw['AT'], np.ones(N)/N, mode='valid')
+hchomaxSE_xdaymean = np.convolve(se['hcho'], np.ones(N)/N, mode='valid')
+hchomaxNW_xdaymean = np.convolve(nw['hcho'], np.ones(N)/N, mode='valid')
+
+mean_SE = se[6:]
+mean_SE.insert(1,'ATxd', atmaxSE_xdaymean.tolist())
+mean_SE.insert(1,'hchoxd', hchomaxSE_xdaymean.tolist())
+mean_NW = nw[6:]
+mean_NW.insert(1,'ATxd', atmaxNW_xdaymean.tolist())
+mean_NW.insert(1,'hchoxd', hchomaxNW_xdaymean.tolist())
+"""
+
+ax1 = fig.add_subplot(312)
 ax1.set_title('(b)', loc='left', size='medium')#, color='green')
-ax1 = plt.gca()
-ax2 = ax1.twinx()
 #ax1.plot(BOKUMetData_dailysum["WS"][start:end]/3.6, linewidth="1", color='blue', label="WS") #label="GR,sum,w"
 #ax1.plot(BOKUMetData_dailysum["WS"][start:end].index, (BOKUMetData_dailysum["WS"][datetime(2018, 3, 1):datetime(2018, 6, 1)].values)/3.6, linewidth="1", color='blue', linestyle=":")
-ax1.plot(ws_w[start:end], linewidth="1", color='blue', label="WS") #label="GR,sum,w"
-ax1.plot(ws_w[start:end].index, ws_w[datetime(2018, 3, 1):datetime(2018, 6, 7)].values, linewidth="1", color='blue', linestyle=":")
-ax1.fill_between(ws_w.index, ws_w+ws_sigma,ws_w - ws_sigma, facecolor='blue', alpha=0.2)
-#ax2.plot(pbl[start:end]/1000, linewidth="1", color='violet', label="PBL") #label="GR,sum,w"
-#ax2.plot(pbl[start:end].index, (pbl[datetime(2018, 3, 1):datetime(2018, 6, 1)].values)/1000, linewidth="1", color='violet', linestyle=":")
-#ax2.plot(pbl_w[start:end], linewidth="1", color='violet', label="PBL") #label="GR,sum,w"
-#ax2.plot(pbl_w[start:end].index, (pbl_w[datetime(2018, 3, 1):datetime(2018, 6, 7)].values), linewidth="1", color='violet', linestyle=":")
-#ax2.fill_between(ws_w.index, pbl_w+pbl_sigma,pbl_w - pbl_sigma, facecolor='violet', alpha=0.2)
+ax1.plot(ws_w[start:end], linewidth="1", color='blue', label="WS_MAM20") #label="GR,sum,w"
+ax1.plot(ws_w[start:end].index, ws_w[datetime(2018, 3, 1):datetime(2018, 6, 7)].values, linewidth="1", color='grey', linestyle=":", label="WS_MAM18")
+ax1.fill_between(ws_w[start:end].index, ws_w[start:end]+ws_sigma,ws_w[start:end]- ws_sigma, facecolor='blue', alpha=0.2)
+ax1.fill_between(ws_w[start:end].index, ws_w[datetime(2018, 3, 1):datetime(2018, 6, 7)]+ws_sigma,
+                 ws_w[datetime(2018, 3, 1):datetime(2018, 6, 7)]- ws_sigma, facecolor='grey', alpha=0.1)
 ax1.set_xlim(start,end)
-
 #ax2.axvline(x=datetime(2020,5,10))
 ax1.set_ylabel("[m s-1]", size="medium")
-ax2.set_ylabel("[km]", size="medium")
 ax1.legend(loc='upper left')
-ax2.legend(loc='lower left')
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
 ax1.grid()
+
+ax1 = fig.add_subplot(313)
+ax1.set_title('(c)', loc='left', size='medium')#, color='green')
+ax1.plot(pbl_w[start:end], linewidth="1", color='blue', label="PBL_MAM20") #label="GR,sum,w"
+ax1.plot(pbl_w[start:end].index, pbl_w[datetime(2018, 3, 1):datetime(2018, 6, 7)].values.flatten(), linewidth="1", color='grey', linestyle=":", label="PBL_MAM18")
+ax1.fill_between(pbl_w[start:end].index, pbl_w[start:end].values.flatten() + pbl_sigma,pbl_w[start:end].values.flatten() - pbl_sigma, facecolor='blue', alpha=0.2)
+ax1.fill_between(pbl_w[start:end].index, pbl_w[datetime(2018, 3, 1):datetime(2018, 6, 7)].values.flatten()+pbl_sigma,
+                 pbl_w[datetime(2018, 3, 1):datetime(2018, 6, 7)].values.flatten()- pbl_sigma, facecolor='grey', alpha=0.1)
+ax1.set_xlim(start,end)
+ax1.set_ylabel("[km]", size="medium")
+ax1.legend(loc='upper left')
+ax1.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
+ax1.grid()
+
 plt.show()
 
 exit()
