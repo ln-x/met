@@ -352,6 +352,8 @@ mean_NW.insert(1,'ATxd', atmaxNW_xdaymean.tolist())
 mean_NW.insert(1,'hchoxd', hchomaxNW_xdaymean.tolist())
 """
 
+BOKUMetData_dailysum["WD"]
+
 ax1 = fig.add_subplot(312)
 ax1.set_title('(b)', loc='left', size='medium')#, color='green')
 #ax1.plot(BOKUMetData_dailysum["WS"][start:end]/3.6, linewidth="1", color='blue', label="WS") #label="GR,sum,w"
