@@ -15,9 +15,6 @@ from met.library.Datetime_recipies import datestdtojd
 from met.library.conversions import *
 from met.library import ReadinVindobona_Filter_fullperiod
 
-#TODO include colorbar
-#TODO include MAM20!
-
 '''READ IN BOKU Metdata'''
 BOKUMetData = met.library.BOKUMet_Data.BOKUMet()
 #print(BOKUMetData) #10min values
@@ -66,38 +63,76 @@ MAM18_s = datetime(2018, 3, 1, 00, 00)
 MAM18_e = datetime(2018, 5, 31, 00, 00)
 MAM20_s = datetime(2020, 3, 1, 00, 00)
 MAM20_e = datetime(2020, 5, 31, 00, 00)
-
+JJA19_s = datetime(2019, 6, 1, 00, 00)
+JJA19_e = datetime(2019, 8, 31, 00, 00)
+JJA20_s = datetime(2020, 6, 1, 00, 00)
+JJA20_e = datetime(2020, 8, 31, 00, 00)
 #o3 = o3_1990_2020_mda8_w[MAM18_s:MAM18_e]
 #wd = BOKUMetData_dailysum["WD"].resample("W").mean()
 o3 = o3_1990_2020_mda8[MAM18_s:MAM18_e]
+o320 = o3_1990_2020_mda8[MAM20_s:MAM20_e]
+o3jja19 = o3_1990_2020_mda8[JJA19_s:datetime(2019, 9, 1, 00, 00)]
+o3jja20 = o3_1990_2020_mda8[JJA20_s:JJA20_e]
+print(o3jja20)
+
 wd = BOKUMetData_dailysum["WD"]
-wd = wd[MAM18_s:MAM18_e]
-wd = wd[:-1]
-print(len(wd), len(o3))
+wd18 = wd[MAM18_s:MAM18_e]
+wd18 = wd18[:-1]
+wd20 = wd[MAM20_s:MAM20_e]
+wdjja19 = wd[JJA19_s:JJA19_e]
+wdjja20 = wd[JJA20_s:JJA20_e]
+print(wdjja20)
+#exit()
 
 fs = 10  #fontsize
-fig, axs = plt.subplots(2,2)
-axs[0, 0].scatter(o3['AT9STEF'], o3['AT30801'], c=wd, label="O3_nw", cmap='viridis') #Irnfritz
-#axs[0, 0].set_title('Axis [0, 0]')
-axs[0, 1].scatter(o3['AT9STEF'], o3['AT31301'], c=wd, label="O3_ne")  #Mistelbach
-#axs[0, 1].set_title('Axis [0, 1]')
-axs[1, 0].scatter(o3['AT9STEF'], o3['AT30603'], c=wd, label="O3_se") #Himberg
-#axs[1, 0].set_title('Axis [0, 1]')
-axs[1, 1].scatter(o3['AT9STEF'], o3['AT32101'], c=wd, label="O3_s") #Wiesmath
-#axs[1, 1].set_title('Axis [0, 1]')
-#ax1.scatter(o3['AT9STEF'], o3['AT30801'], marker=">", label="O3_nw") #Irnfritz c=wd,
-#ax1.scatter(o3['AT9STEF'], o3['AT31301'], marker="<", label="O3_ne") #Mistelbach
-#ax1.scatter(o3['AT9STEF'], o3['AT30603'], marker="o", label="O3_se") #Himberg
-#ax1.scatter(o3['AT9STEF'], o3['AT32101'], marker="^", label="O3_s") #Wiesmath
-#ax1.set_ylabel("O3_vienna_center [μg/m³]", size="medium")
-#ax1.set_ylabel("O3_region [μg/m³]", size="medium")
-#legend2 = ax1.legend(*scatter.legend_elements(**kw),
-#                    loc="lower right", title="Price")
-#axs[0,0].legend(loc='upper left')
-# colorscale
-#cb = fig.colorbar(hexbins, ax=ax)
-#cb.set_label('Color Scale')
-plt.colorbar(o3['AT9STEF'], o3['AT30801'], ax=axs[0,0])
-#plt.colorbar(im, ax=ax[i, j])
+fig, axs = plt.subplots(nrows=4,ncols=2,sharey='row', sharex='col')#, figsize=(6, 6))
+axs[0, 0].set_title('JJA2019')
+pl1 = axs[0, 0].scatter(o3jja19['AT9STEF'], o3jja19['AT30801'], c=wdjja19, label="O3_nw", cmap='viridis') #Irnfritz
+axs[1, 0].scatter(o3jja19['AT9STEF'], o3jja19['AT31301'], c=wdjja19, label="O3_ne")  #Mistelbach
+#axs[1,0].legend(loc="upper left") #axs[1, 0].set_title('NE')
+axs[2, 0].scatter(o3jja19['AT9STEF'], o3jja19['AT30603'], c=wdjja19, label="O3_se") #Himberg
+axs[3, 0].scatter(o3jja19['AT9STEF'], o3jja19['AT32101'], c=wdjja19, label="O3_s") #Wiesmath
+axs[0, 1].set_title('JJA2020')
+pl1 = axs[0,1].scatter(o3jja20['AT9STEF'],o3jja20['AT30801'], c=wdjja20, label="O3_nw", cmap='viridis') #Irnfritz
+axs[1, 1].scatter(o3jja20['AT9STEF'], o3jja20['AT31301'], c=wdjja20, label="O3_ne")  #Mistelbach
+axs[2, 1].scatter(o3jja20['AT9STEF'], o3jja20['AT30603'], c=wdjja20, label="O3_se") #Himberg
+axs[3, 1].scatter(o3jja20['AT9STEF'], o3jja20['AT32101'], c=wdjja20, label="O3_s") #Wiesmath
+axs[0, 0].set_ylabel("O3_nw [μg/m³]")#, ax=axs[:, 0])
+axs[1, 0].set_ylabel("O3_ne [μg/m³]")
+axs[2, 0].set_ylabel("O3_se [μg/m³]")
+axs[3, 0].set_ylabel("O3_se [μg/m³]")
+axs[3, 0].set_xlabel("O3_vie [μg/m³]")
+axs[3, 1].set_xlabel("O3_vie [μg/m³]")
+for ax in fig.get_axes():
+    print(ax)
+    ax.set_xlim(40,130)
+    ax.set_ylim(40,150)
+plt.colorbar(pl1, ax=axs[:, 1], shrink=0.6, label="WD [°]")
+plt.show()
 
+fs = 10  #fontsize
+fig, axs = plt.subplots(nrows=4,ncols=2,sharey='row', sharex='col')#, figsize=(6, 6))
+axs[0, 0].set_title('MAM2018')
+pl1 = axs[0, 0].scatter(o3['AT9STEF'], o3['AT30801'], c=wd18, label="O3_nw", cmap='viridis') #Irnfritz
+axs[1, 0].scatter(o3['AT9STEF'], o3['AT31301'], c=wd18, label="O3_ne")  #Mistelbach
+#axs[1,0].legend(loc="upper left") #axs[1, 0].set_title('NE')
+axs[2, 0].scatter(o3['AT9STEF'], o3['AT30603'], c=wd18, label="O3_se") #Himberg
+axs[3, 0].scatter(o3['AT9STEF'], o3['AT32101'], c=wd18, label="O3_s") #Wiesmath
+axs[0, 1].set_title('MAM2020')
+pl1 = axs[0,1].scatter(o320['AT9STEF'],o320['AT30801'], c=wd20, label="O3_nw", cmap='viridis') #Irnfritz
+axs[1, 1].scatter(o320['AT9STEF'], o320['AT31301'], c=wd20, label="O3_ne")  #Mistelbach
+axs[2, 1].scatter(o320['AT9STEF'], o320['AT30603'], c=wd20, label="O3_se") #Himberg
+axs[3, 1].scatter(o320['AT9STEF'], o320['AT32101'], c=wd20, label="O3_s") #Wiesmath
+axs[0, 0].set_ylabel("O3_nw [μg/m³]")#, ax=axs[:, 0])
+axs[1, 0].set_ylabel("O3_ne [μg/m³]")
+axs[2, 0].set_ylabel("O3_se [μg/m³]")
+axs[3, 0].set_ylabel("O3_se [μg/m³]")
+axs[3, 0].set_xlabel("O3_vie [μg/m³]")
+axs[3, 1].set_xlabel("O3_vie [μg/m³]")
+for ax in fig.get_axes():
+    print(ax)
+    ax.set_xlim(40,130)
+    ax.set_ylim(40,150)
+
+plt.colorbar(pl1, ax=axs[:, 1], shrink=0.6, label="WD [°]")
 plt.show()

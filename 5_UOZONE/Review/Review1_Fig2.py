@@ -11,10 +11,7 @@ from met.library.Datetime_recipies import datestdtojd
 from met.library.conversions import *
 from met.library import ReadinVindobona_Filter_fullperiod
 from met.library import ReadinPROBAV_LAI_300m
-
-
-#TODO: include sigma shading?
-#TODO: include fAPARa?
+#TODO: include fAPARa and AT?
 
 "read in VINDOBONA"
 foldername_D = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_DQ"
@@ -195,7 +192,7 @@ JJA19_s = datetime(2019, 6, 1, 00, 00)
 JJA19_e = datetime(2019, 8, 31, 00, 00)
 JJA20_s = datetime(2020, 6, 1, 00, 00)
 JJA20_e = datetime(2020, 8, 31, 00, 00)
-
+"""
 print("fAPAR mean")
 print("MAM18:", fAPAR[MAM18_s:MAM18_e].mean())
 print("MAM19:", fAPAR[MAM19_s:MAM19_e].mean())
@@ -208,6 +205,7 @@ print("May19:", fAPAR[datetime(2019, 5, 1, 00, 00):MAM18_e].mean())
 print("May20:", fAPAR[datetime(2020, 5, 1, 00, 00):MAM20_e].mean())
 print("Aug20:", fAPAR[datetime(2020, 8, 1, 00, 00):JJA20_e].mean())
 print("Aug19:", fAPAR[datetime(2019, 8, 1, 00, 00):JJA19_e].mean())
+
 
 print("LAI mean")
 print("MAM18:", LAI_df[MAM18_s:MAM18_e].mean())
@@ -229,7 +227,7 @@ print("May20:", LAI_df[datetime(2020, 5, 1, 00, 00):MAM20_e].mean())
 print("Aug20:", LAI_df[datetime(2020, 8, 1, 00, 00):JJA20_e].mean())
 print("Aug19:", LAI_df[datetime(2019, 8, 1, 00, 00):JJA19_e].mean())
 #exit()
-
+"""
 
 '''
 Plotting
@@ -237,13 +235,28 @@ Plotting
 start = datetime(2018, 1, 1)
 end = datetime(2020, 12, 31)
 
+hcho_sigma = hcho_d.std()
+vpd_sigma = vpd_dmax.std()
+ws_sigma = BOKUMetData_weekly["WS"][start:end].std()
+gr = BOKUMetData_weekly["GR"][start:end]/1000
+gr_sigma = gr.std()
+o3_sigma = o3_1990_2020_mda8_w['AT9STEF'][start:end].std()
+osif_sigma = osif_757.std()
+tsif_sigma = tsif.std()
+#print(tsif_sigma.values, osif_sigma)
+tsif_sigma = 0.50563181
+osif_sigma = 0.674449
+
+
 fig = plt.figure()
 plt.suptitle(f"OBS {start} - {end}")
 ax1 = fig.add_subplot(511)
 ax1.set_title('(a)', loc='right', size='medium')#, color='green')
 ax2 = ax1.twinx()
+ax1.plot(gr, linewidth="1", color='orange')#, label="GR sum BOKUR")
 ax2.plot(o3_1990_2020_mda8_w['AT9STEF'][start:end],linewidth="1", color='violet', linestyle="solid") #label="o3 OBS mda8",
-ax1.plot(BOKUMetData_weekly["GR"][start:end]/1000, linewidth="1", color='orange')#, label="GR sum BOKUR")
+ax1.fill_between(gr.index, gr.values+gr_sigma,gr.values-gr_sigma, facecolor='orange', alpha=0.1)
+ax2.fill_between(o3_1990_2020_mda8_w['AT9STEF'][start:end].index, o3_1990_2020_mda8_w['AT9STEF'][start:end].values+o3_sigma,o3_1990_2020_mda8_w['AT9STEF'][start:end].values-o3_sigma, facecolor='violet', alpha=0.1)
 ax1.set_xlim(start,end)
 ax1.set_ylabel("GR[kWh/m²]", size="medium", color="orange")
 ax2.set_ylabel("O3[μg/m³]", size="medium", color="violet")
@@ -265,6 +278,8 @@ ax3 = ax1.twinx()
 #ax3.spines.right.set_position(("axes", 1.15))
 ax1.plot(tsif_w,color='violet', label="TROP")
 ax1.plot(osif_757_w,color='red',label="OCO-2")
+ax1.fill_between(tsif_w[start:end].index, tsif_w[start:end].values.flatten()+tsif_sigma,tsif_w[start:end].values.flatten()-tsif_sigma, facecolor='violet', alpha=0.1)
+ax1.fill_between(osif_757_w[start:end].index, osif_757_w[start:end].values.flatten()+osif_sigma,osif_757_w[start:end].values.flatten()-osif_sigma, facecolor='red', alpha=0.1)
 ax1.set_ylabel("SIF[mW/m2/sr/nm]", size="medium")
 #ax1.plot(fAPAR,color='blue', label="fAPAR anomaly")
 ax3.plot(LAI_df[start:end].index, LAI_df[start:end].LAI, color="green")
@@ -314,7 +329,9 @@ ax1 = plt.gca()
 ax2 = ax1.twinx()
 ax1.axhline(0, color='grey',linestyle="dashed",linewidth="0.3")
 ax2.plot(vpd_dmax_w[start:end], linewidth="1", color='green')#, label="vpd dmax")
+ax2.fill_between(vpd_dmax_w[start:end].index, vpd_dmax_w[start:end].values+vpd_sigma,vpd_dmax_w[start:end].values-vpd_sigma, facecolor='black', alpha=0.1)
 ax1.plot(hcho_w[start:end], linewidth="1", color='black', linestyle="solid") #274 = Julian Day 30.Sept2020 #label="hcho D OBS d",
+ax1.fill_between(hcho_w[start:end].index, hcho_w[start:end].values+hcho_sigma,hcho_w[start:end].values-hcho_sigma, facecolor='black', alpha=0.1)
 ax1.set_xlim(start,end)
 ax2.set_ylabel("VDP[kPa]", size="medium", color="green")
 ax1.set_ylabel("HCHO[ppb]", size="medium")
@@ -329,9 +346,9 @@ ax1.set_title('(e)', loc='right', size='medium')#, color='green')
 ax1 = plt.gca()
 ax2 = ax1.twinx()
 ax1.plot(BOKUMetData_weekly["WS"][start:end], linewidth="1", color='blue') #label="GR,sum,w"
-#ax1.fill_between(ws_w[start:end].index, ws_w[start:end]+ws_sigma,ws_w[start:end]- ws_sigma, facecolor='blue', alpha=0.2)
+ax1.fill_between(BOKUMetData_weekly["WS"][start:end].index, BOKUMetData_weekly["WS"][start:end]+ws_sigma,BOKUMetData_weekly["WS"][start:end]- ws_sigma, facecolor='blue', alpha=0.1)
 ax2.plot(pbl_w_km[start:end], linewidth="1", color='grey', linestyle="solid", label="PBL_MAM18")
-#BOKUMetData_dailysum["WD"]
+ax2.fill_between(pbl_w_km[start:end].index, pbl_w_km[start:end].values.flatten()+pbl_sigma,pbl_w_km[start:end].values.flatten()-pbl_sigma, facecolor='grey', alpha=0.1)
 ax1.set_xlim(start,end)
 #ax2.axvline(x=datetime(2020,5,10))
 ax1.set_ylabel("WS[m s-1]", size="medium", color="blue")

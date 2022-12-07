@@ -11,9 +11,10 @@ import met.library.BOKUMet_Data
 from met.library.Datetime_recipies import datestdtojd
 from met.library.conversions import *
 from met.library import ReadinVindobona_Filter_fullperiod
+import os
+import netCDF4
 
 print(ugm3toppb_no2, ugm3toppb_no)
-
 
 "read in VINDOBONA"
 foldername_D = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_DQ"
@@ -54,25 +55,6 @@ vpd_dmax_w = vpd_dmax.resample('W').max()
 
 '''READ IN EEA air pollution data'''
 pathbase2 = "/windata/DATA/obs_point/chem/EEA/"
-#"AT"+compound+"stationsname"+"year"+_"timeseries.csv"
-nox_1990_2019_da = pd.read_csv(pathbase2 + "nox_da_1990-2019_AT_ppb.csv")
-nox_1990_2019_da = nox_1990_2019_da.set_index(pd.to_datetime(nox_1990_2019_da['date']))
-nox_1990_2019_da = nox_1990_2019_da.drop(columns=['date'])
-no2_2020_mda1 = pd.read_csv(pathbase2 + "AT_NO2_2020.csv")
-no2_2020_mda1 = no2_2020_mda1.set_index(pd.to_datetime(no2_2020_mda1['date']))
-no2_2020_mda1 = no2_2020_mda1.drop(columns=['date'])
-
-no2_2020_mda1 = no2_2020_mda1*0.5319148936 #ugm3toppb_no2
-no2_2020_da = no2_2020_mda1.resample('D').mean()
-no_2020_mda1 = pd.read_csv(pathbase2 + "AT_NO_2020.csv")
-no_2020_mda1 = no_2020_mda1.set_index(pd.to_datetime(no_2020_mda1['date']))
-no_2020_mda1 = no_2020_mda1.drop(columns=['date'])
-no_2020_mda1 = no_2020_mda1*0.8 #ugm3toppb_no
-no_2020_da = no_2020_mda1.resample('D').mean()
-nox_2020_da = no_2020_da.add(no2_2020_da)
-nox_1990_2020_da = pd.concat([nox_1990_2019_da, nox_2020_da], axis=0)
-nox_1990_2020_da_w = nox_1990_2020_da.resample('W').mean()
-
 o3_1990_2019_mda1 = pd.read_csv(pathbase2 + "o3_mda1_1990-2019_AT_mug.csv")
 o3_1990_2019_mda1 = o3_1990_2019_mda1.set_index((pd.to_datetime(o3_1990_2019_mda1['date'])))
 o3_1990_2019_mda1 = o3_1990_2019_mda1.drop(columns=['date'])
@@ -91,7 +73,6 @@ o3_1990_2020_da = o3_1990_2020_mda8.resample('D').mean()
 o3_1990_2020_m = o3_1990_2020_mda8.resample('M').mean()
 o3_1990_2020_mda1_w = o3_1990_2020_mda1.resample('W').mean()
 o3_1990_2020_mda8_w = o3_1990_2020_mda8.resample('W').mean()
-
 
 '''READ in SOIL MOISTURE DATA'''
 
@@ -143,11 +124,6 @@ tsif.columns = ['SIF']
 tsif_m =tsif.resample('M').mean()
 tsif_w =tsif.resample('W').mean()
 
-
-#osif_771_r = pd.read_csv("/windata/DATA/remote/satellite/OCO/OSIF_8100_771nm.csv", sep=",")
-#osif_771 = osif_771_r.set_index(pd.to_datetime(osif_771_r['time']))
-#osif_771 = osif_771.drop(columns=['time'])
-
 osif_757_r = pd.read_csv("/windata/DATA/remote/satellite/OCO2/OSIF_8100_757nm.csv", sep=",")
 osif_757 = osif_757_r.set_index(pd.to_datetime(osif_757_r['time']))
 osif_757 = osif_757.drop(columns=['time'])
@@ -156,7 +132,6 @@ osif_757_w =osif_757.resample('W').mean()
 osif_757.columns = ['SIF']
 
 sif_joint = pd.concat([osif_757[:datetime(2018,7,1)],tsif[datetime(2018,7,1):]], axis=0)
-
 
 "read in EDO - fAPAR data"
 fAPAR = pd.read_csv("/windata/DATA/obs_point/land/EDO/fAPAR.16_48.1990to2021.20211217133422.txt", delimiter="|",skiprows=2,header=0)
@@ -174,6 +149,54 @@ fAPAR = fAPAR.drop(columns=['Date'])
 #2017-01-I|-0.54
 #2017-01-II|0.02
 
+"""READ IN MGNOUT CAMS"""
+foldername_ol18 = "/data1/models/nilu/SEEDS/MEGAN/2018/ol/ISOP/"  #MGNOUT_CAMS_BIG_ISOP_20190102.nc
+foldername_as18 = "/data1/models/nilu/SEEDS/MEGAN/2018/assim_LAI/ISOP/"
+foldername_ol20 = "/data1/models/nilu/SEEDS/MEGAN/2020/ol/ISOP/"  #MGNOUT_CAMS_BIG_ISOP_20190102.nc
+foldername_as20 = "/data1/models/nilu/SEEDS/MEGAN/2020/assim_LAI/ISOP/"
+def EmisSEEDS(foldername):
+    files = os.listdir(foldername)
+    files = sorted(files)
+    dateaxis=[]
+    Emis_max=[]
+    Emis_noontime=[]
+    Emis_noon=[]
+    index_lat = 202  #LAT 48.25°N
+    index_lon = 422 #LON 16.25°E (city rim to Wienerwald) or 421: LON 16.15°E (middle Wienerwald)
+    for i in range(len(files)):
+        day = str(files[i][-5:-3])  # splitlistcomp[3:4]
+        month = str(files[i][-7:-5])  # splitlistcomp[2:3]
+        year = "20" + str(files[i][-9:-7])  # splitlistcomp[:2]
+        #print(day,month,year)
+        date = datetime(year=int(year), month=int(month), day=int(day))
+        #print(date)
+        dateaxis.append(date)
+        path = foldername+files[i]
+        infile = netCDF4.Dataset(path)  #path.decode('UTF-8')  #OSError: [Errno -51] NetCDF: Unknown file format: b'/windata/DATA/models/nilu/MEGAN3_SURFEX_SEEDS/MEGAN/ol/MGNOUT_CAMS_BIG_20190803.nc'
+        Emis_hourlyvalue = infile.variables['Emiss'][:, index_lat, index_lon, 0]  #TODO: only first emission layer (ISO) read in
+        Emis_max.append(Emis_hourlyvalue.max())
+        #print(Emis_hourlyvalue)
+        #Emis_hourly.append(Emis_hourlyvalue)
+        Emis_noon = np.average(Emis_hourlyvalue[8:14])
+        Emis_noontime.append(Emis_noon)
+    Emis_max = pd.DataFrame({'datetime': dateaxis, 'ISO': Emis_max})
+    Emis_max['datetime'] = pd.to_datetime(Emis_max['datetime'])
+    Emis_max = Emis_max.set_index(['datetime'])
+    Emis_noontime = pd.DataFrame({'datetime': dateaxis, 'ISO': Emis_noontime})
+    Emis_noontime['datetime'] = pd.to_datetime(Emis_noontime['datetime'])
+    Emis_noontime = Emis_noontime.set_index(['datetime'])
+    return Emis_max, Emis_noontime
+
+Emis_ol18, Emis_ol_noontime18 = EmisSEEDS(foldername_ol18)
+Emis_assim18, Emis_assim_noontime18 = EmisSEEDS(foldername_as18)
+#Emis_ol, Emis_ol_noontime = EmisSEEDS(foldername_ol)
+#Emis_assim, Emis_assim_noontime = EmisSEEDS(foldername_as)
+Emis_ol20, Emis_ol_noontime20 = EmisSEEDS(foldername_ol20)
+Emis_assim20, Emis_assim_noontime20 = EmisSEEDS(foldername_as20)
+
+ISO_MAM18 = Emis_assim_noontime18.ISO[datetime(2018, 3, 1, 00, 00): datetime(2018, 5, 31, 00, 00)]
+ISO_MAM20 = Emis_assim_noontime20.ISO[datetime(2020, 3, 1, 00, 00): datetime(2020, 5, 31, 00, 00)]
+
 '''TIMESLICES'''
 MAM18_s = datetime(2018, 3, 1, 00, 00)
 MAM18_e = datetime(2018, 5, 31, 00, 00)
@@ -183,33 +206,12 @@ JJA19_s = datetime(2019, 6, 1, 00, 00)
 JJA19_e = datetime(2019, 8, 31, 00, 00)
 JJA20_s = datetime(2020, 6, 1, 00, 00)
 JJA20_e = datetime(2020, 8, 31, 00, 00)
-
-start = MAM20_s
-end = datetime(2020, 6, 1, 00, 00)
-
-start2 = datetime(2020, 4, 15, 00, 00)
-end2 = datetime(2020, 6, 1, 00, 00)
-start3 = datetime(2018, 4, 15, 00, 00)
-
-
 '''
 Plotting
 '''
 
 #labels = list['1a','5a','max']
 fs = 10  # fontsize
-"""
-fig = plt.figure(figsize=(4,3))
-axisrange = [0,2,16,30]
-plt.axis(axisrange)
-plt.boxplot(WT_2013_all)
-plt.title('OBS_20a', fontsize=fs)
-plt.ylabel(u'water temperature [°C]', fontsize=fs)
-ax = gca()
-ax.xaxis.set_ticklabels(['V0','STQ','V100'])
-plt.show()
-"""
-
 #print(len(hcho_d[MAM20_s:MAM20_e].values))
 #print(len(hcho_d[MAM18_s:MAM18_e].values))
 
@@ -217,22 +219,21 @@ plt.show()
 #hcho_d_comp = np.append(hcho_d[MAM20_s:MAM20_e].values, [hcho_d[MAM18_s:MAM18_e].values], axis=1)
 #print(len(hcho_d_comp))
 #exit()
-
-ax2.plot(o3_1990_2020_mda8_w['AT9STEF'][start:end],linewidth="1", color='violet', linestyle="solid",label="O3") #label="O3,mda8,w",
-ax2.plot(o3_1990_2020_mda8_w['AT9STEF'][start:end].index, o3_1990_2020_mda8_w['AT9STEF'][datetime(2018, 3, 1):datetime(2018, 6, 7)].values,linewidth="1", color='violet', linestyle=":")
+#ax2.plot(o3_1990_2020_mda8_w['AT9STEF'][start:end],linewidth="1", color='violet', linestyle="solid",label="O3") #label="O3,mda8,w",
+#ax2.plot(o3_1990_2020_mda8_w['AT9STEF'][start:end].index, o3_1990_2020_mda8_w['AT9STEF'][datetime(2018, 3, 1):datetime(2018, 6, 7)].values,linewidth="1", color='violet', linestyle=":")
 #ax1.plot(BOKUMetData_dailysum["GR"][start:end], linewidth="0.1", color='orange')  #label="GR,sum"
-ax1.plot(BOKUMetData_weekly["GR"][start:end]/1000, linewidth="1", color='orange', label="GR") #label="GR,sum,w"
-ax1.plot(BOKUMetData_weekly["GR"][start:end].index, (BOKUMetData_weekly["GR"][datetime(2018, 3, 1):datetime(2018, 6, 7)].values)/1000, linewidth="1", color='orange', linestyle=":")
-
+#ax1.plot(BOKUMetData_weekly["GR"][start:end]/1000, linewidth="1", color='orange', label="GR") #label="GR,sum,w"
+#ax1.plot(BOKUMetData_weekly["GR"][start:end].index, (BOKUMetData_weekly["GR"][datetime(2018, 3, 1):datetime(2018, 6, 7)].values)/1000, linewidth="1", color='orange', linestyle=":")
 print(hcho_d[MAM20_s:MAM20_e].values)
 
 filtered_hcho20 = hcho_d[MAM20_s:MAM20_e].values[~np.isnan(hcho_d[MAM20_s:MAM20_e].values)]
 filtered_hcho18 = hcho_d[MAM18_s:MAM18_e].values[~np.isnan(hcho_d[MAM18_s:MAM18_e].values)]
 
+
 fig, axes = plt.subplots(nrows=2, ncols=2, sharey='row') #sharex='col', figsize=(6, 6))
 #fig.set_size_inches(3.39,2.54)
 
-axes[0, 0].boxplot(o3_1990_2020_mda8_w['AT9STEF'][start:end])
+axes[0, 0].boxplot(filtered_hcho20)
 axes[0, 0].set_title('OBS_MAM20_dry', fontsize=fs)
 axes[0, 0].set_ylabel(u'HCHO [ppb]', fontsize=fs)
 #axes[0, 0].set_xticks(1,labels=['MAM20_dry'])
@@ -243,12 +244,12 @@ axes[0, 1].set_title('OBS_MAM18_ref', fontsize=fs)
 #axes[0, 1].set_ylabel(u'HCHO [ppb]', fontsize=fs)
 #axes[0, 1].set_xticklabels('MAM18_dry')
 
-axes[1, 0].boxplot(ISO20)
+axes[1, 0].boxplot(ISO_MAM20)
 axes[1, 0].set_title('MOD_MAM20_dry', fontsize=fs)
 axes[1, 0].set_ylabel(u'isoprene [mol s-1 m-2]', fontsize=fs)
 #axes[0, 1].set(xticklabels=('DRY'))
 
-axes[1, 1].boxplot(ISO18)
+axes[1, 1].boxplot(ISO_MAM18)
 axes[1, 1].set_title('MOD_MAM18_ref', fontsize=fs)
 #axes[1, 1].set_ylabel(u'isoprene [mol s-1 m-2]', fontsize=fs)
 #axes[1, 1].set(xticklabels=('REF'))
