@@ -127,6 +127,49 @@ ax2.legend(loc='upper right')
 plt.show()
 """
 
+
+def Plot6var(df1, df2, Emis_ol2, df3, title):
+    #print(df2.ISO,df3)
+    Emis_052019_as = df2.ISO[datetime.datetime(2019, 5, 1, 00, 00): datetime.datetime(2019, 5, 31, 00, 00)]
+    hcho_052019 = df3[datetime.datetime(2019, 5, 1, 00, 00): datetime.datetime(2019, 5, 31, 00, 00)].values.flatten()
+    Emis_062019_as = df2[datetime.datetime(2019, 6, 1, 00, 00): datetime.datetime(2019, 6, 30, 00, 00)].values.flatten()
+    hcho_062019 = df3[datetime.datetime(2019, 6, 1, 00, 00): datetime.datetime(2019, 6, 30, 00, 00)].values.flatten()
+    Emis_072019_as = df2[datetime.datetime(2019, 7, 1, 00, 00): datetime.datetime(2019, 7, 31, 00, 00)].values.flatten()
+    hcho_072019 = df3[datetime.datetime(2019, 7, 1, 00, 00): datetime.datetime(2019, 7, 31, 00, 00)].values.flatten()
+    Emis_082019_as = df2[datetime.datetime(2019, 8, 1, 00, 00): datetime.datetime(2019, 8, 31, 00, 00)].values.flatten()
+    hcho_082019 = df3[datetime.datetime(2019, 8, 1, 00, 00): datetime.datetime(2019, 8, 31, 00, 00)].values.flatten()
+    idx_as = np.isfinite(Emis_052019_as) & np.isfinite(hcho_052019)
+    SRho05, Sp05 = (stats.spearmanr(Emis_052019_as[idx_as], hcho_052019[idx_as]))
+    #m5_as, b5_as = np.polyfit(Emis_JJA2019_as[idx_as], hcho_JJA2019[idx_as], 1)
+    #y_est_as = m5_as * Emis_JJA2019_as + b5_as
+    color1= "palegreen"
+    color2= "mediumseagreen"
+    color3= "thistle"
+    color4= "mediumpurple"
+    a = 0
+    fig, axs = plt.subplots(nrows=1, ncols=4, figsize=(8, 3), sharey=True, dpi=100)
+    #fig.suptitle(title, fontsize="small")
+    axs[0].set_title('(a) May 19 \n SRho={:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
+    axs[0].scatter(Emis_052019_as, hcho_052019, color=color1, s=10)#, label="S-M3_assim")
+    axs[1].set_title('(b) Jun 19')# \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
+    axs[1].scatter(Emis_062019_as, hcho_062019, color=color1, s=10)#, label="S-M3_assim")
+    axs[2].set_title('(c) Jul 19')# \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
+    axs[2].scatter(Emis_072019_as, hcho_072019, color=color1, s=10)#, label="S-M3_ol")
+    axs[3].set_title('(d) Aug 19')# \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
+    axs[3].scatter(Emis_082019_as, hcho_082019, color=color1, s=10)#, label="S-M2_ol"
+    #plt.plot(Emis_JJA2019_as, y_est_as, color=color1)
+    # ax0.fill_between(x5, y_est - y_err_AT, y_est + y_err_AT, alpha=0.2)
+    plt.ylabel("HCHO [ppb]", size="small")
+    plt.xlabel("ISOP [mol s-1 m-2]", size="small")
+    #plt.ylim(0, ylimit)
+    #plt.legend()
+    fig.tight_layout()
+    plt.show()
+
+#Plot6var(Emis_ol, Emis_assim, Emis_ol2, hcho_dmax,"daily max", ylimit=8)
+Plot6var(Emis_ol_noontime, Emis_assim_noontime, Emis_ol2_noontime, hcho_d,"noon time mean (9-15)")
+
+exit()
 def Plot6var(df1, df2, Emis_ol2, df3, title):
     #TODO: define drought/non-drought periods
     #Emis_MAM2018 = df1[datetime(2018, 3, 1, 00, 00): datetime(2018, 5, 31, 00, 00)]
