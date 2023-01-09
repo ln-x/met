@@ -154,6 +154,7 @@ wd0619 = wd[datetime.datetime(2019, 6, 1, 00, 00): datetime.datetime(2019, 6, 30
 wd0719 = wd[datetime.datetime(2019, 7, 1, 00, 00): datetime.datetime(2019, 7, 31, 00, 00)]
 
 ws = BOKUMetData_dailysum["WS"]
+ws19 = ws[datetime.datetime(2019, 6, 1, 00, 00): datetime.datetime(2019, 7, 31, 00, 00)]
 ws0619 = ws[datetime.datetime(2019, 6, 1, 00, 00): datetime.datetime(2019, 6, 30, 00, 00)]
 ws0719 = ws[datetime.datetime(2019, 7, 1, 00, 00): datetime.datetime(2019, 7, 31, 00, 00)]
 
@@ -162,12 +163,15 @@ min_size = 10
 max_size = 100
 
 # Calculate the range of the third variable (z)
-z_min = min(ws0619)
-z_max = max(ws0619)
+z_min = min(ws19)
+z_max = max(ws19)
 z_range = z_max - z_min
+print("zmin", z_min, "zmax", z_max, "zrange",z_range)
 
 # Scale the size of the dots according to the range of the third variable
-scaled_WSsizes = [(size - z_min) / z_range * (max_size - min_size) + min_size for size in ws0619]
+scaled_WSsizes = [(size - z_min) / z_range * (max_size - min_size) + min_size for size in ws19]
+print(scaled_WSsizes)
+print(len(scaled_WSsizes[:29]),len(scaled_WSsizes[29:]))
 
 def Plot6var():
     hcho_062019 = hcho_d[datetime.datetime(2019, 6, 1, 00, 00): datetime.datetime(2019, 6, 30, 00, 00)].values.flatten()
@@ -176,15 +180,17 @@ def Plot6var():
     ISO_0719 = Emis_assim_noontime.ISO[datetime.datetime(2019, 7, 1, 00, 00): datetime.datetime(2019, 7, 31, 00, 00)]
     color1= "black"
     a = 0
-    fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(8, 3), sharey=True, dpi=100)
+    fig, axs = plt.subplots(nrows=1, ncols=2, sharey=True, dpi=100) #ERROR: , aspect='equal'
     ax = axs.flatten()
+    #ax[0].set_aspect('equal')
+    #ax[1].set_aspect('equal')
     #ax[0].set_aspect('equal', 'box')
     #ax[1].set_aspect('equal', 'box')
     #ax[0].axis('equal')
     ax[0].set_title('(a) Jun 19')# \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
-    plt1 = ax[0].scatter(hcho_062019, ISO_0619, ws0619*3.6, c=wd0619)  #9-15mean!  color=color1,
+    plt1 = ax[0].scatter(hcho_062019, ISO_0619, scaled_WSsizes[:30], c=wd0619)  #9-15mean!  color=color1,
     ax[1].set_title('(b) Jul 19')# \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
-    plt2 = ax[1].scatter(hcho_072019, ISO_0719, ws0719*3.6, c=wd0719)
+    plt2 = ax[1].scatter(hcho_072019, ISO_0719, scaled_WSsizes[30:], c=wd0719)
     ax[0].set_ylabel("ISO_mod [mol s-1 m-2]", size="small")
     ax[0].set_xlabel("HCHO_obs [ppb] ", size="small")
     ax[1].set_ylabel("ISO_mod [mol s-1 m-2]", size="small")
@@ -192,18 +198,23 @@ def Plot6var():
     fig.tight_layout()
 
     # produce a legend with the unique colors from the scatter
-    legend1 = ax[0].legend(*plt1.legend_elements(), loc="lower left", title="WD [°]")
-    legend1a = ax[1].legend(*plt2.legend_elements(), loc="lower left", title="WD [°]")
+    legend1 = ax[0].legend(*plt1.legend_elements(), loc="upper left", title="WD [°]")
+    legend1a = ax[1].legend(*plt2.legend_elements(), loc="upper left", title="WD [°]")
     ax[0].add_artist(legend1)
     ax[1].add_artist(legend1a)
     # produce a legend with a cross section of sizes from the scatter
+    #plt.legend(["5","10","14"],[5,10,14])
     handles, labels = plt1.legend_elements(prop="sizes", alpha=0.6)
-    legend2 = ax[0].legend(handles, labels, loc="upper right", title="WS [km h-1]")
+    #handles = [1,50,100]
+    labels = ["6","7","8","9","10","11","12","13","14"]
+    print(handles,labels)
+    legend2 = ax[0].legend(handles, labels, loc="upper right", title="WS [m s-1]")
+    labels = ["6","7","8","9","10","11","12","13","14"]
     handles2, labels2= plt2.legend_elements(prop="sizes", alpha=0.6)
-    legend2a = ax[1].legend(handles, labels, loc="upper right", title="WS [km h-1]")
+    legend2a = ax[1].legend(handles, labels, loc="upper right", title="WS [m s-1]")
     for ax in fig.get_axes():
-        ax.set_xlim(0, 4)
-        ax.set_ylim(0, 4E-8)
+        ax.set_xlim(0, 6)
+        ax.set_ylim(0, 6E-8)
     # plt.colorbar(plt1, label="WD [°]")
     plt.show()
 
@@ -214,12 +225,14 @@ def Plot6varHCHO():
     hcho_072019 = hcho_d[datetime.datetime(2019, 7, 1, 00, 00): datetime.datetime(2019, 7, 31, 00, 00)].values.flatten()
     color1= "black"
     a = 0
-    fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(8, 3), sharey=True, dpi=100)
+    fig, axs = plt.subplots(nrows=1, ncols=2, sharey=True, dpi=100)
     ax = axs.flatten()
+    ax[0].set_aspect('equal')
+    ax[1].set_aspect('equal')
     ax[0].set_title('(a) Jun 19')# \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')  #volume mixing ratio = moles/moles * 10^9 -> ppbv
-    plt1 = ax[0].scatter(hcho_062019, MOC_out_jun19.HCHO*10e8, ws0619*3.6, c=wd0619)  #9-15mean!
+    plt1 = ax[0].scatter(hcho_062019, MOC_out_jun19.HCHO*10e8, scaled_WSsizes[:30], c=wd0619)  #9-15mean!
     ax[1].set_title('(b) Jul 19')# \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
-    plt2 = ax[1].scatter(hcho_072019, MOC_out_jul19.HCHO*10e8,  ws0719*3.6, c=wd0719) #s=10
+    plt2 = ax[1].scatter(hcho_072019, MOC_out_jul19.HCHO*10e8,  scaled_WSsizes[30:], c=wd0719) #s=10
     ax[0].set_ylabel("HCHO_mod [ppb] ", size="small")
     ax[0].set_xlabel("HCHO_obs [ppb] ", size="small")
     ax[1].set_ylabel("HCHO_mod [ppb] ", size="small")
@@ -227,20 +240,22 @@ def Plot6varHCHO():
     fig.tight_layout()
     #plt.colorbar(plt1, label="WS [m/s]")
     # produce a legend with the unique colors from the scatter
-    legend1 = ax[0].legend(*plt1.legend_elements(), loc="lower left", title="WD [°]")
-    legend1a = ax[1].legend(*plt2.legend_elements(), loc="lower left", title="WD [°]")
+    legend1 = ax[0].legend(*plt1.legend_elements(), loc="upper left", title="WD [°]")
+    legend1a = ax[1].legend(*plt2.legend_elements(), loc="upper left", title="WD [°]")
     ax[0].add_artist(legend1)
     ax[1].add_artist(legend1a)
     # produce a legend with a cross section of sizes from the scatter
     handles, labels = plt1.legend_elements(prop="sizes", alpha=0.6)
-    legend2 = ax[0].legend(handles, labels, loc="upper right", title="WS [km h-1]")
+    labels = ["6","7","8","9","10","11","12","13","14"]
+    legend2 = ax[0].legend(handles, labels, loc="upper right", title="WS [m s-1]")
     handles2, labels2 = plt2.legend_elements(prop="sizes", alpha=0.6)
-    legend2a = ax[1].legend(handles, labels, loc="upper right", title="WS [km h-1]")
+    labels2 = ["6","7","8","9","10","11","12","13","14"]
+    legend2a = ax[1].legend(handles2, labels2, loc="upper right", title="WS [m s-1]")
     #plt.colorbar(plt1, label="WD [°]")  # , shrink=0.6,
     for ax in fig.get_axes():
         # print(ax)
-        ax.set_xlim(0, 4)
-        ax.set_ylim(0, 4)
+        ax.set_xlim(0, 6)
+        ax.set_ylim(0, 6)
     plt.show()
 Plot6varHCHO()
 
@@ -249,12 +264,14 @@ def Plot6varO3():
     o3_jul19 = o3_1990_2020_da[datetime.datetime(2019, 7, 1, 00, 00): datetime.datetime(2019, 7, 31, 23, 00)]['AT9STEF']
     color1= "violet"
     a = 0
-    fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(8, 3), sharey=True, dpi=100)
+    fig, axs = plt.subplots(nrows=1, ncols=2, sharey=True, dpi=100)
     ax = axs.flatten()
+    ax[0].set_aspect('equal')
+    ax[1].set_aspect('equal')
     ax[0].set_title('(a) Jun 19')
-    plt1 = ax[0].scatter(o3_jun19, MOC_out_jun19.O3*10e8, ws0619*3.6, c=wd0619) #TODO mda8 vs 9-15 mean
+    plt1 = ax[0].scatter(o3_jun19, MOC_out_jun19.O3*10e8, scaled_WSsizes[:30], c=wd0619) #TODO mda8 vs 9-15 mean
     ax[1].set_title('(b) Jul 19')# \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
-    plt2 = ax[1].scatter(o3_jul19, MOC_out_jul19.O3*10e8, ws0719*3.6, c=wd0719) #TODO mda8 vs 9-15 mean
+    plt2 = ax[1].scatter(o3_jul19, MOC_out_jul19.O3*10e8, scaled_WSsizes[30:], c=wd0719) #TODO mda8 vs 9-15 mean
     ax[0].set_ylabel("O3_mod [ppb]", size="small")
     ax[0].set_xlabel("O3_obs [μg/m³]", size="small")
     ax[1].set_ylabel("O3_mod [ppb] ", size="small")
@@ -262,19 +279,21 @@ def Plot6varO3():
     fig.tight_layout()
 
     # produce a legend with the unique colors from the scatter
-    legend1 = ax[0].legend(*plt1.legend_elements(), loc="lower left", title="WD [°]")
-    legend1a = ax[1].legend(*plt2.legend_elements(), loc="lower left", title="WD [°]")
+    legend1 = ax[0].legend(*plt1.legend_elements(), loc="upper left", title="WD [°]")
+    legend1a = ax[1].legend(*plt2.legend_elements(), loc="upper left", title="WD [°]")
     ax[0].add_artist(legend1)
     ax[1].add_artist(legend1a)
     # produce a legend with a cross section of sizes from the scatter
     handles, labels = plt1.legend_elements(prop="sizes", alpha=0.6)
-    legend2 = ax[0].legend(handles, labels, loc="upper right", title="WS [km h-1]")
+    labels = ["6", "7", "8", "9", "10", "11", "12", "13", "14"]
+    legend2 = ax[0].legend(handles, labels, loc="upper right", title="WS [m s-1]")
     handles2, labels2 = plt2.legend_elements(prop="sizes", alpha=0.6)
-    legend2a = ax[1].legend(handles, labels, loc="upper right", title="WS [km h-1]")
+    labels2 = ["6", "7", "8", "9", "10", "11", "12", "13", "14"]
+    legend2a = ax[1].legend(handles2, labels2, loc="upper right", title="WS [m s-1]")
     for ax in fig.get_axes():
     #    print(ax)
-        ax.set_xlim(20, 200)
-        ax.set_ylim(20, 200)
+        ax.set_xlim(20, 250)
+        ax.set_ylim(20, 250)
     #plt.colorbar(pl1, label="WS [m/s]"
     plt.show()
 
