@@ -232,8 +232,8 @@ print("Aug19:", LAI_df[datetime(2019, 8, 1, 00, 00):JJA19_e].mean())
 '''
 Plotting
 '''
-start = datetime(2018, 1, 1)
-end = datetime(2020, 12, 31)
+start = datetime(2019, 6, 1)
+end = datetime(2019, 8, 31)
 
 hcho_sigma = hcho_d.std()
 vpd_sigma = vpd_dmax.std()
@@ -330,7 +330,7 @@ ax2 = ax1.twinx()
 ax1.axhline(0, color='grey',linestyle="dashed",linewidth="0.3")
 ax2.plot(vpd_dmax_w[start:end], linewidth="1", color='green')#, label="vpd dmax")
 ax2.fill_between(vpd_dmax_w[start:end].index, vpd_dmax_w[start:end].values+vpd_sigma,vpd_dmax_w[start:end].values-vpd_sigma, facecolor='black', alpha=0.1)
-ax1.plot(hcho_w[start:end], linewidth="1", color='black', linestyle="solid") #274 = Julian Day 30.Sept2020 #label="hcho D OBS d",
+ax1.plot(hcho_dmax[start:end], linewidth="1", color='black', linestyle="solid") #274 = Julian Day 30.Sept2020 #label="hcho D OBS d",
 ax1.fill_between(hcho_w[start:end].index, hcho_w[start:end].values+hcho_sigma,hcho_w[start:end].values-hcho_sigma, facecolor='black', alpha=0.1)
 ax1.set_xlim(start,end)
 ax2.set_ylabel("VDP[kPa]", size="medium", color="green")
@@ -345,15 +345,15 @@ ax1 = fig.add_subplot(515)
 ax1.set_title('(e)', loc='right', size='medium')#, color='green')
 ax1 = plt.gca()
 ax2 = ax1.twinx()
-ax1.plot(BOKUMetData_weekly["WS"][start:end], linewidth="1", color='blue') #label="GR,sum,w"
+ax1.plot(BOKUMetData_dailysum["WS"][start:end], linewidth="1", color='blue') #label="GR,sum,w"
 ax1.fill_between(BOKUMetData_weekly["WS"][start:end].index, BOKUMetData_weekly["WS"][start:end]+ws_sigma,BOKUMetData_weekly["WS"][start:end]- ws_sigma, facecolor='blue', alpha=0.1)
-#ax2.plot(BOKUMetData_weekly["WD"][start:end], linewidth="1", color='grey') #label="GR,sum,w"
-ax2.plot(pbl_w_km[start:end], linewidth="1", color='grey', linestyle="solid", label="PBL_MAM18")
-ax2.fill_between(pbl_w_km[start:end].index, pbl_w_km[start:end].values.flatten()+pbl_sigma,pbl_w_km[start:end].values.flatten()-pbl_sigma, facecolor='grey', alpha=0.1)
+ax2.plot(BOKUMetData_dailysum["WD"][start:end], linewidth="1", color='grey') #label="GR,sum,w"
+##ax2.plot(pbl_w_km[start:end], linewidth="1", color='grey', linestyle="solid", label="PBL_MAM18")
+##ax2.fill_between(pbl_w_km[start:end].index, pbl_w_km[start:end].values.flatten()+pbl_sigma,pbl_w_km[start:end].values.flatten()-pbl_sigma, facecolor='grey', alpha=0.1)
 ax1.set_xlim(start,end)
 #ax2.axvline(x=datetime(2020,5,10))
-#ax1.set_ylabel("WS[m s-1]", size="medium", color="blue")
-ax2.set_ylabel("PBL[km]", size="medium", color="grey")
+ax1.set_ylabel("WS[m s-1]", size="medium", color="blue")
+##ax2.set_ylabel("PBL[km]", size="medium", color="grey")
 #ax1.legend(loc='upper left')
 #ax1.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
 ax1.grid()
