@@ -23,7 +23,7 @@ foldername_as = "/data1/models/nilu/SEEDS/MEGAN/2019/ol/ISOP/"
 fname = "/data1/models/nilu/SEEDS/MEGAN/2019/ol/ISOP/MGNOUT_CAMS_BIG_ISOP_20190601.nc"
 dataset = netcdf_dataset(fname)
 #find good region
-#TODO mark Vienna
+#mark Vienna
 #make daily average
 #make monthly average
 #TODO make subplot graph
@@ -32,7 +32,8 @@ dataset = netcdf_dataset(fname)
 
 lats = dataset.variables['lat'][182:222]#[152:252]#
 lons = dataset.variables['lon'][402:442]#[372:472]
-
+print(dataset.variables['lat'][196],dataset.variables['lon'][427]) #  202/422 Vienna 198/425 Eisenstadt #200/425 ~20km SE Vienna Schwadorf
+exit()
 #ISO = dataset.variables['Emiss'][8:14,152:252,372:472,0]#[8:14, 182:222, 402:442, 0] #time(0-23), lat, lon, layer0 = ISO
 #ISO = ISO.mean(axis=0)
 #ax = plt.axes(projection=ccrs.PlateCarree())

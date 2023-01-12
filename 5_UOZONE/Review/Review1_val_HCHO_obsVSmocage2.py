@@ -83,7 +83,7 @@ def ReadinMocage(path, starttime):
     time = infile.variables['time'][:]
     timeaxis = pd.date_range(starttime, periods=len(time), freq="H")
     #print(len(timeaxis), len(ISO_moc))
-    MOC_out = pd.DataFrame({'datetime': timeaxis, 'ISO': ISO_moc, 'HCHO':HCHO_moc,'O3': O3_moc})
+    MOC_out = pd.DataFrame({'datetime': timeaxis, 'ISO': ISO_moc, 'HCHO': HCHO_moc,'O3': O3_moc})
     MOC_out['datetime'] = pd.to_datetime(MOC_out['datetime'])
     MOC_out = MOC_out.set_index(['datetime'])
     return MOC_out

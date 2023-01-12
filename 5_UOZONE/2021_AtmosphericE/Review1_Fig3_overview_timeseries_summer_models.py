@@ -38,15 +38,13 @@ foldername_as20 = "/data1/models/nilu/SEEDS/MEGAN/2020/assim_LAI/ISOP/"
 # we get an annual total of 5.15 Tg yr-1 (see attached) compared to approx. 4.95 Tg yr-1 from CAMS-GLOBAL-BIO v3.1 and
 # 4.65 Tg yr-1 from CAMS-GLOBAL-BIO v3.0.
 
-def EmisSEEDS(foldername):
+def EmisSEEDS(foldername, index_lat, index_lon):
     files = os.listdir(foldername)
     files = sorted(files)
     dateaxis=[]
     Emis_max=[]
     Emis_noontime=[]
     Emis_noon=[]
-    index_lat = 202  #LAT 48.25°N
-    index_lon = 422 #LON 16.25°E (city rim to Wienerwald) or 421: LON 16.15°E (middle Wienerwald)
     for i in range(len(files)):
         day = str(files[i][-5:-3])  # splitlistcomp[3:4]
         month = str(files[i][-7:-5])  # splitlistcomp[2:3]
@@ -71,12 +69,30 @@ def EmisSEEDS(foldername):
     Emis_noontime = Emis_noontime.set_index(['datetime'])
     return Emis_max, Emis_noontime
 
+index_lat_city = 201 #202  #LAT 48.25°N     199/426: Leithagebirge! 202/422 city rim to Wienerwald!
+index_lon_city = 424 #422 #LON 16.25°E (city rim to Wienerwald) or 421: LON 16.15°E (middle Wienerwald)
+index_lat_leitha = 199
+index_lon_leitha = 426
+index_lat_ww = 202
+index_lon_ww = 422
+index_lat_lob = 201
+index_lon_lob = 425
+index_lat_LNeus = 196
+index_lon_LNeus = 427
+
 #Emis_ol18, Emis_ol_noontime18 = EmisSEEDS(foldername_ol18)
 #Emis_assim18, Emis_assim_noontime18 = EmisSEEDS(foldername_as18)
-Emis_ol, Emis_ol_noontime = EmisSEEDS(foldername_ol19)
-Emis_assim, Emis_assim_noontime = EmisSEEDS(foldername_as19)
-Emis_ol20, Emis_ol_noontime20 = EmisSEEDS(foldername_ol20)
-Emis_assim20, Emis_assim_noontime20 = EmisSEEDS(foldername_as20)
+Emis_ol, Emis_ol_noontime = EmisSEEDS(foldername_ol19,index_lat_ww, index_lon_ww)
+Emis_assim, Emis_assim_noontime = EmisSEEDS(foldername_as19,index_lat_ww, index_lon_ww)
+Emis_assim_city, Emis_assim_noontime_city = EmisSEEDS(foldername_as19,index_lat_city, index_lon_city)
+Emis_assim_lob, Emis_assim_noontime_lob = EmisSEEDS(foldername_as19,index_lat_lob, index_lon_lob)
+Emis_assim_leitha, Emis_assim_noontime_leitha = EmisSEEDS(foldername_as19,index_lat_leitha, index_lon_leitha)
+Emis_assim_LNeus, Emis_assim_noontime_LNeus = EmisSEEDS(foldername_as19,index_lat_LNeus, index_lon_LNeus)
+Emis_ol20, Emis_ol_noontime20 = EmisSEEDS(foldername_ol20,index_lat_ww, index_lon_ww)
+Emis_assim20, Emis_assim_noontime20 = EmisSEEDS(foldername_as20,index_lat_ww, index_lon_ww)
+Emis_assim20_city, Emis_assim_noontime20_city = EmisSEEDS(foldername_as20,index_lat_city, index_lon_city)
+
+
 
 "read in VINDOBONA"
 foldername_D = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_DQ"
@@ -141,7 +157,7 @@ ISO19_JJA = Emis_assim_noontime[JJA19_s:JJA19_e].values.flatten()
 
 filtered_hcho20_JJA = hcho_d[JJA20_s:JJA20_e].values[~np.isnan(hcho_d[JJA20_s:JJA20_e].values)]
 filtered_hcho19_JJA = hcho_d[JJA19_s:JJA19_e].values[~np.isnan(hcho_d[JJA19_s:JJA19_e].values)]
-
+"""
 fig, axes = plt.subplots(nrows=2, ncols=2, sharey='row') #sharex='col', figsize=(6, 6))
 #fig.set_size_inches(3.39,2.54)
 
@@ -159,8 +175,7 @@ axes[1, 0].set_ylabel(u'isoprene [mol s-1 m-2]', fontsize=fs)
 axes[1, 1].boxplot(ISO20_JJA)
 axes[1, 1].set_title('MOD_JJA20_ref', fontsize=fs)
 plt.show()
-exit()
-
+"""
 
 fig = plt.figure(figsize=(8, 3), dpi=100)
 ax1 = fig.add_subplot(211)
@@ -177,8 +192,8 @@ ax1.grid()
 
 ax2 = fig.add_subplot(212)
 ax2.set_title('(b) MOD', loc='center', size='medium')#, color='green')
-ax2.plot(Emis_assim_noontime[start:end], linewidth="1", color='orange', label="ISO_19dry") #label="GR,sum,w"
-ax2.plot(Emis_assim_noontime[start:end].index,Emis_assim_noontime20[datetime(2020,6,1): datetime(2020, 9, 1)].values, linewidth="1", color='orange', linestyle=":", label="ISO_20ref")
+ax2.plot(Emis_assim_noontime_city[start:end], linewidth="1", color='orange', label="ISO_19dry") #label="GR,sum,w"
+ax2.plot(Emis_assim_noontime_city[start:end].index,Emis_assim_noontime20_city[datetime(2020,6,1): datetime(2020, 9, 1)].values, linewidth="1", color='orange', linestyle=":", label="ISO_20ref")
 #ax1.set_ylim(0,2E-8)
 ax2.set_ylabel("[mol s-1 m-2]", size="medium")
 ax2.legend(loc='upper left')
@@ -187,8 +202,6 @@ ax2.grid()
 #ax2.set_xticks([])
 #ax2.set_yticks([])
 plt.show()
-exit()
-
 
 fig = plt.figure()
 plt.suptitle("JJA19 vs. JJA20")
@@ -225,6 +238,7 @@ ax1.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
 ax1.grid()
 plt.show()
 
+#exit()
 print(Emis_assim_noontime20[start:end])
 
 fig = plt.figure(figsize=(8, 3), dpi=100)
@@ -232,10 +246,14 @@ plt.suptitle("JJA19 vs. JJA20")
 ax1 = fig.add_subplot(111)
 ax1 = plt.gca()
 ax2 = ax1.twinx()
-ax2.plot(Emis_assim_noontime[start:end], linewidth="1", color='orange', label="ISO_dry_mod")
-ax2.plot(Emis_assim_noontime[start:end].index,Emis_assim_noontime20[datetime(2020, 6, 1):datetime(2020, 9, 1)].values, linewidth="1", color='orange', linestyle=":", label="ISO_ref_mod")
+ax2.plot(Emis_assim_noontime[start:end], linewidth="1", color='blue', label="ISO_WW dry_mod")
+ax2.plot(Emis_assim_noontime_city[start:end], linewidth="1", color='red', label="ISO_CITY dry_mod")
+ax2.plot(Emis_assim_noontime_lob[start:end], linewidth="1", color='turquoise', label="ISO_LOB dry_mod")
+ax2.plot(Emis_assim_noontime_leitha[start:end], linewidth="1", color='green', label="ISO_LEITHA dry_mod")
+ax2.plot(Emis_assim_noontime_LNeus[start:end], linewidth="1", color='violet', label="ISO_LakeNeusiedl dry_mod")
+#ax2.plot(Emis_assim_noontime[start:end].index,Emis_assim_noontime20[datetime(2020, 6, 1):datetime(2020, 9, 1)].values, linewidth="1", color='orange', linestyle=":", label="ISO_ref_mod")
 ax1.plot(hcho_d[start:end], linewidth="1", color='black', label="HCHO_dry_obs")
-ax1.plot(hcho_d[start:end].index,hcho_d[datetime(2020, 6, 1):datetime(2020, 9, 1)].values, linewidth="1", color='black', linestyle=":", label="HCHO_ref_obs")
+#ax1.plot(hcho_d[start:end].index,hcho_d[datetime(2020, 6, 1):datetime(2020, 9, 1)].values, linewidth="1", color='black', linestyle=":", label="HCHO_ref_obs")
 ax1.set_xlim(start,end)
 ax2.set_ylim(0,4E-8)
 ax2.set_ylabel("[mol s-1 m-2]", size="medium")
