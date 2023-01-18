@@ -16,7 +16,6 @@ import met.library.BOKUMet_Data
 import matplotlib.dates as mdates
 
 """READ IN """
-"""
 foldername_ol = "/data1/models/nilu/SEEDS/MEGAN/2019/ol/ISOP/"  #MGNOUT_CAMS_BIG_ISOP_20190102.nc
 foldername_as = "/data1/models/nilu/SEEDS/MEGAN/2019/assim_LAI/ISOP/"
 foldername_as_moc = "/data1/models/mocage/assim/"  #hmmacc01+Jun-2019.nc, hmmacc01+Jul-2019.nc
@@ -64,7 +63,8 @@ MOC_HCHO_WWw = pd.concat([MOC_out_jun19_h_WWw, MOC_out_jul19_h_WWw, MOC_out_aug1
 print(MOC_out_aug19_h_WWw.HCHO)
 MOC_HCHO_WWw_d = MOC_HCHO_WWw.resample("D").mean()
 print(MOC_HCHO_LOB_d.HCHO, MOC_HCHO_WWw_d.HCHO)
-"""
+exit()
+
 "read in VINDOBONA"
 foldername_D = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_DQ"
 hcho_f, hcho_d, hcho_dmax, hcho_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_D,"D",begin = datetime.datetime(2017, 5, 1, 0, 0, 0))

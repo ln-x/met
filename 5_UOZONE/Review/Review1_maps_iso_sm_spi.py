@@ -28,12 +28,18 @@ dataset = netcdf_dataset(fname)
 #make monthly average
 #TODO make subplot graph
 #fix colorbar
+#TODO make hourly plots of peak days
+
+#First smaller version:
+#lats = dataset.variables['lat'][182:222]#[152:252]#
+#lons = dataset.variables['lon'][402:442]#[372:472]
+
+lats = dataset.variables['lat'][192:212]#[152:252]#
+lons = dataset.variables['lon'][413:433]#[372:472]
 
 
-lats = dataset.variables['lat'][182:222]#[152:252]#
-lons = dataset.variables['lon'][402:442]#[372:472]
-print(dataset.variables['lat'][196],dataset.variables['lon'][427]) #  202/422 Vienna 198/425 Eisenstadt #200/425 ~20km SE Vienna Schwadorf
-exit()
+#print(dataset.variables['lat'][196],dataset.variables['lon'][427]) #  202/422 Vienna 198/425 Eisenstadt #200/425 ~20km SE Vienna Schwadorf
+
 #ISO = dataset.variables['Emiss'][8:14,152:252,372:472,0]#[8:14, 182:222, 402:442, 0] #time(0-23), lat, lon, layer0 = ISO
 #ISO = ISO.mean(axis=0)
 #ax = plt.axes(projection=ccrs.PlateCarree())
@@ -61,7 +67,7 @@ def EmisSEEDS(foldername):
         dateaxis.append(date)
         path = foldername+files[i]
         infile = netcdf_dataset(path)  #path.decode('UTF-8')  #OSError: [Errno -51] NetCDF: Unknown file format: b'/windata/DATA/models/nilu/MEGAN3_SURFEX_SEEDS/MEGAN/ol/MGNOUT_CAMS_BIG_20190803.nc'
-        Emis = infile.variables['Emiss'][8:14, 182:222, 402:442, 0]# ,152:252,372:472,0]# ]  #TODO: only first emission layer (ISO) read in
+        Emis = infile.variables['Emiss'][8:14, 192:212, 413:433, 0]#182:222, 402:442, # ,152:252,372:472,0]# ]  #TODO: only first emission layer (ISO) read in
         Emis_noon = Emis.mean(axis=0)
         Emis_noontime.append(Emis_noon)
     Emis_noontime = pd.DataFrame({'datetime': dateaxis, 'ISO': Emis_noontime})
@@ -84,8 +90,10 @@ plt.contourf(lons, lats, Emis06, 60,
              transform=ccrs.PlateCarree())
 plt.pcolor(lons,lats, Emis06, vmin=0, vmax=1.7E-8) #cmap=cm,
 plt.colorbar(label="ISO [mol s-1 m-2]")
-ax.set_xticks([15, 16, 17, 18], crs=ccrs.PlateCarree())
-ax.set_yticks([47, 48, 49, 50], crs=ccrs.PlateCarree())
+#first version: ax.set_xticks([15, 16, 17, 18], crs=ccrs.PlateCarree())
+#first version: ax.set_yticks([47, 48, 49, 50], crs=ccrs.PlateCarree())
+ax.set_xticks([15.5, 16, 16.5, 17], crs=ccrs.PlateCarree())
+ax.set_yticks([47.5, 48, 48.5, 49], crs=ccrs.PlateCarree())
 shape_feature = ShapelyFeature(Reader(filename).geometries(), crs=ccrs.PlateCarree(),edgecolor="black",facecolor=(0,0,0,0))
 ax.add_feature(shape_feature)
 ax.add_feature(cf.BORDERS)
@@ -97,8 +105,8 @@ plt.contourf(lons, lats, Emis07, 60,
              transform=ccrs.PlateCarree())
 plt.pcolor(lons,lats, Emis07, vmin=0, vmax=1.7E-8) #cmap=cm,
 plt.colorbar(label="ISO [mol s-1 m-2]")
-ax.set_xticks([15, 16, 17, 18], crs=ccrs.PlateCarree())
-ax.set_yticks([47, 48, 49, 50], crs=ccrs.PlateCarree())
+ax.set_xticks([15.5, 16, 16.5, 17], crs=ccrs.PlateCarree())
+ax.set_yticks([47.5, 48, 48.5, 49], crs=ccrs.PlateCarree())
 shape_feature = ShapelyFeature(Reader(filename).geometries(), crs=ccrs.PlateCarree(),edgecolor="black",facecolor=(0,0,0,0))
 ax.add_feature(shape_feature)
 ax.add_feature(cf.BORDERS)
@@ -110,14 +118,14 @@ plt.contourf(lons, lats, Emis08, 60,
              transform=ccrs.PlateCarree())
 plt.pcolor(lons,lats, Emis08, vmin=0, vmax=1.7E-8)
 plt.colorbar(label="ISO [mol s-1 m-2]")
-ax.set_xticks([15, 16, 17, 18], crs=ccrs.PlateCarree())
-ax.set_yticks([47, 48, 49, 50], crs=ccrs.PlateCarree())
+ax.set_xticks([15.5, 16, 16.5, 17], crs=ccrs.PlateCarree())
+ax.set_yticks([47.5, 48, 48.5, 49], crs=ccrs.PlateCarree())
 shape_feature = ShapelyFeature(Reader(filename).geometries(), crs=ccrs.PlateCarree(),edgecolor="black",facecolor=(0,0,0,0))
 ax.add_feature(shape_feature)
 ax.add_feature(cf.BORDERS)
 plt.show()
 
-exit()
+
 
 def EmisSEEDS(foldername):
     files = os.listdir(foldername)
@@ -132,7 +140,7 @@ def EmisSEEDS(foldername):
         dateaxis.append(date)
         path = foldername+files[i]
         infile = netcdf_dataset(path)
-        SM_h = infile.variables['WG5_ISBA'][:,182:222,402:442]# 182:222, 402:442, 0]
+        SM_h = infile.variables['WG5_ISBA'][:,192:212,413:433]# 182:222, 402:442, 0]
         SM_d = SM_h.mean(axis=0)
         SM.append(SM_d)
     SM = pd.DataFrame({'datetime': dateaxis, 'SM': SM})
@@ -147,8 +155,8 @@ def EmisSEEDS(foldername):
     SM08 = SM_Aug.SM.values[0]
     return SM, SM06, SM07, SM08
 
-lats = dataset.variables['lat'][182:222]#[152:252]
-lons = dataset.variables['lon'][402:442]#[372:472]
+#lats = dataset.variables['lat'][182:222]#[152:252]
+#lons = dataset.variables['lon'][402:442]#[372:472]
 foldername_sm = "/data1/models/nilu/SEEDS/SM_rootlevel_SURFEX/"
 SM, SM06, SM07, SM08 = EmisSEEDS(foldername_sm)
 
@@ -158,8 +166,8 @@ plt.contourf(lons, lats, SM06, 60,
              transform=ccrs.PlateCarree())
 plt.pcolor(lons,lats, SM06, vmin=0.1, vmax=0.5, cmap="gist_rainbow") #cmap=cm,
 plt.colorbar(label="SM [m3 m-3]")
-ax.set_xticks([15, 16, 17, 18], crs=ccrs.PlateCarree())
-ax.set_yticks([47, 48, 49, 50], crs=ccrs.PlateCarree())
+ax.set_xticks([15.5, 16, 16.5, 17], crs=ccrs.PlateCarree())
+ax.set_yticks([47.5, 48, 48.5, 49], crs=ccrs.PlateCarree())
 
 # Add city borders
 shape_feature = ShapelyFeature(Reader(filename).geometries(), crs=ccrs.PlateCarree(), edgecolor="black",facecolor=(0,0,0,0))#,
@@ -168,8 +176,8 @@ shape_feature = ShapelyFeature(Reader(filename).geometries(), crs=ccrs.PlateCarr
 ax.add_feature(shape_feature)
 ax.add_feature(cf.BORDERS)
 #ax.plot(lons[20], lats[20], marker='x', markersize=9, color='black')
-ax.text(lons[20] - 3, lats[20] - 12, 'Vienna',
-         horizontalalignment='right')#,
+#ax.text(lons[20] - 3, lats[20] - 12, 'Vienna',
+#         horizontalalignment='right')#,
          #transform=ccrs.Geodetic())
 #index_lat = 202  # CAMS European grid
 #index_lon = 422  # CAMS European grid
@@ -182,8 +190,8 @@ plt.contourf(lons, lats, SM07, 60,
              transform=ccrs.PlateCarree())
 plt.pcolor(lons,lats, SM07, vmin=0.1, vmax=0.5, cmap="gist_rainbow")
 plt.colorbar(label="SM [m3 m-3]")
-ax.set_xticks([15, 16, 17, 18], crs=ccrs.PlateCarree())
-ax.set_yticks([47, 48, 49, 50], crs=ccrs.PlateCarree())
+ax.set_xticks([15.5, 16, 16.5, 17], crs=ccrs.PlateCarree())
+ax.set_yticks([47.5, 48, 48.5, 49], crs=ccrs.PlateCarree())
 shape_feature = ShapelyFeature(Reader(filename).geometries(), crs=ccrs.PlateCarree(),edgecolor="black",facecolor=(0,0,0,0))
 ax.add_feature(shape_feature)
 ax.add_feature(cf.BORDERS)
@@ -195,8 +203,8 @@ plt.contourf(lons, lats, SM08, 60,
              transform=ccrs.PlateCarree())
 plt.pcolor(lons,lats, SM08, vmin=0.1, vmax=0.5, cmap="gist_rainbow")
 plt.colorbar(label="SM [m3 m-3]")
-ax.set_xticks([15, 16, 17, 18], crs=ccrs.PlateCarree())
-ax.set_yticks([47, 48, 49, 50], crs=ccrs.PlateCarree())
+ax.set_xticks([15.5, 16, 16.5, 17], crs=ccrs.PlateCarree())
+ax.set_yticks([47.5, 48, 48.5, 49], crs=ccrs.PlateCarree())
 shape_feature = ShapelyFeature(Reader(filename).geometries(), crs=ccrs.PlateCarree(),edgecolor="black",facecolor=(0,0,0,0))
 ax.add_feature(shape_feature)
 ax.add_feature(cf.BORDERS)
