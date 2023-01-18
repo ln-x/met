@@ -46,7 +46,7 @@ def loadfile(foldername, filename, hcho_date):
     hcho_dft['datetime'] = pd.to_datetime(hcho_dft['datetime'])#, unit='D')
     #print("to_datetime", hcho_dft['datetime'])
     hcho_dft = hcho_dft.set_index(['datetime'])
-    hcho_dft = hcho_dft.loc[(hcho_dft.index.hour >= 9) & (hcho_dft.index.hour <= 15)] #TODO keep filter?
+    hcho_dft = hcho_dft.loc[(hcho_dft.index.hour >= 8) & (hcho_dft.index.hour <= 14)] #TODO keep filter?
     return(hcho_dft)
    # exit()
 
@@ -121,9 +121,9 @@ def loadfileALL(foldername,axis,begin):
     #print(hOPL_JFM)
     #print(hcho_f.median())
     #print(hcho_f.describe())
-    return(hcho_d['hcho'], hcho_dmax['hcho'],hcho_m['hcho'])
+    return(hcho_f, hcho_d['hcho'], hcho_dmax['hcho'],hcho_m['hcho'])
 
 if __name__ == '__main__':
     foldername = "/windata/Google Drive/DATA/remote/ground/maxdoas/MAXDOAS2020/DQ/"
-    hcho_d, hcho_dmax, hcho_m = loadfileALL(foldername)
+    hcho_f, hcho_d, hcho_dmax, hcho_m = loadfileALL(foldername)
 

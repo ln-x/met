@@ -79,6 +79,10 @@ index_lat_lob = 201
 index_lon_lob = 425
 index_lat_LNeus = 196
 index_lon_LNeus = 427
+index_lat_Pinus = 200
+index_lon_Pinus = 422
+index_lat_WW2 = 201
+index_lon_WW2 = 420
 
 #Emis_ol18, Emis_ol_noontime18 = EmisSEEDS(foldername_ol18)
 #Emis_assim18, Emis_assim_noontime18 = EmisSEEDS(foldername_as18)
@@ -88,15 +92,16 @@ Emis_assim_city, Emis_assim_noontime_city = EmisSEEDS(foldername_as19,index_lat_
 Emis_assim_lob, Emis_assim_noontime_lob = EmisSEEDS(foldername_as19,index_lat_lob, index_lon_lob)
 Emis_assim_leitha, Emis_assim_noontime_leitha = EmisSEEDS(foldername_as19,index_lat_leitha, index_lon_leitha)
 Emis_assim_LNeus, Emis_assim_noontime_LNeus = EmisSEEDS(foldername_as19,index_lat_LNeus, index_lon_LNeus)
+Emis_assim_pinus, Emis_assim_noontime_pinus = EmisSEEDS(foldername_as19,index_lat_Pinus, index_lon_Pinus)
+Emis_assim_WWw, Emis_assim_noontime_WWw = EmisSEEDS(foldername_as19,index_lat_WW2, index_lon_WW2)
+
 Emis_ol20, Emis_ol_noontime20 = EmisSEEDS(foldername_ol20,index_lat_ww, index_lon_ww)
 Emis_assim20, Emis_assim_noontime20 = EmisSEEDS(foldername_as20,index_lat_ww, index_lon_ww)
 Emis_assim20_city, Emis_assim_noontime20_city = EmisSEEDS(foldername_as20,index_lat_city, index_lon_city)
 
-
-
 "read in VINDOBONA"
 foldername_D = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_DQ"
-hcho_d, hcho_dmax, hcho_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_D,"D", begin= datetime(2017, 5, 1, 0, 0, 0))
+hcho_d, hcho_dmax, hcho_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_D,"D", begin=datetime(2017, 5, 1, 0, 0, 0))
 hcho_w = hcho_dmax.resample("W").mean()
 
 '''READ IN BOKU Metdata'''
@@ -152,6 +157,11 @@ JJA20_s = datetime(2020, 6, 1, 00, 00)
 JJA20_e = datetime(2020, 8, 31, 00, 00)
 fs = 10  # fontsize
 
+#pd.set_option('display.max_rows', None)
+#print(hcho_d[start:end])
+print(Emis_assim_noontime_pinus[start:end],  Emis_assim_noontime_WWw[start:end])
+
+
 ISO20_JJA = Emis_assim_noontime20[JJA20_s:JJA20_e].values.flatten()
 ISO19_JJA = Emis_assim_noontime[JJA19_s:JJA19_e].values.flatten()
 
@@ -175,7 +185,7 @@ axes[1, 0].set_ylabel(u'isoprene [mol s-1 m-2]', fontsize=fs)
 axes[1, 1].boxplot(ISO20_JJA)
 axes[1, 1].set_title('MOD_JJA20_ref', fontsize=fs)
 plt.show()
-"""
+
 
 fig = plt.figure(figsize=(8, 3), dpi=100)
 ax1 = fig.add_subplot(211)
@@ -237,30 +247,34 @@ ax2.legend(loc='lower left')
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
 ax1.grid()
 plt.show()
-
+"""
 #exit()
 print(Emis_assim_noontime20[start:end])
 
 fig = plt.figure(figsize=(8, 3), dpi=100)
-plt.suptitle("JJA19 vs. JJA20")
+#plt.suptitle("JJA19 vs. JJA20")
 ax1 = fig.add_subplot(111)
 ax1 = plt.gca()
 ax2 = ax1.twinx()
-ax2.plot(Emis_assim_noontime[start:end], linewidth="1", color='blue', label="ISO_WW dry_mod")
-ax2.plot(Emis_assim_noontime_city[start:end], linewidth="1", color='red', label="ISO_CITY dry_mod")
-ax2.plot(Emis_assim_noontime_lob[start:end], linewidth="1", color='turquoise', label="ISO_LOB dry_mod")
-ax2.plot(Emis_assim_noontime_leitha[start:end], linewidth="1", color='green', label="ISO_LEITHA dry_mod")
-ax2.plot(Emis_assim_noontime_LNeus[start:end], linewidth="1", color='violet', label="ISO_LakeNeusiedl dry_mod")
+ax2.plot(Emis_assim_noontime[start:end], linewidth="1", color='blue', label="ISO_WW")
+ax2.plot(Emis_assim_noontime_city[start:end], linewidth="1", color='red', label="ISO_CITY")
+ax2.plot(Emis_assim_noontime_pinus[start:end], linewidth="1", color='turquoise', label="ISO_Pinus forest sw")
+ax2.plot(Emis_assim_noontime_WWw[start:end], linewidth="1", color='green', label="ISO_WW further west")
+#ax2.plot(Emis_assim_noontime_lob[start:end], linewidth="1", color='turquoise', label="ISO_LOB dry_mod")
+#ax2.plot(Emis_assim_noontime_leitha[start:end], linewidth="1", color='green', label="ISO_LEITHA dry_mod")
+#ax2.plot(Emis_assim_noontime_LNeus[start:end], linewidth="1", color='violet', label="ISO_LakeNeusiedl dry_mod")
 #ax2.plot(Emis_assim_noontime[start:end].index,Emis_assim_noontime20[datetime(2020, 6, 1):datetime(2020, 9, 1)].values, linewidth="1", color='orange', linestyle=":", label="ISO_ref_mod")
 ax1.plot(hcho_d[start:end], linewidth="1", color='black', label="HCHO_dry_obs")
 #ax1.plot(hcho_d[start:end].index,hcho_d[datetime(2020, 6, 1):datetime(2020, 9, 1)].values, linewidth="1", color='black', linestyle=":", label="HCHO_ref_obs")
 ax1.set_xlim(start,end)
-ax2.set_ylim(0,4E-8)
-ax2.set_ylabel("[mol s-1 m-2]", size="medium")
-ax1.set_ylabel("[ppb]", size="medium")
+#ax1.set_ylim(0,6)
+#ax2.set_ylim(0,4.5E-8)
+ax2.set_ylabel("isoprene [mol s-1 m-2]", size="medium")
+ax1.set_ylabel("HCHO [ppb]", size="medium")
 ax1.legend(loc='upper left')
 ax2.legend(loc='upper right')
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
+ax1.xaxis.set_minor_formatter(mdates.DateFormatter('%m-%d'))
 ax1.grid()
-ax1.set_xticks([])
+#ax1.set_xticks([])
 plt.show()
