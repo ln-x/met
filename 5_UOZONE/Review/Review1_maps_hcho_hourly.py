@@ -18,13 +18,31 @@ filename = r'/windata/DATA/DATAGEO/4_Vienna/CityBorderVienna.shp'
 filename_as_moc_jun = "/data1/models/mocage/assim/hmmacc01+Jun-2019.nc"
 filename_as_moc_jul = "/data1/models/mocage/assim/hmmacc01+Jul-2019.nc"
 filename_as_moc_aug = "/data1/models/mocage/assim/hmmacc01+Aug-2019.nc"
+foldername_wind = "/data2/meteo/summer_2019/xnilu_wrk/projects/FLEXPART/flex_wrk/ECMWF_DATA/PAUL_data/"
+filename_wind = foldername_wind+"Europe_SFC_20190725.nc" #TODO change date
 dataset = netcdf_dataset(filename_as_moc_jun)
-#TODO title=date
-#TODO fix color scale, don't overwrite
 
 lat1,lat2,lon1,lon2 = 192,212,413,433
 lats = dataset.variables['lat'][lat1:lat2]
 lons = dataset.variables['lon'][lon1:lon2]
+timeaxis, UWind_ac, VWind_ac = [],[],[]
+
+def WindSEEDS(filename,lat1,lat2,lon1,lon2):
+    infile = netcdf_dataset(filename)
+    UWind = infile.variables['U10m'][:,lat1:lat2,lon1:lon2]
+    VWind = infile.variables['V10m'][:,lat1:lat2, lon1:lon2]
+    #starttime = datetime.datetime(2019,7,20,0,0)
+    #timeaxis.append(starttime)
+    #for i in range(23):
+    #    timeaxis.append(starttime + datetime.timedelta(hours=1))
+    #print(timeaxis,UWind,VWind)
+    #DFWind = pd.DataFrame({'datetime': timeaxis, 'U10': UWind, 'V10': VWind})
+    #DFWind['datetime'] = pd.to_datetime(DFWind['datetime'])
+    #DFWind = DFWind.set_index(['datetime'])
+    return UWind,VWind#, DFWind#, timestep
+
+#UWind,VWind = WindSEEDS(filename_wind,lat1,lat2,lon1,lon2)
+#print(UWind[1])
 
 def ReadinMocage(path, starttime, lat1, lat2, lon1, lon2):
     infile = netcdf_dataset(path)
@@ -39,31 +57,41 @@ def ReadinMocage(path, starttime, lat1, lat2, lon1, lon2):
     #MOC_out = MOC_out.set_index(['datetime'])
     return HCHO_moc, timestep
 
-date = datetime.datetime(year=int(2019), month=int(7), day=int(1), hour=int(0))
+date = datetime.datetime(year=int(2019), month=int(7), day=int(25), hour=int(0)) #TODO change date
 for i in range(24):
     #print(date)
+    wind_i = i
     #i = i+480 #setstart for 20.July (+20 days*24h)
-    #i = i+600 #setstart for 25.July (+25 days*24h)
+    i = i+600 #setstart for 25.July (+25 days*24h)
     #i = i+624 #setstart for 25.July (+26 days*24h)
     HCHO_moc, timestep = ReadinMocage(filename_as_moc_jul,i,lat1,lat2,lon1,lon2)
+    print(timestep)
+    UWind, VWind = WindSEEDS(filename_wind, lat1, lat2, lon1, lon2)
+    #print(len(UWind[0]))
+    #print(len(HCHO_moc[0]))
+    #exit()
     ax = plt.axes(projection=ccrs.PlateCarree())
     plt.title(date)
-    levels = np.linspace(0, 1.25E-8, 50) #for 1july:1.25e-8, for 25-26:1e-8
-    #levels = np.linspace(0, 9e-9, 50)
+    #levels = np.linspace(0, 1.25E-8, 50) #for 1july:1.25e-8, for 25-26:1e-8
+    levels = np.linspace(0, 6e-9, 50)
     plt.contourf(lons, lats, HCHO_moc, levels=levels,
              transform=ccrs.PlateCarree(),cmap="rainbow")
-    #plt.pcolor(HCHO_moc_1, vmin=0, vmax=2.4E-8)
-    plt.clim(0, 1.25e-8)
-    #plt.clim(0, 9e-9)
+    ##plt.pcolor(HCHO_moc_1, vmin=0, vmax=2.4E-8)
+    #plt.clim(0, 1.25e-8)
+    plt.clim(0, 6e-9)
     plt.colorbar(label="HCHO [?]")
+    #plt.contourf(lons, lats, UWind[wind_i], transform=ccrs.PlateCarree(), cmap="rainbow")
+    plt.quiver(lons, lats, UWind[wind_i], VWind[wind_i])
+    #plt.colorbar(label="u-component [m/s]")
     shape_feature = ShapelyFeature(Reader(filename).geometries(), crs=ccrs.PlateCarree(),edgecolor="black",facecolor=(0,0,0,0))
     ax.add_feature(shape_feature)
     ax.add_feature(cf.BORDERS)
     ax.set_xticks([15.5, 16, 16.5, 17], crs=ccrs.PlateCarree())
     ax.set_yticks([47.5, 48, 48.5, 49], crs=ccrs.PlateCarree())
-    plt.savefig("/home/heidit/ATMENV/MAPS/HCHO_ts_fixedscale/HCHO"+str(date))
+    ##plt.savefig("/home/heidit/ATMENV/MAPS/HCHO_ts_fixedscale/HCHO"+str(date)+"6ppblim")
+    plt.savefig("/home/heidit/ATMENV/MAPS/WIND/arrows"+str(date))
     date = date + datetime.timedelta(hours=1)
-    plt.clf()
+    plt.clf()  #for saving in loop: activate clf!
     #plt.show()
 
 exit()

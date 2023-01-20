@@ -60,10 +60,10 @@ MOC_out_jun19_h_WWw = ReadinMocage(filename_as_moc_jun,datetime.datetime(2019,6,
 MOC_out_jul19_h_WWw = ReadinMocage(filename_as_moc_jul,datetime.datetime(2019,7,1,0,0),index_lat_WW2, index_lon_WW2)
 MOC_out_aug19_h_WWw = ReadinMocage(filename_as_moc_aug,datetime.datetime(2019,8,1,0,0),index_lat_WW2, index_lon_WW2)
 MOC_HCHO_WWw = pd.concat([MOC_out_jun19_h_WWw, MOC_out_jul19_h_WWw, MOC_out_aug19_h_WWw])
-print(MOC_out_aug19_h_WWw.HCHO)
+#print(MOC_out_aug19_h_WWw.HCHO)
 MOC_HCHO_WWw_d = MOC_HCHO_WWw.resample("D").mean()
-print(MOC_HCHO_LOB_d.HCHO, MOC_HCHO_WWw_d.HCHO)
-exit()
+#print(MOC_HCHO_LOB_d.HCHO, MOC_HCHO_WWw_d.HCHO)
+
 
 "read in VINDOBONA"
 foldername_D = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_DQ"
@@ -79,15 +79,20 @@ BOKUMetData_dailysum = BOKUMetData_hourlymean.resample('D').agg({'DT': np.mean, 
 
 #BOKUMetData_hourlymean["WD"] = BOKUMetData_hourlymean["WD"].fillna(-1)
 #BOKUMetData_hourlymean["WD"] = BOKUMetData_hourlymean["WD"].astype('int', errors='ignore')
-BOKUMetData_hourlymean["WD"] = BOKUMetData_hourlymean["WD"].apply(np.round).astype('Int64')
-wd = BOKUMetData_hourlymean["WD"]
-ws = BOKUMetData_hourlymean["WS"]
 start1,end1 = datetime.datetime(2019, 6, 30, 18, 00), datetime.datetime(2019, 7, 1, 23, 00)
 start2,end2 = datetime.datetime(2019, 7, 19, 18, 00), datetime.datetime(2019, 7, 20, 23, 00)
 start3,end3 = datetime.datetime(2019, 7, 24, 18, 00), datetime.datetime(2019, 7, 25, 23, 00)
 start4,end4 = datetime.datetime(2019, 7, 25, 18, 00), datetime.datetime(2019, 7, 26, 23, 00)
+
+print(BOKUMetData_hourlymean["WD"][start2:end2])
+BOKUMetData_hourlymean["WD"] = BOKUMetData_hourlymean["WD"].apply(np.round).astype('Int64')
+wd = BOKUMetData_hourlymean["WD"]
+print(wd[start2:end2])
+
+exit()
+ws = BOKUMetData_hourlymean["WS"]
 #print(wd, ws)
-print(ws[start1:end1].index.hour)
+print(ws[start2:end2].index.hour)
 
 fig, ax = plt.subplots(nrows=2, ncols=2, sharey=True)#, sharex=True)
 ax[0,0].set_title('Jul1')  # \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
