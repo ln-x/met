@@ -8,14 +8,14 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import datetime
 import netCDF4
-from met.library import ReadinVindobona_Filter_fullperiod
+import ReadinVindobona_Filter_fullperiod
 from scipy import stats
 from matplotlib.dates import DayLocator, HourLocator, DateFormatter, drange
 from dateutil import rrule
-import met.library.BOKUMet_Data
+import BOKUMet_Data
 
 '''READ IN BOKU Metdata'''
-BOKUMetData = met.library.BOKUMet_Data.BOKUMet()
+BOKUMetData = BOKUMet_Data.BOKUMet()
 #print(BOKUMetData) #10min values
 #DAILY MEANS
 BOKUMetData_hourlymean = BOKUMetData.resample('H').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.mean, 'WS': np.mean,
@@ -24,7 +24,7 @@ BOKUMetData_dailysum = BOKUMetData_hourlymean.resample('D').agg({'DT': np.mean, 
                                                      'WD': np.mean, 'WSG': np.mean, 'PC': np.sum, 'AP': np.mean})
 #DAILY MAX
 '''READ IN EEA air pollution data'''
-pathbase2 = "/windata/DATA/obs_point/chem/EEA/"
+pathbase2 = "/Users/lnx/DATA/obs_point/chem/EEA/"
 o3_1990_2019_mda1 = pd.read_csv(pathbase2 + "o3_mda1_1990-2019_AT_mug.csv")
 o3_1990_2019_mda1 = o3_1990_2019_mda1.set_index((pd.to_datetime(o3_1990_2019_mda1['date'])))
 o3_1990_2019_mda1 = o3_1990_2019_mda1.drop(columns=['date'])

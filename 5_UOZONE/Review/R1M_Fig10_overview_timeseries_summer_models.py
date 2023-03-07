@@ -9,10 +9,10 @@ import netCDF4
 import os
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-import met.library.BOKUMet_Data
-from met.library.Datetime_recipies import datestdtojd
-from met.library.conversions import *
-from met.library import ReadinVindobona_Filter_fullperiod
+import BOKUMet_Data
+from Datetime_recipies import datestdtojd
+from conversions import *
+import ReadinVindobona_Filter_fullperiod
 
 #print(ugm3toppb_no2, ugm3toppb_no)
 '''READ IN CEILOMETER DATA'''

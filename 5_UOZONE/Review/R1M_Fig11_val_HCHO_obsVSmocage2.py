@@ -8,11 +8,11 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import datetime
 import netCDF4
-from met.library import ReadinVindobona_Filter_fullperiod
+import ReadinVindobona_Filter_fullperiod
 from scipy import stats
 from matplotlib.dates import DayLocator, HourLocator, DateFormatter, drange
 from dateutil import rrule
-import met.library.BOKUMet_Data
+import BOKUMet_Data
 """
 # Set the minimum and maximum size for the dots in the plot
 min_size = 10
@@ -30,7 +30,7 @@ s_inv = ((s-min_size)/(max_size-min_size)*z_range + z_min)
 print(s_inv)
 """
 '''READ IN BOKU Metdata'''
-BOKUMetData = met.library.BOKUMet_Data.BOKUMet()
+BOKUMetData = BOKUMet_Data.BOKUMet()
 #print(BOKUMetData) #10min values
 #DAILY MEANS
 BOKUMetData_hourlymean = BOKUMetData.resample('H').agg({'DT': np.mean, 'AT': np.mean, 'RH': np.mean, 'GR': np.mean, 'WS': np.mean,
@@ -39,7 +39,7 @@ BOKUMetData_dailysum = BOKUMetData_hourlymean.resample('D').agg({'DT': np.mean, 
                                                      'WD': np.mean, 'WSG': np.mean, 'PC': np.sum, 'AP': np.mean})
 #DAILY MAX
 '''READ IN EEA air pollution data'''
-pathbase2 = "/windata/DATA/obs_point/chem/EEA/"
+pathbase2 = "/Users/lnx/DATA/obs_point/chem/EEA/"
 o3_1990_2019_mda1 = pd.read_csv(pathbase2 + "o3_mda1_1990-2019_AT_mug.csv")
 o3_1990_2019_mda1 = o3_1990_2019_mda1.set_index((pd.to_datetime(o3_1990_2019_mda1['date'])))
 o3_1990_2019_mda1 = o3_1990_2019_mda1.drop(columns=['date'])
@@ -60,70 +60,18 @@ o3_1990_2020_mda1_w = o3_1990_2020_mda1.resample('W').mean()
 o3_1990_2020_mda8_w = o3_1990_2020_mda8.resample('W').mean()
 
 """READ IN MGNOUT CAMS"""
-foldername_ol = "/data1/models/nilu/SEEDS/MEGAN/2019/ol/ISOP/"  #MGNOUT_CAMS_BIG_ISOP_20190102.nc
-foldername_as = "/data1/models/nilu/SEEDS/MEGAN/2019/assim_LAI/ISOP/"
-foldername_as_moc = "/data1/models/mocage/assim/"  #hmmacc01+Jun-2019.nc, hmmacc01+Jul-2019.nc
-filename_as_moc_jun = "/data1/models/mocage/assim/hmmacc01+Jun-2019.nc"
-filename_as_moc_jul = "/data1/models/mocage/assim/hmmacc01+Jul-2019.nc"
-filename_as_moc_aug = "/data1/models/mocage/assim/hmmacc01+Aug-2019.nc"
-
-def ReadinMocage(path, starttime):
-#def ReadinMocage(foldername):
-    #files = os.listdir(foldername)
-    #files = sorted(files)
-    #print(files) #['hmmacc01+Jul-2019.nc', 'hmmacc01+Jun-2019.nc']
-    time_moc = []
-    HCHO_moc = []
-    ISO_moc = []
-    O3_moc = []
-    index_lat = 202 #CAMS European grid
-    index_lon = 422 #CAMS European grid
-    #for i in range(len(files)):
-    #    path = foldername + files[i]
-    #    infile = netCDF4.Dataset(path)  # path.decode('UTF-8')  #OSError: [Errno -51] NetCDF: Unknown file format: b'/windata/DATA/models/nilu/MEGAN3_SURFEX_SEEDS/MEGAN/ol/MGNOUT_CAMS_BIG_20190803.nc'
-    #    HCHO_hourlyvalue = infile.variables['HCHO_47'][:, index_lat, index_lon]
-    #    ISO_hourlyvalue = infile.variables['ISO_47'][:, index_lat, index_lon]
-    #    O_x_hourlyvalue = infile.variables['O_x_47'][:, index_lat, index_lon]
-    #    time = infile.variables['time'][:]
-    #    time_moc.append(time)
-    #    HCHO_moc.append(HCHO_hourlyvalue)
-    #    ISO_moc.append(ISO_hourlyvalue)
-    #    O3_moc.append(O_x_hourlyvalue)
-    #    print(HCHO_moc, ISO_moc, O3_moc, time_moc)
-    #path = foldername + 'hmmacc01+Jul-2019.nc'
-    infile = netCDF4.Dataset(path)
-    HCHO_moc = infile.variables['HCHO_47'][:, index_lat, index_lon]
-    ISO_moc = infile.variables['ISO_47'][:, index_lat, index_lon]
-    O3_moc = infile.variables['O_x_47'][:, index_lat, index_lon]
-    #starttime = datetime.datetime(2019,7,1,0,0) #2019-06-01 00:00:00
-    time = infile.variables['time'][:]
-    timeaxis = pd.date_range(starttime, periods=len(time), freq="H")
-    #print(len(timeaxis), len(ISO_moc))
-    MOC_out = pd.DataFrame({'datetime': timeaxis, 'ISO': ISO_moc, 'HCHO': HCHO_moc,'O3': O3_moc})
-    MOC_out['datetime'] = pd.to_datetime(MOC_out['datetime'])
-    MOC_out = MOC_out.set_index(['datetime'])
-    return MOC_out
-
-#MOC_out = ReadinMocage(foldername_as_moc)
-MOC_out_jun19_h = ReadinMocage(filename_as_moc_jun,datetime.datetime(2019,6,1,0,0))
-MOC_out_jul19_h = ReadinMocage(filename_as_moc_jul,datetime.datetime(2019,7,1,0,0))
-MOC_out_aug19_h = ReadinMocage(filename_as_moc_aug,datetime.datetime(2019,8,1,0,0))
-
-MOC_out_jun19 = MOC_out_jun19_h.loc[(MOC_out_jun19_h.index.hour >= 8) & (MOC_out_jun19_h.index.hour <= 14)]
-MOC_out_jun19 = MOC_out_jun19.resample('D').mean()
-MOC_out_jul19 = MOC_out_jul19_h.loc[(MOC_out_jul19_h.index.hour >= 8) & (MOC_out_jul19_h.index.hour <= 14)]
-MOC_out_jul19 = MOC_out_jul19.resample('D').mean()
-MOC_out_aug19 = MOC_out_aug19_h.loc[(MOC_out_aug19_h.index.hour >= 8) & (MOC_out_aug19_h.index.hour <= 14)]
-MOC_out_aug19 = MOC_out_aug19.resample('D').mean()
+#foldername_ol = "/data1/models/nilu/SEEDS/MEGAN/2019/ol/ISOP/"  #MGNOUT_CAMS_BIG_ISOP_20190102.nc
+#foldername_as = "/data1/models/nilu/SEEDS/MEGAN/2019/assim_LAI/ISOP/"
 
 "read in VINDOBONA"
-foldername_D = "/windata/DATA/remote/ground/maxdoas/MAXDOAS_DQ"
-hcho_d, hcho_dmax, hcho_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_D,"D",begin = datetime.datetime(2017, 5, 1, 0, 0, 0))
+foldername_D = "/Users/lnx/DATA/remote/ground/maxdoas/MAXDOAS_DQ"
+hcho_f, hcho_d, hcho_dmax, hcho_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_D,"D",begin = datetime.datetime(2017, 5, 1, 0, 0, 0))
 hcho_w = hcho_dmax.resample("W").mean()
 
 """READ IN MGNOUT CAMS"""
-foldername_ol = "/data1/models/nilu/SEEDS/MEGAN/2019/ol/ISOP/"  #MGNOUT_CAMS_BIG_ISOP_20190102.nc
-foldername_as = "/data1/models/nilu/SEEDS/MEGAN/2019/assim_LAI/ISOP/"
+#foldername_ol = "/data1/models/nilu/SEEDS/MEGAN/2019/ol/ISOP/"  #MGNOUT_CAMS_BIG_ISOP_20190102.nc
+#foldername_as = "/data1/models/nilu/SEEDS/MEGAN/2019/assim_LAI/ISOP/"
+foldername_as = "/Users/lnx/DATA/models/NILU/MEGAN/ISO_JJA19/"
 
 #The isoprene emissions are in units of mole m-2 s-1.
 # bottom-up isoprene emissions for 2019 using the MEGAN-SURFEX coupling at NILU has been completed.
@@ -165,7 +113,7 @@ def EmisSEEDS(foldername):
     Emis_noontime = Emis_noontime.set_index(['datetime'])
     return Emis_max, Emis_noontime
 
-Emis_ol, Emis_ol_noontime = EmisSEEDS(foldername_ol)
+#Emis_ol, Emis_ol_noontime = EmisSEEDS(foldername_ol)
 Emis_assim, Emis_assim_noontime = EmisSEEDS(foldername_as)
 
 wd = BOKUMetData_dailysum["WD"] #TODO WD= daily mean-> maybe there is a better way to aggregate winddir?
@@ -195,7 +143,6 @@ print(scaled_WSsizes)
 
 print(len(scaled_WSsizes[:30]),len(scaled_WSsizes[30:-31]),len(scaled_WSsizes[-31:]))
 
-
 hcho_062019 = hcho_d[datetime.datetime(2019, 6, 1, 00, 00): datetime.datetime(2019, 6, 30, 00, 00)].values.flatten()
 hcho_072019 = hcho_d[datetime.datetime(2019, 7, 1, 00, 00): datetime.datetime(2019, 7, 31, 00, 00)].values.flatten()
 hcho_082019 = hcho_d[datetime.datetime(2019, 8, 1, 00, 00): datetime.datetime(2019, 8, 31, 00, 00)].values.flatten()
@@ -210,12 +157,13 @@ def Plot6var():
     ax = axs.flatten()
     #ax[0].set_aspect('equal', 'box')
     #ax[0].axis('equal')
-    ax[0].set_title('(a) Jun 19')# \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
-    plt1 = ax[0].scatter(hcho_062019, ISO_0619, s=scaled_WSsizes[:30], c=wd0619)  #9-15mean!  color=color1,
-    ax[1].set_title('(b) Jul 19')# \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
-    plt2 = ax[1].scatter(hcho_072019, ISO_0719, s=scaled_WSsizes[30:-31], c=wd0719)
-    ax[2].set_title('(c) Aug 19')  # \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
-    plt3 = ax[2].scatter(hcho_082019, ISO_0819, s=scaled_WSsizes[-31:], c=wd0819)
+    
+    ax[0].set_title('(d) Jun 19')# \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
+    plt1 = ax[0].scatter(hcho_062019, ISO_0619, s=scaled_WSsizes[:30], c=wd0619,cmap="rainbow_r")  #9-15mean!  color=color1,
+    ax[1].set_title('(e) Jul 19')# \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
+    plt2 = ax[1].scatter(hcho_072019, ISO_0719, s=scaled_WSsizes[30:-31], c=wd0719,cmap="rainbow_r")
+    ax[2].set_title('(f) Aug 19')  # \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
+    plt3 = ax[2].scatter(hcho_082019, ISO_0819, s=scaled_WSsizes[-31:], c=wd0819,cmap="rainbow_r")
     ax[0].set_ylabel("ISO_mod [mol s-1 m-2]", size="small")
     ax[0].set_xlabel("HCHO_obs [ppb] ", size="small")
     ax[1].set_ylabel("ISO_mod [mol s-1 m-2]", size="small")
@@ -246,7 +194,63 @@ def Plot6var():
 
 Plot6var()
 
-exit()
+
+
+foldername_as_moc = "/Volumes/Expansion/data1/models/mocage/assim/"  #hmmacc01+Jun-2019.nc, hmmacc01+Jul-2019.nc
+filename_as_moc_jun = "/Volumes/Expansion/data1/models/mocage/assim/hmmacc01+Jun-2019.nc"
+filename_as_moc_jul = "/Volumes/Expansion/data1/models/mocage/assim/hmmacc01+Jul-2019.nc"
+filename_as_moc_aug = "/Volumes/Expansion/data1/models/mocage/assim/hmmacc01+Aug-2019.nc"
+
+def ReadinMocage(path, starttime):
+#def ReadinMocage(foldername):
+    #files = os.listdir(foldername)
+    #files = sorted(files)
+    #print(files) #['hmmacc01+Jul-2019.nc', 'hmmacc01+Jun-2019.nc']
+    time_moc = []
+    HCHO_moc = []
+    ISO_moc = []
+    O3_moc = []
+    index_lat = 201 #city:201 ww:202 #CAMS European grid
+    index_lon = 424 #city:424 ww:422 #CAMS European grid
+    #for i in range(len(files)):
+    #    path = foldername + files[i]
+    #    infile = netCDF4.Dataset(path)  # path.decode('UTF-8')  #OSError: [Errno -51] NetCDF: Unknown file format: b'/windata/DATA/models/nilu/MEGAN3_SURFEX_SEEDS/MEGAN/ol/MGNOUT_CAMS_BIG_20190803.nc'
+    #    HCHO_hourlyvalue = infile.variables['HCHO_47'][:, index_lat, index_lon]
+    #    ISO_hourlyvalue = infile.variables['ISO_47'][:, index_lat, index_lon]
+    #    O_x_hourlyvalue = infile.variables['O_x_47'][:, index_lat, index_lon]
+    #    time = infile.variables['time'][:]
+    #    time_moc.append(time)
+    #    HCHO_moc.append(HCHO_hourlyvalue)
+    #    ISO_moc.append(ISO_hourlyvalue)
+    #    O3_moc.append(O_x_hourlyvalue)
+    #    print(HCHO_moc, ISO_moc, O3_moc, time_moc)
+    #path = foldername + 'hmmacc01+Jul-2019.nc'
+    infile = netCDF4.Dataset(path)
+    HCHO_moc = infile.variables['HCHO_47'][:, index_lat, index_lon]
+    ISO_moc = infile.variables['ISO_47'][:, index_lat, index_lon]
+    O3_moc = infile.variables['O_x_47'][:, index_lat, index_lon]
+    #starttime = datetime.datetime(2019,7,1,0,0) #2019-06-01 00:00:00
+    time = infile.variables['time'][:]
+    timeaxis = pd.date_range(starttime, periods=len(time), freq="H")
+    #print(len(timeaxis), len(ISO_moc))
+    MOC_out = pd.DataFrame({'datetime': timeaxis, 'ISO': ISO_moc, 'HCHO': HCHO_moc,'O3': O3_moc})
+    MOC_out['datetime'] = pd.to_datetime(MOC_out['datetime'])
+    MOC_out = MOC_out.set_index(['datetime'])
+    return MOC_out
+
+#MOC_out = ReadinMocage(foldername_as_moc)
+MOC_out_jun19_h = ReadinMocage(filename_as_moc_jun,datetime.datetime(2019,6,1,0,0))
+MOC_out_jul19_h = ReadinMocage(filename_as_moc_jul,datetime.datetime(2019,7,1,0,0))
+MOC_out_aug19_h = ReadinMocage(filename_as_moc_aug,datetime.datetime(2019,8,1,0,0))
+
+MOC_out_jun19 = MOC_out_jun19_h.loc[(MOC_out_jun19_h.index.hour >= 8) & (MOC_out_jun19_h.index.hour <= 14)]
+MOC_out_jun19 = MOC_out_jun19.resample('D').mean()
+MOC_out_jul19 = MOC_out_jul19_h.loc[(MOC_out_jul19_h.index.hour >= 8) & (MOC_out_jul19_h.index.hour <= 14)]
+MOC_out_jul19 = MOC_out_jul19.resample('D').mean()
+MOC_out_aug19 = MOC_out_aug19_h.loc[(MOC_out_aug19_h.index.hour >= 8) & (MOC_out_aug19_h.index.hour <= 14)]
+MOC_out_aug19 = MOC_out_aug19.resample('D').mean()
+
+
 def Plot6varHCHO():
     color1= "black"
     a = 0
