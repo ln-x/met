@@ -68,6 +68,8 @@ index_lat_Pinus = 200
 index_lon_Pinus = 422
 index_lat_WW2 = 201
 index_lon_WW2 = 420
+index_lat_WWnilu = 199
+index_lon_WWnilu = 420
 
 foldername_laiMAM18 = "/Users/lnx/DATA/models/NILU/LAIas_MAM18/"
 foldername_laiMAM20 = "/Users/lnx/DATA/models/NILU/LAIas_MAM20/"
@@ -76,6 +78,8 @@ foldername_wgMAM20 = "/Users/lnx/DATA/models/NILU/WGas_MAM20/"
 foldername_isoMAM18 ="/Users/lnx/DATA/models/NILU/MEGAN/ISO_MAM18/"
 foldername_isoMAM20 ="/Users/lnx/DATA/models/NILU/MEGAN/ISO_MAM20/"
 
+ISOMAM18_wwnilu = EmisSEEDS(foldername_isoMAM18, 'Emiss',index_lat_WWnilu, index_lon_WWnilu, True, "hourly")
+ISOMAM20_wwnilu = EmisSEEDS(foldername_isoMAM20, 'Emiss',index_lat_WWnilu, index_lon_WWnilu, True,"hourly")
 ISOMAM18 = EmisSEEDS(foldername_isoMAM18, 'Emiss',index_lat_ww, index_lon_ww, True, "hourly")
 ISOMAM20 = EmisSEEDS(foldername_isoMAM20, 'Emiss',index_lat_ww, index_lon_ww, True,"hourly")
 ISOMAM18_lob = EmisSEEDS(foldername_isoMAM18, 'Emiss',index_lat_lob, index_lon_lob, True,"hourly")
@@ -85,6 +89,8 @@ ISOMAM20_cen = EmisSEEDS(foldername_isoMAM20, 'Emiss',index_lat_city, index_lon_
 ISOMAM18_leitha = EmisSEEDS(foldername_isoMAM18, 'Emiss',index_lat_leitha, index_lon_leitha, True,"hourly")
 ISOMAM20_leitha = EmisSEEDS(foldername_isoMAM20, 'Emiss',index_lat_leitha, index_lon_leitha, True,"hourly")
 
+LAIMAM18_wwnilu = EmisSEEDS(foldername_laiMAM18, 'LAI_ISBA',index_lat_WWnilu, index_lon_WWnilu, False, "daily")
+LAIMAM20_wwnilu = EmisSEEDS(foldername_laiMAM20, 'LAI_ISBA',index_lat_WWnilu, index_lon_WWnilu, False, "daily")
 LAIMAM18 = EmisSEEDS(foldername_laiMAM18, 'LAI_ISBA',index_lat_ww, index_lon_ww, False, "daily")
 LAIMAM20 = EmisSEEDS(foldername_laiMAM20, 'LAI_ISBA',index_lat_ww, index_lon_ww, False, "daily")
 LAIMAM18_cen = EmisSEEDS(foldername_laiMAM18, 'LAI_ISBA',index_lat_city, index_lon_city, False,"daily")
@@ -94,6 +100,8 @@ LAIMAM20_lob = EmisSEEDS(foldername_laiMAM20, 'LAI_ISBA',index_lat_lob, index_lo
 LAIMAM18_leitha = EmisSEEDS(foldername_laiMAM18, 'LAI_ISBA',index_lat_leitha, index_lon_leitha, False,"daily")
 LAIMAM20_leitha = EmisSEEDS(foldername_laiMAM20, 'LAI_ISBA',index_lat_leitha, index_lon_leitha, False,"daily")
 
+WGMAM18_wwnilu = EmisSEEDS(foldername_wgMAM18, 'WG5_ISBA',index_lat_WWnilu, index_lon_WWnilu, False,"hourly")
+WGMAM20_wwnilu = EmisSEEDS(foldername_wgMAM20, 'WG5_ISBA',index_lat_WWnilu, index_lon_WWnilu, False,"hourly")
 WGMAM18 = EmisSEEDS(foldername_wgMAM18, 'WG5_ISBA',index_lat_ww, index_lon_ww, False,"hourly")
 WGMAM20 = EmisSEEDS(foldername_wgMAM20, 'WG5_ISBA',index_lat_ww, index_lon_ww, False,"hourly")
 WGMAM18_cen = EmisSEEDS(foldername_wgMAM18, 'WG5_ISBA',index_lat_city, index_lon_city, False,"hourly")
@@ -115,12 +123,14 @@ fig = plt.figure()
 #plt.suptitle(f"OBS {start} - {end}")
 ax1 = fig.add_subplot(311)
 ax1.set_title('(a)', loc='left', size='medium')#, color='green')
-ax1.plot(LAIMAM20["VAR"], linewidth="1", color='green', label="LAI_ww") #label="GR,sum,w"
-ax1.plot(LAIMAM20["VAR"].index, LAIMAM18["VAR"].values, linewidth="1", color='green', linestyle=":")
+ax1.plot(LAIMAM20_wwnilu["VAR"], linewidth="1", color='green', label="LAI_ww") #label="GR,sum,w"
+ax1.plot(LAIMAM20_wwnilu["VAR"].index, LAIMAM18_wwnilu["VAR"].values, linewidth="1", color='green', linestyle=":")
+ax1.plot(LAIMAM20["VAR"], linewidth="1", color='black', label="LAI_sp") #label="GR,sum,w"
+ax1.plot(LAIMAM20["VAR"].index, LAIMAM18["VAR"].values, linewidth="1", color='black', linestyle=":")
 #ax1.plot(LAIMAM20_lob["VAR"], linewidth="1", color='blue', label="LAI_lob") 
 #ax1.plot(LAIMAM20_lob["VAR"].index, LAIMAM18_lob["VAR"].values, linewidth="1", color='blue', linestyle=":")
-ax1.plot(LAIMAM20_cen["VAR"], linewidth="1", color='black', label="LAI_city")
-ax1.plot(LAIMAM20_cen["VAR"].index, LAIMAM18_cen["VAR"].values, linewidth="1", color='black', linestyle=":")
+#ax1.plot(LAIMAM20_cen["VAR"], linewidth="1", color='black', label="LAI_city")
+#ax1.plot(LAIMAM20_cen["VAR"].index, LAIMAM18_cen["VAR"].values, linewidth="1", color='black', linestyle=":")
 #ax1.plot(LAIMAM20_leitha["VAR"], linewidth="1", color='black', label="LAI_leitha") 
 #ax1.plot(LAIMAM20_leitha["VAR"].index, LAIMAM18_leitha["VAR"].values, linewidth="1", color='black', linestyle=":")
 #ax1.set_xlim(start,end)
@@ -133,12 +143,14 @@ ax1.legend(loc='upper left')
 
 ax1 = fig.add_subplot(312)
 ax1.set_title('(b)', loc='left', size='medium')
-ax1.plot(WGMAM20["VAR"], linewidth="1", color='green', label="SM_ww") 
-ax1.plot(WGMAM20["VAR"].index, WGMAM18["VAR"].values, linewidth="1", color='green', linestyle=":")
+ax1.plot(WGMAM20_wwnilu["VAR"], linewidth="1", color='green', label="SM_ww") 
+ax1.plot(WGMAM20_wwnilu["VAR"].index, WGMAM18_wwnilu["VAR"].values, linewidth="1", color='green', linestyle=":")
+ax1.plot(WGMAM20["VAR"], linewidth="1", color='black', label="SM_sp") 
+ax1.plot(WGMAM20["VAR"].index, WGMAM18["VAR"].values, linewidth="1", color='black', linestyle=":")
 #ax1.plot(WGMAM20_lob["VAR"], linewidth="1", color='blue', label="SM_lob") 
 #ax1.plot(WGMAM20_lob["VAR"].index, WGMAM18_lob["VAR"].values, linewidth="1", color='blue', linestyle=":")
-ax1.plot(WGMAM20_cen["VAR"], linewidth="1", color='black', label="SM_city") 
-ax1.plot(WGMAM20_cen["VAR"].index, WGMAM18_cen["VAR"].values, linewidth="1", color='black', linestyle=":")
+#ax1.plot(WGMAM20_cen["VAR"], linewidth="1", color='black', label="SM_city") 
+#ax1.plot(WGMAM20_cen["VAR"].index, WGMAM18_cen["VAR"].values, linewidth="1", color='black', linestyle=":")
 #ax1.plot(WGMAM20_leitha["VAR"], linewidth="1", color='black', label="SM_leitha") 
 #ax1.plot(WGMAM20_leitha["VAR"].index, WGMAM18_leitha["VAR"].values, linewidth="1", color='black', linestyle=":")
 ax1.set_ylabel("soil liquid water content [m3 m-3]", size="medium")
@@ -147,13 +159,15 @@ ax1.xaxis.set_major_formatter(mdates.DateFormatter(''))
 ax1.grid()
 
 ax1 = fig.add_subplot(313)
-ax1.set_title('(b)', loc='left', size='medium')
-ax1.plot(ISOMAM20["VAR"], linewidth="1", color='green', label="ISO_ww") 
-ax1.plot(ISOMAM20["VAR"].index, ISOMAM18["VAR"].values, linewidth="1", color='green', linestyle=":")
+ax1.set_title('(c)', loc='left', size='medium')
+ax1.plot(ISOMAM20_wwnilu["VAR"], linewidth="1", color='green', label="ISO_ww") 
+ax1.plot(ISOMAM20_wwnilu["VAR"].index, ISOMAM18_wwnilu["VAR"].values, linewidth="1", color='green', linestyle=":")
+ax1.plot(ISOMAM20["VAR"], linewidth="1", color='black', label="ISO_sp") 
+ax1.plot(ISOMAM20["VAR"].index, ISOMAM18["VAR"].values, linewidth="1", color='black', linestyle=":")
 #ax1.plot(ISOMAM20_lob["VAR"], linewidth="1", color='blue', label="ISO_lob") 
 #ax1.plot(ISOMAM20_lob["VAR"].index, ISOMAM18_lob["VAR"].values, linewidth="1", color='blue', linestyle=":")
-ax1.plot(ISOMAM20_cen["VAR"], linewidth="1", color='black', label="ISO_city") 
-ax1.plot(ISOMAM20_cen["VAR"].index, ISOMAM18_cen["VAR"].values, linewidth="1", color='black', linestyle=":")
+#ax1.plot(ISOMAM20_cen["VAR"], linewidth="1", color='black', label="ISO_city") 
+#ax1.plot(ISOMAM20_cen["VAR"].index, ISOMAM18_cen["VAR"].values, linewidth="1", color='black', linestyle=":")
 #ax1.plot(ISOMAM20_leitha["VAR"], linewidth="1", color='black', label="ISO_leitha") 
 #ax1.plot(ISOMAM20_leitha["VAR"].index, ISOMAM18_leitha["VAR"].values, linewidth="1", color='black', linestyle=":")
 ax1.set_ylabel("isoprene [ppb]", size="medium")
