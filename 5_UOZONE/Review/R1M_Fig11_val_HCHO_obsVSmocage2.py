@@ -59,10 +59,6 @@ o3_1990_2020_m = o3_1990_2020_mda8.resample('M').mean()
 o3_1990_2020_mda1_w = o3_1990_2020_mda1.resample('W').mean()
 o3_1990_2020_mda8_w = o3_1990_2020_mda8.resample('W').mean()
 
-"""READ IN MGNOUT CAMS"""
-#foldername_ol = "/data1/models/nilu/SEEDS/MEGAN/2019/ol/ISOP/"  #MGNOUT_CAMS_BIG_ISOP_20190102.nc
-#foldername_as = "/data1/models/nilu/SEEDS/MEGAN/2019/assim_LAI/ISOP/"
-
 "read in VINDOBONA"
 foldername_D = "/Users/lnx/DATA/remote/ground/maxdoas/MAXDOAS_DQ"
 hcho_f, hcho_d, hcho_dmax, hcho_m = ReadinVindobona_Filter_fullperiod.loadfileALL(foldername_D,"D",begin = datetime.datetime(2017, 5, 1, 0, 0, 0))
@@ -159,11 +155,11 @@ def Plot6var():
     #ax[0].axis('equal')
     
     ax[0].set_title('(d) Jun 19')# \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
-    plt1 = ax[0].scatter(hcho_062019, ISO_0619, s=scaled_WSsizes[:30], c=wd0619,cmap="rainbow_r")  #9-15mean!  color=color1,
+    plt1 = ax[0].scatter(hcho_062019, ISO_0619, s=scaled_WSsizes[:30], c=wd0619)#,cmap="rainbow_r")  #9-15mean!  color=color1,
     ax[1].set_title('(e) Jul 19')# \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
-    plt2 = ax[1].scatter(hcho_072019, ISO_0719, s=scaled_WSsizes[30:-31], c=wd0719,cmap="rainbow_r")
+    plt2 = ax[1].scatter(hcho_072019, ISO_0719, s=scaled_WSsizes[30:-31], c=wd0719)#,cmap="rainbow_r")
     ax[2].set_title('(f) Aug 19')  # \n SRho{:.2f} \n p={:.2f}'.format(SRho05, Sp05), fontsize='small')
-    plt3 = ax[2].scatter(hcho_082019, ISO_0819, s=scaled_WSsizes[-31:], c=wd0819,cmap="rainbow_r")
+    plt3 = ax[2].scatter(hcho_082019, ISO_0819, s=scaled_WSsizes[-31:], c=wd0819)#,cmap="rainbow_r")
     ax[0].set_ylabel("ISO_mod [mol s-1 m-2]", size="small")
     ax[0].set_xlabel("HCHO_obs [ppb] ", size="small")
     ax[1].set_ylabel("ISO_mod [mol s-1 m-2]", size="small")
@@ -173,19 +169,25 @@ def Plot6var():
     fig.tight_layout()
 
     # produce a legend with the unique colors from the scatter
-    legend1 = ax[0].legend(*plt1.legend_elements(), loc="upper left", title="WD [°]") #limit number of classes: *plt1.legend_elements(num=4)
+    legend1 = ax[0].legend(*plt1.legend_elements(), loc="upper left", title="WD [°]")
     legend1a = ax[1].legend(*plt2.legend_elements(), loc="upper left", title="WD [°]")
     legend1b = ax[2].legend(*plt3.legend_elements(), loc="upper left", title="WD [°]")
     ax[0].add_artist(legend1)
     ax[1].add_artist(legend1a)
     ax[2].add_artist(legend1b)
     # produce a legend with a cross section of sizes from the scatter
-    #plt.legend(["5","10","14"],[5,10,14])
-    kw = dict(prop="sizes", num=4, color="grey", fmt="{x}",
-              func=lambda s:((s - min_size) / (max_size - min_size) * z_range + z_min)) #inverse function of scaling function.
-    legend2 = ax[0].legend(*plt1.legend_elements(**kw), loc="upper right", title="WS [m/s]")
-    legend2a = ax[1].legend(*plt2.legend_elements(**kw), loc="upper right", title="WS [m/s]")
-    legend2b = ax[2].legend(*plt3.legend_elements(**kw), loc="upper right", title="WS [m/s]")
+    handles, labels = plt1.legend_elements(prop="sizes", alpha=0.6)
+    handles2, labels = plt2.legend_elements(prop="sizes", alpha=0.6)
+    handles3, labels = plt3.legend_elements(prop="sizes", alpha=0.6)
+    labels = ["6","7","8","9","10","11","12","13","14"]
+    legend2 = ax[0].legend(handles, labels, loc="upper right", title="WS [m s-1]")
+    legend2a = ax[1].legend(handles2, labels, loc="upper right", title="WS [m s-1]")
+    legend2b = ax[2].legend(handles3, labels, loc="upper right", title="WS [m s-1]")
+    #kw = dict(prop="sizes", num=4, color="grey", fmt="{x}",
+    #          func=lambda s:((s - min_size) / (max_size - min_size) * z_range + z_min)) #inverse function of scaling function.
+    #legend2 = ax[0].legend(*plt1.legend_elements(**kw), loc="upper right", title="WS [m/s]")
+    #legend2a = ax[1].legend(*plt2.legend_elements(**kw), loc="upper right", title="WS [m/s]")
+    #legend2b = ax[2].legend(*plt3.legend_elements(**kw), loc="upper right", title="WS [m/s]")
     for ax in fig.get_axes():
         ax.set_xlim(0, 6)
         ax.set_ylim(0, 6E-8)
@@ -193,7 +195,6 @@ def Plot6var():
     plt.show()
 
 Plot6var()
-
 
 
 foldername_as_moc = "/Volumes/Expansion/data1/models/mocage/assim/"  #hmmacc01+Jun-2019.nc, hmmacc01+Jul-2019.nc
