@@ -232,10 +232,10 @@ ax1 = fig.add_subplot(613)
 ax1.set_title('(c)', loc='left', size='medium')#, color='green')
 ax1 = plt.gca()
 ax2 = ax1.twinx()
-ax1.plot(vwc['RSS_sub_wWheat'][JJA19_s:JJA19_e],linewidth="1", color='orange', linestyle="solid", label="RSS_w") #label="RSS_sub_w",
-ax1.plot(vwc['RSS_sub_wWheat'][JJA19_s:JJA19_e].index,vwc['RSS_sub_wWheat'][JJA20_s:JJA20_e].values,linewidth="1", color='orange', linestyle=":") #label="RSS_sub_w",
-#ax1.plot(vwc['RSS_sub_grass'][JJA19_s:JJA19_e],linewidth="1", color='green', linestyle="solid", label="RSS_g") #label="RSS_sub_g"
-#ax1.plot(vwc['RSS_sub_grass'][JJA19_s:JJA19_e].index,vwc['RSS_sub_grass'][JJA20_s:JJA20_e].values,linewidth="1", color='green', linestyle=":")
+#ax1.plot(vwc['RSS_sub_wWheat'][JJA19_s:JJA19_e],linewidth="1", color='orange', linestyle="solid", label="RSS_w") #label="RSS_sub_w",
+#ax1.plot(vwc['RSS_sub_wWheat'][JJA19_s:JJA19_e].index,vwc['RSS_sub_wWheat'][JJA20_s:JJA20_e].values,linewidth="1", color='orange', linestyle=":") #label="RSS_sub_w",
+ax1.plot(vwc['RSS_sub_grass'][JJA19_s:JJA19_e],linewidth="1", color='green', linestyle="solid", label="RSS_g") #label="RSS_sub_g"
+ax1.plot(vwc['RSS_sub_grass'][JJA19_s:JJA19_e].index,vwc['RSS_sub_grass'][JJA20_s:JJA20_e].values,linewidth="1", color='green', linestyle=":")
 ax2.step(BOKUMetData_dailysum[JJA19_s:JJA19_e].index,(BOKUMetData_dailysum["PC"]*0.1)[JJA19_s:JJA19_e], linewidth="0.3", color='blue', label="PR") #{'pre', 'post', 'mid'} label="PR,sum"
 ax2.step(BOKUMetData_dailysum[JJA19_s:JJA19_e].index,(BOKUMetData_dailysum["PC"]*0.1)[JJA20_s:JJA20_e].values, linewidth="0.3", color='blue', linestyle=":") #{'pre', 'post', 'mid'}  label="PR,sum",
 ax2.set_ylabel("[mm]", size="medium")
